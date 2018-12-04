@@ -11,8 +11,8 @@ public:
 	{
 	public:
 		typedef MainWindow::DefectoscopeViewer Parent; 
+		DefectWindow *owner;
 		void operator()(TRButtonDown &){};
-
 		bool Draw(TMouseMove &, VGraphics &);
 	};
 
@@ -27,4 +27,6 @@ public:
 	void operator()(TSize &);
 	void operator()(TCommand &);
 	void operator()(TMouseWell &);
+
+	void ChangeFrame(int);
 };

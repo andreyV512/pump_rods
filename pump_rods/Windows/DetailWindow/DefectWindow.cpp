@@ -46,6 +46,7 @@ bool DefectWindow::Def::Draw(TMouseMove &l, VGraphics &g)
 		, Mess(buffer[x], x)
 		);
 	label.Draw(g());
+	owner->ChangeFrame(offs);
 	return true;
 }
 
@@ -57,6 +58,7 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
 
 	Def &def = viewers.get<Def>();
+	def.owner = this;
 	memmove(def.buffer, item.outputData, sizeof(def.buffer));
 
 	def.count = item.outputLength;
@@ -82,7 +84,7 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	frame.medianFiltreLength = Singleton<MedianFiltreTable>::Instance().items.get<DefectSig<MedianFiltreWidth>>().value;
 	frame.cutoffFrequency = Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<CutoffFrequency>>().value;
 
-	frame.tchart.items.get<BottomAxesMeters>().maxBorder = frame.count;
+	//frame.tchart.items.get<BottomAxes>().maxBorder = frame.count;
 
 	Compute::Compute(
 		item.inputData
@@ -130,6 +132,87 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
 	return 0;
+}
+
+void DefectWindow::ChangeFrame(int offsetDef)
+{
+	Def &def = viewers.get<Def>();
+	ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
+	DataItem::Defectoscope &item = Singleton<DataItem::Defectoscope>::Instance();
+	FrameViewer &frame =  viewers.get<FrameViewer>();
+	frame.count = viewerCount.get<DefectSig<ViewerCount>>().value;
+
+	frame.medianFiltreLength = Singleton<MedianFiltreTable>::Instance().items.get<DefectSig<MedianFiltreWidth>>().value;
+	frame.cutoffFrequency = Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<CutoffFrequency>>().value;
+
+	static const int tbuf_size = 3 * dimention_of(frame.buffer) / 2;
+	double tbuf[tbuf_size];
+
+	int offs_b = tbuf_size / 3;
+	int offs = offsetDef - offs_b;
+	if(offs < 0)
+	{
+		offs = 0;
+		offs_b = 0;
+	}
+	else if(offs + frame.count > item.currentOffset)
+	{
+		offs = item.currentOffset - frame.count;
+	}
+
+	Compute::Compute(
+		item.inputData + offs
+		, frame.count + offs_b
+		, frame.cutoffFrequency
+		, frame.medianFiltreLength
+		, tbuf//frame.buffer
+		, tbuf_size//frame.buffer)
+		, Singleton<L502ParametersTable>::Instance().items.get<DefectSig<ChannelSamplingRate>>().value
+		);
+
+	memmove(frame.buffer, &tbuf[offs_b], dimention_of(frame.buffer));
+
+//	BottomAxesMeters &bottomAxesMeters = frame.tchart.items.get<BottomAxesMeters>();
+//	bottomAxesMeters.minBorder = offsetDef;
+//	bottomAxesMeters.maxBorder = offsetDef + frame.count;
+	frame.tchart.minAxesX = offsetDef;
+	frame.tchart.maxAxesX = offsetDef + frame.count;
+
+	double adcRange =  100.0 / DataItem::ADC_RANGE(Singleton<L502ParametersTable>::Instance().items.get<DefectSig<RangeL502>>().value);
+	double koef = Singleton<KoeffSignTable>::Instance().items.get<DefectSig<KoeffSign>>().value;
+
+	for(int i = 0; i < dimention_of(frame.buffer); ++i)
+	{
+		frame.buffer[i] *= adcRange * koef;
+	}
+
+	frame.delta = int((double)frame.count / dimention_of(frame.buffer));
+
+	frame.count = dimention_of(frame.buffer);
+	frame.nominalColor		= def.nominalColor		;
+
+	DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;
+	int rodLength = dead.get<RodLenght>().value;
+	frame.deathZoneFirst	= int((double)dead.get<DefectSig<First<DeathZone>>>().value * item.currentOffset / rodLength); 
+	frame.deathZoneSecond	= item.currentOffset -  int((double)dead.get<DefectSig<Second<DeathZone>>>().value * item.currentOffset / rodLength); 
+
+	frame.deathZoneColor	= def.deathZoneColor	; 	
+	frame.threshDefect	 	= def.threshDefect	 	;
+	frame.threshDefectColor	= def.threshDefectColor	;
+	frame.threshSortDownColor = def.threshSortDownColor;
+	frame.threshSortDown   	= def.threshSortDown   	;
+	
+	
+
+	ThresholdsTable::TItems &tresh = Singleton<ThresholdsTable>::Instance().items;
+
+	frame.tchart.items.get<FrameViewer::Border<SortDown>>().value = tresh.get<DefectSig<Thresh<SortDown>>>().value;
+	frame.tchart.items.get<FrameViewer::Border<Defect>>().value = tresh.get<DefectSig<Thresh<Defect>>>().value;
+
+	frame.tchart.items.get<FrameViewer::Border<SortDown>>().color  = frame.threshSortDownColor;
+	frame.tchart.items.get<FrameViewer::Border<Defect>>().color  = frame.threshDefectColor;
+
+	RepaintWindow(frame.hWnd);
 }
 
 void DefectWindow::operator()(TDestroy &m)
