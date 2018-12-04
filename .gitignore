@@ -1,0 +1,6 @@
+Debug/
+*.suo
+ipch/
+*.opensdf
+enc_temp_folder/
+*.sdf

@@ -1,0 +1,175 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{1F3EED86-738F-4A7C-8839-45F58B277AC3}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>pump_rods</RootNamespace>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>NotUsing</PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Common;$(SolutionDir)CommonApp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>Use</PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+    </ClCompile>
+    <Link>
+      <SubSystem>Windows</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\CommonApp\CommonWindow\CheckBox.hpp" />
+    <ClInclude Include="..\CommonApp\CommonWindow\Common.h" />
+    <ClInclude Include="..\CommonApp\CommonWindow\CommonViewer.h" />
+    <ClInclude Include="..\CommonApp\CommonWindow\TopLabelViewer.h" />
+    <ClInclude Include="..\Common\Base\Base.hpp" />
+    <ClInclude Include="..\Common\Base\ExpressBase.hpp" />
+    <ClInclude Include="..\Common\Base\tables.hpp" />
+    <ClInclude Include="..\Common\Base\TablesDefine.h" />
+    <ClInclude Include="..\Common\DspFilters\ChebyshevFiltre.h" />
+    <ClInclude Include="..\Common\DspFilters\include\Biquad.h" />
+    <ClInclude Include="..\Common\DspFilters\include\Cascade.h" />
+    <ClInclude Include="..\Common\DspFilters\include\ChebyshevII.h" />
+    <ClInclude Include="..\Common\DspFilters\include\Common.h" />
+    <ClInclude Include="..\Common\DspFilters\include\Filter.h" />
+    <ClInclude Include="..\Common\DspFilters\include\Params.h" />
+    <ClInclude Include="..\Common\DspFilters\include\PoleFilter.h" />
+    <ClInclude Include="..\Common\Graphics\BarSeries.h" />
+    <ClInclude Include="..\Common\Graphics\Borders.h" />
+    <ClInclude Include="..\Common\Graphics\Chart.h" />
+    <ClInclude Include="..\Common\Graphics\Chart.hpp" />
+    <ClInclude Include="..\Common\Graphics\Color.h" />
+    <ClInclude Include="..\Common\Graphics\ColorLabel.h" />
+    <ClInclude Include="..\Common\Graphics\EmptyLeftAxes.h" />
+    <ClInclude Include="..\Common\Graphics\FixedGridSeries.h" />
+    <ClInclude Include="..\Common\Graphics\Gate.h" />
+    <ClInclude Include="..\Common\Graphics\GridChart.h" />
+    <ClInclude Include="..\Common\Graphics\StepSeries.h" />
+    <ClInclude Include="..\Common\MedianFiltre\MedianFiltre.h" />
+    <ClInclude Include="..\Common\tools_debug\DebugMess.h" />
+    <ClInclude Include="..\Common\window_tool\CheckBoxWidget.h" />
+    <ClInclude Include="..\Common\window_tool\Emptywindow.h" />
+    <ClInclude Include="..\Common\window_tool\HookKey.h" />
+    <ClInclude Include="..\Common\window_tool\ItemIni.h" />
+    <ClInclude Include="..\Common\window_tool\MenuAPI.h" />
+    <ClInclude Include="..\Common\window_tool\SelectTypeSizeList.h" />
+    <ClInclude Include="..\Common\window_tool\WindowsPosition.h" />
+    <ClInclude Include="App\App.h" />
+    <ClInclude Include="App\AppBase.h" />
+    <ClInclude Include="Compute\Compute.h" />
+    <ClInclude Include="DataItem\DataItem.h" />
+    <ClInclude Include="Resource.h" />
+    <ClInclude Include="Windows\DetailWindow\DefectWindow.h" />
+    <ClInclude Include="Windows\DetailWindow\FrameViewer.h" />
+    <ClInclude Include="Windows\MainWindow\AppKeyHandler.h" />
+    <ClInclude Include="Windows\MainWindow\MainWindow.h" />
+    <ClInclude Include="Windows\MainWindow\MainWindowMenu.hpp" />
+    <ClInclude Include="Windows\MainWindow\MainWindowToolBar.h" />
+    <ClInclude Include="Windows\MainWindow\Viewers.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\CommonApp\CommonWindow\Common.cpp" />
+    <ClCompile Include="..\CommonApp\CommonWindow\CommonViewer.cpp" />
+    <ClCompile Include="..\CommonApp\CommonWindow\TopLabelViewer.cpp" />
+    <ClCompile Include="..\Common\DspFilters\ChebyshevFiltre.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\Biquad.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\Cascade.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\ChebyshevII.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\Filter.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\Param.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\PoleFilter.cpp" />
+    <ClCompile Include="..\Common\Graphics\BarSeries.cpp" />
+    <ClCompile Include="..\Common\Graphics\Borders.cpp" />
+    <ClCompile Include="..\Common\Graphics\Chart.cpp" />
+    <ClCompile Include="..\Common\Graphics\ColorLabel.cpp" />
+    <ClCompile Include="..\Common\Graphics\EmptyLeftAxes.cpp" />
+    <ClCompile Include="..\Common\Graphics\FixedGridSeries.cpp" />
+    <ClCompile Include="..\Common\Graphics\Gate.cpp" />
+    <ClCompile Include="..\Common\Graphics\GridChart.cpp" />
+    <ClCompile Include="..\Common\Graphics\StepSeries.cpp" />
+    <ClCompile Include="..\Common\MedianFiltre\MedianFiltre.cpp" />
+    <ClCompile Include="..\Common\tools_debug\DebugMess.cpp" />
+    <ClCompile Include="..\Common\window_tool\EmptyWindow.cpp" />
+    <ClCompile Include="..\Common\window_tool\HookKey.cpp" />
+    <ClCompile Include="..\Common\window_tool\ItemIni.cpp" />
+    <ClCompile Include="..\Common\window_tool\MenuAPI.cpp" />
+    <ClCompile Include="..\Common\window_tool\SelectTypeSizeList.cpp" />
+    <ClCompile Include="..\Common\window_tool\WindowsPosition.cpp" />
+    <ClCompile Include="App\App.cpp" />
+    <ClCompile Include="App\AppBase.cpp" />
+    <ClCompile Include="App\main.cpp" />
+    <ClCompile Include="App\stdafx.cpp" />
+    <ClCompile Include="Compute\Compute.cpp" />
+    <ClCompile Include="DataItem\DataItem.cpp" />
+    <ClCompile Include="Windows\DetailWindow\DefectWindow.cpp" />
+    <ClCompile Include="Windows\DetailWindow\FrameViewer.cpp" />
+    <ClCompile Include="Windows\MainWindow\AppKeyHandler.cpp" />
+    <ClCompile Include="Windows\MainWindow\MainWindow.cpp" />
+    <ClCompile Include="Windows\MainWindow\MainWindowToolBar.cpp" />
+    <ClCompile Include="Windows\MainWindow\Viewers.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\Common\Resource\Resource.rc" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

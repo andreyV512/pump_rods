@@ -1,0 +1,340 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="pump_rods">
+      <UniqueIdentifier>{6d592148-6a2c-48ce-a457-d6698a04fa9a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pump_rods\App">
+      <UniqueIdentifier>{738ce56a-2f41-4e12-8670-da86bd30643e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{0faba472-28f3-4d56-a039-e321c6807c24}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Base">
+      <UniqueIdentifier>{f17d38da-5b14-4352-8bf2-d066486679c3}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\window_tool">
+      <UniqueIdentifier>{bd4273b8-a66e-4e8d-8dcd-13c42b37f5ef}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\tools_debug">
+      <UniqueIdentifier>{9f639590-f071-4972-88b7-b584123ccd8d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Graphics">
+      <UniqueIdentifier>{c80cca12-c049-4cf7-a0f9-2b341ce3a32c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pump_rods\Windows">
+      <UniqueIdentifier>{f731f49d-67e9-4d4b-9d64-525457d3f717}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pump_rods\Windows\MainWindow">
+      <UniqueIdentifier>{39062b04-9a4a-4a16-97a0-917f30777141}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CommonApp">
+      <UniqueIdentifier>{ce83ffc6-bc24-47da-b9a7-07fd024ef4f0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="CommonApp\CommonWindow">
+      <UniqueIdentifier>{bc336f21-1812-415b-a590-97f1b18c2390}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pump_rods\DataItem">
+      <UniqueIdentifier>{696490d6-01eb-44ae-ae22-2418f2608484}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pump_rods\Compute">
+      <UniqueIdentifier>{5da6a313-e025-484e-8cac-fc3c678492c9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\MedianFiltre">
+      <UniqueIdentifier>{76521267-4f05-4d2a-ab34-e3a34c004ba8}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\DspFilter">
+      <UniqueIdentifier>{18aa0736-5add-413c-9e8d-623d47597a1e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\DspFilter\Include">
+      <UniqueIdentifier>{1b8f0844-0dd5-4243-9247-10a98615a758}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\DspFilter\Source">
+      <UniqueIdentifier>{2591bc36-dc7e-476a-b154-f3ba93c145b2}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pump_rods\Windows\DetailWindow">
+      <UniqueIdentifier>{b5032c11-9c76-4fb6-a68e-34b268b47eda}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="Resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Base\Base.hpp">
+      <Filter>Common\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Base\ExpressBase.hpp">
+      <Filter>Common\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Base\tables.hpp">
+      <Filter>Common\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Base\TablesDefine.h">
+      <Filter>Common\Base</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\window_tool\HookKey.h">
+      <Filter>Common\window_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\tools_debug\DebugMess.h">
+      <Filter>Common\tools_debug</Filter>
+    </ClInclude>
+    <ClInclude Include="App\App.h">
+      <Filter>pump_rods\App</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Graphics\BarSeries.h">
+      <Filter>Common\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Graphics\Borders.h">
+      <Filter>Common\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Graphics\Chart.h">
+      <Filter>Common\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Graphics\Chart.hpp">
+      <Filter>Common\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Graphics\Color.h">
+      <Filter>Common\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Graphics\ColorLabel.h">
+      <Filter>Common\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Graphics\EmptyLeftAxes.h">
+      <Filter>Common\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Graphics\Gate.h">
+      <Filter>Common\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Graphics\GridChart.h">
+      <Filter>Common\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Graphics\StepSeries.h">
+      <Filter>Common\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\MainWindow\MainWindow.h">
+      <Filter>pump_rods\Windows\MainWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\window_tool\WindowsPosition.h">
+      <Filter>Common\window_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\window_tool\ItemIni.h">
+      <Filter>Common\window_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\window_tool\Emptywindow.h">
+      <Filter>Common\window_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\window_tool\SelectTypeSizeList.h">
+      <Filter>Common\window_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="App\AppBase.h">
+      <Filter>pump_rods\App</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\MainWindow\MainWindowMenu.hpp">
+      <Filter>pump_rods\Windows\MainWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\MainWindow\MainWindowToolBar.h">
+      <Filter>pump_rods\Windows\MainWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\MainWindow\AppKeyHandler.h">
+      <Filter>pump_rods\Windows\MainWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\window_tool\MenuAPI.h">
+      <Filter>Common\window_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommonApp\CommonWindow\TopLabelViewer.h">
+      <Filter>CommonApp\CommonWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\window_tool\CheckBoxWidget.h">
+      <Filter>Common\window_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="DataItem\DataItem.h">
+      <Filter>pump_rods\DataItem</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommonApp\CommonWindow\CommonViewer.h">
+      <Filter>CommonApp\CommonWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommonApp\CommonWindow\CheckBox.hpp">
+      <Filter>CommonApp\CommonWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\MainWindow\Viewers.h">
+      <Filter>pump_rods\Windows\MainWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\Graphics\FixedGridSeries.h">
+      <Filter>Common\Graphics</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommonApp\CommonWindow\Common.h">
+      <Filter>CommonApp\CommonWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Compute\Compute.h">
+      <Filter>pump_rods\Compute</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\MedianFiltre\MedianFiltre.h">
+      <Filter>Common\MedianFiltre</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\DspFilters\ChebyshevFiltre.h">
+      <Filter>Common\DspFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\DspFilters\include\Filter.h">
+      <Filter>Common\DspFilter\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\DspFilters\include\Common.h">
+      <Filter>Common\DspFilter\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\DspFilters\include\Params.h">
+      <Filter>Common\DspFilter\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\DspFilters\include\Cascade.h">
+      <Filter>Common\DspFilter\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\DspFilters\include\Biquad.h">
+      <Filter>Common\DspFilter\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\DspFilters\include\ChebyshevII.h">
+      <Filter>Common\DspFilter\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\DspFilters\include\PoleFilter.h">
+      <Filter>Common\DspFilter\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\DetailWindow\DefectWindow.h">
+      <Filter>pump_rods\Windows\DetailWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\DetailWindow\FrameViewer.h">
+      <Filter>pump_rods\Windows\DetailWindow</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="App\main.cpp">
+      <Filter>pump_rods\App</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\window_tool\HookKey.cpp">
+      <Filter>Common\window_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\tools_debug\DebugMess.cpp">
+      <Filter>Common\tools_debug</Filter>
+    </ClCompile>
+    <ClCompile Include="App\App.cpp">
+      <Filter>pump_rods\App</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Graphics\BarSeries.cpp">
+      <Filter>Common\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Graphics\Borders.cpp">
+      <Filter>Common\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Graphics\Chart.cpp">
+      <Filter>Common\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Graphics\ColorLabel.cpp">
+      <Filter>Common\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Graphics\EmptyLeftAxes.cpp">
+      <Filter>Common\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Graphics\Gate.cpp">
+      <Filter>Common\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Graphics\GridChart.cpp">
+      <Filter>Common\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Graphics\StepSeries.cpp">
+      <Filter>Common\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="App\stdafx.cpp">
+      <Filter>pump_rods\App</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\MainWindow\MainWindow.cpp">
+      <Filter>pump_rods\Windows\MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\window_tool\WindowsPosition.cpp">
+      <Filter>Common\window_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\window_tool\ItemIni.cpp">
+      <Filter>Common\window_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\window_tool\EmptyWindow.cpp">
+      <Filter>Common\window_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\window_tool\SelectTypeSizeList.cpp">
+      <Filter>Common\window_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="App\AppBase.cpp">
+      <Filter>pump_rods\App</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\MainWindow\MainWindowToolBar.cpp">
+      <Filter>pump_rods\Windows\MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\MainWindow\AppKeyHandler.cpp">
+      <Filter>pump_rods\Windows\MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\window_tool\MenuAPI.cpp">
+      <Filter>Common\window_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommonApp\CommonWindow\TopLabelViewer.cpp">
+      <Filter>CommonApp\CommonWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="DataItem\DataItem.cpp">
+      <Filter>pump_rods\DataItem</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommonApp\CommonWindow\CommonViewer.cpp">
+      <Filter>CommonApp\CommonWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\MainWindow\Viewers.cpp">
+      <Filter>pump_rods\Windows\MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\Graphics\FixedGridSeries.cpp">
+      <Filter>Common\Graphics</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommonApp\CommonWindow\Common.cpp">
+      <Filter>CommonApp\CommonWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Compute\Compute.cpp">
+      <Filter>pump_rods\Compute</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\MedianFiltre\MedianFiltre.cpp">
+      <Filter>Common\MedianFiltre</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\DspFilters\ChebyshevFiltre.cpp">
+      <Filter>Common\DspFilter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\DspFilters\source\Filter.cpp">
+      <Filter>Common\DspFilter\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\DspFilters\source\Param.cpp">
+      <Filter>Common\DspFilter\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\DspFilters\source\Cascade.cpp">
+      <Filter>Common\DspFilter\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\DspFilters\source\Biquad.cpp">
+      <Filter>Common\DspFilter\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\DspFilters\source\ChebyshevII.cpp">
+      <Filter>Common\DspFilter\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\DspFilters\source\PoleFilter.cpp">
+      <Filter>Common\DspFilter\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\DetailWindow\DefectWindow.cpp">
+      <Filter>pump_rods\Windows\DetailWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\DetailWindow\FrameViewer.cpp">
+      <Filter>pump_rods\Windows\DetailWindow</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="..\Common\Resource\Resource.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

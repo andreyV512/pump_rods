@@ -1,0 +1,101 @@
+// Microsoft Visual C++ generated resource script.
+//
+#include "resource.h"
+
+#define APSTUDIO_READONLY_SYMBOLS
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 2 resource.
+//
+#include "afxres.h"
+
+/////////////////////////////////////////////////////////////////////////////
+#undef APSTUDIO_READONLY_SYMBOLS
+
+/////////////////////////////////////////////////////////////////////////////
+// Russian (Russia) resources
+
+#if !defined(AFX_RESOURCE_DLL) || defined(AFX_TARG_RUS)
+LANGUAGE LANG_RUSSIAN, SUBLANG_DEFAULT
+#pragma code_page(1251)
+
+#ifdef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// TEXTINCLUDE
+//
+
+1 TEXTINCLUDE 
+BEGIN
+    "resource.h\0"
+END
+
+2 TEXTINCLUDE 
+BEGIN
+    "#include ""afxres.h""\r\n"
+    "\0"
+END
+
+3 TEXTINCLUDE 
+BEGIN
+    "\r\n"
+    "\0"
+END
+
+#endif    // APSTUDIO_INVOKED
+
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Bitmap
+//
+
+IDB_Refresh             BITMAP                  "..\\Common\\Resource\\RefreshBtn.bmp"
+IDB_SEP                 BITMAP                  "..\\Common\\Resource\\sep.bmp"
+IDB_MashBtn             BITMAP                  "..\\Common\\Resource\\MashBtn.bmp"
+IDB_MashCutBtn          BITMAP                  "..\\Common\\Resource\\MashBtn.bmp"
+IDB_Reset               BITMAP                  "..\\Common\\Resource\\ResetBtn.bmp"
+IDB_OptionsBtn          BITMAP                  "..\\Common\\Resource\\OptionsBtn.bmp"
+IDB_ExitTubeBtn         BITMAP                  "..\\Common\\Resource\\ExitTubeBtn.bmp"
+IDB_Clamp1OnBtn         BITMAP                  "..\\Common\\Resource\\Clamp1OnBtn.bmp"
+IDB_Clamp2OnBtn         BITMAP                  "..\\Common\\Resource\\Clamp2OnBtn.bmp"
+IDB_CycleBtn            BITMAP                  "..\\Common\\Resource\\CycleBtn.bmp"
+IDB_QueryBtn            BITMAP                  "..\\Common\\Resource\\QueryBtn.bmp"
+IDB_LeftArrow           BITMAP                  "..\\Common\\Resource\\LeftArrow.bmp"
+IDB_RightArrow          BITMAP                  "..\\Common\\Resource\\RightArrow.bmp"
+IDB_UpArrow             BITMAP                  "..\\Common\\Resource\\UpArrow.bmp"
+IDB_DownArrow           BITMAP                  "..\\Common\\Resource\\DownArrow.bmp"
+IDB_SensorsUnit         BITMAP                  "..\\Common\\Resource\\SensorsUnit.bmp"
+IDB_ClampBtn            BITMAP                  "..\\Common\\Resource\\clamp.bmp"
+IDB_DownArrow64         BITMAP                  "..\\Common\\Resource\\BottomArr.bmp"
+IDB_UpArrow64           BITMAP                  "..\\Common\\Resource\\TopArr.bmp"
+IDB_LeftArrow64         BITMAP                  "..\\Common\\Resource\\LeftArr.bmp"
+IDB_RightArrow64        BITMAP                  "..\\Common\\Resource\\RightArr.bmp"
+IDB_TrashCanFull        BITMAP                  "..\\Common\\Resource\\trashcan_full.bmp"
+IDB_Ok                  BITMAP                  "..\\Common\\Resource\\ok.bmp"
+
+/////////////////////////////////////////////////////////////////////////////
+//
+// Icon
+//
+
+// Icon with lowest ID value placed first to ensure application icon
+// remains consistent on all systems.
+IDI_UPLOAD              ICON                    "..\\Common\\Resource\\upload.ico"
+IDI_LETTER              ICON                    "..\\Common\\Resource\\POSTITL.ICO"
+IDI_settings            ICON                    "..\\Common\\Resource\\settings.ico"
+#endif    // Russian (Russia) resources
+/////////////////////////////////////////////////////////////////////////////
+
+
+
+#ifndef APSTUDIO_INVOKED
+/////////////////////////////////////////////////////////////////////////////
+//
+// Generated from the TEXTINCLUDE 3 resource.
+//
+
+
+/////////////////////////////////////////////////////////////////////////////
+#endif    // not APSTUDIO_INVOKED
+
