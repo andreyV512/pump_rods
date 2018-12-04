@@ -202,7 +202,7 @@ void BottomAxes::Draw()
 	double height;	
 	chart.g->DrawLine(&pen, chart.rect.left + chart.offsetAxesLeft, y, chart.rect.right - chart.offsetAxesRight, y);
 
-    char buf[32];
+   // char buf[32];
 	wchar_t wbuf[32];
 	PointF origin;
 	RectF rect;	
@@ -213,7 +213,7 @@ void BottomAxes::Draw()
     double minTick = 0;
     int maxLen = 0;
 	OffsetAxes(
-		int(3.5 * chart.GetCountDigit(minA, maxA, height, font, maxLen))
+		int(1.2 * chart.GetCountDigit(minA, maxA, height, font, maxLen))
 		, chart.rect.right - chart.rect.left - chart.offsetAxesLeft - chart.offsetAxesRight
 		, chart.minAxesX
 		, chart.maxAxesX
@@ -235,8 +235,9 @@ void BottomAxes::Draw()
     while(offs < offsMax)
     {		
 		chart.g->DrawLine(&pen, int(offs), y, int(offs), y + 7);
-		gcvt(digit, 5, buf);
-		mbstowcs(wbuf, buf, 32);
+		//gcvt(digit, 5, buf);
+		//mbstowcs(wbuf, buf, 32);
+		_itow((int)digit, wbuf, 10);
 		size_t len = wcslen(wbuf);
 		chart.g->MeasureString(wbuf, (int)len, &font, origin, &format, &rect);
 		origin.X = (REAL)offs;
@@ -266,8 +267,8 @@ void BottomAxes::OffsetToPixel(WORD &offs, int delta)
 BottomAxesMeters::BottomAxesMeters(Chart &chart)//, int zoneInMM)
 : chart(chart)
 //, zoneInMM(zoneInMM)
-, minA(100)
-, maxA(100)
+//, minA(100)
+//, maxA(100)
 , minBorder(0), maxBorder(10)
 {
 }
@@ -291,7 +292,7 @@ void BottomAxesMeters::Draw()
 	double height;	
 	chart.g->DrawLine(&pen, chart.offsetAxesLeft, y, chart.rect.right - chart.offsetAxesRight, y);
 
-    char buf[32];
+   // char buf[32];
 	wchar_t wbuf[32];
 	PointF origin;
 	RectF rect;	
@@ -302,7 +303,7 @@ void BottomAxesMeters::Draw()
     double minTick = 0;
     int maxLen = 0;
 	OffsetAxes(
-		int(3.5 * chart.GetCountDigit(minA, maxA, height, font, maxLen))
+		int(2.0 * chart.GetCountDigit(chart.minAxesX, chart.maxAxesX, height, font, maxLen))
 		, chart.rect.right - chart.rect.left - chart.offsetAxesLeft - chart.offsetAxesRight
 		, minBorder
 		, maxBorder
@@ -311,7 +312,7 @@ void BottomAxesMeters::Draw()
 		, digit
 		, minTick
 		);
-	minA = digit;
+//	minA = digit;
     chart.deltaTickX = deltaTick;
 	chart.deltaDigitX = deltaDigit;
 	double offs = chart.offsetAxesLeft;
@@ -324,8 +325,10 @@ void BottomAxesMeters::Draw()
     while(offs < offsMax)
     {		
 		chart.g->DrawLine(&pen, int(offs), y, int(offs), y + 7);
-		gcvt(digit, 5, buf);
-		mbstowcs(wbuf, buf, 32);
+		//gcvt(digit, 5, buf);
+		//mbstowcs(wbuf, buf, 32);
+		//wsprintf(wbuf, L"%d", (int)digit);
+		_itow((int)digit, wbuf, 10);
 		size_t len = wcslen(wbuf);
 		chart.g->MeasureString(wbuf, (int)len, &font, origin, &format, &rect);
 		origin.X = REAL(offs + (deltaTick - rect.Width) / 2);
@@ -334,7 +337,7 @@ void BottomAxesMeters::Draw()
         offs += deltaTick;
         digit += deltaDigit;
     }
-	maxA = digit;
+	//maxA = digit;
 	chart.g->SetClip(&Region());
 }
 //-----------------------------------------------------------------------------------------------------------------

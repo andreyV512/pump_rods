@@ -90,7 +90,7 @@ public:
 
 class BottomAxesMeters
 {
-	double minA, maxA;
+	//double minA, maxA;
 	int offsMax;
 	int offsMin;
 	double deltaTickDigit;
