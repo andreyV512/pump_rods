@@ -14,9 +14,9 @@ public:
 	template<class T>struct Border: public HBorder{Border(Chart &c): HBorder(c){}};
 	typedef ChartDraw<Chart, TL::MkTlst<
 		NoOffsetLeftAxes
-		, BottomAxesMeters
+		, BottomAxes//Meters
 		, BarSeriesNoFixed
-		, FixedGrid		
+		, Grid		
 		, Border<SortDown>
 		, Border<Defect>
 	>::Result> TChart;
