@@ -18,7 +18,7 @@ class DebugMess
 public:	
 	class Initialization;
 	void Destroy(void);
-	void print(char *, ...);
+	void print(const char *, ...);
 };
 
 class ViewerDebugMess

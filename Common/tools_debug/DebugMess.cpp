@@ -44,7 +44,7 @@ void DebugMess::Destroy(void)
 	CloseHandle(hMapFile);
 }
 #pragma warning(disable : 4996)
-void DebugMess::print(char *c, ...)
+void DebugMess::print(const char *format, ...)
 {
 	if(NULL != map)
 	{
@@ -52,7 +52,10 @@ void DebugMess::print(char *c, ...)
 		--i;
 		i &= 0xff;
 		char *b = map->data[i];
-		vsprintf(b, c, (char *)&c + 4);
+		va_list args;
+		va_start (args, format);
+		vsprintf(b, format, args);
+		va_end (args);
 		b[strlen(b)] = '\0';
 		SetEvent(h);
 	}
