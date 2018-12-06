@@ -18,12 +18,11 @@ public:
 public:
 	Cursor cursor;
 	int currentX;
-	int currentY;
+//	int currentY;
 public:
 	CommonViewer(Chart *, const int &);
 	virtual ~CommonViewer();
 	LRESULT operator()(TCreate &);
-	//void operator()(TDestroy &);
 	void operator()(TSize &);
 	void operator()(TPaint &);
 	void operator()(TMouseMove &);

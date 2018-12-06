@@ -12,7 +12,7 @@ CommonViewer::CommonViewer(Chart *c, const int &count_sensors)
 	, count_sensors(count_sensors)
 	, chart(c)
 	, cursor(*chart)
-	, currentX(0), currentY(0)
+	, currentX(0)//, currentY(0)
 {}
 
 CommonViewer::~CommonViewer()
@@ -101,6 +101,7 @@ void CommonViewer::operator()(TLButtonDown &l)
 	storedMouseMove.x = l.x;
 	storedMouseMove.y = l.y;
 //	 
+	int currentY;
 	chart->CoordCell(storedMouseMove.x, storedMouseMove.y, (int)currentX, currentY);
 	chart->CellCoord(storedMouseMove.x, storedMouseMove.y, (int)currentX, currentY);
 	cursor.CrossCursor(storedMouseMove, HDCGraphics(l.hwnd, backScreen)) ;
@@ -109,7 +110,7 @@ void CommonViewer::operator()(TLButtonDown &l)
 LRESULT CommonViewer::operator()(TCreate &l)
 {
 	storedMouseMove.hwnd = l.hwnd;
-	currentX = currentY = 0;
+	currentX /*= currentY*/ = 0;
 
 	chart->minAxesY = 0;
 	chart->maxAxesY = 100;
@@ -122,12 +123,6 @@ LRESULT CommonViewer::operator()(TCreate &l)
 
 	return 0;
 }
-
-//void CommonViewer::operator()(TDestroy &l)
-//{
-//	delete this;
-//	SetWindowLongPtr(l.hwnd, GWLP_USERDATA, 0);
-//}
 
 void CommonViewer::operator()(TCommand &m)
 {
