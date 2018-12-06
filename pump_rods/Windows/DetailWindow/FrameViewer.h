@@ -9,14 +9,15 @@
 
 class FrameViewer: public CommonViewer
 {
+	int last;
 public:
 	typedef CommonViewer Parent;
 	template<class T>struct Border: public HBorder{Border(Chart &c): HBorder(c){}};
 	typedef ChartDraw<Chart, TL::MkTlst<
 		NoOffsetLeftAxes
 		, BottomAxes//Meters
-		, BarSeriesNoFixed
-		, Grid		
+		, BarSeries//NoFixed
+		, Grid//FixedGrid		
 		, Border<SortDown>
 		, Border<Defect>
 	>::Result> TChart;
@@ -41,6 +42,7 @@ public:
 	bool GetColorBar(int , double &, unsigned &);
 	void operator()(TMouseWell &);
 	void operator()(TSize &);
+	bool DrawFrame(TMouseMove &, VGraphics &);
 };
 
 

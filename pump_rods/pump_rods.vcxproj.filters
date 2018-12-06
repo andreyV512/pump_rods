@@ -212,6 +212,9 @@
     <ClInclude Include="Windows\DetailWindow\FrameViewer.h">
       <Filter>pump_rods\Windows\DetailWindow</Filter>
     </ClInclude>
+    <ClInclude Include="Windows\MainWindow\ResultViewer.h">
+      <Filter>pump_rods\Windows\MainWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp">
@@ -330,6 +333,9 @@
     </ClCompile>
     <ClCompile Include="Windows\DetailWindow\FrameViewer.cpp">
       <Filter>pump_rods\Windows\DetailWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\MainWindow\ResultViewer.cpp">
+      <Filter>pump_rods\Windows\MainWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

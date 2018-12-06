@@ -2,21 +2,31 @@
 
 FrameViewer::FrameViewer()
 	: CommonViewer(&tchart, 1) 
-    , tchart(backScreen)
+	, tchart(backScreen)
+	, last(-1)
 {
-	tchart.items.get<BarSeriesNoFixed>().SetColorBarHandler(this, &FrameViewer::GetColorBar);
+	tchart.items.get<BarSeries>().SetColorBarHandler(this, &FrameViewer::GetColorBar);
 	cursor.horizontalLine = false;
 }
 
-bool FrameViewer::GetColorBar(int zone, double &data, unsigned &color)
+bool FrameViewer::GetColorBar(int zone_, double &data, unsigned &color)
 {
-	data = buffer[zone];
-	color = nominalColor;
-	if(zone < deathZoneFirst) color = deathZoneColor;
-	else if(zone > deathZoneSecond)color = deathZoneColor;
-	else if(data > threshDefect) color = threshDefectColor;
-	else if(data > threshSortDown) color = deathZoneColor;
-	return zone < count;
+	int zone = int((double)zone_ * dimention_of(buffer) / count);
+	if(zone != last)
+	{
+		last = zone;
+		data = buffer[zone];
+		color = nominalColor;
+		double delta = (tchart.maxAxesX - tchart.minAxesX) / dimention_of(buffer);
+
+		int xzone = int(delta * zone + tchart.minAxesX);
+
+		if(xzone < deathZoneFirst)color = deathZoneColor;
+		else if(xzone > deathZoneSecond)color = deathZoneColor;
+		else if(data > threshDefect) color = threshDefectColor;
+		else if(data > threshSortDown) color = threshSortDownColor;
+	}
+	return zone < dimention_of(buffer);
 }
 
 void FrameViewer::operator()(TMouseWell &l)
@@ -36,13 +46,13 @@ void FrameViewer::operator()(TMouseWell &l)
 void FrameViewer::operator()(TSize &l)
 {
 	if(l.resizing == SIZE_MINIMIZED || 0 == l.Width || 0 == l.Height) return;	
-	
+
 	if(NULL != backScreen)
 	{
 		if(backScreen->GetWidth() < l.Width || backScreen->GetHeight() < l.Height)
 		{
 			delete backScreen;
-		    backScreen = new Bitmap(l.Width, l.Height);
+			backScreen = new Bitmap(l.Width, l.Height);
 		}
 	}
 	else if(l.Width > 0 && l.Height > 0)
@@ -56,17 +66,35 @@ void FrameViewer::operator()(TSize &l)
 	chart->rect.right = l.Width;
 	chart->rect.bottom = l.Height;
 
-	ThresholdsTable::TItems &ax = Singleton<ThresholdsTable>::Instance().items;
-	//tchart.items.get<BarSeriesNoFixed>().dataLength = count;
-	//tchart.items.get<Border<SortDown>>().color  = threshSortDownColor;
-	//tchart.items.get<Border<Defect>>().color  = threshDefectColor;
-	//tchart.items.get<Border<SortDown>>().value  = threshSortDown;
-	//tchart.items.get<Border<Defect>>().value  = threshDefect;
-    Graphics g(backScreen);
+	Graphics g(backScreen);
 	SolidBrush solidBrush(Color((ARGB)BACK_GROUND));
 	g.FillRectangle(&solidBrush, 0, 0, 10, l.Height);   
 	g.FillRectangle(&solidBrush, 0, 0, l.Width, 29);
 	chart->Draw(g);
+}
+
+void CoordCell(Chart *chart, int mX, int &x, int delta)
+{
+	double left = chart->rect.left + chart->offsetAxesLeft;
+	x = int(delta * (mX - left)/(chart->rect.right - chart->offsetAxesRight - left));
+	if(x < 0) x = 0;
+}
+
+bool FrameViewer::DrawFrame(TMouseMove &l, VGraphics &g)
+{
+	if(0 == count) return false;
+	int x;
+	CoordCell(chart, l.x, x, dimention_of(buffer));
+	double delta = (tchart.maxAxesX - tchart.minAxesX) / dimention_of(buffer);
+	wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s %d %d"// %s"
+		, int(delta * x + tchart.minAxesX)
+		, Wchar_from<double, 2>(buffer[x])()
+		//	, Mess(buffer[x], x)
+		, x
+		, int(delta * x)
+		);
+	label.Draw(g());
+	return true;
 }
 
 

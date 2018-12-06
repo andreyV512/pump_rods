@@ -77,7 +77,7 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	def.deathZoneColor = color.get<Clr<DeathZone>>().value;
 	def.nominalColor = color.get<Clr<Nominal>>().value;
 	def.cursor.SetMouseMoveHandler(&def, & DefectWindow::Def::Draw);
-
+/*
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	frame.count = viewerCount.get<DefectSig<ViewerCount>>().value;
 
@@ -114,6 +114,8 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	frame.deathZoneFirst	= int((double)dead.get<DefectSig<First<DeathZone>>>().value * item.currentOffset / rodLength); 
 	frame.deathZoneSecond	= item.currentOffset -  int((double)dead.get<DefectSig<Second<DeathZone>>>().value * item.currentOffset / rodLength); 
 
+	dprint(" deathZoneFirst %d deathZoneSecond %d\n", frame.deathZoneFirst, frame.deathZoneSecond);
+
 	frame.deathZoneColor	= def.deathZoneColor	; 	
 	frame.threshDefect	 	= def.threshDefect	 	;
 	frame.threshDefectColor	= def.threshDefectColor	;
@@ -129,7 +131,10 @@ LRESULT DefectWindow::operator()(TCreate &m)
 
 	frame.tchart.items.get<FrameViewer::Border<SortDown>>().color  = frame.threshSortDownColor;
 	frame.tchart.items.get<FrameViewer::Border<Defect>>().color  = frame.threshDefectColor;
-	
+*/	
+	FrameViewer &frame =  viewers.get<FrameViewer>();
+	frame.cursor.SetMouseMoveHandler(&frame, &FrameViewer::DrawFrame); 
+	ChangeFrame(0);
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
 	return 0;
 }
@@ -149,11 +154,13 @@ void DefectWindow::ChangeFrame(int offsetDef)
 	double tbuf[tbuf_size];
 
 	int offs_b = tbuf_size / 3;
-	int offs = offsetDef - offs_b;
+	int offs = int(offsetDef - offs_b * frame.delta);
+	int frameWidth = 3 * frame.count / 2;
 	if(offs < 0)
 	{
 		offs = 0;
 		offs_b = 0;
+		frameWidth = frame.count;
 	}
 	else if(offs + frame.count > item.currentOffset)
 	{
@@ -162,7 +169,7 @@ void DefectWindow::ChangeFrame(int offsetDef)
 
 	Compute::Compute(
 		item.inputData + offs
-		, frame.count + offs_b
+		, frameWidth
 		, frame.cutoffFrequency
 		, frame.medianFiltreLength
 		, tbuf//frame.buffer
@@ -170,11 +177,11 @@ void DefectWindow::ChangeFrame(int offsetDef)
 		, Singleton<L502ParametersTable>::Instance().items.get<DefectSig<ChannelSamplingRate>>().value
 		);
 
-	memmove(frame.buffer, &tbuf[offs_b], dimention_of(frame.buffer));
+	memmove(frame.buffer, &tbuf[offs_b], sizeof(frame.buffer));
 
-//	BottomAxesMeters &bottomAxesMeters = frame.tchart.items.get<BottomAxesMeters>();
-//	bottomAxesMeters.minBorder = offsetDef;
-//	bottomAxesMeters.maxBorder = offsetDef + frame.count;
+	//BottomAxesMeters &bottomAxesMeters = frame.tchart.items.get<BottomAxesMeters>();
+	//bottomAxesMeters.minBorder = offsetDef;
+	//bottomAxesMeters.maxBorder = offsetDef + frame.count;
 	frame.tchart.minAxesX = offsetDef;
 	frame.tchart.maxAxesX = offsetDef + frame.count;
 
@@ -188,13 +195,15 @@ void DefectWindow::ChangeFrame(int offsetDef)
 
 	frame.delta = int((double)frame.count / dimention_of(frame.buffer));
 
-	frame.count = dimention_of(frame.buffer);
+	frame.count = frame.count;//dimention_of(frame.buffer);
 	frame.nominalColor		= def.nominalColor		;
 
 	DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;
 	int rodLength = dead.get<RodLenght>().value;
 	frame.deathZoneFirst	= int((double)dead.get<DefectSig<First<DeathZone>>>().value * item.currentOffset / rodLength); 
 	frame.deathZoneSecond	= item.currentOffset -  int((double)dead.get<DefectSig<Second<DeathZone>>>().value * item.currentOffset / rodLength); 
+
+	dprint("frame.deathZoneFirst %d frame.deathZoneSecond %d\n", frame.deathZoneFirst, frame.deathZoneSecond);
 
 	frame.deathZoneColor	= def.deathZoneColor	; 	
 	frame.threshDefect	 	= def.threshDefect	 	;
@@ -252,3 +261,4 @@ void DefectWindow::operator()(TMouseWell &l)
 		);
 }
 //-----------------------------------------------------------------------------
+

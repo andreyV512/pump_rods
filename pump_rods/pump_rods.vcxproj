@@ -123,6 +123,7 @@
     <ClInclude Include="Windows\MainWindow\MainWindow.h" />
     <ClInclude Include="Windows\MainWindow\MainWindowMenu.hpp" />
     <ClInclude Include="Windows\MainWindow\MainWindowToolBar.h" />
+    <ClInclude Include="Windows\MainWindow\ResultViewer.h" />
     <ClInclude Include="Windows\MainWindow\Viewers.h" />
   </ItemGroup>
   <ItemGroup>
@@ -164,6 +165,7 @@
     <ClCompile Include="Windows\MainWindow\AppKeyHandler.cpp" />
     <ClCompile Include="Windows\MainWindow\MainWindow.cpp" />
     <ClCompile Include="Windows\MainWindow\MainWindowToolBar.cpp" />
+    <ClCompile Include="Windows\MainWindow\ResultViewer.cpp" />
     <ClCompile Include="Windows\MainWindow\Viewers.cpp" />
   </ItemGroup>
   <ItemGroup>
