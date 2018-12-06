@@ -80,6 +80,8 @@
     <ClInclude Include="..\CommonApp\CommonWindow\Common.h" />
     <ClInclude Include="..\CommonApp\CommonWindow\CommonViewer.h" />
     <ClInclude Include="..\CommonApp\CommonWindow\TopLabelViewer.h" />
+    <ClInclude Include="..\CommonApp\MessageText\ListMess.hpp" />
+    <ClInclude Include="..\CommonApp\MessageText\StatusMessages.h" />
     <ClInclude Include="..\Common\Base\Base.hpp" />
     <ClInclude Include="..\Common\Base\ExpressBase.hpp" />
     <ClInclude Include="..\Common\Base\tables.hpp" />
@@ -114,6 +116,7 @@
     <ClInclude Include="..\Common\window_tool\WindowsPosition.h" />
     <ClInclude Include="App\App.h" />
     <ClInclude Include="App\AppBase.h" />
+    <ClInclude Include="App\MessageItems.h" />
     <ClInclude Include="Compute\Compute.h" />
     <ClInclude Include="DataItem\DataItem.h" />
     <ClInclude Include="Resource.h" />
@@ -130,6 +133,7 @@
     <ClCompile Include="..\CommonApp\CommonWindow\Common.cpp" />
     <ClCompile Include="..\CommonApp\CommonWindow\CommonViewer.cpp" />
     <ClCompile Include="..\CommonApp\CommonWindow\TopLabelViewer.cpp" />
+    <ClCompile Include="..\CommonApp\MessageText\StatusMessages.cpp" />
     <ClCompile Include="..\Common\DspFilters\ChebyshevFiltre.cpp" />
     <ClCompile Include="..\Common\DspFilters\source\Biquad.cpp" />
     <ClCompile Include="..\Common\DspFilters\source\Cascade.cpp" />

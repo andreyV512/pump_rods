@@ -63,6 +63,9 @@
     <Filter Include="pump_rods\Windows\DetailWindow">
       <UniqueIdentifier>{b5032c11-9c76-4fb6-a68e-34b268b47eda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CommonApp\MessageText">
+      <UniqueIdentifier>{73b93517-b0d2-4fc4-8540-aa445a1e4989}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -215,6 +218,15 @@
     <ClInclude Include="Windows\MainWindow\ResultViewer.h">
       <Filter>pump_rods\Windows\MainWindow</Filter>
     </ClInclude>
+    <ClInclude Include="..\CommonApp\MessageText\ListMess.hpp">
+      <Filter>CommonApp\MessageText</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommonApp\MessageText\StatusMessages.h">
+      <Filter>CommonApp\MessageText</Filter>
+    </ClInclude>
+    <ClInclude Include="App\MessageItems.h">
+      <Filter>pump_rods\App</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp">
@@ -336,6 +348,9 @@
     </ClCompile>
     <ClCompile Include="Windows\MainWindow\ResultViewer.cpp">
       <Filter>pump_rods\Windows\MainWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommonApp\MessageText\StatusMessages.cpp">
+      <Filter>CommonApp\MessageText</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -5,6 +5,8 @@
 #include "App\AppBase.h"
 #include "DataItem\DataItem.h"
 #include "Windows\MainWindow\MainWindow.h"
+#include "App\MessageItems.h"
+#include "MessageText\StatusMessages.h"
 
 namespace Compute
 {
@@ -33,11 +35,7 @@ namespace Compute
 			if(k >= outputLength) break;
 			if(t < 0) t = -t;
 			if(t > outputData[k]) outputData[k] = t;
-		}
-		//for(int i = 0; i < outputLength; ++i)
-		//{
-		//
-		//}
+		}		
 	}
 
 	//void Normalization()
@@ -98,11 +96,11 @@ namespace Compute
 			, p.cutoffFrequency.get<W<CutoffFrequency>>().value
 			, p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value
 			, o.outputData
-			, o.outputLength
+			, DataItem::output_buffer_size
 			, p.l502Param.get<W<ChannelSamplingRate>>().value
 			);
 
-			for(int i = 0; i < o.outputLength; ++i)
+			for(int i = 0; i < DataItem::output_buffer_size; ++i)
 			{
 				o.outputData[i] *= adcRange * koef;
 			}
@@ -112,22 +110,35 @@ namespace Compute
 			int rodLength = dead.get<RodLenght>().value;
 			int firstDeathZone = dead.get<W<First<DeathZone>>>().value;
 			int secondDeathZone = dead.get<W<Second<DeathZone>>>().value;
-			o.deathZoneFirst =  int((double )o.deathZoneFirst * o.outputLength / rodLength);
-			o.deathZoneSecond =  o.outputLength - int((double )o.deathZoneSecond * o.outputLength / rodLength);
+			o.deathZoneFirst =  int((double )o.deathZoneFirst * DataItem::output_buffer_size / rodLength);
+			o.deathZoneSecond =  DataItem::output_buffer_size - int((double )o.deathZoneSecond * DataItem::output_buffer_size / rodLength);
 
-			o.result = TL::IndexOf<ColorTable::items_list, Clr<Nominal>>::value;
+			o.result = TL::IndexOf<zone_status_list, Nominal>::value;
 			for(int i = o.deathZoneFirst; i < o.deathZoneSecond; ++i)
 			{
 				double t = o.outputData[i];
 				if(t > o.threshDefect)
 				{
-					o.result = TL::IndexOf<ColorTable::items_list, Clr<Defect>>::value;
-					return;
+					o.result = TL::IndexOf<zone_status_list, W<Defect>>::value;
+					o.status[i] = TL::IndexOf<zone_status_list, W<Defect>>::value;
 				}
-				if(t > o.threshSortDown)
+				else if(t > o.threshSortDown)
 				{
-					o.result = TL::IndexOf<ColorTable::items_list, Clr<SortDown>>::value;
+					if(TL::IndexOf<zone_status_list, W<Defect>>::value != o.result)o.result = TL::IndexOf<zone_status_list, W<SortDown>>::value;
+					o.status[i] = TL::IndexOf<zone_status_list, W<SortDown>>::value;
 				}
+				else
+				{
+					o.status[i] = TL::IndexOf<zone_status_list, Nominal>::value;
+				}
+			}
+			for(int i = 0; i < o.deathZoneFirst; ++i)
+			{
+				o.status[i] = TL::IndexOf<zone_status_list, DeathZone>::value;
+			}
+			for(int i = o.deathZoneSecond; i < dimention_of(o.status); ++i)
+			{
+				o.status[i] = TL::IndexOf<zone_status_list, DeathZone>::value;
 			}
 		}
 	};
@@ -152,7 +163,7 @@ namespace Compute
 			Item &item = Singleton<Item>::Instance();
 
 			memmove(v.buffer, item.outputData, sizeof(v.buffer));
-			v.count = item.outputLength;
+			v.count = DataItem::output_buffer_size;
 			v. deathZoneFirst = item.deathZoneFirst;
 			v.deathZoneSecond = item.deathZoneSecond;
 			v.threshSortDown = item.threshSortDown; 
@@ -161,15 +172,32 @@ namespace Compute
 			v.tchart.maxAxesX = item.currentOffset - 1;
 			v.currentOffset = item.currentOffset;
 			v.inputData = item.inputData;
-			v.lengthTube = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;
+			//v.lengthTube = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;
 		}
 	};
+
+	void ComputeResult()
+	{
+		char (&def)[DataItem::output_buffer_size] = Singleton<DataItem::Defectoscope>::Instance().status;
+		char (&sig)[DataItem::output_buffer_size] = Singleton<DataItem::Structure>::Instance().status;
+		char (&res)[DataItem::output_buffer_size] = Singleton<DataItem::ResultData>::Instance().status;
+		unsigned st[3];
+		st[2] = -1;
+		for(int i = 0; i < DataItem::output_buffer_size; ++i)
+		{
+			st[0] = def[i];
+			st[1] = sig[i];
+			
+			res[i] = ResultMessageId(st);
+		}
+	}
 
 	void Recalculation()
 	{
 		MainWindow &mainWindow = Singleton<MainWindow>::Instance();
 		
 		TL::foreach<__data_item_list__, __recalculation__>()(__rec_data__());
+		ComputeResult();
 		TL::foreach<__data_item_list__, __set_data__>()(mainWindow.viewers);
 		App::UpdateViewers();
 

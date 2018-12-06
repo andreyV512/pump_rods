@@ -42,11 +42,11 @@ namespace DataItem
 	{
 		Defectoscope &def = Singleton<Defectoscope>::Instance();
 		def.currentOffset = App::buffer_size;
-		def.outputLength = output_buffer_size;
+		//def.outputLength = output_buffer_size;
 		__Test__(def.inputData, 1.0);
 		Structure &str = Singleton<Structure>::Instance();
 		str.currentOffset = App::buffer_size;
-		str.outputLength = output_buffer_size;
+		//str.outputLength = output_buffer_size;
 		__Test1__(str.inputData, 1.0);
 	}
 

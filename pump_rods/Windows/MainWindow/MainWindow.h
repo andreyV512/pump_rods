@@ -7,6 +7,7 @@
 #include "App/AppBase.h"
 #include "CommonWindow/TopLabelViewer.h"
 #include "Viewers.h"
+#include "ResultViewer.h"
 
 class MainWindow
 {
@@ -36,6 +37,7 @@ public:
 	typedef TL::MkTlst<
 		DefectoscopeViewer
 		, StructureViewer
+		, ResultViewer
 	>::Result viewers_list;
 	TL::Factory<viewers_list> viewers;
 	HWND hWnd;

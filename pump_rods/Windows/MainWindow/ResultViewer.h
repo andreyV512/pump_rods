@@ -12,7 +12,7 @@ public:
 	typedef CommonViewer Parent;
 	typedef ChartDraw<Chart, TL::MkTlst<
 		EmptyLeftAxes
-		, BottomAxesGrid
+		, BottomAxesMeters//BottomAxesGrid
 		, FixedGridSeries
 		, VerticalFixedGrid	
 	>::Result> TChart;

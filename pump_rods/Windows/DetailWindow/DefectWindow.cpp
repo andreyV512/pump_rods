@@ -61,7 +61,7 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	def.owner = this;
 	memmove(def.buffer, item.outputData, sizeof(def.buffer));
 
-	def.count = item.outputLength;
+	def.count = DataItem::output_buffer_size;
 	def. deathZoneFirst = item.deathZoneFirst;
 	def.deathZoneSecond = item.deathZoneSecond;
 	def.threshSortDown = item.threshSortDown; 
@@ -70,8 +70,8 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	def.tchart.maxAxesX = item.currentOffset - 1;
 	def.currentOffset = item.currentOffset;
 	def.inputData = item.inputData;
-	def.lengthTube = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;
-	def.tchart.items.get<BottomAxesMeters>().maxBorder = def.lengthTube;	
+	//def.lengthTube = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;
+//	def.tchart.items.get<BottomAxesMeters>().maxBorder = def.lengthTube;	
 	def.threshSortDownColor = color.get<Clr<SortDown>>().value;
 	def.threshDefectColor = color.get<Clr<Defect>>().value;
 	def.deathZoneColor = color.get<Clr<DeathZone>>().value;

@@ -24,7 +24,7 @@ public:
 	TChart tchart;
 
 	int count;
-	int lengthTube;
+	//int lengthTube;
 	int currentOffset;
 	int deathZoneFirst, deathZoneSecond;
 	double threshSortDown, threshDefect;

@@ -11,17 +11,31 @@ namespace {
 	struct __move_window_data__
 	{
 		int y, width, height, maxYHeight;
+		int lengthTube;
 	};
 	template<class O, class P>struct __move_window__
 	{
 		void operator()(O *o, P *p)
 		{		
-			o->tchart.items.get<BottomAxesMeters>().maxBorder = o->lengthTube;
+			o->tchart.items.get<BottomAxesMeters>().maxBorder = p->lengthTube;
 			int height =  2 * p->height;
 			TSize size = {o->hWnd, WM_SIZE, 0, p->width, height};
 			SendMessage(MESSAGE(size));
 			MoveWindow(o->hWnd , 0, p->y, p->width, height, true);
 			p->y += height;
+		}
+	};
+	template<class P>struct __move_window__<ResultViewer, P>
+	{
+		typedef ResultViewer O;
+		void operator()(O *o, P *p)
+		{		
+			o->tchart.items.get<BottomAxesMeters>().maxBorder = p->lengthTube;
+			//int height =  2 * p->height;
+			TSize size = {o->hWnd, WM_SIZE, 0, p->width, p->height};
+			SendMessage(MESSAGE(size));
+			MoveWindow(o->hWnd , 0, p->y, p->width, p->maxYHeight - p->y, true);
+			//p->y += height;
 		}
 	};
 }
@@ -98,9 +112,11 @@ void MainWindow::operator()(TSize &m)
 	MoveWindow(topLabelViewer.hWnd , 0, y, r.right, topLabelHeight, true);
 	y += topLabelHeight;
 	int maxYHeight = t;
-	t = int((double)t / 4);
+	t = int((double)t / 5);
 //
-	__move_window_data__ data = {y, r.right, t, m.Height - rs.bottom};
+	__move_window_data__ data = {y, r.right, t, m.Height - rs.bottom
+		, Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value
+	};
 	TL::foreach<viewers_list, __move_window__>()(&viewers, &data);
 }
 
@@ -239,7 +255,7 @@ bool MainWindow::StructureViewer::Draw(TMouseMove &l, VGraphics &g)
 	int x;
 	CoordCell(l.x, x, count);
 
-	double offs = lengthTube / count;
+	double offs = tchart.items.get<BottomAxesMeters>().maxBorder / count;
 	offs *= x;
 
 	wsprintf(label.buffer, L"<ff>структура смещение <ff00>%d <ff>%s %s"

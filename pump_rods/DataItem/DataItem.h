@@ -7,29 +7,32 @@ namespace DataItem
 	struct Defectoscope
 	{		
 		int currentOffset;
-		int outputLength;
+		//int outputLength;
 		int deathZoneFirst, deathZoneSecond;
 		double threshSortDown, threshDefect;
 		int result;
 		double inputData[App::buffer_size];
 		double outputData[output_buffer_size];
+		char status[output_buffer_size];
 	};
 
 	struct Structure
 	{
 		int currentOffset;
-		int outputLength;
+		//int outputLength;
 		int deathZoneFirst, deathZoneSecond;
 		double threshSortDown, threshDefect;
 		int result;
 		double inputData[App::buffer_size];
 		double outputData[output_buffer_size];
+		char status[output_buffer_size];
 	};
 
 	struct ResultData
 	{
 		int currentOffset;
 		int currentOffsetZones;
+		char status[output_buffer_size];
 	};
 
 	double ADC_RANGE(int range);
