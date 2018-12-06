@@ -58,12 +58,11 @@ void ViewerData::operator()(TSize &l)
 bool ViewerData::GetColorBar(int zone, double &data, unsigned &color)
 {
 	data = buffer[zone];
-	if(zone < 100)dprint(" %d %f\n", zone, data);
 	color = nominalColor;
 	if(zone < deathZoneFirst) color = deathZoneColor;
 	else if(zone > deathZoneSecond)color = deathZoneColor;
 	else if(data > threshDefect) color = threshDefectColor;
-	else if(data > threshSortDown) color = deathZoneColor;
+	else if(data > threshSortDown) color = threshSortDownColor;
 	return zone < count;
 }
 
@@ -112,11 +111,11 @@ void ViewerData::operator()(TMouseWell &l)
 }
 
 void ViewerData::CoordCell(int mX, int &x, int delta)
- {
+{
 	double left = chart->rect.left + chart->offsetAxesLeft;
 	x = int(delta * (mX - left)/(chart->rect.right - chart->offsetAxesRight - left));
 	if(x < 0) x = 0;
- }
+}
 
 wchar_t *ViewerData::Mess(double val, int offs)
 {

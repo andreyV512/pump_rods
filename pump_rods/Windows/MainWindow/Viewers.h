@@ -30,7 +30,6 @@ public:
 	double threshSortDown, threshDefect;
 	int threshSortDownColor, threshDefectColor, deathZoneColor, nominalColor;
 	int result;
-	//double delta;
 	double *inputData;
 	double buffer[2000];
 
