@@ -17,6 +17,24 @@ namespace DataItem
 		for(int i = 0; i < App::buffer_size; ++i)
 		{
 			data[i] = delta * i;
+			//int k = i / 10;
+			//if(k & 1) data[i] = 10;
+		}
+	}
+
+	void __Test1__(double (&data)[App::buffer_size], double koeff)
+	{
+		//double w = 2 * M_PI /1000 * koeff;
+		//for(int i = 0; i < App::buffer_size; ++i)
+		//{
+		//	data[i] = sin(w * i) * 10  + (rand() % 10) - 5;
+		//}
+		double delta = 100.0 / App::buffer_size / 10;
+		for(int i = 0; i < App::buffer_size; ++i)
+		{
+			data[App::buffer_size - 1 - i] = delta * i;
+			//int k = i / 10;
+			//if(k & 1) data[i] = 10;
 		}
 	}
 
@@ -24,12 +42,12 @@ namespace DataItem
 	{
 		Defectoscope &def = Singleton<Defectoscope>::Instance();
 		def.currentOffset = App::buffer_size;
-		def.outputLength = Defectoscope::output_buffer_size;
+		def.outputLength = output_buffer_size;
 		__Test__(def.inputData, 1.0);
 		Structure &str = Singleton<Structure>::Instance();
 		str.currentOffset = App::buffer_size;
-		str.outputLength = Structure::output_buffer_size;
-		__Test__(str.inputData, 1.0);
+		str.outputLength = output_buffer_size;
+		__Test1__(str.inputData, 1.0);
 	}
 
 	double ADC_RANGE(int range)

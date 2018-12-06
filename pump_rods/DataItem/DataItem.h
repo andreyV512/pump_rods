@@ -3,9 +3,9 @@
 
 namespace DataItem
 {
+	static const int output_buffer_size = 1000;
 	struct Defectoscope
-	{
-		static const int output_buffer_size = 2000;
+	{		
 		int currentOffset;
 		int outputLength;
 		int deathZoneFirst, deathZoneSecond;
@@ -17,7 +17,6 @@ namespace DataItem
 
 	struct Structure
 	{
-		static const int output_buffer_size = 2000;
 		int currentOffset;
 		int outputLength;
 		int deathZoneFirst, deathZoneSecond;
@@ -25,6 +24,12 @@ namespace DataItem
 		int result;
 		double inputData[App::buffer_size];
 		double outputData[output_buffer_size];
+	};
+
+	struct ResultData
+	{
+		int currentOffset;
+		int currentOffsetZones;
 	};
 
 	double ADC_RANGE(int range);
