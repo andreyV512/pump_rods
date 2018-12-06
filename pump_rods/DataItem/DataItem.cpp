@@ -8,10 +8,15 @@ namespace DataItem
 {
 	void __Test__(double (&data)[App::buffer_size], double koeff)
 	{
-		double w = 2 * M_PI /1000 * koeff;
+		//double w = 2 * M_PI /1000 * koeff;
+		//for(int i = 0; i < App::buffer_size; ++i)
+		//{
+		//	data[i] = sin(w * i) * 10  + (rand() % 10) - 5;
+		//}
+		double delta = 100.0 / App::buffer_size / 10;
 		for(int i = 0; i < App::buffer_size; ++i)
 		{
-			data[i] = sin(w * i) * 10  + (rand() % 10) - 5;
+			data[i] = delta * i;
 		}
 	}
 
@@ -19,11 +24,11 @@ namespace DataItem
 	{
 		Defectoscope &def = Singleton<Defectoscope>::Instance();
 		def.currentOffset = App::buffer_size;
-		def.outputLength = 1000;
+		def.outputLength = Defectoscope::output_buffer_size;
 		__Test__(def.inputData, 1.0);
 		Structure &str = Singleton<Structure>::Instance();
 		str.currentOffset = App::buffer_size;
-		str.outputLength = 1000;
+		str.outputLength = Structure::output_buffer_size;
 		__Test__(str.inputData, 1.0);
 	}
 
