@@ -202,7 +202,6 @@ void BottomAxes::Draw()
 	double height;	
 	chart.g->DrawLine(&pen, chart.rect.left + chart.offsetAxesLeft, y, chart.rect.right - chart.offsetAxesRight, y);
 
-   // char buf[32];
 	wchar_t wbuf[32];
 	PointF origin;
 	RectF rect;	
@@ -213,7 +212,7 @@ void BottomAxes::Draw()
     double minTick = 0;
     int maxLen = 0;
 	OffsetAxes(
-		int(1.2 * chart.GetCountDigit(minA, maxA, height, font, maxLen))
+		int(1.5 * chart.GetCountDigit(minA, maxA, height, font, maxLen))
 		, chart.rect.right - chart.rect.left - chart.offsetAxesLeft - chart.offsetAxesRight
 		, chart.minAxesX
 		, chart.maxAxesX
