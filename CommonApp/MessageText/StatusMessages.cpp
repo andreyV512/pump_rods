@@ -51,8 +51,7 @@ namespace StatusMessages
 				__arr_proc_data__ data = {buf};
 				TL::foreach<T, __arr_proc__>()(data);
 			}
-#pragma message("писать")
-			//color = Singleton<ColorTable>::Instance().items.get<Clr<typename __skip_clr_wapper__<T>>::Result>().value;
+			color = Singleton<ColorTable>::Instance().items.get<Clr<typename __skip_clr_wapper__<typename T::Head>::Result>>().value;
 		}
 	};
 
@@ -188,7 +187,7 @@ void ColorBar::operator()(double &data, unsigned &color, int id, double defData)
    //}
 }
 
-void StatusText::FromSensors(unsigned *sens, unsigned &color, bool &visible, wchar_t *buf)
+void StatusText::FromSensors(unsigned *sens, unsigned &color, wchar_t *buf)
 	{
 		
 		buf[0] = 0;
@@ -209,7 +208,7 @@ unsigned StatusColor::operator()(unsigned id)
 		return color;
 	}
 
-void StatusText::operator()(int id, unsigned &color, bool &visible, wchar_t *buf)
+void StatusText::operator()(int id, unsigned &color, wchar_t *buf)
 	{
 		buf[0] = 0;
 
@@ -256,6 +255,14 @@ unsigned StatBits(unsigned id)
 
 namespace StatusMessages
 {
+	template<class T>struct __inner_tytpe__
+	{
+		typedef T Result;
+	};
+	template<template<class>class W, class T>struct __inner_tytpe__<W<T>>
+	{
+		typedef T Result;
+	};
 	struct __status_zone_data__
 	{
 		int id;
@@ -269,8 +276,7 @@ namespace StatusMessages
 			if(TL::IndexOf<zone_status_list, O>::value == p.id)
 			{
 				p.txt = Txt<O>()();
-				//p.color = Singleton<ColorTable>::Instance().items.get<Clr<O>>().value;
-#pragma message("writeygygy uihoioij ijijij")
+				p.color = Singleton<ColorTable>::Instance().items.get<Clr<typename __inner_tytpe__<O>::Result>>().value;
 				return false;
 			}
 			return true;
@@ -278,14 +284,14 @@ namespace StatusMessages
 	};
 }
 
-wchar_t *StatusTextZone(int id, unsigned &color)
-{
-	StatusMessages::__status_zone_data__ data = {
-		id
-		, Singleton<ColorTable>::Instance().items.get<Clr<Nominal>>().value
-		, L""};
-	TL::find<zone_status_list, StatusMessages::__status_zone__>()(data);
-	color = data.color;
-	return data.txt;
-}
+//wchar_t *StatusTextZone(int id, unsigned &color)
+//{
+//	StatusMessages::__status_zone_data__ data = {
+//		id
+//		, Singleton<ColorTable>::Instance().items.get<Clr<Nominal>>().value
+//		, StatusMessages::Txt<Nominal>()()};
+//	TL::find<StatusMessages::list_items, StatusMessages::__status_zone__>()(data);
+//	color = data.color;
+//	return data.txt;
+//}
 

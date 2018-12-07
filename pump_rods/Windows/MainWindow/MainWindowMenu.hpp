@@ -10,7 +10,7 @@ namespace MainWindowMenu
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct LoadDateFile {static void Do(HWND h){zprint("");}};
 	struct SaveDateFile {static void Do(HWND h){zprint("");}};
-	struct Compute_     {static void Do(HWND h){Compute::Recalculation();}};;// {static void Do(HWND h){zprint("");}};
+	struct Compute_     {static void Do(HWND h){Compute::Recalculation();}};// {static void Do(HWND h){zprint("");}};
 	struct MainExit
 	{
 		static void Do(HWND h)

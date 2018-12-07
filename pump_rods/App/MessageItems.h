@@ -2,10 +2,10 @@
 #include "App/AppBase.h"
 
 typedef TL::MkTlst<
-		Nominal
-		, DefectSig<SortDown>
+		DeathZone		
 		, DefectSig<Defect>
-		, StructSig<SortDown>
 		, StructSig<Defect>
-		, DeathZone
+		, DefectSig<SortDown>		
+		, StructSig<SortDown>
+		, Nominal
 	>::Result zone_status_list;

@@ -8,33 +8,41 @@ namespace DataItem
 {
 	void __Test__(double (&data)[App::buffer_size], double koeff)
 	{
-		//double w = 2 * M_PI /1000 * koeff;
-		//for(int i = 0; i < App::buffer_size; ++i)
-		//{
-		//	data[i] = sin(w * i) * 10  + (rand() % 10) - 5;
-		//}
 		double delta = 100.0 / App::buffer_size / 10;
-		for(int i = 0; i < App::buffer_size; ++i)
+		int i = 0;
+		for(; i < App::buffer_size / 2 - 55000; ++i)
 		{
 			data[i] = delta * i;
-			//int k = i / 10;
-			//if(k & 1) data[i] = 10;
+		}
+
+		for(; i < App::buffer_size / 2 + 55000; ++i)
+		{
+			data[i] =  delta * 100000;
+		}
+
+		for(; i < App::buffer_size; ++i)
+		{
+			data[i] = delta * i;
 		}
 	}
 
 	void __Test1__(double (&data)[App::buffer_size], double koeff)
 	{
-		//double w = 2 * M_PI /1000 * koeff;
-		//for(int i = 0; i < App::buffer_size; ++i)
-		//{
-		//	data[i] = sin(w * i) * 10  + (rand() % 10) - 5;
-		//}
 		double delta = 100.0 / App::buffer_size / 10;
-		for(int i = 0; i < App::buffer_size; ++i)
+		int i = 0;
+		for(; i < App::buffer_size / 2 - 55000; ++i)
 		{
 			data[App::buffer_size - 1 - i] = delta * i;
-			//int k = i / 10;
-			//if(k & 1) data[i] = 10;
+		}
+
+		for(; i < App::buffer_size / 2 + 55000; ++i)
+		{
+			data[App::buffer_size - 1 - i] =  delta * 100000;
+		}
+
+		for(; i < App::buffer_size; ++i)
+		{
+			data[App::buffer_size - 1 - i] = delta * i;
 		}
 	}
 

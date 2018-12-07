@@ -339,6 +339,13 @@ void BottomAxesMeters::Draw()
 	//maxA = digit;
 	chart.g->SetClip(&Region());
 }
+//--------------------------------------------------------
+void CoordCell(Chart &chart, int mX, int &x, int delta)
+{
+	double left = chart.rect.left + chart.offsetAxesLeft;
+	x = int(delta * (mX - left)/(chart.rect.right - chart.offsetAxesRight - left));
+	if(x < 0) x = 0;
+}
 //-----------------------------------------------------------------------------------------------------------------
 //void BottomAxesMeters::OffsetToPixel(WORD &offs, int delta)
 //{

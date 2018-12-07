@@ -7,6 +7,7 @@
 #include "Windows\MainWindow\MainWindow.h"
 #include "App\MessageItems.h"
 #include "MessageText\StatusMessages.h"
+#include "MessageText\ListMess.hpp"
 
 namespace Compute
 {
@@ -83,7 +84,7 @@ namespace Compute
 		void operator()(P &p)
 		{
 			O &o = Singleton<O>::Instance();
-
+			dprint("__recalculation__ %s\n", typeid(W<O>).name());
 			double adcRange =  100.0 / DataItem::ADC_RANGE(p.l502Param.get<W<RangeL502>>().value);
 			double koef = p.koeffSign.get<W<KoeffSign>>().value;
 			o.deathZoneFirst  = p.deadArea.get<W<First<DeathZone>>>().value;
@@ -112,33 +113,36 @@ namespace Compute
 			int secondDeathZone = dead.get<W<Second<DeathZone>>>().value;
 			o.deathZoneFirst =  int((double )o.deathZoneFirst * DataItem::output_buffer_size / rodLength);
 			o.deathZoneSecond =  DataItem::output_buffer_size - int((double )o.deathZoneSecond * DataItem::output_buffer_size / rodLength);
+             
+			//int WDefect = STATUS_ID(TDefect);
+			//int WSortDown = STATUS_ID(TSortDown);
 
-			o.result = TL::IndexOf<zone_status_list, Nominal>::value;
+			o.result = STATUS_ID(Nominal);
 			for(int i = o.deathZoneFirst; i < o.deathZoneSecond; ++i)
 			{
 				double t = o.outputData[i];
 				if(t > o.threshDefect)
 				{
-					o.result = TL::IndexOf<zone_status_list, W<Defect>>::value;
-					o.status[i] = TL::IndexOf<zone_status_list, W<Defect>>::value;
+					o.result = STATUS_ID(W<Defect>);//TL::IndexOf<zone_status_list, W<Defect>>::value;
+					o.status[i] = STATUS_ID(W<Defect>);//TL::IndexOf<zone_status_list, W<Defect>>::value;
 				}
 				else if(t > o.threshSortDown)
 				{
-					if(TL::IndexOf<zone_status_list, W<Defect>>::value != o.result)o.result = TL::IndexOf<zone_status_list, W<SortDown>>::value;
-					o.status[i] = TL::IndexOf<zone_status_list, W<SortDown>>::value;
+					if(STATUS_ID(W<Defect>) != o.result)o.result = STATUS_ID(W<SortDown>);
+					o.status[i] = STATUS_ID(W<SortDown>);
 				}
 				else
 				{
-					o.status[i] = TL::IndexOf<zone_status_list, Nominal>::value;
+					o.status[i] = STATUS_ID(Nominal);//TL::IndexOf<zone_status_list, Nominal>::value;
 				}
 			}
 			for(int i = 0; i < o.deathZoneFirst; ++i)
 			{
-				o.status[i] = TL::IndexOf<zone_status_list, DeathZone>::value;
+				o.status[i] = STATUS_ID(DeathZone);
 			}
 			for(int i = o.deathZoneSecond; i < dimention_of(o.status); ++i)
 			{
-				o.status[i] = TL::IndexOf<zone_status_list, DeathZone>::value;
+				o.status[i] = STATUS_ID(DeathZone);
 			}
 		}
 	};
@@ -148,7 +152,7 @@ namespace Compute
 	{
 		typedef MainWindow::DefectoscopeViewer Result;
 	};
-	template<>struct Viewer<DefectSig<DataItem::Structure>>
+	template<>struct Viewer<StructSig<DataItem::Structure>>
 	{
 		typedef MainWindow::StructureViewer Result;
 	};
@@ -163,7 +167,8 @@ namespace Compute
 			Item &item = Singleton<Item>::Instance();
 
 			memmove(v.buffer, item.outputData, sizeof(v.buffer));
-			v.count = DataItem::output_buffer_size;
+			memmove(v.status, item.status, sizeof(v.status));
+			//v.count = DataItem::output_buffer_size;
 			v. deathZoneFirst = item.deathZoneFirst;
 			v.deathZoneSecond = item.deathZoneSecond;
 			v.threshSortDown = item.threshSortDown; 

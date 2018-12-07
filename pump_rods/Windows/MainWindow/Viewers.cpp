@@ -2,14 +2,14 @@
 #include "templates/templates.hpp"
 #include "App/AppBase.h"
 #include "window_tool/MenuAPI.h"
-#include "DataItem/DataItem.h"
+//#include "DataItem/DataItem.h"
 
 using namespace Gdiplus;
 
 ViewerData::ViewerData()
 	: CommonViewer(&tchart, 1) 
     , tchart(backScreen)
-	, count(0)
+	//, count(0)
 	, currentOffset(1000)
 {
 	chart = &tchart;
@@ -42,7 +42,7 @@ void ViewerData::operator()(TSize &l)
 	chart->rect.bottom = l.Height;
 
 	ThresholdsTable::TItems &ax = Singleton<ThresholdsTable>::Instance().items;
-	tchart.items.get<BarSeriesNoFixed>().dataLength = count;
+	tchart.items.get<BarSeriesNoFixed>().dataLength = DataItem::output_buffer_size;
 	tchart.items.get<Border<SortDown>>().color  = threshSortDownColor;
 	tchart.items.get<Border<Defect>>().color  = threshDefectColor;
 	tchart.items.get<Border<SortDown>>().value  = threshSortDown;
@@ -63,7 +63,7 @@ bool ViewerData::GetColorBar(int zone, double &data, unsigned &color)
 	else if(zone > deathZoneSecond)color = deathZoneColor;
 	else if(data > threshDefect) color = threshDefectColor;
 	else if(data > threshSortDown) color = threshSortDownColor;
-	return zone < count;
+	return zone < dimention_of(buffer);
 }
 
 //void Chart_CoordCell(Chart &c, int mX, int &x, int delta)
@@ -96,31 +96,31 @@ void ViewerData::operator()(TRButtonDown &l)
 	//PopupMenu<ContextMenuThickWindow::items_list>::Do(l.hwnd, l.hwnd);
 }
 
-void ViewerData::operator()(TMouseWell &l)
-{
-	if(0 == l.delta) return;
-	int offsMin = chart->rect.left + chart->offsetAxesLeft;
-	storedMouseMove.x += l.delta < 0 ? 1: -1;
-	if(offsMin >= storedMouseMove.x){storedMouseMove.x = offsMin;}
-	else
-	{
-		int offsMax = chart->rect.right - chart->offsetAxesRight;
-		if(offsMax <= storedMouseMove.x)storedMouseMove.x = storedMouseMove.x;
-	}
-	cursor.VerticalCursor(storedMouseMove, HDCGraphics(storedMouseMove.hwnd, backScreen));
-}
+//void ViewerData::operator()(TMouseWell &l)
+//{
+//	if(0 == l.delta) return;
+//	int offsMin = chart->rect.left + chart->offsetAxesLeft;
+//	storedMouseMove.x += l.delta < 0 ? 1: -1;
+//	if(offsMin >= storedMouseMove.x){storedMouseMove.x = offsMin;}
+//	else
+//	{
+//		int offsMax = chart->rect.right - chart->offsetAxesRight;
+//		if(offsMax <= storedMouseMove.x)storedMouseMove.x = storedMouseMove.x;
+//	}
+//	cursor.VerticalCursor(storedMouseMove, HDCGraphics(storedMouseMove.hwnd, backScreen));
+//}
 
-void ViewerData::CoordCell(int mX, int &x, int delta)
-{
-	double left = chart->rect.left + chart->offsetAxesLeft;
-	x = int(delta * (mX - left)/(chart->rect.right - chart->offsetAxesRight - left));
-	if(x < 0) x = 0;
-}
+//void ViewerData::CoordCell(int mX, int &x, int delta)
+//{
+//	double left = chart->rect.left + chart->offsetAxesLeft;
+//	x = int(delta * (mX - left)/(chart->rect.right - chart->offsetAxesRight - left));
+//	if(x < 0) x = 0;
+//}
 
-wchar_t *ViewerData::Mess(double val, int offs)
-{
-	if(offs < deathZoneFirst || offs > deathZoneSecond) return L"Мёртвая зона";
-	if(val > threshDefect) return L"Брак";
-	if(val > threshSortDown) return L"Сорт";
-	return L"Норма";
-}
+//wchar_t *ViewerData::Mess(double val, int offs)
+//{
+//	if(offs < deathZoneFirst || offs > deathZoneSecond) return /L/"Мёртвая зона";
+//	if(val > threshDefect) return L"Брак";
+//	if(val > threshSortDown) return L"Сорт";
+//	return L"Норма";
+//}

@@ -68,7 +68,7 @@ private:
 
 public:
 	typedef typename TL::MultyListToList<typename TL::MkTlst<
-		typename Gen<1, 5>::Result 
+		typename Gen<0, (1 << 6) - 1>::Result 
 	//	, typename Gen<301, 600>::Result 
 	//	, typename Gen<601, 900>::Result 
 	//	, typename Gen<901, 1023>::Result

@@ -14,8 +14,8 @@ struct ColorBar
 
 struct StatusText
 {
-	void FromSensors(unsigned *sens, unsigned &color, bool &visible, wchar_t *buf);
-	void operator()(int id, unsigned &color, bool &visible, wchar_t *);
+	void FromSensors(unsigned *sens, unsigned &color, wchar_t *buf);
+	void operator()(int id, unsigned &color, wchar_t *);
 };
 
 struct StatusColor
@@ -53,4 +53,4 @@ unsigned StatBits(unsigned);
 //	}
 //};
 
-wchar_t *StatusTextZone(int, unsigned &);
+//wchar_t *StatusTextZone(int, unsigned &);

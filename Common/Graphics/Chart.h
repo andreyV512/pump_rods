@@ -103,6 +103,8 @@ public:
   //void OffsetToPixel(WORD &, int);
 };
 
+void CoordCell( Chart &chart, int mX, int &x, int delta);
+
 class BottomAxesInt
 {
 	double minA, maxA;

@@ -4,6 +4,7 @@
 #include "App/AppBase.h"
 #include "window_tool\MenuAPI.h"
 //#include "Windows/ViewersMenu.hpp"
+#include "MessageText\StatusMessages.h"
 
 using namespace Gdiplus;
 ResultViewer::ResultViewer()
@@ -13,36 +14,33 @@ ResultViewer::ResultViewer()
 {
 	chart = &tchart;
 
-	tchart.items.get<FixedGridSeries>().SetColorCellHandler(this, &ResultViewer::GetColorBar);
+	tchart.items.get<BarSeriesNoFixed>().SetColorBarHandler(this, &ResultViewer::GetColorBar);
+	tchart.items.get<BarSeriesNoFixed>().dataLength = dimention_of(viewerData.status);
 	cursor.SetMouseMoveHandler(this, &ResultViewer::Draw);
-	cursor.horizontalLine = false;
+	cursor.horizontalLine = false;	
 }
 
-bool ResultViewer::GetColorBar(unsigned sensor, int zone, double &data, unsigned &color)
+bool ResultViewer::GetColorBar(int zone, double &data, unsigned &color)
 {
-	//color = StatusColor()(viewerData.status[zone]);
-	return false;//zone < viewerData.currentOffsetZones - 1;
+	color = StatusColor()(viewerData.status[zone]);
+	data = 90;
+	return zone < dimention_of(viewerData.status);
 }
 
 bool ResultViewer::Draw(TMouseMove &l, VGraphics &g)
 {
-	//int x = currentX;
-	int x, y;
-	tchart.CoordCell(l.x, l.y, x, y);
+	int x = 0;
+	CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 
-	bool drawZones =  x < viewerData.currentOffsetZones - 1;
-	if(drawZones)
-	{		
-		unsigned color;
-		bool b;
-		wchar_t s[256] = L"test title";
-		//StatusText()(viewerData.status[x], color, b, s);
-		wsprintf(label.buffer, L"<ff>результат зона <ff>%d <%6x>%s"
-			, 1 + x
-			, color
-			, s
-			);
-		label.Draw(g());
-	}
-	return drawZones;
+	int offs = int((double)x * Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value / DataItem::output_buffer_size);
+	unsigned color = 0xffffffff;
+	wchar_t txt[1024];
+	StatusText()(viewerData.status[x], color, txt);
+	wsprintf(label.buffer, L"<ff>смещение <ff00>%d <%x>%s"
+		, offs
+		, color
+		, txt
+		);
+	label.Draw(g());
+	return false;
 }

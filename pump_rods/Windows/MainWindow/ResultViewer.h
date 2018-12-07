@@ -4,7 +4,7 @@
 #include "Graphics/GridChart.h"
 #include "DataItem/DataItem.h"
 #include "Graphics/EmptyLeftAxes.h"
-#include "Graphics/Borders.h"
+#include "Graphics/BarSeries.h"
 
 class ResultViewer: public CommonViewer
 {
@@ -12,9 +12,9 @@ public:
 	typedef CommonViewer Parent;
 	typedef ChartDraw<Chart, TL::MkTlst<
 		EmptyLeftAxes
-		, BottomAxesMeters//BottomAxesGrid
-		, FixedGridSeries
-		, VerticalFixedGrid	
+		, BottomAxesMeters
+		, BarSeriesNoFixed
+		, VerticalFixedGrid		
 	>::Result> TChart;
 	TChart tchart;
 
@@ -22,6 +22,6 @@ public:
 
 	ResultViewer();
 
-	bool GetColorBar(unsigned sensor, int zone, double &data, unsigned &color);
+	bool GetColorBar(int zone, double &data, unsigned &color);
 	bool Draw(TMouseMove &l, VGraphics &g);
 };

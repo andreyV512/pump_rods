@@ -7,13 +7,23 @@
 #include "window_tool\HookKey.h"
 #include "Windows\MainWindow\AppKeyHandler.h"
 #include "DataItem\DataItem.h"
+#include "MessageText\ListMess.hpp"
 
 namespace App
 {
+	template<class O, class P>struct _test_
+	{
+		void operator()()
+		{
+			dprint("%s\n", typeid(O).name());
+		}
+	};
+
 	void Init()
 	{
 //test
 		DataItem::Test();
+		TL::foreach<StatusMessages::list_items, _test_>()();
 //test end
 		AppBase().Init();
 

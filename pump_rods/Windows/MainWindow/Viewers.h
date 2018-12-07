@@ -6,6 +6,7 @@
 #include "Graphics/BarSeries.h"
 #include "App\AppBase.h"
 #include "Graphics\Borders.h"
+#include "DataItem\DataItem.h"
 
 class ViewerData: public CommonViewer
 {
@@ -23,7 +24,7 @@ public:
 	>::Result> TChart;
 	TChart tchart;
 
-	int count;
+	//int count;
 	//int lengthTube;
 	int currentOffset;
 	int deathZoneFirst, deathZoneSecond;
@@ -31,7 +32,8 @@ public:
 	int threshSortDownColor, threshDefectColor, deathZoneColor, nominalColor;
 	int result;
 	double *inputData;
-	double buffer[2000];
+	double buffer[DataItem::output_buffer_size];
+	char status[DataItem::output_buffer_size];
 
 	ViewerData();
 
@@ -40,8 +42,8 @@ public:
 	void operator()(TRButtonDown &);
 	void operator()(TSize &);
 
-	void operator()(TMouseWell &);
+	//void operator()(TMouseWell &);
 
-	void CoordCell(int mX, int &x, int delta);
-	wchar_t *Mess(double val, int offs);
+	//void CoordCell(int mX, int &x, int delta);
+	//wchar_t *Mess(double val, int offs);
 };

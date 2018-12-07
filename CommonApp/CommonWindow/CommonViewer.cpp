@@ -12,7 +12,7 @@ CommonViewer::CommonViewer(Chart *c, const int &count_sensors)
 	, count_sensors(count_sensors)
 	, chart(c)
 	, cursor(*chart)
-	, currentX(0)//, currentY(0)
+	, currentX(0)
 {}
 
 CommonViewer::~CommonViewer()
@@ -92,7 +92,11 @@ void CommonViewer::operator()(TMouseWell &l)
 			, l.delta / 120
 			, true 
 			);
-		cursor.VerticalCursor(storedMouseMove, HDCGraphics(storedMouseMove.hwnd, backScreen));
+		currentX -= l.delta / 120;
+		//cursor.VerticalCursor(storedMouseMove, HDCGraphics(storedMouseMove.hwnd, backScreen));
+		int currentY = 0;
+		chart->CellCoord(storedMouseMove.x, storedMouseMove.y, currentX, currentY);
+		cursor.CrossCursor(storedMouseMove, HDCGraphics(storedMouseMove.hwnd, backScreen));
 }
 
 void CommonViewer::operator()(TLButtonDown &l)
@@ -101,7 +105,7 @@ void CommonViewer::operator()(TLButtonDown &l)
 	storedMouseMove.x = l.x;
 	storedMouseMove.y = l.y;
 //	 
-	int currentY;
+	int currentY = 0;
 	chart->CoordCell(storedMouseMove.x, storedMouseMove.y, (int)currentX, currentY);
 	chart->CellCoord(storedMouseMove.x, storedMouseMove.y, (int)currentX, currentY);
 	cursor.CrossCursor(storedMouseMove, HDCGraphics(l.hwnd, backScreen)) ;

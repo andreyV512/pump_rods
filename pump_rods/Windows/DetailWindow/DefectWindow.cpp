@@ -34,19 +34,21 @@ namespace DefectMenu
 
 bool DefectWindow::Def::Draw(TMouseMove &l, VGraphics &g)
 {
-	if(0 == count) return false;
+	//if(0 == count) return false;
+	Parent::Draw(l, g);
 	int x;
-	CoordCell(l.x, x, count);
+	CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 
-	int offs = int((double)x * currentOffset / count);
+	int offs = int((double)x * currentOffset / DataItem::output_buffer_size);
 
-	wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s %s"
-		, offs
-		, Wchar_from<double, 2>(buffer[x])()
-		, Mess(buffer[x], x)
-		);
-	label.Draw(g());
+	//wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s %s"
+	//	, offs
+	//	, Wchar_from<double, 2>(buffer[x])()
+	//	, L"Mess(buffer[x], x)"
+	//	);
+	//label.Draw(g());
 	owner->ChangeFrame(offs);
+	
 	return true;
 }
 
@@ -60,8 +62,9 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	Def &def = viewers.get<Def>();
 	def.owner = this;
 	memmove(def.buffer, item.outputData, sizeof(def.buffer));
+	memmove(def.status, item.status, sizeof(def.status));
 
-	def.count = DataItem::output_buffer_size;
+//	def.count = DataItem::output_buffer_size;
 	def. deathZoneFirst = item.deathZoneFirst;
 	def.deathZoneSecond = item.deathZoneSecond;
 	def.threshSortDown = item.threshSortDown; 
@@ -70,68 +73,14 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	def.tchart.maxAxesX = item.currentOffset - 1;
 	def.currentOffset = item.currentOffset;
 	def.inputData = item.inputData;
-	//def.lengthTube = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;
-//	def.tchart.items.get<BottomAxesMeters>().maxBorder = def.lengthTube;	
+//	def.lengthTube = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;
+	def.tchart.items.get<BottomAxesMeters>().maxBorder = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;	
 	def.threshSortDownColor = color.get<Clr<SortDown>>().value;
 	def.threshDefectColor = color.get<Clr<Defect>>().value;
 	def.deathZoneColor = color.get<Clr<DeathZone>>().value;
 	def.nominalColor = color.get<Clr<Nominal>>().value;
 	def.cursor.SetMouseMoveHandler(&def, & DefectWindow::Def::Draw);
-/*
-	FrameViewer &frame =  viewers.get<FrameViewer>();
-	frame.count = viewerCount.get<DefectSig<ViewerCount>>().value;
 
-	frame.medianFiltreLength = Singleton<MedianFiltreTable>::Instance().items.get<DefectSig<MedianFiltreWidth>>().value;
-	frame.cutoffFrequency = Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<CutoffFrequency>>().value;
-
-	//frame.tchart.items.get<BottomAxes>().maxBorder = frame.count;
-
-	Compute::Compute(
-		item.inputData
-		, frame.count
-		, frame.cutoffFrequency
-		, frame.medianFiltreLength
-		, frame.buffer
-		, dimention_of(frame.buffer)
-		, Singleton<L502ParametersTable>::Instance().items.get<DefectSig<ChannelSamplingRate>>().value
-		);
-
-	double adcRange =  100.0 / DataItem::ADC_RANGE(Singleton<L502ParametersTable>::Instance().items.get<DefectSig<RangeL502>>().value);
-	double koef = Singleton<KoeffSignTable>::Instance().items.get<DefectSig<KoeffSign>>().value;
-
-	for(int i = 0; i < dimention_of(frame.buffer); ++i)
-	{
-		frame.buffer[i] *= adcRange * koef;
-	}
-
-	frame.delta = int((double)frame.count / dimention_of(frame.buffer));
-
-	frame.count = dimention_of(frame.buffer);
-	frame.nominalColor		= def.nominalColor		;
-
-	DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;
-	int rodLength = dead.get<RodLenght>().value;
-	frame.deathZoneFirst	= int((double)dead.get<DefectSig<First<DeathZone>>>().value * item.currentOffset / rodLength); 
-	frame.deathZoneSecond	= item.currentOffset -  int((double)dead.get<DefectSig<Second<DeathZone>>>().value * item.currentOffset / rodLength); 
-
-	dprint(" deathZoneFirst %d deathZoneSecond %d\n", frame.deathZoneFirst, frame.deathZoneSecond);
-
-	frame.deathZoneColor	= def.deathZoneColor	; 	
-	frame.threshDefect	 	= def.threshDefect	 	;
-	frame.threshDefectColor	= def.threshDefectColor	;
-	frame.threshSortDownColor = def.threshSortDownColor;
-	frame.threshSortDown   	= def.threshSortDown   	;
-	
-	
-
-	ThresholdsTable::TItems &tresh = Singleton<ThresholdsTable>::Instance().items;
-
-	frame.tchart.items.get<FrameViewer::Border<SortDown>>().value = tresh.get<DefectSig<Thresh<SortDown>>>().value;
-	frame.tchart.items.get<FrameViewer::Border<Defect>>().value = tresh.get<DefectSig<Thresh<Defect>>>().value;
-
-	frame.tchart.items.get<FrameViewer::Border<SortDown>>().color  = frame.threshSortDownColor;
-	frame.tchart.items.get<FrameViewer::Border<Defect>>().color  = frame.threshDefectColor;
-*/	
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	frame.cursor.SetMouseMoveHandler(&frame, &FrameViewer::DrawFrame); 
 	ChangeFrame(0);

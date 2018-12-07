@@ -6,6 +6,7 @@
 #include "templates\WindowsEventTemplate.hpp"
 #include "window_tool\EmptyWindow.h"
 #include "Windows\DetailWindow\DefectWindow.h"
+#include "MessageText\StatusMessages.h"
 
 namespace {
 	struct __move_window_data__
@@ -141,6 +142,11 @@ void MainWindow::operator()(TClose &l)
 	}
 }
 
+namespace Common
+{
+	template<class P>struct __in_rect__<ResultViewer, P>: __in_rect_all__<ResultViewer, P, MainWindow::viewers_list>{};
+}
+
 void MainWindow::operator()(TMouseWell &l)
 {
 	TL::find<viewers_list, Common::__in_rect__>()(
@@ -163,7 +169,7 @@ template<>struct __main_window_viewer__<DefectSig<DataItem::Defectoscope>>
 {
 	typedef MainWindow::DefectoscopeViewer Result;
 };
-template<>struct __main_window_viewer__<DefectSig<DataItem::Structure>>
+template<>struct __main_window_viewer__<StructSig<DataItem::Structure>>
 {
 	typedef MainWindow::StructureViewer Result;
 };
@@ -188,19 +194,19 @@ void MainWindow::SetColor()
 
 bool MainWindow::DefectoscopeViewer::Draw(TMouseMove &l, VGraphics &g)
 {
-	if(0 == count) return false;
-	int x;
-	CoordCell(l.x, x, count);
+	int x = 0;
+	CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 
-	//double offs = lengthTube / count;
-	//offs *= x;
-
-	int offs = int((double)x * currentOffset / count);
-
-	wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s %s"
+	int offs = int((double)x * currentOffset / DataItem::output_buffer_size);
+	unsigned color = 0xffffffff;
+	wchar_t txt[1024];
+	StatusText()(status[x], color, txt);
+	wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s <%x>%s  status %d"
 		, offs
 		, Wchar_from<double, 2>(buffer[x])()
-		, Mess(buffer[x], x)
+		, color
+		, txt
+		, status[x]
 		);
 	label.Draw(g());
 	return true;
@@ -251,17 +257,19 @@ void MainWindow::DefectoscopeViewer::operator()(TRButtonDown &l)
 
 bool MainWindow::StructureViewer::Draw(TMouseMove &l, VGraphics &g)
 {
-	if(0 == count) return false;
-	int x;
-	CoordCell(l.x, x, count);
+	int x = 0;
+	CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 
-	double offs = tchart.items.get<BottomAxesMeters>().maxBorder / count;
-	offs *= x;
-
-	wsprintf(label.buffer, L"<ff>структура смещение <ff00>%d <ff>%s %s"
-		, (int)offs
+	int offs = int((double)x * currentOffset / DataItem::output_buffer_size);
+	unsigned color = 0xffffffff;
+	wchar_t txt[1024];
+	StatusText()(status[x], color, txt);
+	wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s <%x>%s  status %d"
+		, offs
 		, Wchar_from<double, 2>(buffer[x])()
-		, Mess(buffer[x], x)
+		, color
+		, txt
+		, status[x]
 		);
 	label.Draw(g());
 	return true;
