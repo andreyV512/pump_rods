@@ -24,14 +24,13 @@ public:
 	>::Result> TChart;
 	TChart tchart;
 
-	//int count;
-	//int lengthTube;
 	int currentOffset;
 	int deathZoneFirst, deathZoneSecond;
 	double threshSortDown, threshDefect;
 	int threshSortDownColor, threshDefectColor, deathZoneColor, nominalColor;
 	int result;
 	double *inputData;
+	bool cleanChart;
 	double buffer[DataItem::output_buffer_size];
 	char status[DataItem::output_buffer_size];
 

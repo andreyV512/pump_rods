@@ -2,7 +2,7 @@
 #include "templates/templates.hpp"
 #include "App/AppBase.h"
 #include "window_tool/MenuAPI.h"
-//#include "DataItem/DataItem.h"
+#include "MessageText\StatusMessages.h"
 
 using namespace Gdiplus;
 
@@ -11,6 +11,7 @@ ViewerData::ViewerData()
     , tchart(backScreen)
 	//, count(0)
 	, currentOffset(1000)
+	, cleanChart(true)
 {
 	chart = &tchart;
 
@@ -58,12 +59,14 @@ void ViewerData::operator()(TSize &l)
 bool ViewerData::GetColorBar(int zone, double &data, unsigned &color)
 {
 	data = buffer[zone];
-	color = nominalColor;
-	if(zone < deathZoneFirst) color = deathZoneColor;
-	else if(zone > deathZoneSecond)color = deathZoneColor;
-	else if(data > threshDefect) color = threshDefectColor;
-	else if(data > threshSortDown) color = threshSortDownColor;
-	return zone < dimention_of(buffer);
+	//color = nominalColor;
+	//if(zone < deathZoneFirst) color = deathZoneColor;
+	//else if(zone > deathZoneSecond)color = deathZoneColor;
+	//else if(data > threshDefect) color = threshDefectColor;
+	//else if(data > threshSortDown) color = threshSortDownColor;
+	//StatusText()(status[x], color, txt);
+	color = StatusColor()(status[zone]);
+	return !cleanChart && zone < dimention_of(buffer);
 }
 
 //void Chart_CoordCell(Chart &c, int mX, int &x, int delta)

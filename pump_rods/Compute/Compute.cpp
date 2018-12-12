@@ -203,7 +203,7 @@ namespace Compute
 		
 		TL::foreach<__data_item_list__, __recalculation__>()(__rec_data__());
 		ComputeResult();
-		TL::foreach<__data_item_list__, __set_data__>()(mainWindow.viewers);
+		TL::foreach<__data_item_list__, __set_data__>()(mainWindow.viewers);		
 		App::UpdateViewers();
 
 	}

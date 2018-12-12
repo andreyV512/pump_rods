@@ -210,6 +210,68 @@ DEFINE_PARAM_WAPPER(StructSig, ViewerCount, int, 30000)
 	const wchar_t *name(){return L"ViewerCountTable";}
  };
 
+DEFINE_PARAM(iСU     , unsigned, 1 << 0) //цепи управления
+DEFINE_PARAM(iKM2_DC , unsigned, 1 << 1)
+DEFINE_PARAM(iKM3_DC , unsigned, 1 << 2)
+DEFINE_PARAM(iCycle , unsigned, 1 << 3)
+DEFINE_PARAM(iP1     , unsigned, 1 << 4)
+DEFINE_PARAM(iP2     , unsigned, 1 << 5)
+DEFINE_PARAM(iCOPT   , unsigned, 1 << 6)
+DEFINE_PARAM(iControl, unsigned, 1 << 7)
+
+struct InputBitTable
+ {
+	typedef TL::MkTlst<
+		iСU     
+		, iKM2_DC 
+		, iKM3_DC 
+		, iCycle 
+		, iP1     
+		, iP2     
+		, iCOPT   
+		, iControl
+	>::Result items_list;
+	typedef TL::Factory<items_list> TItems;
+	TItems items;
+	const wchar_t *name(){return L"InputBitTable";}
+ };
+
+DEFINE_PARAM(oDC_ON1 , unsigned, 1 << 0)
+DEFINE_PARAM(oAC_ON  , unsigned, 1 << 1)
+DEFINE_PARAM(oDC_ON2 , unsigned, 1 << 2)
+DEFINE_PARAM(oWork   , unsigned, 1 << 3)
+DEFINE_PARAM(oStart  , unsigned, 1 << 4)
+DEFINE_PARAM(oToShift, unsigned, 1 << 5)
+DEFINE_PARAM(oC1     , unsigned, 1 << 6)
+DEFINE_PARAM(oC2     , unsigned, 1 << 7)
+
+struct OutputBitTable
+ {
+	typedef TL::MkTlst<
+		oDC_ON1 
+		, oAC_ON  
+		, oDC_ON2 
+		, oWork   
+		, oStart  
+		, oToShift
+		, oC1     
+		, oC2     
+	>::Result items_list;
+	typedef TL::Factory<items_list> TItems;
+	TItems items;
+	const wchar_t *name(){return L"OutputBitTable";}
+ };
+
+STR_PARAM(NamePlate1730, 64, L"PCI-1730,BID#1")
+ struct NamePlate1730ParametersTable
+ {
+	 typedef TL::MkTlst<
+		 NamePlate1730
+	 >::Result items_list;
+	 typedef TL::Factory<items_list> TItems;
+	 TItems items;
+	 const wchar_t *name(){return L"NamePlate1730ParametersTable";}
+ };
 
 struct ParametersBase
  {
@@ -217,6 +279,9 @@ struct ParametersBase
 		 ColorTable	
 		 , OnTheJobTable
 		 , ViewerCountTable
+		 , InputBitTable
+		 , OutputBitTable
+		 , NamePlate1730ParametersTable
 	 >::Result one_row_table_list;
 
 	 typedef TL::MkTlst<

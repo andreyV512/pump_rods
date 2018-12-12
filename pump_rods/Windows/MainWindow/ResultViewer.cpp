@@ -11,6 +11,7 @@ ResultViewer::ResultViewer()
 	: CommonViewer(&tchart, 1) 
     , tchart(backScreen)
 	, viewerData(Singleton<DataItem::ResultData>::Instance())
+	, cleanChart(true)
 {
 	chart = &tchart;
 
@@ -24,7 +25,7 @@ bool ResultViewer::GetColorBar(int zone, double &data, unsigned &color)
 {
 	color = StatusColor()(viewerData.status[zone]);
 	data = 90;
-	return zone < dimention_of(viewerData.status);
+	return !cleanChart && zone < dimention_of(viewerData.status);
 }
 
 bool ResultViewer::Draw(TMouseMove &l, VGraphics &g)

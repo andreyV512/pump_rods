@@ -400,9 +400,13 @@ namespace TL
 	{
 		typedef Tlst<Wapper<Head>, typename TypeToTypeLst<Tail, Wapper>::Result> Result;
 	};
-	template<class Head, template<class>class Wapper>struct TypeToTypeLst<Tlst<Head, NullType>, Wapper>
+	//template<class Head, template<class>class Wapper>struct TypeToTypeLst<Tlst<Head, NullType>, Wapper>
+	//{
+	//	typedef Tlst<Wapper<Head>, NullType> Result;
+	//};
+	template<template<class>class Wapper>struct TypeToTypeLst<NullType, Wapper>
 	{
-		typedef Tlst<Wapper<Head>, NullType> Result;
+		typedef NullType Result;
 	};
 //--------------------------------------------------------------------------------------------------------------------------
 	template<typename List, template<class>class T>struct EraseAllParam;

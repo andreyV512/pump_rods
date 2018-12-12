@@ -8,6 +8,8 @@
 #include "Windows\MainWindow\AppKeyHandler.h"
 #include "DataItem\DataItem.h"
 #include "MessageText\ListMess.hpp"
+#include "Log\LogMessageToTopLabel.h"
+#include "Automat\Automat.h"
 
 namespace App
 {
@@ -34,15 +36,28 @@ namespace App
 
 		HWND h = WindowTemplate(
 			&mainWindow
-			, L"Группа прочности"
+			, L"Контроль насосных штанг"
 			, r.left, r.top, r.right, r.bottom
 			);
 		ShowWindow(h, SW_SHOWNORMAL);
+		Singleton<LogMessageToTopLabel>::Instance().Run();
 		StartKeyHook(h, &AppKeyHandler::KeyPressed);
+
+		bool ok = true;
+
+		if(!device1730.Init(Singleton<NamePlate1730ParametersTable>::Instance().items.get<NamePlate1730>().value))
+		{
+			MessageBox(h, L"Не могу инициировать плату 1730 номер 1", L"Ошибка !!!", MB_ICONERROR);
+			ok = false;
+		}
+
+		Automat::Init();
 	}
 
 	void Destroy()
 	{
+		Automat::Destroy();
+		Singleton<LogMessageToTopLabel>::Instance().Stop();
 	}
 
 	wchar_t *Salt()
@@ -53,6 +68,21 @@ namespace App
 	void UpdateViewers()
 	{
 		MainWindow &mainWindow = Singleton<MainWindow>::Instance();
+		mainWindow.CleanChart(false);
 		RepaintWindow(mainWindow.hWnd);
 	}
+
+	void CleanViewers()
+	{
+		MainWindow &mainWindow = Singleton<MainWindow>::Instance();
+		mainWindow.CleanChart(true);
+		RepaintWindow(mainWindow.hWnd);
+	}
+
+	void TopLabel(wchar_t *mess)
+	{
+		Singleton<MainWindow>::Instance().topLabelViewer.SetMessage(mess);
+	}
 }
+
+Device1730 device1730;

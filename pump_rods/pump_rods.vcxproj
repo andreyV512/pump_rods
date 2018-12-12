@@ -80,8 +80,13 @@
     <ClInclude Include="..\CommonApp\CommonWindow\Common.h" />
     <ClInclude Include="..\CommonApp\CommonWindow\CommonViewer.h" />
     <ClInclude Include="..\CommonApp\CommonWindow\TopLabelViewer.h" />
+    <ClInclude Include="..\CommonApp\Log\LogBuffer.h" />
+    <ClInclude Include="..\CommonApp\Log\LogMessages.h" />
+    <ClInclude Include="..\CommonApp\Log\LogMessageToTopLabel.h" />
     <ClInclude Include="..\CommonApp\MessageText\ListMess.hpp" />
     <ClInclude Include="..\CommonApp\MessageText\StatusMessages.h" />
+    <ClInclude Include="..\Common\1730\Device1730.h" />
+    <ClInclude Include="..\Common\1730\inc\bdaqctrl.h" />
     <ClInclude Include="..\Common\Base\Base.hpp" />
     <ClInclude Include="..\Common\Base\ExpressBase.hpp" />
     <ClInclude Include="..\Common\Base\tables.hpp" />
@@ -106,6 +111,7 @@
     <ClInclude Include="..\Common\Graphics\GridChart.h" />
     <ClInclude Include="..\Common\Graphics\StepSeries.h" />
     <ClInclude Include="..\Common\MedianFiltre\MedianFiltre.h" />
+    <ClInclude Include="..\Common\PerformanceCounter\PerformanceCounter.h" />
     <ClInclude Include="..\Common\tools_debug\DebugMess.h" />
     <ClInclude Include="..\Common\window_tool\CheckBoxWidget.h" />
     <ClInclude Include="..\Common\window_tool\Emptywindow.h" />
@@ -116,7 +122,10 @@
     <ClInclude Include="..\Common\window_tool\WindowsPosition.h" />
     <ClInclude Include="App\App.h" />
     <ClInclude Include="App\AppBase.h" />
+    <ClInclude Include="App\Config.h" />
     <ClInclude Include="App\MessageItems.h" />
+    <ClInclude Include="Automat\Automat.h" />
+    <ClInclude Include="Automat\Automat.hpp" />
     <ClInclude Include="Compute\Compute.h" />
     <ClInclude Include="DataItem\DataItem.h" />
     <ClInclude Include="Resource.h" />
@@ -133,7 +142,11 @@
     <ClCompile Include="..\CommonApp\CommonWindow\Common.cpp" />
     <ClCompile Include="..\CommonApp\CommonWindow\CommonViewer.cpp" />
     <ClCompile Include="..\CommonApp\CommonWindow\TopLabelViewer.cpp" />
+    <ClCompile Include="..\CommonApp\Log\LogBuffer.cpp" />
+    <ClCompile Include="..\CommonApp\Log\LogMessages.cpp" />
+    <ClCompile Include="..\CommonApp\Log\LogMessageToTopLabel.cpp" />
     <ClCompile Include="..\CommonApp\MessageText\StatusMessages.cpp" />
+    <ClCompile Include="..\Common\1730\Device1730.cpp" />
     <ClCompile Include="..\Common\DspFilters\ChebyshevFiltre.cpp" />
     <ClCompile Include="..\Common\DspFilters\source\Biquad.cpp" />
     <ClCompile Include="..\Common\DspFilters\source\Cascade.cpp" />
@@ -151,6 +164,7 @@
     <ClCompile Include="..\Common\Graphics\GridChart.cpp" />
     <ClCompile Include="..\Common\Graphics\StepSeries.cpp" />
     <ClCompile Include="..\Common\MedianFiltre\MedianFiltre.cpp" />
+    <ClCompile Include="..\Common\PerformanceCounter\PerformanceCounter.cpp" />
     <ClCompile Include="..\Common\tools_debug\DebugMess.cpp" />
     <ClCompile Include="..\Common\window_tool\EmptyWindow.cpp" />
     <ClCompile Include="..\Common\window_tool\HookKey.cpp" />
@@ -162,6 +176,7 @@
     <ClCompile Include="App\AppBase.cpp" />
     <ClCompile Include="App\main.cpp" />
     <ClCompile Include="App\stdafx.cpp" />
+    <ClCompile Include="Automat\Automat.cpp" />
     <ClCompile Include="Compute\Compute.cpp" />
     <ClCompile Include="DataItem\DataItem.cpp" />
     <ClCompile Include="Windows\DetailWindow\DefectWindow.cpp" />

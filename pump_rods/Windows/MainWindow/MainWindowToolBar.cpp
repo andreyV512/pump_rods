@@ -5,6 +5,8 @@
 #include "window_tool/InitToolBar.hpp"
 #include "AppKeyHandler.h"
 #include "MainWindow.h"
+#include "Automat\Automat.h"
+
 namespace 
 {
 
@@ -76,6 +78,7 @@ namespace
 		//	Singleton<MainWindow>::Instance().StatusBar(0, L"Цикл");
 		//}
 		dprint("Key<IDB_CycleBtn>::Click\n");
+		Automat::Run();
 	}
 	//void Key<IDB_Continue>::Click(HWND h)
 	//{

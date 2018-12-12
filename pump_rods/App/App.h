@@ -1,5 +1,6 @@
 ﻿#pragma once
 #include "templates\typelist.hpp"
+#include "1730/Device1730.h"
 
 template<class T>struct DefectSig; 
 template<class T>struct StructSig; 
@@ -20,4 +21,9 @@ namespace App
 	wchar_t *Salt();
 
 	void UpdateViewers();
+	void CleanViewers();
+
+	void TopLabel(wchar_t *);
 }
+
+extern Device1730 device1730;

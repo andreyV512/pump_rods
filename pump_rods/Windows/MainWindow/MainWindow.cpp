@@ -32,11 +32,9 @@ namespace {
 		void operator()(O *o, P *p)
 		{		
 			o->tchart.items.get<BottomAxesMeters>().maxBorder = p->lengthTube;
-			//int height =  2 * p->height;
 			TSize size = {o->hWnd, WM_SIZE, 0, p->width, p->height};
 			SendMessage(MESSAGE(size));
 			MoveWindow(o->hWnd , 0, p->y, p->width, p->maxYHeight - p->y, true);
-			//p->y += height;
 		}
 	};
 }
@@ -190,6 +188,19 @@ template<class O, class P>struct __main_window_set_color__
 void MainWindow::SetColor()
 {
 	TL::foreach<App::data_item_list, __main_window_set_color__>()(viewers);
+}
+
+template<class O, class P>struct __clean_chart__
+{
+	void operator()(O &o, P &p)
+	{
+		o.cleanChart = p;
+	}
+};
+
+void MainWindow::CleanChart(bool b)
+{
+	TL::foreach<viewers_list, __clean_chart__>()(viewers, b);
 }
 
 bool MainWindow::DefectoscopeViewer::Draw(TMouseMove &l, VGraphics &g)

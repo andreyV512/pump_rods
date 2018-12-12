@@ -66,6 +66,21 @@
     <Filter Include="CommonApp\MessageText">
       <UniqueIdentifier>{73b93517-b0d2-4fc4-8540-aa445a1e4989}</UniqueIdentifier>
     </Filter>
+    <Filter Include="CommonApp\Log">
+      <UniqueIdentifier>{f2f89ab4-c3b0-4c5d-a1bb-c536800f20f1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\PerformanceCounter">
+      <UniqueIdentifier>{0d858447-2fb8-49d3-be02-fadb3d486774}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="pump_rods\Automat">
+      <UniqueIdentifier>{fb994dfa-8b40-457f-89df-2e374c777c35}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Devices">
+      <UniqueIdentifier>{257f790f-eeb0-4d6e-90d4-9473ce9a02a9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\Devices\Inc">
+      <UniqueIdentifier>{74b66db5-344d-43b6-9c8c-6dc59313f46a}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -227,6 +242,33 @@
     <ClInclude Include="App\MessageItems.h">
       <Filter>pump_rods\App</Filter>
     </ClInclude>
+    <ClInclude Include="..\CommonApp\Log\LogBuffer.h">
+      <Filter>CommonApp\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommonApp\Log\LogMessages.h">
+      <Filter>CommonApp\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\CommonApp\Log\LogMessageToTopLabel.h">
+      <Filter>CommonApp\Log</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\PerformanceCounter\PerformanceCounter.h">
+      <Filter>Common\PerformanceCounter</Filter>
+    </ClInclude>
+    <ClInclude Include="Automat\Automat.h">
+      <Filter>pump_rods\Automat</Filter>
+    </ClInclude>
+    <ClInclude Include="Automat\Automat.hpp">
+      <Filter>pump_rods\Automat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\1730\Device1730.h">
+      <Filter>Common\Devices</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\1730\inc\bdaqctrl.h">
+      <Filter>Common\Devices\Inc</Filter>
+    </ClInclude>
+    <ClInclude Include="App\Config.h">
+      <Filter>pump_rods\App</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp">
@@ -351,6 +393,24 @@
     </ClCompile>
     <ClCompile Include="..\CommonApp\MessageText\StatusMessages.cpp">
       <Filter>CommonApp\MessageText</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommonApp\Log\LogBuffer.cpp">
+      <Filter>CommonApp\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommonApp\Log\LogMessages.cpp">
+      <Filter>CommonApp\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\CommonApp\Log\LogMessageToTopLabel.cpp">
+      <Filter>CommonApp\Log</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\PerformanceCounter\PerformanceCounter.cpp">
+      <Filter>Common\PerformanceCounter</Filter>
+    </ClCompile>
+    <ClCompile Include="Automat\Automat.cpp">
+      <Filter>pump_rods\Automat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\1730\Device1730.cpp">
+      <Filter>Common\Devices</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -56,4 +56,5 @@ public:
 	void StatusBar(int n, wchar_t *txt);
 //	void UpdateWindow();
 	void SetColor();
+	void CleanChart(bool);
 };

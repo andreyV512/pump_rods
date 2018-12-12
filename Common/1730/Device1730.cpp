@@ -1,4 +1,3 @@
-#include "stdafx.h"
 #include "Device1730.h"
 #include "App/Config.h"
 #include "tools_debug\DebugMess.h"
@@ -100,34 +99,23 @@ void Device1730::WriteOutput(unsigned output, unsigned maska)
 	 LeaveCriticalSection(&cs);
 }
 #else
-#pragma message("Порт 1730 отключён")
-#include "App/App.h"
-#include "Emulator\Emulator.h"
-namespace
-{
-Emulator &emulator = Singleton<Emulator>::Instance();
-}
 unsigned Device1730::Read()
 {
-	return emulator.Inputs();
+	return 0;
 }
 //--------------------------------------------------------------------------
 void Device1730::Write(unsigned output)
 {
-	emulator.Outputs(output);
+	
 }
 //--------------------------------------------------------------------------
 unsigned Device1730::ReadOutput()
 {	
-	return emulator.Outputs();
+	return 0;
 }
 //----------------------------------------------------------------------------
 void Device1730::WriteOutput(unsigned output, unsigned maska)
 {	
-	 unsigned t = emulator.Outputs();
-	 t &= ~maska;
-	 t |= output;
-	 Write(t);
 }
 #endif
 

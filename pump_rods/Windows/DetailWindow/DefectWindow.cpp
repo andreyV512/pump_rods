@@ -64,7 +64,6 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	memmove(def.buffer, item.outputData, sizeof(def.buffer));
 	memmove(def.status, item.status, sizeof(def.status));
 
-//	def.count = DataItem::output_buffer_size;
 	def. deathZoneFirst = item.deathZoneFirst;
 	def.deathZoneSecond = item.deathZoneSecond;
 	def.threshSortDown = item.threshSortDown; 
@@ -73,13 +72,13 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	def.tchart.maxAxesX = item.currentOffset - 1;
 	def.currentOffset = item.currentOffset;
 	def.inputData = item.inputData;
-//	def.lengthTube = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;
 	def.tchart.items.get<BottomAxesMeters>().maxBorder = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;	
 	def.threshSortDownColor = color.get<Clr<SortDown>>().value;
 	def.threshDefectColor = color.get<Clr<Defect>>().value;
 	def.deathZoneColor = color.get<Clr<DeathZone>>().value;
 	def.nominalColor = color.get<Clr<Nominal>>().value;
 	def.cursor.SetMouseMoveHandler(&def, & DefectWindow::Def::Draw);
+	def.cleanChart = !(0 < item.currentOffset);
 
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	frame.cursor.SetMouseMoveHandler(&frame, &FrameViewer::DrawFrame); 
