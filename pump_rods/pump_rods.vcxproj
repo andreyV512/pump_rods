@@ -110,6 +110,8 @@
     <ClInclude Include="..\Common\Graphics\Gate.h" />
     <ClInclude Include="..\Common\Graphics\GridChart.h" />
     <ClInclude Include="..\Common\Graphics\StepSeries.h" />
+    <ClInclude Include="..\Common\L502\l502api.h" />
+    <ClInclude Include="..\Common\L502\L502Work.h" />
     <ClInclude Include="..\Common\MedianFiltre\MedianFiltre.h" />
     <ClInclude Include="..\Common\PerformanceCounter\PerformanceCounter.h" />
     <ClInclude Include="..\Common\tools_debug\DebugMess.h" />
@@ -163,6 +165,7 @@
     <ClCompile Include="..\Common\Graphics\Gate.cpp" />
     <ClCompile Include="..\Common\Graphics\GridChart.cpp" />
     <ClCompile Include="..\Common\Graphics\StepSeries.cpp" />
+    <ClCompile Include="..\Common\L502\L502Work.cpp" />
     <ClCompile Include="..\Common\MedianFiltre\MedianFiltre.cpp" />
     <ClCompile Include="..\Common\PerformanceCounter\PerformanceCounter.cpp" />
     <ClCompile Include="..\Common\tools_debug\DebugMess.cpp" />

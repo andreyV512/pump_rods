@@ -87,12 +87,14 @@ DEFINE_PARAM(RodLenght, int, 8000) //длина штанги
 struct Check;
 DEFINE_PARAM_WAPPER(DefectSig, Check, bool, true)
 DEFINE_PARAM_WAPPER(StructSig, Check, bool, true)
+DEFINE_PARAM(InterruptViewCheck, bool, true)
 
 struct OnTheJobTable
 {
 	typedef TL::MkTlst<
 		DefectSig<Check>
 		, StructSig<Check>
+		, InterruptViewCheck
 	>::Result items_list;
 	typedef TL::Factory<items_list> TItems;
 	TItems items;
@@ -145,14 +147,14 @@ DEFINE_PARAM_WAPPER(StructSig, KoeffSign, double, 1)
  };
 
 struct RangeL502;
-struct OffsetL502;
+struct ChannelL502;
 struct ChannelSamplingRate;
 DEFINE_PARAM_WAPPER(DefectSig, ChannelSamplingRate, int, 10000)
 DEFINE_PARAM_WAPPER(StructSig, ChannelSamplingRate, int, 10000)
 DEFINE_PARAM_WAPPER(DefectSig, RangeL502, int, 0)
 DEFINE_PARAM_WAPPER(StructSig, RangeL502, int, 0)
-DEFINE_PARAM_WAPPER(DefectSig, OffsetL502, int, 1)
-DEFINE_PARAM_WAPPER(StructSig, OffsetL502, int, 2)
+DEFINE_PARAM_WAPPER(DefectSig, ChannelL502, int, 1)
+DEFINE_PARAM_WAPPER(StructSig, ChannelL502, int, 2)
 
 struct L502ParametersTable
 {
@@ -161,8 +163,8 @@ struct L502ParametersTable
 		, StructSig<ChannelSamplingRate>
 		, DefectSig<RangeL502>
 		, StructSig<RangeL502>
-		, DefectSig<OffsetL502>
-		, StructSig<OffsetL502>
+		, DefectSig<ChannelL502>
+		, StructSig<ChannelL502>
 	>::Result items_list;
 	typedef TL::Factory<items_list> TItems;
 	TItems items;

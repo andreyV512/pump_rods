@@ -136,7 +136,7 @@ namespace
 HWND MainWindowToolBar::Init(HWND h)
 {
 	hWnd = InitToolbar<tool_button_list>()(h);
-	AppKeyHandler::Stop();
+	//AppKeyHandler::Stop();
 	return hWnd;
 }
 //-------------------------------------------------------------------

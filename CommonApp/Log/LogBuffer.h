@@ -38,6 +38,6 @@ public:
 };
 
 #define DROP_MESSAGE(N)template<>struct Log::Filter<N>{static const bool value = false;};
-DROP_MESSAGE(LogMess::ErrStop)
+//DROP_MESSAGE(LogMess::ErrStop)
 DROP_MESSAGE(LogMess::ProgramOpen)
 #undef DROP_MESSAGE

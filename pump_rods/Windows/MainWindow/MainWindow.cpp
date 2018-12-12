@@ -61,6 +61,7 @@ LRESULT MainWindow::operator()(TCreate &m)
 	//
 	checks.get<CheckBoxWidget<OnCheckBox<DefectSig<Check>, OnTheJobTable> >>().Init(toolBar.hWnd, L"Дефектоскопия");
 	checks.get<CheckBoxWidget<OnCheckBox<StructSig<Check>, OnTheJobTable> >>().Init(toolBar.hWnd, L"Структура");
+	checks.get<CheckBoxWidget<OnCheckBox<InterruptViewCheck, OnTheJobTable> >>().Init(toolBar.hWnd, L"Прерывание на просмотр");
 	
 	CreateChildWindow(m.hwnd, &topLabelViewer);
 	topLabelViewer.label.fontHeight = 24;
@@ -104,6 +105,7 @@ void MainWindow::operator()(TSize &m)
 //
 	checks.get<CheckBoxWidget<OnCheckBox<DefectSig<Check>, OnTheJobTable> >>().Size(width + 425, 5 , 400, 20);
 	checks.get<CheckBoxWidget<OnCheckBox<StructSig<Check>, OnTheJobTable> >>().Size(width + 425, 25, 400, 20);
+	checks.get<CheckBoxWidget<OnCheckBox<InterruptViewCheck, OnTheJobTable> >>().Size(width, 60, 400, 20);
 
 	static const int topLabelHeight = 40;
 	int y = rt.bottom - rt.top - 1;

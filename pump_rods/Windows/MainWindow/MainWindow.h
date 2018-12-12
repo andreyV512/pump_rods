@@ -17,6 +17,7 @@ public:
 	typedef TL::MkTlst<
 		  CheckBoxWidget<OnCheckBox<DefectSig<Check>, OnTheJobTable> >
 		, CheckBoxWidget<OnCheckBox<StructSig<Check>, OnTheJobTable> >
+		, CheckBoxWidget<OnCheckBox<InterruptViewCheck, OnTheJobTable> >
 	>::Result check_list;
 	TL::Factory<check_list> checks;
 	TopLabelViewer topLabelViewer;

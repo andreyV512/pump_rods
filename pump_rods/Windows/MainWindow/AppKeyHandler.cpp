@@ -98,7 +98,7 @@ namespace AppKeyHandler
 		__btn__<
 			__all_button_OnOff__<
 			  button_list
-			  , TL::MkTlst<TL::IntToType<IDB_Reset>, TL::IntToType<IDB_Ok>>::Result
+			  , TL::MkTlst<TL::IntToType<IDB_Reset>/*, TL::IntToType<IDB_Ok>*/>::Result
 			  , On, Off
 			>::Result
 		>()();
@@ -107,10 +107,13 @@ namespace AppKeyHandler
 	
 	void Continue()
 	{
-		//typedef TL::MkTlst<
-		//	On<IDB_Continue>//, On<IDB_CycleBtn>
-		//>::Result list;
-		//__btn__<list>()();
+		__btn__<
+			__all_button_OnOff__<
+			  button_list
+			  , TL::MkTlst<TL::IntToType<IDB_Reset>, TL::IntToType<IDB_CycleBtn>>::Result
+			  , On, Off
+			>::Result
+		>()();
 		zprint("\n");
 	}
 	void RunContine()

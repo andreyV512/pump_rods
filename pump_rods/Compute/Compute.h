@@ -6,4 +6,5 @@ namespace Compute
 	void ComputeResult();
 	void Recalculation();
 	//void Normalization();
+	unsigned Result(unsigned res);
 };

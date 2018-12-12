@@ -10,6 +10,7 @@
 #include "MessageText\ListMess.hpp"
 #include "Log\LogMessageToTopLabel.h"
 #include "Automat\Automat.h"
+#include "App\Config.h"
 
 namespace App
 {
@@ -44,14 +45,20 @@ namespace App
 		StartKeyHook(h, &AppKeyHandler::KeyPressed);
 
 		bool ok = true;
-
+#ifndef DEBUG_ITEMS
 		if(!device1730.Init(Singleton<NamePlate1730ParametersTable>::Instance().items.get<NamePlate1730>().value))
 		{
-			MessageBox(h, L"Не могу инициировать плату 1730 номер 1", L"Ошибка !!!", MB_ICONERROR);
+			MessageBox(h, L"Не могу инициировать плату 1730", L"Ошибка !!!", MB_ICONERROR);
 			ok = false;
 		}
 
-		Automat::Init();
+		if(ok && !l502.Init())
+		{
+			MessageBox(h, L"Не могу инициировать плату L502", L"Ошибка !!!", MB_ICONERROR);
+			ok = false;
+		}
+#endif
+		if(ok)Automat::Init();
 	}
 
 	void Destroy()
@@ -83,6 +90,12 @@ namespace App
 	{
 		Singleton<MainWindow>::Instance().topLabelViewer.SetMessage(mess);
 	}
+
+	bool InterruptView()
+	{
+		return Singleton<OnTheJobTable>::Instance().items.get<InterruptViewCheck>().value;
+	}
 }
 
 Device1730 device1730;
+L502Work l502;

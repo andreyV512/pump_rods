@@ -58,6 +58,12 @@ namespace Automat
 	template<class O>struct MessID;
 	template<>struct MessID<iСU>{typedef LogMess::AlarmExitControlCircuitBitIn Result;};
 	template<>struct MessID<iCycle>{typedef LogMess::AlarmExitControlCycleBitIn Result;};
+	template<>struct MessID<iP1>{typedef LogMess::TimeOverlappedDefectoscope Result;};
+	template<>struct MessID<iP2>{typedef LogMess::TimeOverlappedStructure Result;};
+
+	template<>struct MessID<oAC_ON>{typedef LogMess::outputsAC_ON Result;};
+	template<>struct MessID<oDC_ON2>{typedef LogMess::outputsDC_ON2 Result;};
+	template<>struct MessID<oDC_ON1>{typedef LogMess::outputsDC_ON1 Result;};
 
 	template<class O, class P>struct __test_bits_do__;
 	template<class O, class P>struct __test_bits_do__<On<O>, P>
@@ -95,7 +101,52 @@ namespace Automat
 
 	template<>struct TestBitsDo<NullType>{template<class T>bool operator()(T &){return true;}};
 
-	
+	struct __test_output_bits_data__
+	{		
+		OutputBitTable::TItems &offs;
+		unsigned bits;
+		 __test_output_bits_data__()
+			 : offs(Singleton<OutputBitTable>::Instance().items)
+			 , bits(device1730.ReadOutput())
+		 {}
+	};
+	template<class O, class P>struct __test_output_bits__;
+	template<class O, class P>struct __test_output_bits__<On<O>, P>
+	{
+		bool operator()(P &p)
+		{
+			if(0 == (p.bits & (1 << p.offs.get<O>().value)))
+			{
+				Log::Mess<MessID<On<O>>::Result>();
+				return false;
+			}
+			return true;
+		}
+	};
+	template<class O, class P>struct __test_output_bits__<Off<O>, P>
+	{
+		bool operator()(P &p)
+		{
+			if(0 == (p.bits & (1 << p.offs.get<O>().value)))
+			{
+				Log::Mess<MessID<O>::Result>();
+				return false;
+			}
+			return true;
+		}
+	};
+
+	template<class List>struct TestOutputBits
+	{
+		unsigned operator()()
+		{
+			if(!TL::find<List, __test_output_bits__>()(__test_output_bits_data__()))
+			{
+				return Status::alarm_bits;
+			}
+			return 0;
+		}
+	};
 
 	template<class A, class B>struct __all_lists_not_empty__
 	{
@@ -166,6 +217,20 @@ namespace Automat
 		void operator()(unsigned &bits){}
 	};
 
+	template<class List>struct SelectOutBits
+	{
+		void operator()(unsigned &bits)
+		{
+			bits = 0;
+			__sel_bits__<typename __filtr__<List, OutputBitTable::items_list>::Result, __bits_0__>()
+				(&Singleton<OutputBitTable>::Instance().items, &bits);
+		}
+	};
+	template<>struct SelectOutBits<NullType>
+	{
+		void operator()(unsigned &bits){}
+	};
+
 	template<class O, class P>struct __default_do__
 	{
 		void operator()(P &p)
@@ -206,17 +271,17 @@ namespace Automat
 		bool operator()(unsigned){return true;}
 	};
 
-	template<class List>struct ResethEvent
-	{
-		void operator()()
-		{
-			ResetEvent(hEvent);
-		}
-	};
-	template<>struct ResethEvent<NullType>
-	{
-		void operator()(){}
-	};
+	//template<class List>struct ResethEvent
+	//{
+	//	void operator()()
+	//	{
+	//		ResetEvent(hEvent);
+	//	}
+	//};
+	//template<>struct ResethEvent<NullType>
+	//{
+	//	void operator()(){}
+	//};
 
 	template<class List, class Result, unsigned N>struct AND_Bits_delay
 	{
@@ -225,9 +290,6 @@ namespace Automat
 			if(delay < GetTickCount()) 
 			{
 				if(!TestBitsDo<TL::MultyListToList<
-					//Tlst<typename TL::TypeToTypeLst<list_on, On>::Result
-					//, Tlst<typename TL::TypeToTypeLst<list_off, Off>::Result
-					//, NullType>>
 					List
 					>::Result>()(result))
 					return Status::alarm_bits;
@@ -258,7 +320,7 @@ namespace Automat
 			SelectBits<typename Filt<List, Inv>::Result>()(bitInv);
 
 			typedef typename FiltKey<List, Key>::Result list_key;
-			ResethEvent<list_key>()();
+			ResetEvent(hEvent);
 
 			while(true)
 			{
@@ -353,4 +415,5 @@ EXIT:
 
 #define AND_BITS(delay, ...) if(0 != (status = AND_Bits<delay, TL::MkTlst<__VA_ARGS__>::Result>()(result)))break
 #define OUT_BITS(...) OUT_Bits<TL::MkTlst<__VA_ARGS__>::Result>()()
+#define TEST_OUTPUT_BITS(...)if(0 != (status = TestOutputBits<TL::MkTlst<__VA_ARGS__>::Result>()()))break
 }

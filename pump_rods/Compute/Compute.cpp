@@ -207,4 +207,24 @@ namespace Compute
 		App::UpdateViewers();
 
 	}
+
+	static const unsigned brak = 0;
+	static const unsigned cort1 = 1;
+	static const unsigned cort2 = 2;
+	static const unsigned cort3 = 3;
+	
+	unsigned Result(unsigned res)
+	{
+		DataItem::Defectoscope &def = Singleton<DataItem::Defectoscope>::Instance();
+		DataItem::Structure &str    = Singleton<DataItem::Structure>::Instance();
+
+		if(def.result == STATUS_ID(DefectSig<Defect>)) return brak;
+		if(str.result == STATUS_ID(StructSig<Defect>)) return brak;
+
+		if(res <= 0) return brak;
+
+		if(def.result == STATUS_ID(DefectSig<SortDown>)) return res - 1;
+		if(str.result == STATUS_ID(StructSig<SortDown>)) return res - 1;
+		return brak;
+	}
 }
