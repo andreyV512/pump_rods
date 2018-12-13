@@ -7,4 +7,6 @@ namespace Compute
 	void Recalculation();
 	//void Normalization();
 	unsigned Result(unsigned res);
+
+	void Reverse(double *data, int len);
 };

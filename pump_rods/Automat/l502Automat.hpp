@@ -15,11 +15,11 @@ template<class T, template<class>class W>struct l502Run<W<T>>
 	}status;
 	int &currentOffset;
 	bool terminate;
-	double (&outputData)[DataItem::output_buffer_size];
+	double (&inputData)[App::buffer_size];
 	l502Run(T &t)
 		: currentOffset(t.currentOffset)
 		, terminate(false)
-		, outputData(t.outputData)
+		, inputData(t.inputData)
 		, status(ok)
 	{
 		currentOffset = 0;
@@ -62,10 +62,10 @@ template<class T, template<class>class W>struct l502Run<W<T>>
 		{
 			unsigned startChannel;
 			unsigned count = 0;
-			if(0 < l502.Read(startChannel, &outputData[currentOffset], count))
+			if(0 < l502.Read(startChannel, &inputData[currentOffset], count))
 			{
 				currentOffset += count;
-				if(currentOffset > dimention_of(outputData))
+				if(currentOffset > dimention_of(inputData))
 				{
 					status = buffer_overlapped;
 					terminate = true;

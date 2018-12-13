@@ -28,7 +28,8 @@ namespace Compute
 
 		double delta = (double)inputLenght / outputLength;
 		memset(outputData, 0, outputLength * sizeof(double));
-		for(int i = 0; i < inputLenght; ++i)
+		--inputLenght;
+		for(int i = 0; i <= inputLenght; ++i)
 		{
 			double t = medianWidth > 2? filtre(inputData[i]): inputData[i];
 			if(0 != cutoffFrequency) t = analogFiltre(t);
@@ -164,12 +165,10 @@ namespace Compute
 		{
 			typedef Viewer<O>::Result V;
 			V &v = p.get<Viewer<O>::Result>();
-			//typedef TL::Inner<O>::Result Item;
 			O &item = Singleton<O>::Instance();
 
 			memmove(v.buffer, item.outputData, sizeof(v.buffer));
 			memmove(v.status, item.status, sizeof(v.status));
-			//v.count = DataItem::output_buffer_size;
 			v. deathZoneFirst = item.deathZoneFirst;
 			v.deathZoneSecond = item.deathZoneSecond;
 			v.threshSortDown = item.threshSortDown; 
@@ -179,7 +178,6 @@ namespace Compute
 			v.currentOffset = item.currentOffset;
 			v.inputData = item.inputData;
 			v.count = DataItem::output_buffer_size;
-			//v.lengthTube = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;
 		}
 	};
 
@@ -228,5 +226,19 @@ namespace Compute
 		if(def.result == STATUS_ID(DefectSig<SortDown>)) return res - 1;
 		if(str.result == STATUS_ID(StructSig<SortDown>)) return res - 1;
 		return brak;
+	}
+
+	void Reverse(double *data, int len)
+	{
+		--len;
+		int len2 = len / 2;
+
+		for(int i = 0; i < len2; ++i)
+		{
+			int k = len - i;
+			double d = data[i];
+			data[i] = data[k];
+			data[k] = d;
+		}
 	}
 }

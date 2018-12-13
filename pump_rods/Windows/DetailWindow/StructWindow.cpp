@@ -1,11 +1,11 @@
-﻿#include "DefectWindow.h"
+﻿#include "StructWindow.h"
 #include "window_tool/MenuApi.h"
 #include "CommonWindow/Common.h"
 #include "DataItem\DataItem.h"
 #include "Compute\Compute.h"
 #include "App/AppBase.h"
 
-namespace DefectMenu
+namespace StructMenu
 {
 	struct MainFile{};
 	MENU_TEXT(L"Файл", TopMenu<MainFile>)
@@ -33,7 +33,7 @@ namespace DefectMenu
 	>::Result menu_list;	
 };
 
-bool DefectWindow::Def::Draw(TMouseMove &l, VGraphics &g)
+bool StructWindow::Str::Draw(TMouseMove &l, VGraphics &g)
 {
 	if(count > 0)
 	{
@@ -48,51 +48,50 @@ bool DefectWindow::Def::Draw(TMouseMove &l, VGraphics &g)
 	return true;
 }
 
-LRESULT DefectWindow::operator()(TCreate &m)
+LRESULT StructWindow::operator()(TCreate &m)
 {
-	Menu<DefectMenu::menu_list>().Init(m.hwnd);
-	DefectSig<DataItem::Buffer> &item = Singleton<DefectSig<DataItem::Buffer>>::Instance();
+	Menu<StructMenu::menu_list>().Init(m.hwnd);
+	StructSig<DataItem::Buffer> &item = Singleton<StructSig<DataItem::Buffer>>::Instance();
 	ColorTable::TItems &color = Singleton<ColorTable>::Instance().items;
 	ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
 
-	Def &def = viewers.get<Def>();
-	def.owner = this;
-	memmove(def.buffer, item.outputData, sizeof(def.buffer));
-	memmove(def.status, item.status, sizeof(def.status));
+	Str &str = viewers.get<Str>();
+	str.owner = this;
+	memmove(str.buffer, item.outputData, sizeof(str.buffer));
+	memmove(str.status, item.status, sizeof(str.status));
 
-	def. deathZoneFirst = item.deathZoneFirst;
-	def.deathZoneSecond = item.deathZoneSecond;
-	def.threshSortDown = item.threshSortDown; 
-	def.threshDefect = item.threshDefect;
-	def.result = item.result;
-	def.tchart.maxAxesX = item.currentOffset - 1;
-	def.currentOffset = item.currentOffset;
-	def.inputData = item.inputData;
-	def.tchart.items.get<BottomAxesMeters>().maxBorder = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;	
-	def.threshSortDownColor = color.get<Clr<SortDown>>().value;
-	def.threshDefectColor = color.get<Clr<Defect>>().value;
-	def.deathZoneColor = color.get<Clr<DeathZone>>().value;
-	def.nominalColor = color.get<Clr<Nominal>>().value;
-	def.cursor.SetMouseMoveHandler(&def, & DefectWindow::Def::Draw);
-	def.count = DataItem::output_buffer_size;
+	str. deathZoneFirst = item.deathZoneFirst;
+	str.deathZoneSecond = item.deathZoneSecond;
+	str.threshSortDown = item.threshSortDown; 
+	str.threshDefect = item.threshDefect;
+	str.result = item.result;
+	str.tchart.maxAxesX = item.currentOffset - 1;
+	str.currentOffset = item.currentOffset;
+	str.inputData = item.inputData;
+	str.tchart.items.get<BottomAxesMeters>().maxBorder = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;	
+	str.threshSortDownColor = color.get<Clr<SortDown>>().value;
+	str.threshDefectColor = color.get<Clr<Defect>>().value;
+	str.deathZoneColor = color.get<Clr<DeathZone>>().value;
+	str.nominalColor = color.get<Clr<Nominal>>().value;
+	str.cursor.SetMouseMoveHandler(&str, & StructWindow::Str::Draw);
+	str.count = DataItem::output_buffer_size;
 
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	frame.cursor.SetMouseMoveHandler(&frame, &FrameViewer::DrawFrame); 
-	ChangeFrame(def.currentX);
+	ChangeFrame(str.currentX);
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
 	return 0;
 }
 
-void DefectWindow::ChangeFrame(int offsetDef)
+void StructWindow::ChangeFrame(int offsetDef)
 {
-	Def &def = viewers.get<Def>();
+	Str &def = viewers.get<Str>();
 	ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
-	DefectSig<DataItem::Buffer> &item = Singleton<DefectSig<DataItem::Buffer>>::Instance();
+	StructSig<DataItem::Buffer> &item = Singleton<StructSig<DataItem::Buffer>>::Instance();
 	FrameViewer &frame =  viewers.get<FrameViewer>();
-	frame.count = viewerCount.get<DefectSig<ViewerCount>>().value;
-
-	frame.medianFiltreLength = Singleton<MedianFiltreTable>::Instance().items.get<DefectSig<MedianFiltreWidth>>().value;
-	frame.cutoffFrequency = Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<CutoffFrequency>>().value;
+	frame.count = viewerCount.get<StructSig<ViewerCount>>().value;
+	frame.medianFiltreLength = Singleton<MedianFiltreTable>::Instance().items.get<StructSig<MedianFiltreWidth>>().value;
+	frame.cutoffFrequency = Singleton<AnalogFilterTable>::Instance().items.get<StructSig<CutoffFrequency>>().value;
 
 	static const int tbuf_size = 3 * dimention_of(frame.buffer) / 2;
 	double tbuf[tbuf_size];
@@ -118,7 +117,7 @@ void DefectWindow::ChangeFrame(int offsetDef)
 		, frame.medianFiltreLength
 		, tbuf
 		, tbuf_size
-		, Singleton<L502ParametersTable>::Instance().items.get<DefectSig<ChannelSamplingRate>>().value
+		, Singleton<L502ParametersTable>::Instance().items.get<StructSig<ChannelSamplingRate>>().value
 		);
 
 	memmove(frame.buffer, &tbuf[offs_b], sizeof(frame.buffer));
@@ -126,8 +125,8 @@ void DefectWindow::ChangeFrame(int offsetDef)
 	frame.tchart.minAxesX = offsetDef;
 	frame.tchart.maxAxesX = offsetDef + frame.count;
 
-	double adcRange =  100.0 / DataItem::ADC_RANGE(Singleton<L502ParametersTable>::Instance().items.get<DefectSig<RangeL502>>().value);
-	double koef = Singleton<KoeffSignTable>::Instance().items.get<DefectSig<KoeffSign>>().value;
+	double adcRange =  100.0 / DataItem::ADC_RANGE(Singleton<L502ParametersTable>::Instance().items.get<StructSig<RangeL502>>().value);
+	double koef = Singleton<KoeffSignTable>::Instance().items.get<StructSig<KoeffSign>>().value;
 
 	for(int i = 0; i < dimention_of(frame.buffer); ++i)
 	{
@@ -141,8 +140,8 @@ void DefectWindow::ChangeFrame(int offsetDef)
 
 	DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;
 	int rodLength = dead.get<RodLenght>().value;
-	frame.deathZoneFirst	= int((double)dead.get<DefectSig<First<DeathZone>>>().value * item.currentOffset / rodLength); 
-	frame.deathZoneSecond	= item.currentOffset -  int((double)dead.get<DefectSig<Second<DeathZone>>>().value * item.currentOffset / rodLength); 
+	frame.deathZoneFirst	= int((double)dead.get<StructSig<First<DeathZone>>>().value * item.currentOffset / rodLength); 
+	frame.deathZoneSecond	= item.currentOffset -  int((double)dead.get<StructSig<Second<DeathZone>>>().value * item.currentOffset / rodLength); 
 
 	dprint("frame.deathZoneFirst %d frame.deathZoneSecond %d\n", frame.deathZoneFirst, frame.deathZoneSecond);
 
@@ -154,8 +153,8 @@ void DefectWindow::ChangeFrame(int offsetDef)
 	
 	ThresholdsTable::TItems &tresh = Singleton<ThresholdsTable>::Instance().items;
 
-	frame.tchart.items.get<FrameViewer::Border<SortDown>>().value = tresh.get<DefectSig<Thresh<SortDown>>>().value;
-	frame.tchart.items.get<FrameViewer::Border<Defect>>().value = tresh.get<DefectSig<Thresh<Defect>>>().value;
+	frame.tchart.items.get<FrameViewer::Border<SortDown>>().value = tresh.get<StructSig<Thresh<SortDown>>>().value;
+	frame.tchart.items.get<FrameViewer::Border<Defect>>().value = tresh.get<StructSig<Thresh<Defect>>>().value;
 
 	frame.tchart.items.get<FrameViewer::Border<SortDown>>().color  = frame.threshSortDownColor;
 	frame.tchart.items.get<FrameViewer::Border<Defect>>().color  = frame.threshDefectColor;
@@ -163,18 +162,18 @@ void DefectWindow::ChangeFrame(int offsetDef)
 	RepaintWindow(frame.hWnd);
 }
 
-void DefectWindow::operator()(TDestroy &m)
+void StructWindow::operator()(TDestroy &m)
 {
 	delete this;
 	SetWindowLongPtr(m.hwnd, GWLP_USERDATA, 0);
 }
 
-void DefectWindow::operator()(TSize &m)
+void StructWindow::operator()(TSize &m)
 {
 	static const int height = 200;
 
 	{
-		Def &def = viewers.get<Def>();
+		Str &def = viewers.get<Str>();
 		TSize size = {def.hWnd, WM_SIZE, 0, m.Width, height};
 		SendMessage(MESSAGE(size));
 		MoveWindow(def.hWnd , 0, 0, size.Width, size.Height, true);
@@ -187,16 +186,16 @@ void DefectWindow::operator()(TSize &m)
 	}
 }
 
-void DefectWindow::operator()(TCommand &m)
+void StructWindow::operator()(TCommand &m)
 {
 	EventDo(m);
 }
 
-void DefectWindow::operator()(TMouseWell &l)
+void StructWindow::operator()(TMouseWell &l)
 {
 	TL::find<viewers_list, Common::__in_rect__>()(
 		&viewers
-		, &Common::__event_data__<TMouseWell, DefectWindow>(*this, l)
+		, &Common::__event_data__<TMouseWell, StructWindow>(*this, l)
 		);
 }
 //-----------------------------------------------------------------------------

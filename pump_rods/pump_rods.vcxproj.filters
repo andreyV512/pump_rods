@@ -284,6 +284,9 @@
     <ClInclude Include="..\Common\L502\Device502.h">
       <Filter>Common\Devices\502</Filter>
     </ClInclude>
+    <ClInclude Include="Windows\DetailWindow\StructWindow.h">
+      <Filter>pump_rods\Windows\DetailWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp">
@@ -429,6 +432,9 @@
     </ClCompile>
     <ClCompile Include="..\Common\L502\Device502.cpp">
       <Filter>Common\Devices\502</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\DetailWindow\StructWindow.cpp">
+      <Filter>pump_rods\Windows\DetailWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

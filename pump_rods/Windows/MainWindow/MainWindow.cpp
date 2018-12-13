@@ -6,6 +6,7 @@
 #include "templates\WindowsEventTemplate.hpp"
 #include "window_tool\EmptyWindow.h"
 #include "Windows\DetailWindow\DefectWindow.h"
+#include "Windows\DetailWindow\StructWindow.h"
 #include "MessageText\StatusMessages.h"
 
 namespace {
@@ -247,6 +248,13 @@ public:
 	static wchar_t *Title(){return L"Дефектоскоп";}
 };
 
+class StructureDetailWindow: public StructWindow
+{
+public:
+	typedef StructWindow Parent; 
+	static wchar_t *Title(){return L"Структура";}
+};
+
 template<>struct Event<TopMenu<MainWindow::DefectoscopeViewer >> 	
 {										
 	static void Do(void *data)				
@@ -255,15 +263,25 @@ template<>struct Event<TopMenu<MainWindow::DefectoscopeViewer >>
 		HWND h = Common::OpenWindow<DefectoscopeDetailWindow>::Do(v->hWnd);
 		if(NULL != h)
 		{
+			DefectoscopeDetailWindow *w = (DefectoscopeDetailWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+			w->viewers.get<DefectWindow::Def>().currentX = v->currentX;
+			w->ChangeFrame(v->currentX);
 		}
 	}									
 };
 
 template<>struct Event<TopMenu<MainWindow::StructureViewer >> 	
 {										
-	static void Do(HWND h)				
+	static void Do(void *data)				
 	{	
-		zprint("             event\n");
+		MainWindow::StructureViewer *v = (MainWindow::StructureViewer *)data;
+		HWND h = Common::OpenWindow<StructureDetailWindow>::Do(v->hWnd);
+		if(NULL != h)
+		{
+			StructureDetailWindow *w = (StructureDetailWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+			w->viewers.get<StructWindow::Str>().currentX = v->currentX;
+			w->ChangeFrame(v->currentX);
+		}
 	}									
 };
 
@@ -297,5 +315,5 @@ bool MainWindow::StructureViewer::Draw(TMouseMove &l, VGraphics &g)
 
 void MainWindow::StructureViewer::operator()(TRButtonDown &l)
 {
-	zprint("              rbutton\n");
+	if(count > 0)PopupMenu<TL::MkTlst<TopMenu<MainWindow::StructureViewer> >::Result>::Do(l.hwnd, this);
 }

@@ -31,19 +31,20 @@ namespace DataItem
 	{
 		double delta = 100.0 / App::buffer_size / 10;
 		int i = 0;
+		double w = 3.0 * 2.0 * 3.1214 / App::buffer_size;
 		for(; i < App::buffer_size / 2 - 55000; ++i)
 		{
-			data[App::buffer_size - 1 - i] = delta * i;
+			data[App::buffer_size - 1 - i] =  sin(w * i) * delta * i;
 		}
-
+		
 		for(; i < App::buffer_size / 2 + 55000; ++i)
 		{
-			data[App::buffer_size - 1 - i] =  delta * 100000;
+			data[App::buffer_size - 1 - i] =  sin(w * i) * delta * 100000;
 		}
 
 		for(; i < App::buffer_size; ++i)
 		{
-			data[App::buffer_size - 1 - i] = delta * i;
+			data[App::buffer_size - 1 - i] =  sin(w * i) * delta * i;
 		}
 	}
 

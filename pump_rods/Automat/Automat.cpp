@@ -158,11 +158,12 @@ namespace Automat
 				Log::Mess<LogMess::WaitingForTheP2Signal>();
 				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP2>,Test<On<iСU>, On<iCycle>>);
 				//включение сигнала AC_ON
+				StructSig<DataItem::Buffer> &structBuff = Singleton<StructSig<DataItem::Buffer>>::Instance();
 				OUT_BITS(On<oAC_ON>);
 				{
 					//сбор данных
 					Log::Mess<LogMess::DataCollectionSTR>();
-					l502Run<StructSig<DataItem::Buffer>> str(Singleton<StructSig<DataItem::Buffer>>::Instance());
+					l502Run<StructSig<DataItem::Buffer>> str(structBuff);
 					if(0 != (status502 = str()))
 					{
 						status = Status::alarm_l502;
@@ -173,7 +174,9 @@ namespace Automat
 					Log::Mess<LogMess::WaitingForTheP2SignalTurnOff>();
 					AND_BITS(120000, Key<Status::stop>, Off<iP2>,Test<On<iСU>, On<iCycle>>);
 				}
-				OUT_BITS(Off<oAC_ON>, Off<oStart>);
+				OUT_BITS(Off<oAC_ON>, Off<oStart>);	
+				//реверс данных с структуры
+				Compute::Reverse(structBuff.inputData, structBuff.currentOffset);
 				//расчёт и отображение данных
 				Compute::Recalculation();
 				//прерывание на просмотр

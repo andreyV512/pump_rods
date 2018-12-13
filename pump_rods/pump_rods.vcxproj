@@ -134,6 +134,7 @@
     <ClInclude Include="Resource.h" />
     <ClInclude Include="Windows\DetailWindow\DefectWindow.h" />
     <ClInclude Include="Windows\DetailWindow\FrameViewer.h" />
+    <ClInclude Include="Windows\DetailWindow\StructWindow.h" />
     <ClInclude Include="Windows\MainWindow\AppKeyHandler.h" />
     <ClInclude Include="Windows\MainWindow\MainWindow.h" />
     <ClInclude Include="Windows\MainWindow\MainWindowMenu.hpp" />
@@ -185,6 +186,7 @@
     <ClCompile Include="DataItem\DataItem.cpp" />
     <ClCompile Include="Windows\DetailWindow\DefectWindow.cpp" />
     <ClCompile Include="Windows\DetailWindow\FrameViewer.cpp" />
+    <ClCompile Include="Windows\DetailWindow\StructWindow.cpp" />
     <ClCompile Include="Windows\MainWindow\AppKeyHandler.cpp" />
     <ClCompile Include="Windows\MainWindow\MainWindow.cpp" />
     <ClCompile Include="Windows\MainWindow\MainWindowToolBar.cpp" />

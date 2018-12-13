@@ -128,8 +128,6 @@ namespace Common
 		return false;
 	}
 
-	template<class T>struct SetParamOpenWindow{void operator()(HWND){}};
-	
 	template<class T>struct OpenWindow
 	{
 		static HWND Do(HWND)
@@ -147,7 +145,6 @@ namespace Common
 				hh = WindowTemplate(new T, T::Title(), r.left, r.top, r.right, r.bottom);
 				ShowWindow(hh, SW_SHOWNORMAL);
 			}
-			SetParamOpenWindow<T>()(hh);
 			return hh;
 		}
 	};
