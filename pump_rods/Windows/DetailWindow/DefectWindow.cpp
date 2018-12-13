@@ -35,14 +35,16 @@ namespace DefectMenu
 
 bool DefectWindow::Def::Draw(TMouseMove &l, VGraphics &g)
 {
-	Parent::Draw(l, g);
-	int x;
-	CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
+	if(count > 0)
+	{
+		Parent::Draw(l, g);
+		int x;
+		CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 
-	int offs = int((double)x * currentOffset / DataItem::output_buffer_size);
+		int offs = int((double)x * currentOffset / DataItem::output_buffer_size);
 
-	owner->ChangeFrame(offs);
-	
+		owner->ChangeFrame(offs);
+	}
 	return true;
 }
 

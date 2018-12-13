@@ -208,21 +208,24 @@ void MainWindow::CleanChart(bool b)
 
 bool MainWindow::DefectoscopeViewer::Draw(TMouseMove &l, VGraphics &g)
 {
-	int x = 0;
-	CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
+	if(count > 0)
+	{
+		int x = 0;
+		CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 
-	int offs = int((double)x * currentOffset / DataItem::output_buffer_size);
-	unsigned color = 0xffffffff;
-	wchar_t txt[1024];
-	StatusText()(status[x], color, txt);
-	wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s <%x>%s  status %d"
-		, offs
-		, Wchar_from<double, 2>(buffer[x])()
-		, color
-		, txt
-		, status[x]
+		int offs = int((double)x * currentOffset / DataItem::output_buffer_size);
+		unsigned color = 0xffffffff;
+		wchar_t txt[1024];
+		StatusText()(status[x], color, txt);
+		wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s <%x>%s  status %d"
+			, offs
+			, Wchar_from<double, 2>(buffer[x])()
+			, color
+			, txt
+			, status[x]
 		);
-	label.Draw(g());
+		label.Draw(g());
+	}
 	return true;
 }
 
@@ -266,26 +269,29 @@ template<>struct Event<TopMenu<MainWindow::StructureViewer >>
 
 void MainWindow::DefectoscopeViewer::operator()(TRButtonDown &l)
 {
-	PopupMenu<TL::MkTlst<TopMenu<MainWindow::DefectoscopeViewer> >::Result>::Do(l.hwnd, this);
+	if(count > 0)PopupMenu<TL::MkTlst<TopMenu<MainWindow::DefectoscopeViewer> >::Result>::Do(l.hwnd, this);
 }
 
 bool MainWindow::StructureViewer::Draw(TMouseMove &l, VGraphics &g)
 {
-	int x = 0;
-	CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
+	if(count > 0)
+	{
+		int x = 0;
+		CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 
-	int offs = int((double)x * currentOffset / DataItem::output_buffer_size);
-	unsigned color = 0xffffffff;
-	wchar_t txt[1024];
-	StatusText()(status[x], color, txt);
-	wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s <%x>%s  status %d"
-		, offs
-		, Wchar_from<double, 2>(buffer[x])()
-		, color
-		, txt
-		, status[x]
+		int offs = int((double)x * currentOffset / DataItem::output_buffer_size);
+		unsigned color = 0xffffffff;
+		wchar_t txt[1024];
+		StatusText()(status[x], color, txt);
+		wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s <%x>%s  status %d"
+			, offs
+			, Wchar_from<double, 2>(buffer[x])()
+			, color
+			, txt
+			, status[x]
 		);
-	label.Draw(g());
+		label.Draw(g());
+	}
 	return true;
 }
 
