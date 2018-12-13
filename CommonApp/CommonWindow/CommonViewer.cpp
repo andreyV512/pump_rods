@@ -93,7 +93,6 @@ void CommonViewer::operator()(TMouseWell &l)
 			, true 
 			);
 		currentX -= l.delta / 120;
-		//cursor.VerticalCursor(storedMouseMove, HDCGraphics(storedMouseMove.hwnd, backScreen));
 		int currentY = 0;
 		chart->CellCoord(storedMouseMove.x, storedMouseMove.y, currentX, currentY);
 		cursor.CrossCursor(storedMouseMove, HDCGraphics(storedMouseMove.hwnd, backScreen));

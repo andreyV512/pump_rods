@@ -75,14 +75,14 @@ namespace App
 	void UpdateViewers()
 	{
 		MainWindow &mainWindow = Singleton<MainWindow>::Instance();
-		mainWindow.CleanChart(false);
+		mainWindow.CleanChart(true);
 		RepaintWindow(mainWindow.hWnd);
 	}
 
 	void CleanViewers()
 	{
 		MainWindow &mainWindow = Singleton<MainWindow>::Instance();
-		mainWindow.CleanChart(true);
+		mainWindow.CleanChart(false);
 		RepaintWindow(mainWindow.hWnd);
 	}
 
@@ -98,4 +98,4 @@ namespace App
 }
 
 Device1730 device1730;
-L502Work l502;
+Device502 l502;

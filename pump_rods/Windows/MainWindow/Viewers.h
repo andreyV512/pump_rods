@@ -30,7 +30,8 @@ public:
 	int threshSortDownColor, threshDefectColor, deathZoneColor, nominalColor;
 	int result;
 	double *inputData;
-	bool cleanChart;
+	//bool cleanChart;
+	int count;
 	double buffer[DataItem::output_buffer_size];
 	char status[DataItem::output_buffer_size];
 

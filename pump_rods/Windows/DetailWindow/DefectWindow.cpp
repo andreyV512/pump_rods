@@ -3,6 +3,7 @@
 #include "CommonWindow/Common.h"
 #include "DataItem\DataItem.h"
 #include "Compute\Compute.h"
+#include "App/AppBase.h"
 
 namespace DefectMenu
 {
@@ -34,19 +35,12 @@ namespace DefectMenu
 
 bool DefectWindow::Def::Draw(TMouseMove &l, VGraphics &g)
 {
-	//if(0 == count) return false;
 	Parent::Draw(l, g);
 	int x;
 	CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 
 	int offs = int((double)x * currentOffset / DataItem::output_buffer_size);
 
-	//wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s %s"
-	//	, offs
-	//	, Wchar_from<double, 2>(buffer[x])()
-	//	, L"Mess(buffer[x], x)"
-	//	);
-	//label.Draw(g());
 	owner->ChangeFrame(offs);
 	
 	return true;
@@ -55,7 +49,7 @@ bool DefectWindow::Def::Draw(TMouseMove &l, VGraphics &g)
 LRESULT DefectWindow::operator()(TCreate &m)
 {
 	Menu<DefectMenu::menu_list>().Init(m.hwnd);
-	DataItem::Defectoscope &item = Singleton<DataItem::Defectoscope>::Instance();
+	DefectSig<DataItem::Buffer> &item = Singleton<DefectSig<DataItem::Buffer>>::Instance();
 	ColorTable::TItems &color = Singleton<ColorTable>::Instance().items;
 	ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
 
@@ -78,7 +72,7 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	def.deathZoneColor = color.get<Clr<DeathZone>>().value;
 	def.nominalColor = color.get<Clr<Nominal>>().value;
 	def.cursor.SetMouseMoveHandler(&def, & DefectWindow::Def::Draw);
-	def.cleanChart = !(0 < item.currentOffset);
+	def.count = DataItem::output_buffer_size;
 
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	frame.cursor.SetMouseMoveHandler(&frame, &FrameViewer::DrawFrame); 
@@ -91,7 +85,7 @@ void DefectWindow::ChangeFrame(int offsetDef)
 {
 	Def &def = viewers.get<Def>();
 	ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
-	DataItem::Defectoscope &item = Singleton<DataItem::Defectoscope>::Instance();
+	DefectSig<DataItem::Buffer> &item = Singleton<DefectSig<DataItem::Buffer>>::Instance();
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	frame.count = viewerCount.get<DefectSig<ViewerCount>>().value;
 
@@ -159,8 +153,6 @@ void DefectWindow::ChangeFrame(int offsetDef)
 	frame.threshSortDownColor = def.threshSortDownColor;
 	frame.threshSortDown   	= def.threshSortDown   	;
 	
-	
-
 	ThresholdsTable::TItems &tresh = Singleton<ThresholdsTable>::Instance().items;
 
 	frame.tchart.items.get<FrameViewer::Border<SortDown>>().value = tresh.get<DefectSig<Thresh<SortDown>>>().value;

@@ -4,10 +4,9 @@
 namespace DataItem
 {
 	static const int output_buffer_size = 1000;
-	struct Defectoscope
+	struct Buffer
 	{		
 		int currentOffset;
-		//int outputLength;
 		int deathZoneFirst, deathZoneSecond;
 		double threshSortDown, threshDefect;
 		int result;
@@ -16,17 +15,16 @@ namespace DataItem
 		char status[output_buffer_size];
 	};
 
-	struct Structure
-	{
-		int currentOffset;
-		//int outputLength;
-		int deathZoneFirst, deathZoneSecond;
-		double threshSortDown, threshDefect;
-		int result;
-		double inputData[App::buffer_size];
-		double outputData[output_buffer_size];
-		char status[output_buffer_size];
-	};
+	//struct Structure
+	//{
+	//	int currentOffset;
+	//	int deathZoneFirst, deathZoneSecond;
+	//	double threshSortDown, threshDefect;
+	//	int result;
+	//	double inputData[App::buffer_size];
+	//	double outputData[output_buffer_size];
+	//	char status[output_buffer_size];
+	//};
 
 	struct ResultData
 	{

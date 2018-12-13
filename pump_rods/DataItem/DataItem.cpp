@@ -3,6 +3,7 @@
 #include <math.h>
 #include <stdlib.h>
 #include "templates\typelist.hpp"
+#include "App\AppBase.h"
 
 namespace DataItem
 {
@@ -48,11 +49,11 @@ namespace DataItem
 
 	void Test()
 	{
-		Defectoscope &def = Singleton<Defectoscope>::Instance();
+		DefectSig<DataItem::Buffer> &def = Singleton<DefectSig<DataItem::Buffer>>::Instance();
 		def.currentOffset = App::buffer_size;
 		//def.outputLength = output_buffer_size;
 		__Test__(def.inputData, 1.0);
-		Structure &str = Singleton<Structure>::Instance();
+		StructSig<DataItem::Buffer> &str = Singleton<StructSig<DataItem::Buffer>>::Instance();
 		str.currentOffset = App::buffer_size;
 		//str.outputLength = output_buffer_size;
 		__Test1__(str.inputData, 1.0);

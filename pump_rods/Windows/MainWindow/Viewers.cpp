@@ -9,9 +9,9 @@ using namespace Gdiplus;
 ViewerData::ViewerData()
 	: CommonViewer(&tchart, 1) 
     , tchart(backScreen)
-	//, count(0)
+	, count(0)
 	, currentOffset(1000)
-	, cleanChart(true)
+	//, cleanChart(true)
 {
 	chart = &tchart;
 
@@ -66,7 +66,7 @@ bool ViewerData::GetColorBar(int zone, double &data, unsigned &color)
 	//else if(data > threshSortDown) color = threshSortDownColor;
 	//StatusText()(status[x], color, txt);
 	color = StatusColor()(status[zone]);
-	return !cleanChart && zone < dimention_of(buffer);
+	return zone < count;
 }
 
 //void Chart_CoordCell(Chart &c, int mX, int &x, int delta)

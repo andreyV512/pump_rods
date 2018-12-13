@@ -1,6 +1,6 @@
 #pragma once
 
-class L502Work
+class Device502
 {
 	void *hnd;
 public:
@@ -13,7 +13,7 @@ public:
 //	L502Work();
 	bool Init();
 	void Destroy();
-	template<template<class>class W>bool SetupParams(){return true;}
+	bool SetupParams(int *f_channels, int *f_ch_ranges, int ADC_FREQ, int countChannels);
 	int Start();
 	int Stop();
 	int Read(unsigned &startChennel, double *data, unsigned &count);

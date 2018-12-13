@@ -18,7 +18,7 @@ public:
 	>::Result> TChart;
 	TChart tchart;
 
-	bool cleanChart;
+	int count;
 	DataItem::ResultData &viewerData;
 
 	ResultViewer();

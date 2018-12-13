@@ -9,6 +9,7 @@
 #include "Windows.h"
 #include "Windows\MainWindow\AppKeyHandler.h"
 #include "Compute\Compute.h"
+#include "l502Automat.hpp"
 
 
 namespace Automat
@@ -26,6 +27,7 @@ namespace Automat
 			, start
 			, stop
 			, alarm_bits
+			, alarm_l502
 		};
 	};
 
@@ -136,6 +138,11 @@ namespace Automat
 				//выставлен сигнал DC_ON2
 				OUT_BITS(On<oDC_ON2>);
 				//сбор данных
+				if(!l502Run<DefectSig>()())
+				{
+					status = Status::alarm_l502;
+					break;
+				}
 				//ожидание выключения сигнала П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке ЦИКЛ
 				//, при превышении сбора 120 сек выход из цикла
 				AND_BITS(120000, Key<Status::stop>, Off<iP1>,Test<On<iСU>, On<iCycle>>);
@@ -152,6 +159,11 @@ namespace Automat
 				//включение сигнала AC_ON
 				OUT_BITS(On<oAC_ON>);
 				//сбор данных
+				if(!l502Run<StructSig>()())
+				{
+					status = Status::alarm_l502;
+					break;
+				}
 				//ожидание выключения сигнала П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке ЦИКЛ
 				//, при превышении сбора 120 сек выход из цикла
 				AND_BITS(120000, Key<Status::stop>, Off<iP2>,Test<On<iСU>, On<iCycle>>);
@@ -191,7 +203,7 @@ namespace Automat
 			case Status::stop:
 				if(result.key == Status::stop)
 				{
-						Log::Mess<LogMess::ExitMeshuringCycle>();
+					Log::Mess<LogMess::ExitMeshuringCycle>();
 				}
 				dprint("Status::stop\n");
 				break;
@@ -200,6 +212,9 @@ namespace Automat
 				break;
 			case Status::alarm_bits:
 				dprint("Status::alarm_bits\n");
+				break;
+			case Status::alarm_l502:
+				dprint("Status::alarm_l502\n");
 				break;
 			}
 		}

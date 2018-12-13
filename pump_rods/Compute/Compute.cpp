@@ -79,12 +79,13 @@ namespace Compute
 	};
 
 	template<class O, class P>struct __recalculation__;
-	template<class O, template<class>class W, class P>struct __recalculation__<W<O>, P>
+	template<class T, template<class>class W, class P>struct __recalculation__<W<T>, P>
 	{
+		typedef W<T> O;
 		void operator()(P &p)
 		{
 			O &o = Singleton<O>::Instance();
-			dprint("__recalculation__ %s\n", typeid(W<O>).name());
+			dprint("__recalculation__ %s\n", typeid(O).name());
 			double adcRange =  100.0 / DataItem::ADC_RANGE(p.l502Param.get<W<RangeL502>>().value);
 			double koef = p.koeffSign.get<W<KoeffSign>>().value;
 			o.deathZoneFirst  = p.deadArea.get<W<First<DeathZone>>>().value;
@@ -148,11 +149,11 @@ namespace Compute
 	};
 
 	template<class T>struct Viewer;
-	template<>struct Viewer<DefectSig<DataItem::Defectoscope>>
+	template<>struct Viewer<DefectSig<DataItem::Buffer>>
 	{
 		typedef MainWindow::DefectoscopeViewer Result;
 	};
-	template<>struct Viewer<StructSig<DataItem::Structure>>
+	template<>struct Viewer<StructSig<DataItem::Buffer>>
 	{
 		typedef MainWindow::StructureViewer Result;
 	};
@@ -163,8 +164,8 @@ namespace Compute
 		{
 			typedef Viewer<O>::Result V;
 			V &v = p.get<Viewer<O>::Result>();
-			typedef TL::Inner<O>::Result Item;
-			Item &item = Singleton<Item>::Instance();
+			//typedef TL::Inner<O>::Result Item;
+			O &item = Singleton<O>::Instance();
 
 			memmove(v.buffer, item.outputData, sizeof(v.buffer));
 			memmove(v.status, item.status, sizeof(v.status));
@@ -177,14 +178,15 @@ namespace Compute
 			v.tchart.maxAxesX = item.currentOffset - 1;
 			v.currentOffset = item.currentOffset;
 			v.inputData = item.inputData;
+			v.count = DataItem::output_buffer_size;
 			//v.lengthTube = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;
 		}
 	};
 
 	void ComputeResult()
 	{
-		char (&def)[DataItem::output_buffer_size] = Singleton<DataItem::Defectoscope>::Instance().status;
-		char (&sig)[DataItem::output_buffer_size] = Singleton<DataItem::Structure>::Instance().status;
+		char (&def)[DataItem::output_buffer_size] = Singleton<DefectSig<DataItem::Buffer>>::Instance().status;
+		char (&sig)[DataItem::output_buffer_size] = Singleton<StructSig<DataItem::Buffer>>::Instance().status;
 		char (&res)[DataItem::output_buffer_size] = Singleton<DataItem::ResultData>::Instance().status;
 		unsigned st[3];
 		st[2] = -1;
@@ -215,8 +217,8 @@ namespace Compute
 	
 	unsigned Result(unsigned res)
 	{
-		DataItem::Defectoscope &def = Singleton<DataItem::Defectoscope>::Instance();
-		DataItem::Structure &str    = Singleton<DataItem::Structure>::Instance();
+		DefectSig<DataItem::Buffer> &def = Singleton<DefectSig<DataItem::Buffer>>::Instance();
+		StructSig<DataItem::Buffer> &str    = Singleton<StructSig<DataItem::Buffer>>::Instance();
 
 		if(def.result == STATUS_ID(DefectSig<Defect>)) return brak;
 		if(str.result == STATUS_ID(StructSig<Defect>)) return brak;

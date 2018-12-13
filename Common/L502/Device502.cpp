@@ -1,4 +1,4 @@
-#include "L502Work.h"
+#include "Device502.h"
 #include "App/AppBase.h"
 #include "App/Config.h"
 #include "tools_debug/DebugMess.h"
@@ -43,23 +43,21 @@ void L502SolidGroup::Destroy()
         L502_Free((t_l502_hnd)hnd);
 }
 
-bool L502SolidGroup::SetupParams()
+bool L502SolidGroup::SetupParams(int *f_channels, int *f_ch_ranges, int ADC_FREQ, int countChannels)
 {
-	SolenoidParametersTable::TItems &adcParam = Singleton<SolenoidParametersTable>::Instance().items;
-	int f_channels[] = {
-		adcParam.get<InputSignal>().value
-		, adcParam.get<ReferenceSignal>().value
-	};
-	int f_ch_modes[] = {L502_LCH_MODE_COMM, L502_LCH_MODE_COMM};
-	int f_ch_ranges[] = {referenceV, dataV};
+//	int f_channels[] = {
+//		adcParam.get<InputSignal>().value
+//		, adcParam.get<ReferenceSignal>().value
+//	};
+//	int f_ch_ranges[] = {referenceV, dataV};
 
-	static const int count_inputs = dimention_of(f_channels);
-	int err = L502_SetLChannelCount((t_l502_hnd)hnd, count_inputs);
-	for (int i=0; (i < count_inputs) && !err; i++)
-        err = L502_SetLChannel((t_l502_hnd)hnd, i, f_channels[i], f_ch_modes[i], f_ch_ranges[i], 0);
+	//static const int count_inputs = dimention_of(f_channels);
+	int err = L502_SetLChannelCount((t_l502_hnd)hnd, countChannels);
+	for (int i=0; (i < countChannels) && !err; i++)
+        err = L502_SetLChannel((t_l502_hnd)hnd, i, f_channels[i], L502_LCH_MODE_COMM, f_ch_ranges[i], 0);
 	/* устанавливаем частоты ввода для АЦП и цифровых входов */
 	double f_adc = ADC_FREQ;
-	double f_frame = (double)ADC_FREQ/count_inputs;
+	double f_frame = (double)ADC_FREQ/countChannels;
     if (!err)
     {
         err = L502_SetAdcFreq((t_l502_hnd)hnd, &f_adc, &f_frame);
@@ -117,16 +115,10 @@ int L502SolidGroup::Read(unsigned &startChennel, double *data, unsigned &count)
 	return cnt;
 }
 #else
-//L502Work::L502Work()
-//	: ADC_FREQ(Singleton<SolenoidParametersTable>::Instance().items.get<Frequency502>().value)
-//	, referenceV(Singleton<SolenoidParametersTable>::Instance().items.get<ReferenceRangeSignal>/(/).value)
-//	, dataV(Singleton<SolenoidParametersTable>::Instance().items.get<InputRangeSignal>().value)
-//	, READ_TIMEOUT(1500)
-//{}
-bool  L502Work::Init(){return true;}
-void  L502Work::Destroy(){}
-//bool   L502Work::SetupParams(){return true;}
-int   L502Work::Start(){return 0;}
-int   L502Work::Stop(){return 0;}
-int L502Work::Read(unsigned &startChennel, double *data, unsigned &count){return 0;}
+bool  Device502::Init(){return true;}
+void  Device502::Destroy(){}
+bool   Device502::SetupParams(int *, int *, int, int){return true;}
+int   Device502::Start(){return 0;}
+int   Device502::Stop(){return 0;}
+int Device502::Read(unsigned &startChennel, double *data, unsigned &count){return 0;}
 #endif

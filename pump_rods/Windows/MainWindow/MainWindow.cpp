@@ -165,11 +165,11 @@ void MainWindow::StatusBar(int n, wchar_t *txt)
 }
 
 template<class >struct __main_window_viewer__;
-template<>struct __main_window_viewer__<DefectSig<DataItem::Defectoscope>>
+template<>struct __main_window_viewer__<DefectSig<DataItem::Buffer>>
 {
 	typedef MainWindow::DefectoscopeViewer Result;
 };
-template<>struct __main_window_viewer__<StructSig<DataItem::Structure>>
+template<>struct __main_window_viewer__<StructSig<DataItem::Buffer>>
 {
 	typedef MainWindow::StructureViewer Result;
 };
@@ -196,13 +196,14 @@ template<class O, class P>struct __clean_chart__
 {
 	void operator()(O &o, P &p)
 	{
-		o.cleanChart = p;
+		o.count = p;
 	}
 };
 
 void MainWindow::CleanChart(bool b)
 {
-	TL::foreach<viewers_list, __clean_chart__>()(viewers, b);
+	int count = b? DataItem::output_buffer_size: 0;
+	TL::foreach<viewers_list, __clean_chart__>()(viewers, count);
 }
 
 bool MainWindow::DefectoscopeViewer::Draw(TMouseMove &l, VGraphics &g)

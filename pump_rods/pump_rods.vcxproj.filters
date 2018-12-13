@@ -278,7 +278,10 @@
     <ClInclude Include="..\Common\L502\l502api.h">
       <Filter>Common\Devices\502</Filter>
     </ClInclude>
-    <ClInclude Include="..\Common\L502\L502Work.h">
+    <ClInclude Include="Automat\l502Automat.hpp">
+      <Filter>pump_rods\Automat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\L502\Device502.h">
       <Filter>Common\Devices\502</Filter>
     </ClInclude>
   </ItemGroup>
@@ -424,7 +427,7 @@
     <ClCompile Include="..\Common\1730\Device1730.cpp">
       <Filter>Common\Devices\1730</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\L502\L502Work.cpp">
+    <ClCompile Include="..\Common\L502\Device502.cpp">
       <Filter>Common\Devices\502</Filter>
     </ClCompile>
   </ItemGroup>
