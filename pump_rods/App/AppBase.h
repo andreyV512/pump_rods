@@ -42,9 +42,9 @@ struct ColorTable
 	const wchar_t *name(){return L"ColorTable";}
 };
 
-template<class T>struct DefectSig: T{};
-template<class T>struct StructSig: T{};
-template<class T>struct Thresh: T{};
+template<class T>struct DefectSig;
+template<class T>struct StructSig;
+template<class T>struct Thresh;
 DEFINE_PARAM_WAPPER2(DefectSig, Thresh, SortDown, int, 40)
 DEFINE_PARAM_WAPPER2(DefectSig, Thresh, Defect, int, 70)
 DEFINE_PARAM_WAPPER2(StructSig, Thresh, SortDown, int, 40)

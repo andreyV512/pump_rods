@@ -18,7 +18,6 @@ public:
 public:
 	Cursor cursor;
 	int currentX;
-//	int currentY;
 public:
 	CommonViewer(Chart *, const int &);
 	virtual ~CommonViewer();
