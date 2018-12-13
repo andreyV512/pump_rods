@@ -64,6 +64,10 @@ namespace App
 	void Destroy()
 	{
 		Automat::Destroy();
+#ifndef DEBUG_ITEMS
+		l502.Destroy();
+		device1730.Destroy();
+#endif
 		Singleton<LogMessageToTopLabel>::Instance().Stop();
 	}
 

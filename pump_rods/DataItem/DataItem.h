@@ -15,17 +15,6 @@ namespace DataItem
 		char status[output_buffer_size];
 	};
 
-	//struct Structure
-	//{
-	//	int currentOffset;
-	//	int deathZoneFirst, deathZoneSecond;
-	//	double threshSortDown, threshDefect;
-	//	int result;
-	//	double inputData[App::buffer_size];
-	//	double outputData[output_buffer_size];
-	//	char status[output_buffer_size];
-	//};
-
 	struct ResultData
 	{
 		int currentOffset;
@@ -37,3 +26,8 @@ namespace DataItem
 
 	void Test();
 }
+
+template<>struct DefectSig<DataItem::Buffer>: DataItem::Buffer{};
+template<>struct StructSig<DataItem::Buffer>: DataItem::Buffer{};
+
+

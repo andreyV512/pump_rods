@@ -30,7 +30,6 @@ public:
 	int threshSortDownColor, threshDefectColor, deathZoneColor, nominalColor;
 	int result;
 	double *inputData;
-	//bool cleanChart;
 	int count;
 	double buffer[DataItem::output_buffer_size];
 	char status[DataItem::output_buffer_size];
@@ -41,9 +40,4 @@ public:
 
 	void operator()(TRButtonDown &);
 	void operator()(TSize &);
-
-	//void operator()(TMouseWell &);
-
-	//void CoordCell(int mX, int &x, int delta);
-	//wchar_t *Mess(double val, int offs);
 };
