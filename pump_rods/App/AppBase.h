@@ -102,14 +102,20 @@ struct OnTheJobTable
 };
 
 struct CutoffFrequency; 
+struct CutoffFrequencyON;
 DEFINE_PARAM_WAPPER(DefectSig, CutoffFrequency, int, 20)
 DEFINE_PARAM_WAPPER(StructSig, CutoffFrequency, int, 20)
+DEFINE_PARAM_WAPPER(DefectSig, CutoffFrequencyON, bool, true)
+DEFINE_PARAM_WAPPER(StructSig, CutoffFrequencyON, bool, true)
+
 
  struct AnalogFilterTable
 {
 	typedef TL::MkTlst<
 		DefectSig<CutoffFrequency>
+		, DefectSig<CutoffFrequencyON>
 		, StructSig<CutoffFrequency>
+		, StructSig<CutoffFrequencyON>
 	>::Result items_list;
 	typedef TL::Factory<items_list> TItems;
 	TItems items;
@@ -117,14 +123,19 @@ DEFINE_PARAM_WAPPER(StructSig, CutoffFrequency, int, 20)
 };
 
 struct MedianFiltreWidth;
+struct MedianFiltreON;
 DEFINE_PARAM_WAPPER(DefectSig, MedianFiltreWidth, int, 5)
 DEFINE_PARAM_WAPPER(StructSig, MedianFiltreWidth, int, 5)
+DEFINE_PARAM_WAPPER(DefectSig, MedianFiltreON, bool, true)
+DEFINE_PARAM_WAPPER(StructSig, MedianFiltreON, bool, true)
 
  struct MedianFiltreTable
  {
 	 typedef TL::MkTlst<
 		 DefectSig<MedianFiltreWidth>
+		, DefectSig<MedianFiltreON>
 		, StructSig<MedianFiltreWidth>
+		, StructSig<MedianFiltreON>
 	 >::Result items_list;
 	 typedef TL::Factory<items_list> TItems;
 	 TItems items;
@@ -314,3 +325,29 @@ struct AppBase
 	void Init();
 	static void InitTypeSizeTables(CBase &);
 };
+
+template<class T>int CurrentId()
+{
+	  return Singleton<ParametersTable>::Instance().items.get<T>().value;
+}
+
+template<class T>int CountId(CBase &base, int num)
+{
+	ADODB::_RecordsetPtr rec;
+	Select<ParametersTable>(base).eq<T>(num).Execute(rec);
+	int i = 0;
+	while (!rec->EndOfFile) 
+	{			
+		++i;
+		rec->MoveNext(); 
+	}
+	return i;
+}
+template<class T>void UpdateId(CBase &base, int num)
+{
+   CurrentParametersTable &current = Singleton<CurrentParametersTable>::Instance();
+   Select<CurrentParametersTable>(base).ID(1).Execute(current);
+   ParametersTable &t = Singleton<ParametersTable>::Instance();
+   t.items.get<T>().value = num;
+   UpdateWhere<ParametersTable>(t, base).ID(current.items.get<CurrentID>().value).Execute();
+}
