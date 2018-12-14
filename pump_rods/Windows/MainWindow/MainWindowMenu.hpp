@@ -109,11 +109,11 @@ namespace MainWindowMenu
 	struct Setting{};
 	MENU_TEXT(L"Установка", TopMenu<Setting>)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	struct AnalogPlate__           {};//{static void Do(HWND h){zprint("");}};//: AnalogPlateDlg{};//{static void Do(HWND h){zprint("");}};
+	struct AnalogPlate__          : AnalogPlatelDlg{};
 	struct DiscretePlate	      {};//{static void Do(HWND h){zprint("");}};//{};//static void Do(HWND h){zprint("");}};
 	struct Lir__{};
-	struct DiscretePlateInputs    {static void Do(HWND h){zprint("");}};
-	struct DiscretePlateOutputs   {static void Do(HWND h){zprint("");}};
+	struct DiscretePlateInputs    : InputBitDlg{};
+	struct DiscretePlateOutputs   : OutputBitDlg{};
 	struct ColorItems             {static void Do(HWND h){zprint("");}};//: ColorItemsDlg{};//{static void Do(HWND h){zprint("");}};
 	struct DiscretePlateDescriptor{static void Do(HWND h){zprint("");}};
 	struct Coefficient            {static void Do(HWND h){zprint("");}};
@@ -129,7 +129,7 @@ namespace MainWindowMenu
 	MENU_ITEM(L"Дискриптор дискретной платы", DiscretePlateDescriptor)
 	MENU_ITEM(L"Коэффициенты пересчёта", Coefficient)
 	
-	MENU_TEXT(L"Аналоговая плата", SubMenu<AnalogPlate__>)
+	MENU_ITEM(L"Аналоговая плата", AnalogPlate__)
 	MENU_ITEM(L"Смещение каналов", OffsetChannels)
 	MENU_ITEM(L"Усиление каналов", AmplificationChannels)
 
@@ -137,13 +137,13 @@ namespace MainWindowMenu
 	MENU_ITEM(L"Границы АЧХ", ACFBorder)
 	MENU_ITEM(L"Цвета", ColorItems)
 	
-	template<>struct SubMenu<AnalogPlate__>
-	{
-		typedef TL::TypeToTypeLst<
-			typename TL::MkTlst<OffsetChannels, AmplificationChannels>::Result 
-			, MenuItem
-		>::Result list;
-	};
+	//template<>struct SubMenu<AnalogPlate__>
+	//{
+	//	typedef TL::TypeToTypeLst<
+	//		typename TL::MkTlst<OffsetChannels, AmplificationChannels>::Result 
+	//		, MenuItem
+	//	>::Result list;
+	//};
 
 	template<>struct SubMenu<DiscretePlate>
 	{
@@ -172,7 +172,7 @@ namespace MainWindowMenu
 	{
 		typedef TL::MkTlst<
 			 SubMenu<DiscretePlate>	
-			 , SubMenu<AnalogPlate__>
+			 , MenuItem<AnalogPlate__>
 			 , SubMenu<Lir__>
 			, MenuItem<ColorItems>
 		>::Result list;		
