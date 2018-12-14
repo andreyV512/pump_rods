@@ -22,9 +22,9 @@ public:
 
 DLG(FilterDlg)
 DLG(MedianFilterDlg)
-//DLG(DeadZonesDlg)
-//DLG(TypeSizeDlg)
-//DLG(AddTypeSizeDlg)
+DLG(AnalogPlatelDlg)
+DLG(InputBitDlg)
+DLG(OutputBitDlg)
 //DLG(DelTypeSizeDlg)
 //DLG(AboutWindowDlg)
 //DLG(TestIOPorts)
