@@ -200,6 +200,7 @@ DEFINE_PARAM_ID(KoeffSignTable	   , int, 1)
 		, ID<OnTheJobTable>
 		, ID<AnalogFilterTable>
 		, ID<MedianFiltreTable>
+		, ID<L502ParametersTable>
 		, NameParam
 		, DiametrPumpRods
 	>::Result items_list;
@@ -225,7 +226,7 @@ DEFINE_PARAM_WAPPER(StructSig, ViewerCount, int, 30000)
 
 DEFINE_PARAM(iСU     , unsigned, 1 << 0) //цепи управления
 DEFINE_PARAM(iKM2_DC , unsigned, 1 << 1)
-DEFINE_PARAM(iKM3_DC , unsigned, 1 << 2)
+DEFINE_PARAM(iKM3_AC , unsigned, 1 << 2)
 DEFINE_PARAM(iCycle , unsigned, 1 << 3)
 DEFINE_PARAM(iP1     , unsigned, 1 << 4)
 DEFINE_PARAM(iP2     , unsigned, 1 << 5)
@@ -237,7 +238,7 @@ struct InputBitTable
 	typedef TL::MkTlst<
 		iСU     
 		, iKM2_DC 
-		, iKM3_DC 
+		, iKM3_AC 
 		, iCycle 
 		, iP1     
 		, iP2     

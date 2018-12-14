@@ -56,7 +56,7 @@ template<class O>struct __data_from_widget__<O, int>
 };
 template<class O>struct __data_from_widget__<O, unsigned>
 {
-	typedef int T;
+	typedef unsigned T;
     T operator()(O &o)
 	{
 		wchar_t buf[128];
@@ -496,7 +496,7 @@ template<class T>struct FillComboboxList
 };
 template<class T>struct ComboBoxSubItem
 {
-	static const int DY = 25;
+	static const int DY = 30;
 	HWND Init(HWND h, int &x, int &width, int &dy, T &t)
 	{
 		HWND hWnd = CreateWindow(L"COMBOBOX", NULL
@@ -508,7 +508,7 @@ template<class T>struct ComboBoxSubItem
 			, 140 + 2 * x, dy + 3, dlg_width, 20, h, 0,  (HINSTANCE)::GetModuleHandle(NULL), NULL
 			);
 		dy += DY;		
-		if(width < dlg_width) width = dlg_width;
+	//	if(width < dlg_width) width = dlg_width;
 		FillComboboxList<T>()(hWnd, t);
 		CurrentValue<T>()(hWnd, t);
 		return hWnd;
@@ -538,7 +538,7 @@ template<class T>struct ComboEditSubItem
 //------------------------------------------------------------------------------
 template<class T,  int min = 0, int max = 31, int edit_width = 60>struct UpDownSubItem
 {
-	static const int DY = 25;
+	static const int DY = 30;
 	HWND Init(HWND h, int &x, int &width, int &dy, T &t)
 	{
 		HWND hWnd = CreateWindowEx(WS_EX_CLIENTEDGE, L"edit", Wchar_from<typename T::type_value>(t.value)()

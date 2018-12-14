@@ -254,7 +254,6 @@ namespace Dialog
 			p.height = storeHeight + 5;
 		}
 	};
-	//template<class X, class Owner, class P>WNDPROC __init__X<DlgItem2<GroupBox<X>, Owner>, P>::OldGroupBoxProc;
 	
 #pragma warning(disable: 4355)
 	template<class BaseParam, class TableParam
