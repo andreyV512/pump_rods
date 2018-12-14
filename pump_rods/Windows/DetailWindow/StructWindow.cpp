@@ -91,7 +91,9 @@ void StructWindow::ChangeFrame(int offsetDef)
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	frame.count = viewerCount.get<StructSig<ViewerCount>>().value;
 	frame.medianFiltreLength = Singleton<MedianFiltreTable>::Instance().items.get<StructSig<MedianFiltreWidth>>().value;
+	frame.medianFiltreON = Singleton<MedianFiltreTable>::Instance().items.get<StructSig<MedianFiltreON>>().value;
 	frame.cutoffFrequency = Singleton<AnalogFilterTable>::Instance().items.get<StructSig<CutoffFrequency>>().value;
+	frame.cutoffFrequencyON = Singleton<AnalogFilterTable>::Instance().items.get<StructSig<CutoffFrequencyON>>().value;
 
 	static const int tbuf_size = 3 * dimention_of(frame.buffer) / 2;
 	double tbuf[tbuf_size];
@@ -114,7 +116,9 @@ void StructWindow::ChangeFrame(int offsetDef)
 		item.inputData + offs
 		, frameWidth
 		, frame.cutoffFrequency
+		, frame.cutoffFrequencyON
 		, frame.medianFiltreLength
+		, frame.medianFiltreON
 		, tbuf
 		, tbuf_size
 		, Singleton<L502ParametersTable>::Instance().items.get<StructSig<ChannelSamplingRate>>().value

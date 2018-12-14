@@ -93,6 +93,7 @@ void DefectWindow::ChangeFrame(int offsetDef)
 
 	frame.medianFiltreLength = Singleton<MedianFiltreTable>::Instance().items.get<DefectSig<MedianFiltreWidth>>().value;
 	frame.cutoffFrequency = Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<CutoffFrequency>>().value;
+	frame.cutoffFrequencyON = Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<CutoffFrequencyON>>().value;
 
 	static const int tbuf_size = 3 * dimention_of(frame.buffer) / 2;
 	double tbuf[tbuf_size];
@@ -115,7 +116,9 @@ void DefectWindow::ChangeFrame(int offsetDef)
 		item.inputData + offs
 		, frameWidth
 		, frame.cutoffFrequency
+		, frame.cutoffFrequencyON
 		, frame.medianFiltreLength
+		, frame.medianFiltreON
 		, tbuf
 		, tbuf_size
 		, Singleton<L502ParametersTable>::Instance().items.get<DefectSig<ChannelSamplingRate>>().value

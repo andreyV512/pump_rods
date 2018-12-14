@@ -35,6 +35,8 @@ public:
 	int count;
 	int medianFiltreLength;
 	int cutoffFrequency;
+	bool cutoffFrequencyON;
+	bool medianFiltreON;
 	double delta;
 
 	FrameViewer();
