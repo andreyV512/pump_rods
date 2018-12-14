@@ -12,7 +12,7 @@
 namespace Compute
 {
 
-	void Compute(double *inputData, int inputLenght, int cutoffFrequency, int medianWidth, double *outputData, int outputLength, int samplingRate
+	void Compute(double *inputData, int inputLenght, int cutoffFrequency, bool cutoffFrequencyON, int medianWidth, bool medianON, double *outputData, int outputLength, int samplingRate
 		)
 	{
 		MedianFiltre filtre;
@@ -31,8 +31,8 @@ namespace Compute
 		--inputLenght;
 		for(int i = 0; i <= inputLenght; ++i)
 		{
-			double t = medianWidth > 2? filtre(inputData[i]): inputData[i];
-			if(0 != cutoffFrequency) t = analogFiltre(t);
+			double t = medianON? filtre(inputData[i]): inputData[i];
+			if(cutoffFrequencyON) t = analogFiltre(t);
 			int k = int(i / delta);
 			if(k >= outputLength) break;
 			if(t < 0) t = -t;
@@ -86,7 +86,7 @@ namespace Compute
 		void operator()(P &p)
 		{
 			O &o = Singleton<O>::Instance();
-			dprint("__recalculation__ %s\n", typeid(O).name());
+			//dprint("__recalculation__ %s\n", typeid(O).name());
 			double adcRange =  100.0 / DataItem::ADC_RANGE(p.l502Param.get<W<RangeL502>>().value);
 			double koef = p.koeffSign.get<W<KoeffSign>>().value;
 			o.deathZoneFirst  = p.deadArea.get<W<First<DeathZone>>>().value;
@@ -97,7 +97,9 @@ namespace Compute
 			  o.inputData
 			, o.currentOffset
 			, p.cutoffFrequency.get<W<CutoffFrequency>>().value
+			, p.cutoffFrequency.get<W<CutoffFrequencyON>>().value
 			, p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value
+			, p.medianFiltreWidth.get<W<MedianFiltreON>>().value
 			, o.outputData
 			, DataItem::output_buffer_size
 			, p.l502Param.get<W<ChannelSamplingRate>>().value
@@ -116,17 +118,14 @@ namespace Compute
 			o.deathZoneFirst =  int((double )o.deathZoneFirst * DataItem::output_buffer_size / rodLength);
 			o.deathZoneSecond =  DataItem::output_buffer_size - int((double )o.deathZoneSecond * DataItem::output_buffer_size / rodLength);
              
-			//int WDefect = STATUS_ID(TDefect);
-			//int WSortDown = STATUS_ID(TSortDown);
-
 			o.result = STATUS_ID(Nominal);
 			for(int i = o.deathZoneFirst; i < o.deathZoneSecond; ++i)
 			{
 				double t = o.outputData[i];
 				if(t > o.threshDefect)
 				{
-					o.result = STATUS_ID(W<Defect>);//TL::IndexOf<zone_status_list, W<Defect>>::value;
-					o.status[i] = STATUS_ID(W<Defect>);//TL::IndexOf<zone_status_list, W<Defect>>::value;
+					o.result = STATUS_ID(W<Defect>);
+					o.status[i] = STATUS_ID(W<Defect>);
 				}
 				else if(t > o.threshSortDown)
 				{
@@ -135,7 +134,7 @@ namespace Compute
 				}
 				else
 				{
-					o.status[i] = STATUS_ID(Nominal);//TL::IndexOf<zone_status_list, Nominal>::value;
+					o.status[i] = STATUS_ID(Nominal);
 				}
 			}
 			for(int i = 0; i < o.deathZoneFirst; ++i)
