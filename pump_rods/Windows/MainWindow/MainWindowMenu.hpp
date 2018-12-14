@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include "window_tool/MenuApi.h"
-//#include "Dlg/Dialogs.h"
+#include "Dlg/Dialogs.h"
 #include "Compute/Compute.h"
 
 namespace MainWindowMenu
@@ -46,10 +46,10 @@ namespace MainWindowMenu
 	struct CrossThresholdWindow__    {static void Do(HWND h){zprint("");}};//: ThresholdCrossDlg{};//{static void Do(HWND h){zprint("");}};																   //
 	struct LongThresholdWindow__     {static void Do(HWND h){zprint("");}};//: ThresholdLongDlg{};//{static void Do(HWND h){zprint("");}};
 	struct ThickThresholdWindow__    {static void Do(HWND h){zprint("");}};
-	struct MedianFiltre              {static void Do(HWND h){zprint("");}};
+	struct MedianFiltre              : MedianFilterDlg{};
 	struct PipeThicknes              {static void Do(HWND h){zprint("");}};//: MinMaxThresholdsDlg{};//{static void Do(HWND h){zprint("");}};
 	struct AcfCutOffBorders          {static void Do(HWND h){zprint("");}};
-	struct Filter_                   {static void Do(HWND h){zprint("");}};//: FilterDlg{};//{static void Do(HWND h){zprint("");}};
+	struct Filter_                   : FilterDlg{};
 
 	MENU_ITEM(L"Поперечные пороги", CrossThresholdWindow__)
 	MENU_ITEM(L"Продольные пороги", LongThresholdWindow__)

@@ -87,6 +87,12 @@
     <Filter Include="Common\Devices\502">
       <UniqueIdentifier>{c9ffce64-e6a0-4b51-9aff-a7f282cb1e27}</UniqueIdentifier>
     </Filter>
+    <Filter Include="pump_rods\DLG">
+      <UniqueIdentifier>{0cb77f1f-8668-4e4d-9f63-e26039183627}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common\DlgTemplates">
+      <UniqueIdentifier>{2bbb7bf6-99b5-45fc-a6e5-5ea00402588b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -287,6 +293,21 @@
     <ClInclude Include="Windows\DetailWindow\StructWindow.h">
       <Filter>pump_rods\Windows\DetailWindow</Filter>
     </ClInclude>
+    <ClInclude Include="DLG\Dialogs.h">
+      <Filter>pump_rods\DLG</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\DlgTemplates\ParamDlg.h">
+      <Filter>Common\DlgTemplates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\DlgTemplates\ParamDlg.hpp">
+      <Filter>Common\DlgTemplates</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\window_tool\Pass.h">
+      <Filter>Common\window_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\window_tool\GroupBox.h">
+      <Filter>Common\window_tool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp">
@@ -435,6 +456,21 @@
     </ClCompile>
     <ClCompile Include="Windows\DetailWindow\StructWindow.cpp">
       <Filter>pump_rods\Windows\DetailWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="DLG\FilterDlg.cpp">
+      <Filter>pump_rods\DLG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\DlgTemplates\ParamDlg.cpp">
+      <Filter>Common\DlgTemplates</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\window_tool\Pass.cpp">
+      <Filter>Common\window_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\window_tool\GroupBox.cpp">
+      <Filter>Common\window_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="DLG\MedianFilterDlg.cpp">
+      <Filter>pump_rods\DLG</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
