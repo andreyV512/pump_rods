@@ -193,6 +193,7 @@
     <ClCompile Include="Compute\Compute.cpp" />
     <ClCompile Include="DataItem\DataItem.cpp" />
     <ClCompile Include="DLG\AnalogPlateDlg.cpp" />
+    <ClCompile Include="DLG\DeathZonesDlg.cpp" />
     <ClCompile Include="DLG\FilterDlg.cpp" />
     <ClCompile Include="DLG\InputOutputDlg.cpp" />
     <ClCompile Include="DLG\MedianFilterDlg.cpp" />

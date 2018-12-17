@@ -77,3 +77,15 @@ void OutputBitDlg::Do(HWND h)
 	{
 	}
 }
+
+DO_NOT_CHECK(NamePlate1730)
+PARAM_TITLE(NamePlate1730, L"Дескриптор")
+
+void DiscriptorBitDlg::Do(HWND h)
+{
+	if(Dialog::Templ<ParametersBase, NamePlate1730ParametersTable>(
+		Singleton<NamePlate1730ParametersTable>::Instance()
+		).Do(h, L"Дескриптор платы"))
+	{
+	}
+}

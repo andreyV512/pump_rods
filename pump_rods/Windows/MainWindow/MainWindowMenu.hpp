@@ -40,7 +40,7 @@ namespace MainWindowMenu
 	struct MainOptionTypeSize{};
 	MENU_TEXT(L"Типоразмер", TopMenu<MainOptionTypeSize>)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 
-	struct DeadZones                 {static void Do(HWND h){zprint("");}};//: DeadZonesDlg{};//								 																				   //
+	struct DeadZones                 : DeathZonesDlg{};								 																				   //
 	struct MainCreateTypesize        {static void Do(HWND h){zprint("");}};//: AddTypeSizeDlg{};//{static void Do(HWND h){zprint("");}};
 	struct MainDeleteTypeSize        {static void Do(HWND h){zprint("");}};//: DelTypeSizeDlg{};//{static void Do(HWND h){zprint("");}};
 	struct CrossThresholdWindow__    {static void Do(HWND h){zprint("");}};//: ThresholdCrossDlg{};//{static void Do(HWND h){zprint("");}};																   //
@@ -115,7 +115,7 @@ namespace MainWindowMenu
 	struct DiscretePlateInputs    : InputBitDlg{};
 	struct DiscretePlateOutputs   : OutputBitDlg{};
 	struct ColorItems             {static void Do(HWND h){zprint("");}};//: ColorItemsDlg{};//{static void Do(HWND h){zprint("");}};
-	struct DiscretePlateDescriptor{static void Do(HWND h){zprint("");}};
+	struct DiscretePlateDescriptor: DiscriptorBitDlg{};
 	struct Coefficient            {static void Do(HWND h){zprint("");}};
 	struct Signal                 {static void Do(HWND h){zprint("");}};
 	struct ACFBorder              {static void Do(HWND h){zprint("");}};

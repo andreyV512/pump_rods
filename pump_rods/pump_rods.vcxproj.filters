@@ -478,6 +478,9 @@
     <ClCompile Include="DLG\InputOutputDlg.cpp">
       <Filter>pump_rods\DLG</Filter>
     </ClCompile>
+    <ClCompile Include="DLG\DeathZonesDlg.cpp">
+      <Filter>pump_rods\DLG</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\Common\Resource\Resource.rc">
