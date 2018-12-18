@@ -4,6 +4,7 @@
 #include "Graphics\Color.h"
 #include "Graphics\FixedGridSeries.h"
 #include "window_tool/MenuAPI.h"
+#include "DataItem\DataItem.h"
 
 using namespace Gdiplus;
 
@@ -85,16 +86,20 @@ void CommonViewer::operator()(TLButtonDbClk &l)
 void CommonViewer::operator()(TMouseWell &l)
 {
 	mouseMove = false;
-		OffsetToPixel(
-			*chart
-			, storedMouseMove.x
-			, storedMouseMove.y
-			, l.delta / 120
-			, true 
-			);
-		currentX -= l.delta / 120;
+		//OffsetToPixel(
+		//	*chart
+		//	, storedMouseMove.x
+		//	, storedMouseMove.y
+		//	, inc
+		//	, true 
+		//	);
+	    int x = storedMouseMove.x;
 		int currentY = 0;
-		chart->CellCoord(storedMouseMove.x, storedMouseMove.y, currentX, currentY);
+		for(int i = 0; i < 100 && x == storedMouseMove.x; ++i)
+		{
+			currentX -= l.delta / 120;
+			chart->CellCoord(storedMouseMove.x, storedMouseMove.y, currentX, currentY);
+		}
 		cursor.CrossCursor(storedMouseMove, HDCGraphics(storedMouseMove.hwnd, backScreen));
 }
 
