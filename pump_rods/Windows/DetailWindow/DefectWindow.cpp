@@ -37,10 +37,10 @@ namespace DefectMenu
 	struct Correction  : Defectoscope::CorrectionSensorDlg{};
 
 	MENU_ITEM(L"Настройки цифрового фильтра", Filter_)
-		MENU_ITEM(L"Медианный фильтр", MedianFiltre)
-		MENU_ITEM(L"Корректировка датчика", Correction)
+	MENU_ITEM(L"Медианный фильтр", MedianFiltre)
+	MENU_ITEM(L"Корректировка датчика", Correction)
 
-		template<>struct TopMenu<TypeSize>
+	template<>struct TopMenu<TypeSize>
 	{
 		typedef TL::MkTlst<
 			MenuItem<MedianFiltre>
@@ -50,11 +50,26 @@ namespace DefectMenu
 		>::Result list;
 	};
 
+	struct Options{};
+	MENU_TEXT(L"Настройки", TopMenu<Options>)
+
+	struct FrameWidthView: Defectoscope::FrameWidthViewDlg{};
+	MENU_ITEM(L"Ширина кадра", FrameWidthView)
+
+	template<>struct TopMenu<Options>
+	{
+		typedef TL::MkTlst<
+			MenuItem<FrameWidthView>
+		>::Result list;
+	};
+
 	typedef TL::MkTlst<
 		TopMenu<MainFile>
 		, TopMenu<TypeSize>
+		, TopMenu<Options>
 	>::Result menu_list;	
 }
+
 bool DefectWindow::Def::Draw(TMouseMove &l, VGraphics &g)
 {
 	if(count > 0)
@@ -115,17 +130,16 @@ LRESULT DefectWindow::operator()(TCreate &m)
 void DefectWindow::ChangeFrame(int offsetDef)
 {
 	Def &def = viewers.get<Def>();
-	//ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
 	DefectSig<DataItem::Buffer> &item = Singleton<DefectSig<DataItem::Buffer>>::Instance();
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 
 
-	static const int tbuf_size = 3 * dimention_of(frame.buffer) / 2;
+	static const int tbuf_size = 4 * dimention_of(frame.buffer);
 	double tbuf[tbuf_size];
 
-	int offs_b = tbuf_size / 3;
+	int offs_b = 3 * tbuf_size / 4;
 	int offs = int(offsetDef - offs_b * frame.delta);
-	int frameWidth = 3 * frame.count / 2;
+	int frameWidth = 4 * frame.count;
 	if(offs < 0)
 	{
 		offs = 0;

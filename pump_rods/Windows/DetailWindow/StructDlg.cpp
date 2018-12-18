@@ -234,5 +234,20 @@ namespace Structure
 			}
 		}
 	}
+
+	MIN_EQUAL_VALUE(StructSig<ViewerCount>, 100)
+	MAX_EQUAL_VALUE(StructSig<ViewerCount>, 30000)
+	PARAM_TITLE(StructSig<ViewerCount>, L"Ширина")
+
+	void FrameWidthViewDlg::Do(HWND h)
+	{
+		if(Dialog::Templ<ParametersBase, ViewerCountTable
+			, TL::MkTlst<
+			StructSig<ViewerCount>
+			>::Result
+		>(Singleton<ViewerCountTable>::Instance()).Do(h, L"Ширина кадра"))
+		{
+		}
+	}
 }
 

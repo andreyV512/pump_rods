@@ -48,13 +48,27 @@ namespace StructMenu
 			 , Separator<0>
 			 , MenuItem<Correction>
 		>::Result list;
-	 };
+	};
+
+	struct Options{};
+	MENU_TEXT(L"Настройки", TopMenu<Options>)
+
+	struct FrameWidthView: Structure::FrameWidthViewDlg{};
+	MENU_ITEM(L"Ширина кадра", FrameWidthView)
+
+	template<>struct TopMenu<Options>
+	{
+		typedef TL::MkTlst<
+			MenuItem<FrameWidthView>
+		>::Result list;
+	};
 
 	typedef TL::MkTlst<
 		TopMenu<MainFile>
 		, TopMenu<TypeSize>
+		, TopMenu<Options>
 	>::Result menu_list;	
-};
+}
 
 bool StructWindow::Str::Draw(TMouseMove &l, VGraphics &g)
 {
@@ -116,7 +130,6 @@ LRESULT StructWindow::operator()(TCreate &m)
 void StructWindow::ChangeFrame(int offsetDef)
 {
 	Str &def = viewers.get<Str>();
-	//ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
 	StructSig<DataItem::Buffer> &item = Singleton<StructSig<DataItem::Buffer>>::Instance();
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	

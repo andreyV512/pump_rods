@@ -20,4 +20,9 @@ namespace Structure
 
 	bool TestChangeParam(HWND h);
 	void StoreParam(HWND);
+
+	struct FrameWidthViewDlg
+	{
+		static void Do(HWND);
+	};
 }

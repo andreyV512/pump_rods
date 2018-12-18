@@ -243,5 +243,20 @@ struct DefOkBtn
 			}
 		}
 	}
+
+	MIN_EQUAL_VALUE(DefectSig<ViewerCount>, 100)
+	MAX_EQUAL_VALUE(DefectSig<ViewerCount>, 30000)
+	PARAM_TITLE(DefectSig<ViewerCount>, L"Ширина")
+
+	void FrameWidthViewDlg::Do(HWND h)
+	{
+		if(Dialog::Templ<ParametersBase, ViewerCountTable
+			, TL::MkTlst<
+			DefectSig<ViewerCount>
+			>::Result
+		>(Singleton<ViewerCountTable>::Instance()).Do(h, L"Ширина кадра"))
+		{
+		}
+	}
 }
 
