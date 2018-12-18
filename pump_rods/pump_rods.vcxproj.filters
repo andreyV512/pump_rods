@@ -314,6 +314,9 @@
     <ClInclude Include="Windows\DetailWindow\DefectDlg.h">
       <Filter>pump_rods\Windows\DetailWindow</Filter>
     </ClInclude>
+    <ClInclude Include="Windows\DetailWindow\StructDlg.h">
+      <Filter>pump_rods\Windows\DetailWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp">
@@ -507,6 +510,9 @@
     </ClCompile>
     <ClCompile Include="DLG\KoefDlg.cpp">
       <Filter>pump_rods\DLG</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\DetailWindow\StructDlg.cpp">
+      <Filter>pump_rods\Windows\DetailWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

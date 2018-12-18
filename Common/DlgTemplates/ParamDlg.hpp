@@ -181,50 +181,11 @@ template<class T>struct ErrMess
 		typedef typename TL::TypeExist<typename TL::MkTlst<Less<T>, LessEqual<T> >::Result>::Result min_type;
 		typedef typename TL::TypeExist<typename TL::MkTlst<Largen<T>, LargenEqual<T> >::Result>::Result max_type;
 		SubErrMess<min_type, max_type, T>()(buf);
-		//wsprintf(buf, L"Параметр \"%s\" должен быть %s %s и %s %s"
-		//	, ParamTitle<T>()()
-		//	, ErrMessText<min_type>()()
-		//	, Wchar_from<T::type_value>(min_type()())()
-		//	, ErrMessText<max_type>()()
-		//	, Wchar_from<T::type_value>(max_type()())()
-		//	);
 		MessageBox(h, buf, L"Ошибка!!!", MB_ICONEXCLAMATION);
 	}
 };
 
 template<class _0, class _1, class Z>struct __compare_param__;
-//{
-//	bool operator()(typename Z::type_value &t)
-//	{
-//		dprint("error __compare_param__ %s\n", typeid(Z).name());
-//		return true;
-//	}
-//};
-//template<class _0>struct __compare_param__<_0, NullType>
-//{
-//	template<class Z>bool operator()(Z &t)
-//	{
-//		dprint("%s\n", typeid(Z).name());
-//		return true;
-//	}
-//};
-//template<class _1>struct __compare_param__<NullType, _1>
-//{
-//	template<class Z>bool operator()(Z &t)
-//	{
-//		dprint("%s\n", typeid(Z).name());
-//		return true;
-//	}
-//};
-//
-//template<>struct __compare_param__<NullType, NullType>
-//{
-//	template<class Z>bool operator()(Z &t)
-//	{
-//		dprint("%s\n", typeid(Z).name());
-//		return true;
-//	}
-//};
 
 template<class T>struct __compare_param__<Less<T>, Largen<T>, T>
 {

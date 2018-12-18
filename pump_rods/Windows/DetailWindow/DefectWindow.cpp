@@ -22,7 +22,7 @@ namespace DefectMenu
 
 	MENU_ITEM(L"Выход", MainExit)
 
-	template<>struct TopMenu<MainFile>
+		template<>struct TopMenu<MainFile>
 	{
 		typedef TL::MkTlst<
 			MenuItem<MainExit>
@@ -32,30 +32,29 @@ namespace DefectMenu
 	struct TypeSize{};
 	MENU_TEXT(L"Типоразмер", TopMenu<TypeSize>)
 
-	struct Filter_     : DefectoscopeFilterDlg{};
-	struct MedianFiltre: DefectMedianFiltre{};
-	struct Correction  : DefectoscopeCorrectionSensorDlg{};
+	struct Filter_     : Defectoscope::FilterDlg{};
+	struct MedianFiltre: Defectoscope::MedianFiltre{};
+	struct Correction  : Defectoscope::CorrectionSensorDlg{};
 
 	MENU_ITEM(L"Настройки цифрового фильтра", Filter_)
-	MENU_ITEM(L"Медианный фильтр", MedianFiltre)
-	MENU_ITEM(L"Корректировка датчика", Correction)
+		MENU_ITEM(L"Медианный фильтр", MedianFiltre)
+		MENU_ITEM(L"Корректировка датчика", Correction)
 
-	template<>struct TopMenu<TypeSize>
+		template<>struct TopMenu<TypeSize>
 	{
 		typedef TL::MkTlst<
-			 MenuItem<MedianFiltre>
-			 , MenuItem<Filter_>
-			 , Separator<0>
-			 , MenuItem<Correction>
+			MenuItem<MedianFiltre>
+			, MenuItem<Filter_>
+			, Separator<0>
+			, MenuItem<Correction>
 		>::Result list;
-	 };
+	};
 
 	typedef TL::MkTlst<
 		TopMenu<MainFile>
 		, TopMenu<TypeSize>
 	>::Result menu_list;	
-};
-
+}
 bool DefectWindow::Def::Draw(TMouseMove &l, VGraphics &g)
 {
 	if(count > 0)
@@ -101,7 +100,7 @@ LRESULT DefectWindow::operator()(TCreate &m)
 
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	frame.count = Singleton<ViewerCountTable>::Instance().items.get<DefectSig<ViewerCount>>().value;
-	frame.medianFiltreLength = Singleton<MedianFiltreTable>::Instance().items.get<DefectSig<MedianFiltreWidth>>().value;
+	frame.medianFiltreWidth = Singleton<MedianFiltreTable>::Instance().items.get<DefectSig<MedianFiltreWidth>>().value;
 	frame.medianFiltreON =  Singleton<MedianFiltreTable>::Instance().items.get<DefectSig<MedianFiltreON>>().value;
 	frame.cutoffFrequency = Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<CutoffFrequency>>().value;
 	frame.cutoffFrequencyON = Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<CutoffFrequencyON>>().value;
@@ -119,7 +118,7 @@ void DefectWindow::ChangeFrame(int offsetDef)
 	//ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
 	DefectSig<DataItem::Buffer> &item = Singleton<DefectSig<DataItem::Buffer>>::Instance();
 	FrameViewer &frame =  viewers.get<FrameViewer>();
-	
+
 
 	static const int tbuf_size = 3 * dimention_of(frame.buffer) / 2;
 	double tbuf[tbuf_size];
@@ -143,7 +142,7 @@ void DefectWindow::ChangeFrame(int offsetDef)
 		, frameWidth
 		, frame.cutoffFrequency
 		, frame.cutoffFrequencyON
-		, frame.medianFiltreLength
+		, frame.medianFiltreWidth
 		, frame.medianFiltreON
 		, tbuf
 		, tbuf_size
@@ -177,7 +176,7 @@ void DefectWindow::ChangeFrame(int offsetDef)
 	frame.threshDefectColor	= def.threshDefectColor	;
 	frame.threshSortDownColor = def.threshSortDownColor;
 	frame.threshSortDown   	= def.threshSortDown   	;
-	
+
 	ThresholdsTable::TItems &tresh = Singleton<ThresholdsTable>::Instance().items;
 
 	frame.tchart.items.get<FrameViewer::Border<SortDown>>().value = tresh.get<DefectSig<Thresh<SortDown>>>().value;
@@ -225,5 +224,12 @@ void DefectWindow::operator()(TMouseWell &l)
 		, &Common::__event_data__<TMouseWell, DefectWindow>(*this, l)
 		);
 }
-//-----------------------------------------------------------------------------
 
+void DefectWindow::operator()(TClose &l)
+{
+	if(!Defectoscope::TestChangeParam(l.hwnd) && IDYES == MessageBox(l.hwnd, L"Сохранить?", L"Параметры были изменены", MB_ICONQUESTION | MB_YESNO))
+	{
+		Defectoscope::StoreParam(l.hwnd);
+	}
+	DestroyWindow(l.hwnd);
+}

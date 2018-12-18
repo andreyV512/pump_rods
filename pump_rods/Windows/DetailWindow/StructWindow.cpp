@@ -4,6 +4,7 @@
 #include "DataItem\DataItem.h"
 #include "Compute\Compute.h"
 #include "App/AppBase.h"
+#include "StructDlg.h"
 
 namespace StructMenu
 {
@@ -28,8 +29,30 @@ namespace StructMenu
 		>::Result list;
 	};
 
+	struct TypeSize{};
+	MENU_TEXT(L"Типоразмер", TopMenu<TypeSize>)
+
+	struct Filter_     : Structure::FilterDlg{};
+	struct MedianFiltre: Structure::MedianFiltre{};
+	struct Correction  : Structure::CorrectionSensorDlg{};
+
+	MENU_ITEM(L"Настройки цифрового фильтра", Filter_)
+	MENU_ITEM(L"Медианный фильтр", MedianFiltre)
+	MENU_ITEM(L"Корректировка датчика", Correction)
+
+	template<>struct TopMenu<TypeSize>
+	{
+		typedef TL::MkTlst<
+			 MenuItem<MedianFiltre>
+			 , MenuItem<Filter_>
+			 , Separator<0>
+			 , MenuItem<Correction>
+		>::Result list;
+	 };
+
 	typedef TL::MkTlst<
 		TopMenu<MainFile>
+		, TopMenu<TypeSize>
 	>::Result menu_list;	
 };
 
@@ -77,7 +100,14 @@ LRESULT StructWindow::operator()(TCreate &m)
 	str.count = DataItem::output_buffer_size;
 
 	FrameViewer &frame =  viewers.get<FrameViewer>();
+	frame.count = Singleton<ViewerCountTable>::Instance().items.get<StructSig<ViewerCount>>().value;
+	frame.medianFiltreWidth = Singleton<MedianFiltreTable>::Instance().items.get<StructSig<MedianFiltreWidth>>().value;
+	frame.medianFiltreON =  Singleton<MedianFiltreTable>::Instance().items.get<StructSig<MedianFiltreON>>().value;
+	frame.cutoffFrequency = Singleton<AnalogFilterTable>::Instance().items.get<StructSig<CutoffFrequency>>().value;
+	frame.cutoffFrequencyON = Singleton<AnalogFilterTable>::Instance().items.get<StructSig<CutoffFrequencyON>>().value;
 	frame.cursor.SetMouseMoveHandler(&frame, &FrameViewer::DrawFrame); 
+	frame.koef = Singleton<KoeffSignTable>::Instance().items.get<StructSig<KoeffSign>>().value;
+
 	ChangeFrame(str.currentX);
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
 	return 0;
@@ -86,14 +116,10 @@ LRESULT StructWindow::operator()(TCreate &m)
 void StructWindow::ChangeFrame(int offsetDef)
 {
 	Str &def = viewers.get<Str>();
-	ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
+	//ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
 	StructSig<DataItem::Buffer> &item = Singleton<StructSig<DataItem::Buffer>>::Instance();
 	FrameViewer &frame =  viewers.get<FrameViewer>();
-	frame.count = viewerCount.get<StructSig<ViewerCount>>().value;
-	frame.medianFiltreLength = Singleton<MedianFiltreTable>::Instance().items.get<StructSig<MedianFiltreWidth>>().value;
-	frame.medianFiltreON = Singleton<MedianFiltreTable>::Instance().items.get<StructSig<MedianFiltreON>>().value;
-	frame.cutoffFrequency = Singleton<AnalogFilterTable>::Instance().items.get<StructSig<CutoffFrequency>>().value;
-	frame.cutoffFrequencyON = Singleton<AnalogFilterTable>::Instance().items.get<StructSig<CutoffFrequencyON>>().value;
+	
 
 	static const int tbuf_size = 3 * dimention_of(frame.buffer) / 2;
 	double tbuf[tbuf_size];
@@ -117,7 +143,7 @@ void StructWindow::ChangeFrame(int offsetDef)
 		, frameWidth
 		, frame.cutoffFrequency
 		, frame.cutoffFrequencyON
-		, frame.medianFiltreLength
+		, frame.medianFiltreWidth
 		, frame.medianFiltreON
 		, tbuf
 		, tbuf_size
@@ -130,11 +156,10 @@ void StructWindow::ChangeFrame(int offsetDef)
 	frame.tchart.maxAxesX = offsetDef + frame.count;
 
 	double adcRange =  100.0 / DataItem::ADC_RANGE(Singleton<L502ParametersTable>::Instance().items.get<StructSig<RangeL502>>().value);
-	double koef = Singleton<KoeffSignTable>::Instance().items.get<StructSig<KoeffSign>>().value;
 
 	for(int i = 0; i < dimention_of(frame.buffer); ++i)
 	{
-		frame.buffer[i] *= adcRange * koef;
+		frame.buffer[i] *= adcRange * frame.koef;
 	}
 
 	frame.delta = int((double)frame.count / dimention_of(frame.buffer));
@@ -146,8 +171,6 @@ void StructWindow::ChangeFrame(int offsetDef)
 	int rodLength = dead.get<RodLenght>().value;
 	frame.deathZoneFirst	= int((double)dead.get<StructSig<First<DeathZone>>>().value * item.currentOffset / rodLength); 
 	frame.deathZoneSecond	= item.currentOffset -  int((double)dead.get<StructSig<Second<DeathZone>>>().value * item.currentOffset / rodLength); 
-
-	dprint("frame.deathZoneFirst %d frame.deathZoneSecond %d\n", frame.deathZoneFirst, frame.deathZoneSecond);
 
 	frame.deathZoneColor	= def.deathZoneColor	; 	
 	frame.threshDefect	 	= def.threshDefect	 	;
@@ -201,6 +224,15 @@ void StructWindow::operator()(TMouseWell &l)
 		&viewers
 		, &Common::__event_data__<TMouseWell, StructWindow>(*this, l)
 		);
+}
+
+void StructWindow::operator()(TClose &l)
+{
+	if(!Structure::TestChangeParam(l.hwnd) && IDYES == MessageBox(l.hwnd, L"Сохранить?", L"Параметры были изменены", MB_ICONQUESTION | MB_YESNO))
+	{
+		Structure::StoreParam(l.hwnd);
+	}
+	DestroyWindow(l.hwnd);
 }
 //-----------------------------------------------------------------------------
 

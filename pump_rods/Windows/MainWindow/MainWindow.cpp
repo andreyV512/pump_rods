@@ -210,12 +210,11 @@ bool MainWindow::DefectoscopeViewer::Draw(TMouseMove &l, VGraphics &g)
 		unsigned color = 0xffffffff;
 		wchar_t txt[1024];
 		StatusText()(status[x], color, txt);
-		wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s <%x>%s  status %d"
+		wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s <%x>%s"
 			, offs
 			, Wchar_from<double, 2>(buffer[x])()
 			, color
 			, txt
-			, status[x]
 		);
 		label.Draw(g());
 	}
@@ -294,12 +293,11 @@ bool MainWindow::StructureViewer::Draw(TMouseMove &l, VGraphics &g)
 		unsigned color = 0xffffffff;
 		wchar_t txt[1024];
 		StatusText()(status[x], color, txt);
-		wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s <%x>%s  status %d"
+		wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s <%x>%s"
 			, offs
 			, Wchar_from<double, 2>(buffer[x])()
 			, color
 			, txt
-			, status[x]
 		);
 		label.Draw(g());
 	}

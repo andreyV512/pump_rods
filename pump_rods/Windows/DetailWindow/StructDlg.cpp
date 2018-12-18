@@ -1,20 +1,15 @@
-﻿#include "DefectDlg.h"
+﻿#include "StructDlg.h"
 #include "tools_debug/DebugMess.h"
 #include "App/AppBase.h"
 #include "DlgTemplates\ParamDlgNew.h"
-#include "DefectWindow.h"
+#include "StructWindow.h"
 #include "Compute\Compute.h"
 #include "window_tool\EmptyWindow.h"
 #include "MessageText\ListMess.hpp"
 
-namespace Defectoscope
+namespace Structure
 {
-	MIN_EQUAL_VALUE(DefectSig<MedianFiltreWidth>, 3)
-		MAX_EQUAL_VALUE(DefectSig<MedianFiltreWidth>, 15)
-		PARAM_TITLE(DefectSig<MedianFiltreWidth>, L"Ширина фильтра")
-		PARAM_TITLE(DefectSig<MedianFiltreON>, L"Включение фильтра")
-
-		MIN_EQUAL_VALUE(StructSig<MedianFiltreWidth>, 3)
+	MIN_EQUAL_VALUE(StructSig<MedianFiltreWidth>, 3)
 		MAX_EQUAL_VALUE(StructSig<MedianFiltreWidth>, 15)
 		PARAM_TITLE(StructSig<MedianFiltreWidth>, L"Ширина фильтра")
 		PARAM_TITLE(StructSig<MedianFiltreON>, L"Включение фильтра")
@@ -78,114 +73,110 @@ namespace Defectoscope
 		RepaintWindow(frame.hWnd);
 	}
 
-struct DefOkBtn
-{
-	static const int width = 120;
-	static const int height = 30;
-	static const int ID = IDOK;
-	wchar_t *Title(){return L"Применить";}
-	template<class Owner>void BtnHandler(Owner &t, HWND h)
+	struct DefOkBtn
 	{
-		if(!TL::find<typename Owner::list, __test__>()(&t.items, &h))return;
-		TL::foreach<typename Owner::list, __def_ok_btn__>()(t.items);
-		EndDialog(h, TRUE);
-	}
-};
+		static const int width = 120;
+		static const int height = 30;
+		static const int ID = IDOK;
+		wchar_t *Title(){return L"Применить";}
+		template<class Owner>void BtnHandler(Owner &t, HWND h)
+		{
+			if(!TL::find<typename Owner::list, __test__>()(&t.items, &h))return;
+			TL::foreach<typename Owner::list, __def_ok_btn__>()(t.items);
+			EndDialog(h, TRUE);
+		}
+	};
+
 	void MedianFiltre::Do(HWND h)
 	{
-		DefectWindow &e = *(DefectWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+		StructWindow &e = *(StructWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
 		FrameViewer &frame =  e.viewers.get<FrameViewer>();
 		MedianFiltreTable par;
-		par.items.get< DefectSig<MedianFiltreWidth>>().value = frame.medianFiltreWidth;
-		par.items.get< DefectSig<MedianFiltreON>>().value = frame.medianFiltreON;
+		par.items.get< StructSig<MedianFiltreWidth>>().value = frame.medianFiltreWidth;
+		par.items.get< StructSig<MedianFiltreON>>().value = frame.medianFiltreON;
 		if(Dialog::Templ<NullType, MedianFiltreTable
 			, TL::MkTlst<
-			DefectSig<MedianFiltreWidth>, DefectSig<MedianFiltreON>
+			StructSig<MedianFiltreWidth>, StructSig<MedianFiltreON>
 			>::Result
 			, 550
 			, TL::MkTlst<DefOkBtn, CancelBtn>::Result
 		>(par).Do(h, L"Настройки медианного фильтра"))
 		{
-			frame.medianFiltreWidth = par.items.get< DefectSig<MedianFiltreWidth>>().value;
-			frame.medianFiltreON = par.items.get< DefectSig<MedianFiltreON>>().value;
+			frame.medianFiltreWidth = par.items.get< StructSig<MedianFiltreWidth>>().value;
+			frame.medianFiltreON = par.items.get< StructSig<MedianFiltreON>>().value;
 
-			Repaint<DefectSig>(e.viewers.get<DefectWindow::Def>(), frame);
+			Repaint<StructSig>(e.viewers.get<StructWindow::Str>(), frame);
 		}
 	}
 
-	MIN_EQUAL_VALUE(DefectSig<CutoffFrequency>, 0)
-		MAX_EQUAL_VALUE(DefectSig<CutoffFrequency>, 4000)
-		PARAM_TITLE(DefectSig<CutoffFrequency>, L"Частота отсечения фильтра")
-		PARAM_TITLE(DefectSig<CutoffFrequencyON>, L"Включение фильтра")
-
-		MIN_EQUAL_VALUE(StructSig<CutoffFrequency>, 0)
+	MIN_EQUAL_VALUE(StructSig<CutoffFrequency>, 0)
 		MAX_EQUAL_VALUE(StructSig<CutoffFrequency>, 4000)
 		PARAM_TITLE(StructSig<CutoffFrequency>, L"Частота отсечения фильтра")
 		PARAM_TITLE(StructSig<CutoffFrequencyON>, L"Включение фильтра")
 
 		void FilterDlg::Do(HWND h)
 	{
-		DefectWindow &e = *(DefectWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+		StructWindow &e = *(StructWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
 		FrameViewer &frame =  e.viewers.get<FrameViewer>();
 		AnalogFilterTable par;
-		par.items.get< DefectSig<CutoffFrequency>>().value = frame.cutoffFrequency;
-		par.items.get< DefectSig<CutoffFrequencyON>>().value = frame.cutoffFrequencyON;
+		par.items.get< StructSig<CutoffFrequency>>().value = frame.cutoffFrequency;
+		par.items.get< StructSig<CutoffFrequencyON>>().value = frame.cutoffFrequencyON;
 		if(Dialog::Templ<NullType, AnalogFilterTable
 			, TL::MkTlst<
-			DefectSig<CutoffFrequency>
-			, DefectSig<CutoffFrequencyON>
+			StructSig<CutoffFrequency>
+			, StructSig<CutoffFrequencyON>
 			>::Result
 			, 550
 			, TL::MkTlst<DefOkBtn, CancelBtn>::Result
 		>(par).Do(h, L"Настройки цифрового фильтра"))
 		{
-			frame.cutoffFrequency = par.items.get< DefectSig<CutoffFrequency>>().value;
-			frame.cutoffFrequencyON = par.items.get< DefectSig<CutoffFrequencyON>>().value;
+			frame.cutoffFrequency = par.items.get< StructSig<CutoffFrequency>>().value;
+			frame.cutoffFrequencyON = par.items.get< StructSig<CutoffFrequencyON>>().value;
 
-			Repaint<DefectSig>( e.viewers.get<DefectWindow::Def>(), frame);
+			Repaint<StructSig>( e.viewers.get<StructWindow::Str>(), frame);
 		}
 	}
 
-	MIN_EQUAL_VALUE( DefectSig<KoeffSign>, 0.1)
-	MAX_EQUAL_VALUE( DefectSig<KoeffSign>, 2.0)
-	PARAM_TITLE( DefectSig<KoeffSign>, L"Коэффициент")
+	MIN_EQUAL_VALUE( StructSig<KoeffSign>, 0.1)
+		MAX_EQUAL_VALUE( StructSig<KoeffSign>, 2.0)
+		PARAM_TITLE( StructSig<KoeffSign>, L"Коэффициент")
 
 		void CorrectionSensorDlg::Do(HWND h)
 	{
-		DefectWindow &e = *(DefectWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+		StructWindow &e = *(StructWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
 		FrameViewer &frame =  e.viewers.get<FrameViewer>();
 		KoeffSignTable koef;
-		koef.items.get<DefectSig<KoeffSign>>().value = frame.koef;
+		koef.items.get<StructSig<KoeffSign>>().value = frame.koef;
 		if(Dialog::Templ<NullType, KoeffSignTable
-			, TL::MkTlst<DefectSig<KoeffSign>>::Result
+			, TL::MkTlst<StructSig<KoeffSign>>::Result
 			, 550
 			, TL::MkTlst<DefOkBtn, CancelBtn>::Result
 			>(koef).Do(h, L"Корректировка датчика"))
 		{
-			DefectWindow &e = *(DefectWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+			StructWindow &e = *(StructWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
 			FrameViewer &frame =  e.viewers.get<FrameViewer>();
-			frame.koef = koef.items.get<DefectSig<KoeffSign>>().value;
+			frame.koef = koef.items.get<StructSig<KoeffSign>>().value;
 
-			Repaint<DefectSig>(e.viewers.get<DefectWindow::Def>(), frame);
+			Repaint<StructSig>(e.viewers.get<StructWindow::Str>(), frame);
 		}
 	}
 
 	template<class Table, class Item, class Param, class Type, Type Param::*>struct __test_change_param__;
 
-	template<>struct __test_change_param__<KoeffSignTable, DefectSig<KoeffSign>, FrameViewer, double, &FrameViewer::koef>{};
+	template<>struct __test_change_param__<KoeffSignTable, StructSig<KoeffSign>, FrameViewer, double, &FrameViewer::koef>{};
 
-	template<>struct __test_change_param__<AnalogFilterTable, DefectSig<CutoffFrequency>, FrameViewer, int, &FrameViewer::cutoffFrequency>{};
-	template<>struct __test_change_param__<AnalogFilterTable, DefectSig<CutoffFrequencyON>, FrameViewer, bool, &FrameViewer::cutoffFrequencyON>{};
+	template<>struct __test_change_param__<AnalogFilterTable, StructSig<CutoffFrequency>, FrameViewer, int, &FrameViewer::cutoffFrequency>{};
+	template<>struct __test_change_param__<AnalogFilterTable, StructSig<CutoffFrequencyON>, FrameViewer, bool, &FrameViewer::cutoffFrequencyON>{};
 
-	template<>struct __test_change_param__<MedianFiltreTable, DefectSig<MedianFiltreWidth>, FrameViewer, int, &FrameViewer::medianFiltreWidth>{};
-	template<>struct __test_change_param__<MedianFiltreTable, DefectSig<MedianFiltreON>, FrameViewer, bool, &FrameViewer::medianFiltreON>{};
+	template<>struct __test_change_param__<MedianFiltreTable, StructSig<MedianFiltreWidth>, FrameViewer, int, &FrameViewer::medianFiltreWidth>{};
+	template<>struct __test_change_param__<MedianFiltreTable, StructSig<MedianFiltreON>, FrameViewer, bool, &FrameViewer::medianFiltreON>{};
 
 	typedef TL::MkTlst<
-		__test_change_param__<KoeffSignTable   , DefectSig<KoeffSign>        , FrameViewer, double, &FrameViewer::koef>
-		, __test_change_param__<AnalogFilterTable, DefectSig<CutoffFrequency>  , FrameViewer, int,    &FrameViewer::cutoffFrequency>
-		, __test_change_param__<AnalogFilterTable, DefectSig<CutoffFrequencyON>, FrameViewer, bool,   &FrameViewer::cutoffFrequencyON>
-		, __test_change_param__<MedianFiltreTable, DefectSig<MedianFiltreWidth>, FrameViewer, int,    &FrameViewer::medianFiltreWidth>
-		, __test_change_param__<MedianFiltreTable, DefectSig<MedianFiltreON>   , FrameViewer, bool,   &FrameViewer::medianFiltreON>
+		__test_change_param__<KoeffSignTable   , StructSig<KoeffSign>        , FrameViewer, double, &FrameViewer::koef>
+		, __test_change_param__<AnalogFilterTable, StructSig<CutoffFrequency>  , FrameViewer, int,    &FrameViewer::cutoffFrequency>
+		, __test_change_param__<AnalogFilterTable, StructSig<CutoffFrequencyON>, FrameViewer, bool,   &FrameViewer::cutoffFrequencyON>
+		, __test_change_param__<MedianFiltreTable, StructSig<MedianFiltreWidth>, FrameViewer, int,    &FrameViewer::medianFiltreWidth>
+		, __test_change_param__<MedianFiltreTable, StructSig<MedianFiltreON>   , FrameViewer, bool,   &FrameViewer::medianFiltreON>
 	>::Result __param_list__;
 
 	template<class O, class P>struct __test_param__;
@@ -224,7 +215,7 @@ struct DefOkBtn
 
 	bool TestChangeParam(HWND h)
 	{
-		DefectWindow &e = *(DefectWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+		StructWindow &e = *(StructWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
 		FrameViewer &frame =  e.viewers.get<FrameViewer>();
 
 		return TL::find<__param_list__, __test_param__>()(frame);
@@ -234,7 +225,7 @@ struct DefOkBtn
 	{
 		if(TypesizePasswordDlg().Do(h))
 		{
-			DefectWindow &e = *(DefectWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+			StructWindow &e = *(StructWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
 			FrameViewer &frame =  e.viewers.get<FrameViewer>();
 			CBase base(ParametersBase().name());
 			if(base.IsOpen())

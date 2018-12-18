@@ -33,7 +33,7 @@ public:
 	int threshSortDownColor;
 	double threshSortDown   ;
 	int count;
-	int medianFiltreLength;
+	int medianFiltreWidth;
 	int cutoffFrequency;
 	bool cutoffFrequencyON;
 	bool medianFiltreON;

@@ -27,6 +27,7 @@ public:
 	void operator()(TSize &);
 	void operator()(TCommand &);
 	void operator()(TMouseWell &);
+	void operator()(TClose &);
 
 	void ChangeFrame(int);
 };

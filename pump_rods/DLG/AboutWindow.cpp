@@ -7,15 +7,8 @@ static const wchar_t *about_text[] = {
 	, L"Проект xxxxxx-xxx/xx"
 	, L"УРАН-3000"
 	, L"г.XXXXXXXXXX"
-	#ifdef CURRENT_DATE
-	, CURRENT_DATE
-#endif
-#ifdef VER
-	, L"Версия "VER
-#endif
-	#ifdef HASH
-	, L"Сборка "HASH
-#endif
+	, L"Версия 5.3"
+	, VERSION()
 };
 
 LRESULT CALLBACK Proc(HWND h, UINT msg, WPARAM wParam, LPARAM lParam)

@@ -1,7 +1,7 @@
 ﻿#pragma once
 #include <Windows.h>
 
-namespace Defectoscope
+namespace Structure
 {
 	struct MedianFiltre
 	{
