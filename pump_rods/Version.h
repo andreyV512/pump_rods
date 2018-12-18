@@ -1,2 +1,2 @@
 #pragma once 
-#define VERSION() L"—борка 383de95"
+#define VERSION() L"Cборка 8c56e00"

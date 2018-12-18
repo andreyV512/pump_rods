@@ -47,12 +47,13 @@ namespace MainWindowMenu
 	struct MainDeleteTypeSize        : DelTypeSizeDlg{};
 	struct MedianFiltre              : MedianFilterDlg{};
 	struct Filter_                   : FilterDlg{};
+	struct KoefDlg_                   : KoefDlg{};
 
 	MENU_ITEM(L"Мёртвые зоны", DeadZones)
 	MENU_ITEM(L"Создать типоразмер", MainCreateTypesize)
 	MENU_ITEM(L"Удалить типоразмер", MainDeleteTypeSize)
 	MENU_ITEM(L"Медианный фильтр", MedianFiltre)
-
+	MENU_ITEM(L"Корректировка датчиков", KoefDlg_)
 	MENU_ITEM(L"Настройки цифрового фильтра", Filter_)
 
 	template<>struct TopMenu<MainOptionTypeSize>
@@ -61,6 +62,7 @@ namespace MainWindowMenu
 			 MenuItem<DeadZones>
 			, MenuItem<MedianFiltre>
 			, MenuItem<Filter_>
+			, MenuItem<KoefDlg_>
 			, Separator<0>
 			, MenuItem<MainCreateTypesize>
 			, MenuItem<MainDeleteTypeSize>

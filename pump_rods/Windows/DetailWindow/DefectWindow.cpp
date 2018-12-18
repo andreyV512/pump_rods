@@ -32,9 +32,9 @@ namespace DefectMenu
 	struct TypeSize{};
 	MENU_TEXT(L"Типоразмер", TopMenu<TypeSize>)
 
-	struct Filter_                   {static void Do(HWND h){zprint("");}};//: FilterDlg{};
-	struct MedianFiltre              : DefectMedianFiltre{};//{static void Do(HWND h){zprint("");}};//: MedianFilterDlg{};
-	struct Correction              {static void Do(HWND h){zprint("");}};//: MedianFilterDlg{};
+	struct Filter_     : DefectoscopeFilterDlg{};
+	struct MedianFiltre: DefectMedianFiltre{};
+	struct Correction  : DefectoscopeCorrectionSensorDlg{};
 
 	MENU_ITEM(L"Настройки цифрового фильтра", Filter_)
 	MENU_ITEM(L"Медианный фильтр", MedianFiltre)

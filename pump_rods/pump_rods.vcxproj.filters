@@ -505,6 +505,9 @@
     <ClCompile Include="Windows\DetailWindow\DefectDlg.cpp">
       <Filter>pump_rods\Windows\DetailWindow</Filter>
     </ClCompile>
+    <ClCompile Include="DLG\KoefDlg.cpp">
+      <Filter>pump_rods\DLG</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\Common\Resource\Resource.rc">

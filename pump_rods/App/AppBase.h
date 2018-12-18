@@ -201,6 +201,7 @@ DEFINE_PARAM_ID(KoeffSignTable	   , int, 1)
 		, ID<AnalogFilterTable>
 		, ID<MedianFiltreTable>
 		, ID<L502ParametersTable>
+		, ID<KoeffSignTable>
 		, NameParam
 		, DiametrPumpRods
 	>::Result items_list;

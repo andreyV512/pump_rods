@@ -32,7 +32,7 @@ DLG(AddTypeSizeDlg)
 DLG(DelTypeSizeDlg)
 DLG(TestIOPorts)
 DLG(AboutWindowDlg)
-//DLG(MinMaxThresholdsDlg)
+DLG(KoefDlg)
 //DLG(SignalOptionsDlg)
 
 #undef DLG
