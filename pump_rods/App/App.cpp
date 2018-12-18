@@ -99,6 +99,16 @@ namespace App
 	{
 		return Singleton<OnTheJobTable>::Instance().items.get<InterruptViewCheck>().value;
 	}
+
+	bool DataCollectionDefectoscope()
+	{
+		return Singleton<OnTheJobTable>::Instance().items.get<DefectSig<Check>>().value;
+	}
+
+	bool DataCollectionStructure()
+	{
+		return Singleton<OnTheJobTable>::Instance().items.get<StructSig<Check>>().value;
+	}
 }
 
 Device1730 device1730;

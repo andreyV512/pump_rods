@@ -8,6 +8,7 @@ namespace StatusMessages
 	template<class T>struct Txt;
 	template<>struct Txt<DeathZone			  >{wchar_t *operator()(){return L"\"мёртвая зона\"";}};
 	template<>struct Txt<Nominal			  >{wchar_t *operator()(){return L"\"норма\"";}};
+	template<>struct Txt<SensorOff			  >{wchar_t *operator()(){return L"\"датчик отключён\"";}};
 
 	template<>struct Txt< DefectSig<Defect>  >{wchar_t *operator()(){return L"\"дефект дефектоскопии\"";}};
 	template<>struct Txt< StructSig<Defect>  >{wchar_t *operator()(){return L"\"дефект структуры\"";}};

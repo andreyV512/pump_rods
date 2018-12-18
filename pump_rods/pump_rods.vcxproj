@@ -55,6 +55,12 @@
       <SubSystem>Windows</SubSystem>
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
+    <PreBuildEvent>
+      <Command>$(ProjectDir)GenVer.bat</Command>
+    </PreBuildEvent>
+    <PreBuildEvent>
+      <Message>генерация версии</Message>
+    </PreBuildEvent>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <ClCompile>
@@ -118,6 +124,7 @@
     <ClInclude Include="..\Common\PerformanceCounter\PerformanceCounter.h" />
     <ClInclude Include="..\Common\tools_debug\DebugMess.h" />
     <ClInclude Include="..\Common\window_tool\CheckBoxWidget.h" />
+    <ClInclude Include="..\Common\window_tool\DlgFiles.h" />
     <ClInclude Include="..\Common\window_tool\Emptywindow.h" />
     <ClInclude Include="..\Common\window_tool\GroupBox.h" />
     <ClInclude Include="..\Common\window_tool\HookKey.h" />
@@ -137,6 +144,7 @@
     <ClInclude Include="DataItem\DataItem.h" />
     <ClInclude Include="DLG\Dialogs.h" />
     <ClInclude Include="Resource.h" />
+    <ClInclude Include="Windows\DetailWindow\DefectDlg.h" />
     <ClInclude Include="Windows\DetailWindow\DefectWindow.h" />
     <ClInclude Include="Windows\DetailWindow\FrameViewer.h" />
     <ClInclude Include="Windows\DetailWindow\StructWindow.h" />
@@ -177,6 +185,7 @@
     <ClCompile Include="..\Common\MedianFiltre\MedianFiltre.cpp" />
     <ClCompile Include="..\Common\PerformanceCounter\PerformanceCounter.cpp" />
     <ClCompile Include="..\Common\tools_debug\DebugMess.cpp" />
+    <ClCompile Include="..\Common\window_tool\DlgFiles.cpp" />
     <ClCompile Include="..\Common\window_tool\EmptyWindow.cpp" />
     <ClCompile Include="..\Common\window_tool\GroupBox.cpp" />
     <ClCompile Include="..\Common\window_tool\HookKey.cpp" />
@@ -192,11 +201,16 @@
     <ClCompile Include="Automat\Automat.cpp" />
     <ClCompile Include="Compute\Compute.cpp" />
     <ClCompile Include="DataItem\DataItem.cpp" />
+    <ClCompile Include="DLG\AboutWindow.cpp" />
     <ClCompile Include="DLG\AnalogPlateDlg.cpp" />
+    <ClCompile Include="DLG\ColorItemsDlg.cpp" />
     <ClCompile Include="DLG\DeathZonesDlg.cpp" />
     <ClCompile Include="DLG\FilterDlg.cpp" />
     <ClCompile Include="DLG\InputOutputDlg.cpp" />
     <ClCompile Include="DLG\MedianFilterDlg.cpp" />
+    <ClCompile Include="DLG\TestIOPorts.cpp" />
+    <ClCompile Include="DLG\TypeSizeDlg.cpp" />
+    <ClCompile Include="Windows\DetailWindow\DefectDlg.cpp" />
     <ClCompile Include="Windows\DetailWindow\DefectWindow.cpp" />
     <ClCompile Include="Windows\DetailWindow\FrameViewer.cpp" />
     <ClCompile Include="Windows\DetailWindow\StructWindow.cpp" />

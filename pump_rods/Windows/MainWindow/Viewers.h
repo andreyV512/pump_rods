@@ -38,6 +38,6 @@ public:
 
 	bool GetColorBar(int zone, double &data_, unsigned &color);
 
-	void operator()(TRButtonDown &);
+	//void operator()(TRButtonDown &);
 	void operator()(TSize &);
 };

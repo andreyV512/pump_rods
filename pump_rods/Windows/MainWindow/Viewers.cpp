@@ -11,7 +11,6 @@ ViewerData::ViewerData()
     , tchart(backScreen)
 	, count(0)
 	, currentOffset(1000)
-	//, cleanChart(true)
 {
 	chart = &tchart;
 
@@ -59,12 +58,6 @@ void ViewerData::operator()(TSize &l)
 bool ViewerData::GetColorBar(int zone, double &data, unsigned &color)
 {
 	data = buffer[zone];
-	//color = nominalColor;
-	//if(zone < deathZoneFirst) color = deathZoneColor;
-	//else if(zone > deathZoneSecond)color = deathZoneColor;
-	//else if(data > threshDefect) color = threshDefectColor;
-	//else if(data > threshSortDown) color = threshSortDownColor;
-	//StatusText()(status[x], color, txt);
 	color = StatusColor()(status[zone]);
 	return zone < count;
 }
@@ -93,11 +86,11 @@ bool ViewerData::GetColorBar(int zone, double &data, unsigned &color)
 //}
 
 //CONTEXT_MENU(ThickWindow)
-void ViewerData::operator()(TRButtonDown &l)
-{
-	//if(Singleton<OnTheJobTable>::Instance().items.get<OnTheJob<Thick>>().value)
-	//PopupMenu<ContextMenuThickWindow::items_list>::Do(l.hwnd, l.hwnd);
-}
+//void ViewerData::operator()(TRButtonDown &l)
+//{
+//	//if(Singleton<OnTheJobTable>::Instance().items.get<OnTheJob<Thick>>().value)
+//	//PopupMenu<ContextMenuThickWindow::items_list>::Do(l.hwnd, l.hwnd);
+//}
 
 //void ViewerData::operator()(TMouseWell &l)
 //{

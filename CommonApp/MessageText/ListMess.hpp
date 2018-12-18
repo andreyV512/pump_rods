@@ -68,7 +68,7 @@ private:
 
 public:
 	typedef typename TL::MultyListToList<typename TL::MkTlst<
-		typename Gen<0, (1 << 6) - 1>::Result 
+		typename Gen<1, (1 << TL::Length<zone_status_list>::value) - 1>::Result 
 	//	, typename Gen<301, 600>::Result 
 	//	, typename Gen<601, 900>::Result 
 	//	, typename Gen<901, 1023>::Result
@@ -92,7 +92,8 @@ namespace StatusMessages
 
 #define SKIP(item, ...)template<>struct ItemSkipX<item>{static const unsigned value = Bits<zone_status_list, typename TL::MkTlst<__VA_ARGS__>::Result>::value;};
 	
-	template<>struct ItemSkipX<DeathZone>{static const unsigned value = 0;};
+	template<>struct ItemSkipX<SensorOff>{static const unsigned value = 0;};
+	//template<>struct ItemSkipX<DeathZone>{static const unsigned value = 0;};
 
 		SKIP(Nominal
 		, DefectSig<SortDown>
@@ -100,24 +101,33 @@ namespace StatusMessages
 		, StructSig<SortDown>
 		, StructSig<Defect>
 		, DeathZone
+		, SensorOff
 		)
 
 		SKIP(DefectSig<SortDown>
 		, DefectSig<Defect>
 		, DeathZone 
+		, SensorOff
 		)
 
 		SKIP(StructSig<SortDown>
 		, StructSig<Defect>
 		, DeathZone 
+		, SensorOff
 		)
 
 		SKIP(DefectSig<Defect>
 		, DeathZone 
+		, SensorOff
 		)
 
 		SKIP(StructSig<Defect>
 		, DeathZone 
+		, SensorOff
+		)
+
+		SKIP(DeathZone 
+		, SensorOff
 		)
 
 #undef SKIP

@@ -4,3 +4,5 @@ ipch/
 *.opensdf
 enc_temp_folder/
 *.sdf
+pump_rods/NumVerOld.txt
+Version.h

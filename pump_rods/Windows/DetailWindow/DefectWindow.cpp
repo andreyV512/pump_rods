@@ -4,6 +4,7 @@
 #include "DataItem\DataItem.h"
 #include "Compute\Compute.h"
 #include "App/AppBase.h"
+#include "DefectDlg.h"
 
 namespace DefectMenu
 {
@@ -28,8 +29,30 @@ namespace DefectMenu
 		>::Result list;
 	};
 
+	struct TypeSize{};
+	MENU_TEXT(L"Типоразмер", TopMenu<TypeSize>)
+
+	struct Filter_                   {static void Do(HWND h){zprint("");}};//: FilterDlg{};
+	struct MedianFiltre              : DefectMedianFiltre{};//{static void Do(HWND h){zprint("");}};//: MedianFilterDlg{};
+	struct Correction              {static void Do(HWND h){zprint("");}};//: MedianFilterDlg{};
+
+	MENU_ITEM(L"Настройки цифрового фильтра", Filter_)
+	MENU_ITEM(L"Медианный фильтр", MedianFiltre)
+	MENU_ITEM(L"Корректировка датчика", Correction)
+
+	template<>struct TopMenu<TypeSize>
+	{
+		typedef TL::MkTlst<
+			 MenuItem<MedianFiltre>
+			 , MenuItem<Filter_>
+			 , Separator<0>
+			 , MenuItem<Correction>
+		>::Result list;
+	 };
+
 	typedef TL::MkTlst<
 		TopMenu<MainFile>
+		, TopMenu<TypeSize>
 	>::Result menu_list;	
 };
 
@@ -77,7 +100,14 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	def.count = DataItem::output_buffer_size;
 
 	FrameViewer &frame =  viewers.get<FrameViewer>();
+	frame.count = Singleton<ViewerCountTable>::Instance().items.get<DefectSig<ViewerCount>>().value;
+	frame.medianFiltreLength = Singleton<MedianFiltreTable>::Instance().items.get<DefectSig<MedianFiltreWidth>>().value;
+	frame.medianFiltreON =  Singleton<MedianFiltreTable>::Instance().items.get<DefectSig<MedianFiltreON>>().value;
+	frame.cutoffFrequency = Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<CutoffFrequency>>().value;
+	frame.cutoffFrequencyON = Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<CutoffFrequencyON>>().value;
 	frame.cursor.SetMouseMoveHandler(&frame, &FrameViewer::DrawFrame); 
+	frame.koef = Singleton<KoeffSignTable>::Instance().items.get<DefectSig<KoeffSign>>().value;
+
 	ChangeFrame(def.currentX);
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
 	return 0;
@@ -86,14 +116,10 @@ LRESULT DefectWindow::operator()(TCreate &m)
 void DefectWindow::ChangeFrame(int offsetDef)
 {
 	Def &def = viewers.get<Def>();
-	ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
+	//ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
 	DefectSig<DataItem::Buffer> &item = Singleton<DefectSig<DataItem::Buffer>>::Instance();
 	FrameViewer &frame =  viewers.get<FrameViewer>();
-	frame.count = viewerCount.get<DefectSig<ViewerCount>>().value;
-
-	frame.medianFiltreLength = Singleton<MedianFiltreTable>::Instance().items.get<DefectSig<MedianFiltreWidth>>().value;
-	frame.cutoffFrequency = Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<CutoffFrequency>>().value;
-	frame.cutoffFrequencyON = Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<CutoffFrequencyON>>().value;
+	
 
 	static const int tbuf_size = 3 * dimention_of(frame.buffer) / 2;
 	double tbuf[tbuf_size];
@@ -130,11 +156,10 @@ void DefectWindow::ChangeFrame(int offsetDef)
 	frame.tchart.maxAxesX = offsetDef + frame.count;
 
 	double adcRange =  100.0 / DataItem::ADC_RANGE(Singleton<L502ParametersTable>::Instance().items.get<DefectSig<RangeL502>>().value);
-	double koef = Singleton<KoeffSignTable>::Instance().items.get<DefectSig<KoeffSign>>().value;
 
 	for(int i = 0; i < dimention_of(frame.buffer); ++i)
 	{
-		frame.buffer[i] *= adcRange * koef;
+		frame.buffer[i] *= adcRange * frame.koef;
 	}
 
 	frame.delta = int((double)frame.count / dimention_of(frame.buffer));
@@ -146,8 +171,6 @@ void DefectWindow::ChangeFrame(int offsetDef)
 	int rodLength = dead.get<RodLenght>().value;
 	frame.deathZoneFirst	= int((double)dead.get<DefectSig<First<DeathZone>>>().value * item.currentOffset / rodLength); 
 	frame.deathZoneSecond	= item.currentOffset -  int((double)dead.get<DefectSig<Second<DeathZone>>>().value * item.currentOffset / rodLength); 
-
-	dprint("frame.deathZoneFirst %d frame.deathZoneSecond %d\n", frame.deathZoneFirst, frame.deathZoneSecond);
 
 	frame.deathZoneColor	= def.deathZoneColor	; 	
 	frame.threshDefect	 	= def.threshDefect	 	;

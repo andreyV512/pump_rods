@@ -8,4 +8,5 @@ typedef TL::MkTlst<
 		, DefectSig<SortDown>		
 		, StructSig<SortDown>
 		, Nominal
+		, SensorOff
 	>::Result zone_status_list;

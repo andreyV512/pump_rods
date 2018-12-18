@@ -27,13 +27,11 @@ DLG(InputBitDlg)
 DLG(OutputBitDlg)
 DLG(DiscriptorBitDlg)
 DLG(DeathZonesDlg)
-//DLG(TestIOPorts)
-//
-//DLG(ThresholdCrossDlg)
-//DLG(ThresholdLongDlg)
-//DLG(ColorItemsDlg)
-//
-//DLG(BorderACFCutOffDlg)
+DLG(ColorItemsDlg)
+DLG(AddTypeSizeDlg)
+DLG(DelTypeSizeDlg)
+DLG(TestIOPorts)
+DLG(AboutWindowDlg)
 //DLG(MinMaxThresholdsDlg)
 //DLG(SignalOptionsDlg)
 

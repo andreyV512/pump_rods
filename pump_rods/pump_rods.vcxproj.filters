@@ -308,6 +308,12 @@
     <ClInclude Include="..\Common\window_tool\GroupBox.h">
       <Filter>Common\window_tool</Filter>
     </ClInclude>
+    <ClInclude Include="..\Common\window_tool\DlgFiles.h">
+      <Filter>Common\window_tool</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\DetailWindow\DefectDlg.h">
+      <Filter>pump_rods\Windows\DetailWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp">
@@ -480,6 +486,24 @@
     </ClCompile>
     <ClCompile Include="DLG\DeathZonesDlg.cpp">
       <Filter>pump_rods\DLG</Filter>
+    </ClCompile>
+    <ClCompile Include="DLG\ColorItemsDlg.cpp">
+      <Filter>pump_rods\DLG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\window_tool\DlgFiles.cpp">
+      <Filter>Common\window_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="DLG\TypeSizeDlg.cpp">
+      <Filter>pump_rods\DLG</Filter>
+    </ClCompile>
+    <ClCompile Include="DLG\TestIOPorts.cpp">
+      <Filter>pump_rods\DLG</Filter>
+    </ClCompile>
+    <ClCompile Include="DLG\AboutWindow.cpp">
+      <Filter>pump_rods\DLG</Filter>
+    </ClCompile>
+    <ClCompile Include="Windows\DetailWindow\DefectDlg.cpp">
+      <Filter>pump_rods\Windows\DetailWindow</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

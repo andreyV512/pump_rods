@@ -85,8 +85,8 @@ namespace Compute
 		typedef W<T> O;
 		void operator()(P &p)
 		{
+			if(!Singleton<OnTheJobTable>::Instance().items.get<W<Check>>().value) return;
 			O &o = Singleton<O>::Instance();
-			//dprint("__recalculation__ %s\n", typeid(O).name());
 			double adcRange =  100.0 / DataItem::ADC_RANGE(p.l502Param.get<W<RangeL502>>().value);
 			double koef = p.koeffSign.get<W<KoeffSign>>().value;
 			o.deathZoneFirst  = p.deadArea.get<W<First<DeathZone>>>().value;
@@ -158,6 +158,12 @@ namespace Compute
 		typedef MainWindow::StructureViewer Result;
 	};
 
+	template<class O, class T>struct ChangeWapper;
+	template<template<class>class W, class O, class T>struct ChangeWapper<W<O>, T>
+	{
+		typedef W<T> Result;
+	};
+
 	template<class O, class P>struct __set_data__
 	{
 		void operator()(P &p)
@@ -165,18 +171,27 @@ namespace Compute
 			typedef Viewer<O>::Result V;
 			V &v = p.get<Viewer<O>::Result>();
 			O &item = Singleton<O>::Instance();
-
-			memmove(v.buffer, item.outputData, sizeof(v.buffer));
-			memmove(v.status, item.status, sizeof(v.status));
-			v. deathZoneFirst = item.deathZoneFirst;
-			v.deathZoneSecond = item.deathZoneSecond;
-			v.threshSortDown = item.threshSortDown; 
-			v.threshDefect = item.threshDefect;
-			v.result = item.result;
-			v.tchart.maxAxesX = item.currentOffset - 1;
-			v.currentOffset = item.currentOffset;
-			v.inputData = item.inputData;
-			v.count = DataItem::output_buffer_size;
+			if(Singleton<OnTheJobTable>::Instance().items.get<typename ChangeWapper<O, Check>::Result>().value)
+			{
+				memmove(v.buffer, item.outputData, sizeof(v.buffer));
+				memmove(v.status, item.status, sizeof(v.status));
+				v. deathZoneFirst = item.deathZoneFirst;
+				v.deathZoneSecond = item.deathZoneSecond;
+				v.threshSortDown = item.threshSortDown; 
+				v.threshDefect = item.threshDefect;
+				v.result = item.result;
+				v.tchart.maxAxesX = item.currentOffset - 1;
+				v.currentOffset = item.currentOffset;
+				v.inputData = item.inputData;
+				v.count = DataItem::output_buffer_size;
+			}
+			else
+			{
+				memset(v.buffer, 0, sizeof(v.buffer));
+				memset(v.status, STATUS_ID(SensorOff), sizeof(v.status));
+				v.result = STATUS_ID(SensorOff);
+				v.count = 0;
+			}
 		}
 	};
 
@@ -186,12 +201,14 @@ namespace Compute
 		char (&sig)[DataItem::output_buffer_size] = Singleton<StructSig<DataItem::Buffer>>::Instance().status;
 		char (&res)[DataItem::output_buffer_size] = Singleton<DataItem::ResultData>::Instance().status;
 		unsigned st[3];
-		st[2] = -1;
+		bool bdef = App::DataCollectionDefectoscope();
+		bool bstr = App::DataCollectionStructure();
 		for(int i = 0; i < DataItem::output_buffer_size; ++i)
 		{
-			st[0] = def[i];
-			st[1] = sig[i];
-			
+			int ind = 0;
+			if(bdef)st[ind++] = def[i];
+			if(bstr)st[ind++] = sig[i];
+			st[ind] = -1;
 			res[i] = ResultMessageId(st);
 		}
 	}

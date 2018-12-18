@@ -127,14 +127,6 @@ void MainWindow::operator()(TCommand &m)
 	EventDo(m);
 }
 
-//void MainWindow::operator()(TGetMinMaxInfo &m)
-//{
-//	if(NULL != m.pMinMaxInfo)
-//	{
-//		m.pMinMaxInfo->ptMinTrackSize.x = 600;
-//		m.pMinMaxInfo->ptMinTrackSize.y = 600;
-//	}	
-//}
 void MainWindow::operator()(TClose &l)
 {
 	if(IDYES == MessageBox(l.hwnd, L"Выйти из программы?", L"Cообщение", MB_ICONQUESTION | MB_YESNO))
@@ -287,7 +279,8 @@ template<>struct Event<TopMenu<MainWindow::StructureViewer >>
 
 void MainWindow::DefectoscopeViewer::operator()(TRButtonDown &l)
 {
-	if(count > 0)PopupMenu<TL::MkTlst<TopMenu<MainWindow::DefectoscopeViewer> >::Result>::Do(l.hwnd, this);
+	if(count > 0 && App::DataCollectionDefectoscope())
+		PopupMenu<TL::MkTlst<TopMenu<MainWindow::DefectoscopeViewer> >::Result>::Do(l.hwnd, this);
 }
 
 bool MainWindow::StructureViewer::Draw(TMouseMove &l, VGraphics &g)
@@ -315,5 +308,8 @@ bool MainWindow::StructureViewer::Draw(TMouseMove &l, VGraphics &g)
 
 void MainWindow::StructureViewer::operator()(TRButtonDown &l)
 {
-	if(count > 0)PopupMenu<TL::MkTlst<TopMenu<MainWindow::StructureViewer> >::Result>::Do(l.hwnd, this);
+	if(count > 0 && App::DataCollectionStructure())
+		PopupMenu<TL::MkTlst<TopMenu<MainWindow::StructureViewer> >::Result>::Do(l.hwnd, this);
 }
+
+

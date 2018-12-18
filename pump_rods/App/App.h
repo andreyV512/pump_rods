@@ -9,8 +9,6 @@ template<class T>struct StructSig;
 namespace DataItem
 {
 	struct Buffer;
-//	struct Defectoscope;
-	//struct Structure;
 }
 
 namespace App
@@ -27,6 +25,9 @@ namespace App
 
 	void TopLabel(wchar_t *);
 	bool InterruptView();
+
+	bool DataCollectionDefectoscope();
+	bool DataCollectionStructure();
 }
 
 extern Device1730 device1730;

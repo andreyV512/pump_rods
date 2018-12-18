@@ -38,6 +38,7 @@ public:
 	bool cutoffFrequencyON;
 	bool medianFiltreON;
 	double delta;
+	double koef;
 
 	FrameViewer();
 
