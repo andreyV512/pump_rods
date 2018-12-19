@@ -133,11 +133,13 @@ void DefectWindow::ChangeFrame(int offsetDef)
 	DefectSig<DataItem::Buffer> &item = Singleton<DefectSig<DataItem::Buffer>>::Instance();
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 
+	frame.delta = (double)frame.count / dimention_of(frame.buffer);
+
 
 	static const int tbuf_size = 4 * dimention_of(frame.buffer);
 	double tbuf[tbuf_size];
 
-	int offs_b = 3 * tbuf_size / 4;
+	int offs_b = tbuf_size - dimention_of(frame.buffer);
 	int offs = int(offsetDef - offs_b * frame.delta);
 	int frameWidth = 4 * frame.count;
 	if(offs < 0)
@@ -175,9 +177,8 @@ void DefectWindow::ChangeFrame(int offsetDef)
 		frame.buffer[i] *= adcRange * frame.koef;
 	}
 
-	frame.delta = int((double)frame.count / dimention_of(frame.buffer));
+	frame.delta = (double)frame.count / dimention_of(frame.buffer);
 
-	frame.count = frame.count;
 	frame.nominalColor		= def.nominalColor;
 
 	DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;

@@ -247,6 +247,9 @@ namespace Structure
 			>::Result
 		>(Singleton<ViewerCountTable>::Instance()).Do(h, L"Ширина кадра"))
 		{
+			StructWindow &e = *(StructWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+			FrameViewer &frame =  e.viewers.get<FrameViewer>();
+			frame.count = Singleton<ViewerCountTable>::Instance().items.get<StructSig<ViewerCount>>().value;
 		}
 	}
 }
