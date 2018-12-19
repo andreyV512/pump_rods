@@ -33,6 +33,6 @@ DLG(DelTypeSizeDlg)
 DLG(TestIOPorts)
 DLG(AboutWindowDlg)
 DLG(KoefDlg)
-//DLG(SignalOptionsDlg)
+DLG(MessageDlg)
 
 #undef DLG
