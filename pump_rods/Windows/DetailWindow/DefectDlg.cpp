@@ -216,7 +216,7 @@ struct DefOkBtn
 			{
 				int id = CurrentId<ID<Table> >();
 				param = p.frame.*X;
-				UpdateWhere<Table>(Singleton<Table>::Instance(), p.base).ID(id).Execute();
+				Update<Table>(p.base).set<Item>(param).Where().ID(id).Execute();
 			}
 		}
 	};
