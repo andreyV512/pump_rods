@@ -74,9 +74,11 @@ namespace MainWindowMenu
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	struct WindowPos    {static void Do(HWND h){WindowPosition::Set<MainWindow>(h);}};
 	struct IOportsView      : TestIOPorts{};
+	struct Message_      : MessageDlg{};
 
 	MENU_ITEM(L"Сохранить координаты окна", WindowPos)
     MENU_ITEM(L"Просмотр дискретных портов", IOportsView)
+	MENU_ITEM(L"Просмотр сообщений", Message_)
 
 	template<>struct TopMenu<Options>
 	{
@@ -84,6 +86,7 @@ namespace MainWindowMenu
 			 MenuItem<WindowPos>
 			, Separator<1>
 			, MenuItem<IOportsView>
+			, MenuItem<Message_>
 		>::Result list;		
 	};
 	//-------------------------------------------------------------------------------------------------------

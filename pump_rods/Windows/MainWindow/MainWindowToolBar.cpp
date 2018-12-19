@@ -127,9 +127,9 @@ namespace
 		//SetEvent(App::ProgrammStopEvent);
 		//MainWindow *w = (MainWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
 		//SetToolButtonText(w->toolBar.hWnd, IDB_CycleBtn, L"F4 Цикл");
-		AppKeyHandler::Stop();
+		//AppKeyHandler::Stop();
 //		Singleton<MainWindow>::Instance().StatusBar(0, L"Стоп");
-		//Automat::Stop();
+		Automat::Stop();
 	}
 }
 //--------------------------------------------------------------------------------------------

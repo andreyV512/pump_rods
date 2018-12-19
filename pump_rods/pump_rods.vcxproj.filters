@@ -317,6 +317,9 @@
     <ClInclude Include="Windows\DetailWindow\StructDlg.h">
       <Filter>pump_rods\Windows\DetailWindow</Filter>
     </ClInclude>
+    <ClInclude Include="..\Common\window_tool\RunExecute.h">
+      <Filter>Common\window_tool</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp">
@@ -513,6 +516,12 @@
     </ClCompile>
     <ClCompile Include="Windows\DetailWindow\StructDlg.cpp">
       <Filter>pump_rods\Windows\DetailWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="DLG\MessageDlg.cpp">
+      <Filter>pump_rods\Windows\DetailWindow</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\window_tool\RunExecute.cpp">
+      <Filter>Common\window_tool</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

@@ -131,6 +131,7 @@
     <ClInclude Include="..\Common\window_tool\ItemIni.h" />
     <ClInclude Include="..\Common\window_tool\MenuAPI.h" />
     <ClInclude Include="..\Common\window_tool\Pass.h" />
+    <ClInclude Include="..\Common\window_tool\RunExecute.h" />
     <ClInclude Include="..\Common\window_tool\SelectTypeSizeList.h" />
     <ClInclude Include="..\Common\window_tool\WindowsPosition.h" />
     <ClInclude Include="App\App.h" />
@@ -193,6 +194,7 @@
     <ClCompile Include="..\Common\window_tool\ItemIni.cpp" />
     <ClCompile Include="..\Common\window_tool\MenuAPI.cpp" />
     <ClCompile Include="..\Common\window_tool\Pass.cpp" />
+    <ClCompile Include="..\Common\window_tool\RunExecute.cpp" />
     <ClCompile Include="..\Common\window_tool\SelectTypeSizeList.cpp" />
     <ClCompile Include="..\Common\window_tool\WindowsPosition.cpp" />
     <ClCompile Include="App\App.cpp" />
@@ -210,6 +212,7 @@
     <ClCompile Include="DLG\InputOutputDlg.cpp" />
     <ClCompile Include="DLG\KoefDlg.cpp" />
     <ClCompile Include="DLG\MedianFilterDlg.cpp" />
+    <ClCompile Include="DLG\MessageDlg.cpp" />
     <ClCompile Include="DLG\TestIOPorts.cpp" />
     <ClCompile Include="DLG\TypeSizeDlg.cpp" />
     <ClCompile Include="Windows\DetailWindow\DefectDlg.cpp" />

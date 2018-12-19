@@ -92,7 +92,7 @@ namespace Automat
 				Log::Mess<LogMess::StartCycle>();
 				//проверка сигнала ЦЕПИ УПРАВЛЕНИЯ
 				Log::Mess<LogMess::WaitingForControlCircuitActivation>();
-				AND_BITS(3000, On<iСU>);	
+				AND_BITS(3000, Key<Status::stop>, On<iСU>);	
 				//ожидание сигнала ЦИКЛ, проверка ЦЕПИ УПРАВЛЕНИЯ, выход из цикла по кнопке СТОП
 				Log::Mess<LogMess::WaitingForTheCycleSignal>();
 				AND_BITS(-1,  Key<Status::stop>, On<iCycle>, Test<On<iСU>>);	
