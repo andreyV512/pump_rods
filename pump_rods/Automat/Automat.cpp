@@ -1,14 +1,14 @@
-﻿#include "Automat/Automat.h"
-#include "App\App.h"
-#include "templates\typelist.hpp"
-#include "tools_debug\DebugMess.h"
+﻿#include "App/App.h"
+#include "templates/typelist.hpp"
+#include "tools_debug/DebugMess.h"
 #include "App/AppBase.h"
-#include "Log\LogBuffer.h"
-#include "Log\LogMessages.h"
+#include "Log/LogBuffer.h"
+#include "Log/LogMessages.h"
+#include "Automat/Automat.h"
 #include "Automat/Automat.hpp"
 #include "Windows.h"
-#include "Windows\MainWindow\AppKeyHandler.h"
-#include "Compute\Compute.h"
+#include "Windows/MainWindow/AppKeyHandler.h"
+#include "Compute/Compute.h"
 #include "l502Automat.hpp"
 
 
@@ -18,62 +18,52 @@ namespace Automat
 	HANDLE hThread;
 	HANDLE hEvent;
 
-	struct Status
-	{
-		enum e{
-			undefined
-			, exit_loop
-			, time_out
-			, start
-			, stop
-			, alarm_bits
-			, alarm_l502
-		};
-	};
-
-	struct Result
-	{
-		unsigned error;
-		unsigned key;
-		unsigned bits;
-		unsigned ret;
-		InputBitTable::TItems &inputs_bits;
-		Result()
-			: inputs_bits(Singleton<InputBitTable>::Instance().items)
-		{}
-	} result;
+	
+	HANDLE Key<Status::start>::hEvent;
 
 	
+	HANDLE Key<Status::stop>::hEvent;
+
+	Result::Result()
+		: inputs_bits(Singleton<InputBitTable>::Instance().items)
+	{}
+
+	Result result;
 
 	void Init()
 	{
 		hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+		Key<Status::start>::hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
+		Key<Status::stop>::hEvent  = CreateEvent(NULL, FALSE, FALSE, NULL);
 		hThread = CreateThread(NULL, 0, Loop, NULL, 0, NULL);
 	}
 
 	void Destroy()
 	{
 		CloseHandle(hEvent);
+		CloseHandle(Key<Status::start>::hEvent);
+		CloseHandle(Key<Status::stop>::hEvent );
 		WaitForSingleObject(hThread, INFINITE);
 		CloseHandle(hThread);
 	}
 
 	void Run()
 	{
-		result.key = Status::start;
-		SetEvent(hEvent);
+		//result.key = Status::start;
+		SetEvent(Key<Status::start>::hEvent);
 	}
 
 	void Stop()
 	{
-		result.key = Status::stop;
-		SetEvent(hEvent);
+		//result.key = Status::stop;
+		SetEvent(Key<Status::stop>::hEvent);
 	}
 //-----------------------------------------------------------------------------------
 	DWORD WINAPI  Loop(PVOID)
 	{
 		unsigned status = 0;
 		unsigned status502 = 0;
+		
 		for(;;)
 		{
 			for(;;)
@@ -84,6 +74,7 @@ namespace Automat
 				AppKeyHandler::Stop();
 				//ожидание нажатия кнопки ТЕСТ
 				AND_BITS(-1, Key<Status::start>);
+				dprint("AUTOMAT_RUN------------------------------\n");
 				//очистить главное окно
 				App::CleanViewers();
 				//включена кнопка СТОП
@@ -179,6 +170,7 @@ namespace Automat
 				Compute::Reverse(structBuff.inputData, structBuff.currentOffset);
 				//расчёт и отображение данных
 				Compute::Recalculation();
+				Log::Mess<LogMess::DataCollectionCompleted>();
 				//прерывание на просмотр
 				if(App::InterruptView())
 				{
@@ -210,10 +202,7 @@ namespace Automat
 				dprint("Status::exit_loop\n");
 				return 0;
 			case Status::stop:
-				if(result.key == Status::stop)
-				{
-					Log::Mess<LogMess::ExitMeshuringCycle>();
-				}
+				Log::Mess<LogMess::ExitMeshuringCycle>();
 				dprint("Status::stop\n");
 				break;
 			case Status::time_out:
@@ -224,6 +213,7 @@ namespace Automat
 				break;
 			case Status::alarm_l502:
 				dprint("Status::alarm_l502  %d\n", status502);
+				Log::Mess<LogMess::Alarm502>(status502);
 				break;
 			}
 		}

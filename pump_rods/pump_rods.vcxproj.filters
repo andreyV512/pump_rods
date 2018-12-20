@@ -320,6 +320,9 @@
     <ClInclude Include="..\Common\window_tool\RunExecute.h">
       <Filter>Common\window_tool</Filter>
     </ClInclude>
+    <ClInclude Include="Automat\EquipmentCheck.h">
+      <Filter>pump_rods\Automat</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp">
@@ -522,6 +525,9 @@
     </ClCompile>
     <ClCompile Include="..\Common\window_tool\RunExecute.cpp">
       <Filter>Common\window_tool</Filter>
+    </ClCompile>
+    <ClCompile Include="Automat\EquipmentCheck.cpp">
+      <Filter>pump_rods\Automat</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>

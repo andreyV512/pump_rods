@@ -271,19 +271,7 @@ namespace Automat
 		bool operator()(unsigned){return true;}
 	};
 
-	//template<class List>struct ResethEvent
-	//{
-	//	void operator()()
-	//	{
-	//		ResetEvent(hEvent);
-	//	}
-	//};
-	//template<>struct ResethEvent<NullType>
-	//{
-	//	void operator()(){}
-	//};
-
-	template<class List, class Result, unsigned N>struct AND_Bits_delay
+	template<class List, class Result, unsigned N>struct AND_Bits_WAIT_TIMEOUT
 	{
 		unsigned operator()(Result &result, unsigned delay)
 		{
@@ -298,16 +286,74 @@ namespace Automat
 			return 0;
 		}
 	};
-	template<class List, class Result>struct AND_Bits_delay<List, Result, -1>
+	template<class List, class Result>struct AND_Bits_WAIT_TIMEOUT<List, Result, -1>
 	{
 		unsigned operator()(Result &, unsigned){return 0;}
+	};
+
+	template<class List>struct WaitFor
+	{
+		static const int count = TL::Length<List>::value;
+		HANDLE h[count];
+		template<class O, class P>struct __init__
+		{
+			void operator()(P *p)
+			{
+				p[TL::IndexOf<List, O>::value] = O::hEvent;
+			}
+		};
+		unsigned operator()()
+		{
+			TL::foreach<List, __init__>()(h);
+			return WaitForMultipleObjects(count, h, FALSE, 5);
+		}
+	};
+
+	template<>struct WaitFor<NullType>
+	{
+		unsigned operator()()
+		{
+			return WaitForSingleObject(hEvent, 5);
+		}
+	};
+
+	template<class List>struct __key_handler__
+	{
+		int ret;
+		unsigned key;
+		template<class O, class P>struct __loc__
+		{
+			bool operator()(P &p)
+			{
+				if(TL::IndexOf<List, O>::value == p.key)
+				{
+					p.ret = O::value == Status::stop ? Status::stop: 0; 
+					return false;
+				}
+				return true;
+			}
+		};
+		int operator()(unsigned key_)
+		{
+			key = key_;
+			TL::find<List, __loc__>()(*this);
+			return ret;
+		}
+	};
+
+	template<>struct __key_handler__<NullType>
+	{
+		int operator()(unsigned key_)
+		{
+			return -1;
+		}
 	};
 
 	template<unsigned DELAY, class List>struct AND_Bits
 	{
 		template<class Result>unsigned operator()(Result &result)
 		{
-			result.key = 0;
+			result.ret = 0;
 			unsigned delay = DELAY;
 			if((unsigned)-1 != DELAY) delay += GetTickCount();
 			unsigned bitOn = 0, bitOff = 0, bitInv = 0;
@@ -320,11 +366,10 @@ namespace Automat
 			SelectBits<typename Filt<List, Inv>::Result>()(bitInv);
 
 			typedef typename FiltKey<List, Key>::Result list_key;
-			ResetEvent(hEvent);
 
 			while(true)
 			{
-				unsigned ev = WaitForSingleObject(hEvent, 5);
+				unsigned ev = WaitFor<list_key>()();//WaitForSingleObject(hEvent, 5);
 				unsigned bits = 0;
 				if(bitsNotEmpty || __list_not_empty__<list_proc>::value)bits = device1730.Read();
 				
@@ -332,17 +377,7 @@ namespace Automat
 				{
 				case WAIT_TIMEOUT:
 					{
-						//if(-1 != delay && delay < GetTickCount()) 
-						//{
-						//	if(!TestBitsDo<TL::MultyListToList<
-						//		Tlst<typename TL::TypeToTypeLst<list_on, On>::Result
-						//		, Tlst<typename TL::TypeToTypeLst<list_off, Off>::Result
-						//		, NullType>>
-						//		>::Result>()(result))
-						//		return Status::alarm_bits;
-						//	return Status::time_out; 
-						//}
-						unsigned ret = AND_Bits_delay<
+						unsigned ret = AND_Bits_WAIT_TIMEOUT<
 							Tlst<typename TL::TypeToTypeLst<list_on, On>::Result
 							, Tlst<typename TL::TypeToTypeLst<list_off, Off>::Result
 							, NullType>>
@@ -353,28 +388,40 @@ namespace Automat
 						if(bitsNotEmpty &&(bitOn || bitOff))
 						{						
 							unsigned t = bits ^ bitInv;
-							if(bitOn == (t & (bitOn | bitOff))) goto EXIT;
+							if(bitOn == (t & (bitOn | bitOff))) return 0;
 						}	
 						result.bits = bits;
-						if(DefaultDo<list_proc>()(result) == Status::stop)return Status::stop;
+						switch(DefaultDo<list_proc>()(result))
+						{
+						case Status::stop: return Status::stop;
+						case Status::contine: return 0;
+						}
 						typedef typename FiltTestBits<List>::Result __test_bits_list__;
 						if(!TestBitsDo<__test_bits_list__>()(result)) return Status::alarm_bits;
 					}
 					break;
 
-				case WAIT_OBJECT_0:
-					
-					if(!KeyDo<list_key>()(result.key))
-					{
-						if(result.key == Status::stop) return Status::stop;
-					}
-					goto EXIT;
+				//case WAIT_OBJECT_0:
+				//	
+				//	if(!KeyDo<list_key>()(result.key))
+				//	{
+				//		if(result.key == Status::stop) return Status::stop;
+				//	}
+				//	goto EXIT;
 
 				case WAIT_FAILED:
 					return Status::exit_loop;
+
+				default:
+					switch(__key_handler__<list_key>()(ev - WAIT_OBJECT_0))
+					{
+					case -1          : break;
+					case 0           : return 0;
+					case Status::stop: return Status::stop;
+					}
+					break;
 				}
 			}
-EXIT:
 			return 0;
 		}
 	};

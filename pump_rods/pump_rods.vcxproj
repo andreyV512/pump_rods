@@ -140,6 +140,7 @@
     <ClInclude Include="App\MessageItems.h" />
     <ClInclude Include="Automat\Automat.h" />
     <ClInclude Include="Automat\Automat.hpp" />
+    <ClInclude Include="Automat\EquipmentCheck.h" />
     <ClInclude Include="Automat\l502Automat.hpp" />
     <ClInclude Include="Compute\Compute.h" />
     <ClInclude Include="DataItem\DataItem.h" />
@@ -202,6 +203,7 @@
     <ClCompile Include="App\main.cpp" />
     <ClCompile Include="App\stdafx.cpp" />
     <ClCompile Include="Automat\Automat.cpp" />
+    <ClCompile Include="Automat\EquipmentCheck.cpp" />
     <ClCompile Include="Compute\Compute.cpp" />
     <ClCompile Include="DataItem\DataItem.cpp" />
     <ClCompile Include="DLG\AboutWindow.cpp" />

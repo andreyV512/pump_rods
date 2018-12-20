@@ -94,6 +94,10 @@ namespace LogMess
 	MESS(WaitingForTheP2SignalTurnOff, void, "ожидание отключения сигнала \"П2\"", blue, white)
 	MESS(DataCollectionSTR, void, "сбор данных \"СТРУКТУРА\"", blue, white)
 
+	MESS(Alarm502, int, "Ошибка платы L502  ", red  , yellow)
+
+	MESS(DataCollectionCompleted, void, "Цикл сбора данных закончен", green, white)
+
 //	
 /*
 	MESS(ErrStop                      , void  , "Прерывание цикла измерения", red, yellow)

@@ -15,18 +15,21 @@ template<class T, template<class>class W>struct l502Run<W<T>>
 	}status;
 	int &currentOffset;
 	bool terminate;
+	HANDLE hThread;
 	double (&inputData)[App::buffer_size];
 	l502Run(T &t)
 		: currentOffset(t.currentOffset)
 		, terminate(false)
 		, inputData(t.inputData)
 		, status(ok)
+		, hThread(NULL)
 	{
 		currentOffset = 0;
 	}
 	~l502Run()
 	{
 		terminate = true;
+		if(NULL != hThread)WaitForSingleObject(hThread, INFINITE);
 	}
 
 	static DWORD WINAPI Proc(PVOID p)
@@ -46,7 +49,7 @@ template<class T, template<class>class W>struct l502Run<W<T>>
 			); 
 		if(b)
 		{
-			CloseHandle(CreateThread(NULL, 0, Proc, this, 0, NULL));
+			hThread = CreateThread(NULL, 0, Proc, this, 0, NULL);
 		}
 		else
 		{

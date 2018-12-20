@@ -6,6 +6,7 @@
 #include "AppKeyHandler.h"
 #include "MainWindow.h"
 #include "Automat\Automat.h"
+#include "Automat\EquipmentCheck.h"
 
 namespace 
 {
@@ -88,9 +89,8 @@ namespace
 //-------------------------------------------------------------------------------
 	void Key<IDB_QueryBtn>::Click(HWND h)
 	{
-		//Singleton<MainWindow>::Instance().StatusBar(0, L"Тест");
-		//AppKeyHandler::Run();
 		zprint("\n");	
+		EquipmentCheck();
 	}
 //------------------------------------------------------------------------------
 	void Key<IDB_DownArrow>::Click(HWND h)
