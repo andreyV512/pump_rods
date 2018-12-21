@@ -247,5 +247,3 @@ void StructWindow::operator()(TClose &l)
 	}
 	DestroyWindow(l.hwnd);
 }
-//-----------------------------------------------------------------------------
-

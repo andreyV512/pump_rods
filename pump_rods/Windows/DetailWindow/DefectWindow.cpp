@@ -135,7 +135,6 @@ void DefectWindow::ChangeFrame(int offsetDef)
 
 	frame.delta = (double)frame.count / dimention_of(frame.buffer);
 
-
 	static const int tbuf_size = 4 * dimention_of(frame.buffer);
 	double tbuf[tbuf_size];
 
