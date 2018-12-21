@@ -8,14 +8,14 @@
 #include <stdio.h>
 #include "App/AppBase.h"
 
-L502SolidGroup::L502SolidGroup()
-	: ADC_FREQ(Singleton<SolenoidParametersTable>::Instance().items.get<Frequency502>().value)
-	, referenceV(Singleton<SolenoidParametersTable>::Instance().items.get<ReferenceRangeSignal>().value)
-	, dataV(Singleton<SolenoidParametersTable>::Instance().items.get<InputRangeSignal>().value)
-	, READ_TIMEOUT(100)
-{}
+//Device502::Device502()
+//	//: ADC_FREQ(Singleton<SolenoidParametersTable>::Instance().items.get<Frequency502>().value)
+//	//, referenceV(Singleton<SolenoidParametersTable>::Instance().items.get<ReferenceRangeSignal>().value)
+//	//, dataV(Singleton<SolenoidParametersTable>::Instance().items.get<InputRangeSignal>().value)
+//	//, READ_TIMEOUT(100)
+//{}
 
-bool L502SolidGroup::Init()
+bool Device502::Init()
 {
 	hnd = L502_Create();
 	if (hnd==NULL)
@@ -35,7 +35,7 @@ bool L502SolidGroup::Init()
 	return NULL != hnd;
 }
 
-void L502SolidGroup::Destroy()
+void Device502::Destroy()
 {
 	 /* закрываем связь с модулем */
         L502_Close((t_l502_hnd)hnd);
@@ -43,7 +43,7 @@ void L502SolidGroup::Destroy()
         L502_Free((t_l502_hnd)hnd);
 }
 
-bool L502SolidGroup::SetupParams(int *f_channels, int *f_ch_ranges, int ADC_FREQ, int countChannels)
+bool Device502::SetupParams(int *f_channels, int *f_ch_ranges, int ADC_FREQ, int countChannels)
 {
 //	int f_channels[] = {
 //		adcParam.get<InputSignal>().value
@@ -78,7 +78,7 @@ bool L502SolidGroup::SetupParams(int *f_channels, int *f_ch_ranges, int ADC_FREQ
 
     return 0 == err;
 }
-int L502SolidGroup::Start()
+int Device502::Start()
 {
 	int err = L502_StreamsStart((t_l502_hnd)hnd);
 	if (err)
@@ -86,7 +86,7 @@ int L502SolidGroup::Start()
 	return err;
 }
 
-int L502SolidGroup::Stop()
+int Device502::Stop()
 {
 	/* останавливаем поток сбора данных (независимо от того, была ли ошибка) */
 	int err = L502_StreamsStop((t_l502_hnd)hnd);
@@ -97,10 +97,10 @@ int L502SolidGroup::Stop()
 	return err;
 }
 
-int L502SolidGroup::Read(unsigned &startChennel, double *data, unsigned &count)
+int Device502::Read(unsigned &startChennel, double *data, unsigned &count)
 {
 	unsigned rcv_buf[buffer_length];
-	int cnt = L502_Recv((t_l502_hnd)hnd, rcv_buf, buffer_length, READ_TIMEOUT);
+	int cnt = L502_Recv((t_l502_hnd)hnd, rcv_buf, buffer_length, 100);//READ_TIMEOUT);
 	if(cnt > 0)
 	{
 		L502_GetNextExpectedLchNum((t_l502_hnd)hnd, &startChennel);

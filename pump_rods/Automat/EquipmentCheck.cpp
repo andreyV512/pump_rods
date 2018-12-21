@@ -17,8 +17,9 @@ namespace Automat
 		static unsigned delay;
 		static void Init()
 		{
-			delay =  GetTickCount() + 10000;
+			delay =  GetTickCount();
 			dprint("start delay %d\n", delay);
+			delay += 10000;
 		}
 		static void Do(Result &r)
 		{

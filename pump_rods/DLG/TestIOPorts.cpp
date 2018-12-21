@@ -107,11 +107,11 @@ namespace TestIOPortsN
 	{
 		T &items;
 		unsigned msk;
-		unsigned value;
-		__data_io__(T &items, unsigned msk, unsigned value): items(items), msk(msk), value(value){}
+		unsigned &value;
+		__data_io__(T &items, unsigned msk, unsigned &value): items(items), msk(msk), value(value){}
 	};
 
-	template<class O, class P>struct __io__
+	template<class O, class P>struct __i__
 	{
 		bool operator()(O &o, P &p)
 		{
@@ -123,6 +123,35 @@ namespace TestIOPortsN
 					HWND h = p.items.get<Dialog::DlgItem2<InpStat<O>,NullType>>().hWnd;
 					unsigned t = (o.value & p.value) ? BST_CHECKED : BST_UNCHECKED;
 					Button_SetCheck(h, t);
+				}
+				return true;
+			}
+			return false;
+		}
+	};	
+	template<class O, class P>struct __o__
+	{
+		bool operator()(O &o, P &p)
+		{
+			if(p.msk)
+			{
+				if(p.msk & o.value)
+				{
+					p.msk &= ~o.value;
+					HWND h = p.items.get<Dialog::DlgItem2<OutStat<O>,NullType>>().hWnd;
+					bool b = 0 != (o.value & p.value);
+					unsigned t = (b) ? BST_CHECKED : BST_UNCHECKED;
+					Button_SetCheck(h, t);
+					if(b)
+					{
+						//p.value |= o.value;
+						device1730.WriteOutput(o.value);
+					}
+					else
+					{
+						//p.value &= ~o.value;
+						device1730.WriteOutput(0, o.value);
+					}
 				}
 				return true;
 			}
@@ -147,12 +176,21 @@ class TestIOWindow
 		CheckBox(TestIOWindow *owner): owner(owner){}
 		void Do(TCommand &l)
 		{
+			typedef TL::Inner<TL::Inner<T>::Result>::Result Tbit;
+			unsigned bit = Singleton<OutputBitTable>::Instance().items.get<Tbit>().value;
 			bool b = BST_CHECKED == Button_GetCheck(l.hControl);
-			zprint(" check %d\n", b);
+			if(b)
+			{
+				device1730.WriteOutput(bit);
+			}
+			else
+			{
+				device1730.WriteOutput(0, bit);
+			}
 		}
 	};
 
-	unsigned lastBitsInput0, lastBitsInput1;
+	unsigned lastBitsInput, lastBitsOutput;
 
 	typedef TL::TypeToTypeLstParam1<TestIOPortsN::__input_list_0__, Dialog::DlgItem2, NullType>::Result original_list_input0;
 	typedef TL::TypeToTypeLstParam1<TestIOPortsN::__output_list_0__, Dialog::DlgItem2, NullType>::Result original_list_output0;
@@ -180,7 +218,8 @@ TestIOWindow::TestIOWindow()
 
 LRESULT TestIOWindow::operator()(TCreate &l)
 {
-	lastBitsInput0 = lastBitsInput0 =(unsigned) -1;
+	lastBitsInput  = ~device1730.Read();
+	lastBitsOutput = ~device1730.ReadOutput();
 
 	int width = 280;
 	int height = 15;
@@ -212,20 +251,26 @@ void TestIOWindow::operator()(TCommand &l)
 	EventDo(l);
 }
 
-unsigned test_testIOWindow = 0; //todo test
 
 void TestIOWindow::operator()(TTimer &)
 {
-	test_testIOWindow <<= 1;										   //todo test
-	if(test_testIOWindow < 32) 										   //todo test
-	{																   //todo test
-		test_testIOWindow |= 1;										   //todo test
-	}																   //todo test
-	else if(0xfffff < test_testIOWindow)	test_testIOWindow = 0;	   //todo test
-
-	TestIOPortsN::__data_io__<TL::Factory<list_input0>> data(items_input0, test_testIOWindow ^ lastBitsInput0, test_testIOWindow);
-	TL::find<InputBitTable::items_list, TestIOPortsN::__io__>()(Singleton<InputBitTable>::Instance().items, data);
-	lastBitsInput0 = test_testIOWindow;  //todo test
+	unsigned test_testIOWindow = device1730.Read();
+	TestIOPortsN::__data_io__<TL::Factory<list_input0>> idata(items_input0, test_testIOWindow ^ lastBitsInput, test_testIOWindow);
+	TL::find<InputBitTable::items_list, TestIOPortsN::__i__>()(Singleton<InputBitTable>::Instance().items, idata);
+	lastBitsInput = test_testIOWindow;  
+	// test unsigned t = device1730.Read();
+	// test if(t & (1 << 15))
+	// test {
+	// test 	device1730.WriteOutput(0xaa);
+	// test }
+	// test else
+	// test {
+	// test 	device1730.WriteOutput(0, 0xaa);
+	// test }
+	test_testIOWindow = device1730.ReadOutput();
+	TestIOPortsN::__data_io__<TL::Factory<list_output0>> odata(items_output0, test_testIOWindow ^ lastBitsOutput, test_testIOWindow);
+	TL::find<OutputBitTable::items_list, TestIOPortsN::__o__>()(Singleton<OutputBitTable>::Instance().items, odata);
+	lastBitsOutput = test_testIOWindow; 	
 }
 
 void TestIOPorts::Do(HWND)
