@@ -258,15 +258,15 @@ void TestIOWindow::operator()(TTimer &)
 	TestIOPortsN::__data_io__<TL::Factory<list_input0>> idata(items_input0, test_testIOWindow ^ lastBitsInput, test_testIOWindow);
 	TL::find<InputBitTable::items_list, TestIOPortsN::__i__>()(Singleton<InputBitTable>::Instance().items, idata);
 	lastBitsInput = test_testIOWindow;  
-	// test unsigned t = device1730.Read();
-	// test if(t & (1 << 15))
-	// test {
-	// test 	device1730.WriteOutput(0xaa);
-	// test }
-	// test else
-	// test {
-	// test 	device1730.WriteOutput(0, 0xaa);
-	// test }
+	//testunsigned t = device1730.Read();
+	//testif(t & (1 << 15))
+	//test{
+	//test	device1730.WriteOutput(0xaa);
+	//test}
+	//testelse
+	//test{
+	//test	device1730.WriteOutput(0, 0xaa);
+	//test}
 	test_testIOWindow = device1730.ReadOutput();
 	TestIOPortsN::__data_io__<TL::Factory<list_output0>> odata(items_output0, test_testIOWindow ^ lastBitsOutput, test_testIOWindow);
 	TL::find<OutputBitTable::items_list, TestIOPortsN::__o__>()(Singleton<OutputBitTable>::Instance().items, odata);
