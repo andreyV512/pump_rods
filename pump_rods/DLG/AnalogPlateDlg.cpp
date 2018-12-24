@@ -33,9 +33,9 @@ const wchar_t *SyncGainData[] ={L"10", L"5", L"2", L"1", L"0.5", L"0.2"};
 	}\
 	};\
 	template<>struct DlgSubItems<TYPE, int>: ComboBoxSubItem<TYPE>{};\
-	template<class P>struct __ok_btn__<DlgItem<TYPE>, P>\
+	template<class X, class P>struct __ok_btn__<Dialog::DlgItem2<TYPE, X>, P>\
 	{  \
-	typedef DlgItem<TYPE> O; \
+	typedef Dialog::DlgItem2<TYPE, X> O; \
 	void operator()(O *o, P *p)	 \
 	{						   \
 	wchar_t s[128];					\
@@ -47,6 +47,7 @@ const wchar_t *SyncGainData[] ={L"10", L"5", L"2", L"1", L"0.5", L"0.2"};
 	}												 \
 	o->value.value =  i;		   \
 	p->update.set<typename TL::Inner<O>::Result>(o->value.value);  \
+	dprint("set %d\n", i);\
 	}	 \
 	};
 
@@ -72,6 +73,14 @@ typedef GROUP_BOX(StructSig<ChannelL502>, StructSig<RangeL502>, StructSig<Channe
 
 PARAM_TITLE(Defect_Sig, L"Дефектоскопия")
 PARAM_TITLE(Struct_Sig, L"Структура")
+
+template<>struct TestPassword<ParametersBase, L502ParametersTable>
+{
+	bool operator()(HWND h)
+	{
+		return OptionPasswordDlg().Do(h);
+	}
+};
 
 void AnalogPlatelDlg::Do(HWND h)
 {
