@@ -46,28 +46,28 @@ namespace
 #endif
 		>::Result tool_button_list;
 #undef BUTTON_KEY
-	namespace closed_window
-	{		
-		//typedef TL::MkTlst<
-		//	WindowClass<CrossWindow		>
-		//	, WindowClass<LongWindow		>
-		//	, WindowClass<ThickWindow	>
-		//	, WindowClass<ScanWindow		>
-		//>::Result window_list;
-		template<class O, class P>struct __close_window__
-		{
-			void operator()()
-			{
-				HWND hh = FindWindow(O()(), NULL);
-		    	if(NULL != hh) DestroyWindow(hh);
-			}
-		};
-
-		void close_window()
-		{
-			//TL::foreach<window_list, __close_window__>()();
-		}
-	}
+	//namespace closed_window
+	//{		
+	//	//typedef TL::MkTlst<
+	//	//	WindowClass<CrossWindow		>
+	//	//	, WindowClass<LongWindow		>
+	//	//	, WindowClass<ThickWindow	>
+	//	//	, WindowClass<ScanWindow		>
+	//	//>::Result window_list;
+	//	template<class O, class P>struct __close_window__
+	//	{
+	//		void operator()()
+	//		{
+	//			HWND hh = FindWindow(O()(), NULL);
+	//	    	if(NULL != hh) DestroyWindow(hh);
+	//		}
+	//	};
+	//
+	//	void close_window()
+	//	{
+	//		//TL::foreach<window_list, __close_window__>()();
+	//	}
+	//}
 //----------------------------------------------------------------------------------
 	static bool closed_packet_dialog = true;
 	static bool run_once_per_sycle = false;

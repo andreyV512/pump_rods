@@ -487,50 +487,7 @@ LineSeries::LineSeries(Chart &chart) : chart(chart), data(NULL), color(0xff0000f
 void LineSeries::Draw()
 {
   if(NULL != data)
-  {
-	  /*
-    Color col(color);
-	Pen pen(col, 2);
-	chart.g->SetClip(&Region(RectF(
-		REAL(chart.rect.left + chart.offsetAxesLeft + 3)
-		, REAL(chart.rect.top + chart.offsetAxesTop + 3)
-		, REAL((chart.rect.right - chart.offsetAxesRight) - (chart.rect.left + chart.offsetAxesLeft) - 6)
-		, REAL((chart.rect.bottom - chart.offsetAxesBottom) - (chart.rect.top + chart.offsetAxesTop) - 6)
-		)),
-       CombineModeReplace
-     );
-    double dY = (double) (chart.rect.bottom - chart.rect.top - chart.offsetAxesBottom - chart.offsetAxesTop) / (chart.maxAxesY - chart.minAxesY);
-
-    double y = chart.rect.bottom - chart.offsetAxesBottom;
-   
-	int width = chart.rect.right - chart.rect.left - chart.offsetAxesRight - chart.offsetAxesLeft;
-	double dX = (double)(width) / count;
-	int x0 = chart.rect.left + chart.offsetAxesLeft;
-	Point points[2000];
-	points[0].X = x0;
-	points[0].Y = int(y - data[0] * dY);
-	double x = 0;
-	int last = 0;
-	for(int i = 1; i < count; ++i)
-	{
-		if(dimention_of(points) < last) break;
-		x += dX;
-		int k = i;//(int)x;
-		points[k].X = int(x + x0);
-		if(last == k)
-		{
-			int tmp = int(y - data[i] * dY);
-			if(points[k].Y < tmp) points[k].Y = tmp;
-		}
-		else
-		{
-			points[k].Y =  int(y - data[i] * dY);
-		}
-		last = k;
-	}
-	chart.g->DrawLines(&pen, points, count);
-	chart.g->SetClip(&Region());
-	*/
+  {	
 	  Color col(color);
 		Pen pen(col, 2);
 		chart.g->SetClip(&Region(RectF(
