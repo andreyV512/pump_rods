@@ -8,11 +8,12 @@
 #include "App\MessageItems.h"
 #include "MessageText\StatusMessages.h"
 #include "MessageText\ListMess.hpp"
+#include <cmath>
 
 namespace Compute
 {
 
-	void Compute(double *inputData, int inputLenght, int cutoffFrequency, bool cutoffFrequencyON, int medianWidth, bool medianON, double *outputData, int outputLength, int samplingRate
+	void Compute(double *inputData, int inputLenght, int cutoffFrequency, bool cutoffFrequencyON, int medianWidth, bool medianON, double *outputData, int outputLength, int samplingRate, bool wave
 		)
 	{
 		MedianFiltre filtre;
@@ -35,8 +36,7 @@ namespace Compute
 			if(cutoffFrequencyON) t = analogFiltre(t);
 			int k = int(i / delta);
 			if(k >= outputLength) break;
-			if(t < 0) t = -t;
-			if(t > outputData[k]) outputData[k] = t;
+			if(abs(t) > abs(outputData[k])) outputData[k] = wave? abs(t): t;
 		}		
 	}
 

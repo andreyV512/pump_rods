@@ -4,8 +4,11 @@ FrameViewer::FrameViewer()
 	: CommonViewer(&tchart, 1) 
 	, tchart(backScreen)
 	, last(-1)
+	, isBarGraph(true)
 {
 	tchart.items.get<BarSeries>().SetColorBarHandler(this, &FrameViewer::GetColorBar);
+	tchart.items.get<LineSeries>().SetData(buffer, dimention_of(buffer));
+
 	cursor.horizontalLine = false;
 }
 
@@ -70,7 +73,14 @@ void FrameViewer::operator()(TSize &l)
 	SolidBrush solidBrush(Color((ARGB)BACK_GROUND));
 	g.FillRectangle(&solidBrush, 0, 0, 10, l.Height);   
 	g.FillRectangle(&solidBrush, 0, 0, l.Width, 29);
-	chart->Draw(g);
+	if(isBarGraph)
+	{
+		tchart.DrawItems<chart_list0>(g);
+	}
+	else
+	{
+		tchart.DrawItems<chart_list1>(g);
+	}
 }
 
 void CoordCell(Chart *chart, int mX, int &x, int delta)

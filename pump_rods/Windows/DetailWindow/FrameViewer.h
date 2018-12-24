@@ -7,23 +7,63 @@
 #include "Graphics/BarSeries.h"
 #include "Graphics\Borders.h"
 
+
+
 class FrameViewer: public CommonViewer
 {
 	int last;
 public:
 	typedef CommonViewer Parent;
-	template<class T>struct Border: public HBorder{Border(Chart &c): HBorder(c){}};
-	typedef ChartDraw<Chart, TL::MkTlst<
+	template<class T>struct Border: HBorder{Border(Chart &c): HBorder(c){}};
+	template<class T>struct BorderDown: HBorder
+	{
+		BorderDown(Chart &c): HBorder(c){}
+		void Draw();
+		//{
+		//	//HBorder::value = -value;
+		//	value = (*(TChart *)&chart).items.get<Border<T>>().value;
+		//	HBorder::Draw();
+		//}
+	};
+
+	typedef TL::MkTlst<
 		NoOffsetLeftAxes
-		, BottomAxes//Meters
-		, BarSeries//NoFixed
-		, Grid//FixedGrid		
+		, BottomAxes
+		, BarSeries
+		, Grid	
 		, Border<SortDown>
 		, Border<Defect>
-	>::Result> TChart;
+	>::Result chart_list0;
+
+	typedef TL::MkTlst<
+		NoOffsetLeftAxes
+		, BottomAxes
+		, LineSeries
+		, Grid	
+		, Border<SortDown>
+		, Border<Defect>
+		, BorderDown<SortDown>
+		, BorderDown<Defect>
+	>::Result chart_list1;
+
+	typedef ChartDraw<Chart, TL::MkTlst<
+		NoOffsetLeftAxes
+		, BottomAxes
+		, BarSeries
+		, LineSeries
+		, Grid	
+		, Border<SortDown>
+		, Border<Defect>
+		, BorderDown<SortDown>
+		, BorderDown<Defect>
+	>::Result> TChart;	
 	TChart tchart;
 
-	double buffer[2 * 1024];
+	
+
+	double buffer[1024];
+	double status[1024];
+
 	int nominalColor	 ;
 	int deathZoneFirst	 ;
 	int deathZoneColor	 ;
@@ -39,6 +79,7 @@ public:
 	bool medianFiltreON;
 	double delta;
 	double koef;
+	bool isBarGraph;
 
 	FrameViewer();
 
@@ -47,5 +88,13 @@ public:
 	void operator()(TSize &);
 	bool DrawFrame(TMouseMove &, VGraphics &);
 };
+
+template<class T>void FrameViewer::BorderDown<T>::Draw()
+{
+	Border<T>  &b = (*(TChart *)&chart).items.get<Border<T>>();
+	value = -b.value;
+	color = b.color;
+	HBorder::Draw();
+}
 
 

@@ -2,7 +2,7 @@
 
 namespace Compute
 {	
-	void Compute(double *inputData, int inputLenght, int cutoffFrequency, bool cutoffFrequencyON, int medianWidth, bool medianON, double *outputData, int outputLength, int samplingRate);
+	void Compute(double *inputData, int inputLenght, int cutoffFrequency, bool cutoffFrequencyON, int medianWidth, bool medianON, double *outputData, int outputLength, int samplingRate, bool wave = true);
 	void ComputeResult();
 	void Recalculation();
 	//void Normalization();

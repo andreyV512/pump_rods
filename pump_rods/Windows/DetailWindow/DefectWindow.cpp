@@ -5,6 +5,7 @@
 #include "Compute\Compute.h"
 #include "App/AppBase.h"
 #include "DefectDlg.h"
+#include "MessageText\ListMess.hpp"
 
 namespace DefectMenu
 {
@@ -56,10 +57,23 @@ namespace DefectMenu
 	struct FrameWidthView: Defectoscope::FrameWidthViewDlg{};
 	MENU_ITEM(L"Ширина кадра", FrameWidthView)
 
+	struct GraphView{
+		static void Do(HWND h)
+		{			
+			DefectWindow &w = *(DefectWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+			FrameViewer &f = w.viewers.get<FrameViewer>();
+			f.isBarGraph ^= true;
+			w.ChangeFrame(w.offs);
+		}
+	};
+	MENU_ITEM(L"Вид графика", GraphView)
+
 	template<>struct TopMenu<Options>
 	{
 		typedef TL::MkTlst<
 			MenuItem<FrameWidthView>
+			, Separator<0>
+			, MenuItem<GraphView>
 		>::Result list;
 	};
 
@@ -78,9 +92,9 @@ bool DefectWindow::Def::Draw(TMouseMove &l, VGraphics &g)
 		int x;
 		CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 
-		int offs = int((double)x * currentOffset / DataItem::output_buffer_size);
+		owner->offs = int((double)x * currentOffset / DataItem::output_buffer_size);
 
-		owner->ChangeFrame(offs);
+		owner->ChangeFrame(owner->offs);
 	}
 	return true;
 }
@@ -162,7 +176,19 @@ void DefectWindow::ChangeFrame(int offsetDef)
 		, tbuf
 		, tbuf_size
 		, Singleton<L502ParametersTable>::Instance().items.get<DefectSig<ChannelSamplingRate>>().value
+		, frame.isBarGraph
 		);
+
+    if(frame.isBarGraph)
+	{
+		frame.tchart.minAxesY = 0;
+		frame.tchart.maxAxesY = 100;
+	}
+	else
+	{
+		frame.tchart.minAxesY = -100;
+		frame.tchart.maxAxesY = 100;
+	}
 
 	memmove(frame.buffer, &tbuf[offs_b], sizeof(frame.buffer));
 
