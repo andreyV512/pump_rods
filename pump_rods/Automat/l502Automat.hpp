@@ -61,23 +61,26 @@ template<class T, template<class>class W>struct l502Run<W<T>>
 	void Do()
 	{
 		l502.Start();
+		int err = 0;
+		unsigned countData = 0;
 		while(!terminate)
 		{
 			unsigned startChannel;
-			unsigned count = 0;
-			if(0 < l502.Read(startChannel, &inputData[currentOffset], count))
+			if(0 == (err = l502.Read(startChannel, &inputData[currentOffset], countData)))
 			{
-				currentOffset += count;
-				if(currentOffset > dimention_of(inputData))
+				currentOffset += countData;
+				if(currentOffset > dimention_of(inputData) - Device502::buffer_length)
 				{
 					status = buffer_overlapped;
 					terminate = true;
+					dprint("read ok %d\n", currentOffset);
 				}
 			}
 			else
 			{
 				status = l502_read_error;
 				terminate = true;
+				dprint("read stop %d\n", err);
 			}
 		}
 		l502.Stop();

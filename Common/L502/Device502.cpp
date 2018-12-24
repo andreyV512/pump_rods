@@ -61,19 +61,21 @@ bool Device502::SetupParams(int *f_channels, int *f_ch_ranges, int ADC_FREQ, int
     if (!err)
     {
         err = L502_SetAdcFreq((t_l502_hnd)hnd, &f_adc, &f_frame);
+		dprint("L502_SetAdcFreq frequency adc = %0.0f frequency chenell = %0.0f\n", f_adc, f_frame);
     }
 
     /* записываем настройки в модуль */
     if (!err)
-	{
-		dprint("frequency adc = %0.0f frequency chenell = %0.0f", f_adc, f_frame);
+	{		
         err = L502_Configure((t_l502_hnd)hnd, 0);
+		dprint("L502_Configure((t_l502_hnd)hnd, 0); %d\n", err);
 	}
 
     /* разрешаем синхронные потоки */
     if (!err)
     {
         err = L502_StreamsEnable((t_l502_hnd)hnd, L502_STREAM_ADC);
+		dprint("L502_StreamsEnable((t_l502_hnd)hnd, L502_STREAM_ADC) %d\n", err);
     }
 
     return 0 == err;
@@ -104,9 +106,9 @@ int Device502::Read(unsigned &startChennel, double *data, unsigned &count)
 	if(cnt > 0)
 	{
 		L502_GetNextExpectedLchNum((t_l502_hnd)hnd, &startChennel);
-		int err = L502_ProcessData((t_l502_hnd)hnd, rcv_buf, cnt, L502_PROC_FLAGS_VOLT,
-			data, &count, NULL, NULL);
-		if (err)
+		count = buffer_length;
+		int err = L502_ProcessData((t_l502_hnd)hnd, rcv_buf, cnt, L502_PROC_FLAGS_VOLT,data, &count, NULL, NULL);
+		if (err < 0)
 		{
 			dprint("error computing date: %s", L502_GetErrorString(err));
 		}
