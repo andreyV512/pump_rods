@@ -17,7 +17,7 @@ public:
 		obj = (TObj *)t;
 		SetColorBar = (Tptr)ptr;
 	}
-	double ValueY(int);
+	//double ValueY(int);
 };
 
 class BarSeriesDouble

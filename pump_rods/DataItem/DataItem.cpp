@@ -13,7 +13,7 @@ namespace DataItem
 		int i = 0;
 		for(; i < App::buffer_size / 2 - 55000; ++i)
 		{
-			data[i] = delta * i * rand() / RAND_MAX;
+			data[i] = (sin(0.01 * i)) * delta * i * rand() / RAND_MAX;
 		}
 
 		for(; i < App::buffer_size / 2 + 55000; ++i)
@@ -23,7 +23,8 @@ namespace DataItem
 
 		for(; i < App::buffer_size; ++i)
 		{
-			data[i] = delta * i;
+			//data[i] = delta * i;
+			data[i] = (sin(0.01 * i)) * delta * i;
 		}
 	}
 
