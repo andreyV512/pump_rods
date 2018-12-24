@@ -58,7 +58,7 @@ DWORD WINAPI EquipmentCheck__(PVOID)
 			//сбор данных
 			Log::Mess<LogMess::DataCollectionDEF>();
 			l502Run<DefectSig<DataItem::Buffer>> def(Singleton<DefectSig<DataItem::Buffer>>::Instance());
-			if(0 != (status502 = def()))
+			if(def.ok != (status502 = def()))
 			{
 				status = Status::alarm_l502;
 				break;
@@ -66,7 +66,6 @@ DWORD WINAPI EquipmentCheck__(PVOID)
 			////выход по кнопке ЦИКЛ, при превышении сбора 10 сек выход из цикла
 			EquipmentCheckDelay::Init();
 			AND_BITS(-1, Key<Status::stop>, Proc<EquipmentCheckDelay>);
-			//Sleep(10000);
 		}
 		OUT_BITS(Off<oDC_ON2>);
 		Sleep(200);
@@ -78,7 +77,7 @@ DWORD WINAPI EquipmentCheck__(PVOID)
 			//сбор данных
 			Log::Mess<LogMess::DataCollectionSTR>();
 			l502Run<StructSig<DataItem::Buffer>> str(structBuff);
-			if(0 != (status502 = str()))
+			if(str.ok != (status502 = str()))
 			{
 				status = Status::alarm_l502;
 				break;
