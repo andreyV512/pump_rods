@@ -94,7 +94,7 @@ bool DefectWindow::Def::Draw(TMouseMove &l, VGraphics &g)
 
 		owner->offs = int((double)x * currentOffset / DataItem::output_buffer_size);
 
-		owner->ChangeFrame(owner->offs);
+		owner->ChangeFrame(owner->offs);		
 	}
 	return true;
 }
@@ -136,7 +136,6 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	frame.cursor.SetMouseMoveHandler(&frame, &FrameViewer::DrawFrame); 
 	frame.koef = Singleton<KoeffSignTable>::Instance().items.get<DefectSig<KoeffSign>>().value;
 
-	ChangeFrame(def.currentX);
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
 	return 0;
 }
