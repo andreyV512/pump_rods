@@ -155,9 +155,9 @@ void StructWindow::ChangeFrame(int offsetDef)
 	int frameWidth = 4 * frame.count;
 	if(offs < 0)
 	{
-		offs = 0;
-		offs_b = 0;
+		offs_b = offs_b + int((double)offs/(offs_b * frame.delta) * offs_b);
 		frameWidth = frame.count;
+		offs = int(offs_b * frame.delta);
 	}
 	else if(offs + frame.count > item.currentOffset)
 	{
