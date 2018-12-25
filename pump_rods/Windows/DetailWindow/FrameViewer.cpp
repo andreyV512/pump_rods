@@ -96,12 +96,12 @@ bool FrameViewer::DrawFrame(TMouseMove &l, VGraphics &g)
 	int x;
 	CoordCell(chart, l.x, x, dimention_of(buffer));
 	double delta = (tchart.maxAxesX - tchart.minAxesX) / dimention_of(buffer);
-	wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s %d %d"// %s"
+	wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s"// %d %d"// %s"
 		, int(delta * x + tchart.minAxesX)
 		, Wchar_from<double, 2>(buffer[x])()
 		//	, Mess(buffer[x], x)
-		, x
-		, int(delta * x)
+		//, x
+		//, int(delta * x)
 		);
 	label.Draw(g());
 	return true;

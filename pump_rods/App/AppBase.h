@@ -211,8 +211,8 @@ DEFINE_PARAM_ID(KoeffSignTable	   , int, 1)
  };
 
 struct ViewerCount;
-DEFINE_PARAM_WAPPER(DefectSig, ViewerCount, int, 30000)
-DEFINE_PARAM_WAPPER(StructSig, ViewerCount, int, 30000)
+DEFINE_PARAM_WAPPER(DefectSig, ViewerCount, int, 3000)
+DEFINE_PARAM_WAPPER(StructSig, ViewerCount, int, 3000)
 
  struct ViewerCountTable
  {
