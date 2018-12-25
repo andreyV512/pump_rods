@@ -56,10 +56,23 @@ namespace StructMenu
 	struct FrameWidthView: Structure::FrameWidthViewDlg{};
 	MENU_ITEM(L"Ширина кадра", FrameWidthView)
 
+	struct GraphView{
+		static void Do(HWND h)
+		{			
+			StructWindow &w = *(StructWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+			FrameViewer &f = w.viewers.get<FrameViewer>();
+			f.isBarGraph ^= true;
+			w.ChangeFrame(w.offs);
+		}
+	};
+	MENU_ITEM(L"Вид графика", GraphView)
+
 	template<>struct TopMenu<Options>
 	{
 		typedef TL::MkTlst<
 			MenuItem<FrameWidthView>
+			, Separator<0>
+			, MenuItem<GraphView>
 		>::Result list;
 	};
 
@@ -122,7 +135,6 @@ LRESULT StructWindow::operator()(TCreate &m)
 	frame.cursor.SetMouseMoveHandler(&frame, &FrameViewer::DrawFrame); 
 	frame.koef = Singleton<KoeffSignTable>::Instance().items.get<StructSig<KoeffSign>>().value;
 
-	ChangeFrame(str.currentX);
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
 	return 0;
 }
@@ -163,6 +175,17 @@ void StructWindow::ChangeFrame(int offsetDef)
 		, tbuf_size
 		, Singleton<L502ParametersTable>::Instance().items.get<StructSig<ChannelSamplingRate>>().value
 		);
+
+    if(frame.isBarGraph)
+	{
+		frame.tchart.minAxesY = 0;
+		frame.tchart.maxAxesY = 100;
+	}
+	else
+	{
+		frame.tchart.minAxesY = -100;
+		frame.tchart.maxAxesY = 100;
+	}
 
 	memmove(frame.buffer, &tbuf[offs_b], sizeof(frame.buffer));
 

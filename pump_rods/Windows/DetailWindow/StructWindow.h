@@ -22,6 +22,7 @@ public:
 	>::Result viewers_list;
 	TL::Factory<viewers_list> viewers;
 	HWND hWnd;
+	int offs;
 	LRESULT operator()(TCreate &);
 	void operator()(TDestroy &);
 	void operator()(TSize &);
