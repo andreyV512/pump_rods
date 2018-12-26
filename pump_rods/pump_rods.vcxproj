@@ -215,6 +215,7 @@
     <ClCompile Include="DLG\KoefDlg.cpp" />
     <ClCompile Include="DLG\MedianFilterDlg.cpp" />
     <ClCompile Include="DLG\MessageDlg.cpp" />
+    <ClCompile Include="DLG\StoredData.cpp" />
     <ClCompile Include="DLG\TestIOPorts.cpp" />
     <ClCompile Include="DLG\TypeSizeDlg.cpp" />
     <ClCompile Include="Windows\DetailWindow\DefectDlg.cpp" />

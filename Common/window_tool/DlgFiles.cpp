@@ -11,7 +11,7 @@ SaveData::SaveData(HWND h, wchar_t *title)
 	ofn.nMaxFile = dimention_of(sFile);
 	ofn.nFilterIndex = 1;
 	ofn.Flags = OFN_OVERWRITEPROMPT | OFN_NOCHANGEDIR | OFN_NONETWORKBUTTON;
-	ofn.lpstrFilter = L"*.bz2\0*.bz2\0.dat\0*.dat\0*.*\0*.*\0";
+	ofn.lpstrFilter = L"*.bz2\0*.bz2\0*.dat\0*.dat\0*.*\0*.*\0";
 	if(NULL != title)ofn.lpstrTitle = title;
 	ofn.lpstrDefExt = L"dat";
 }

@@ -9,8 +9,8 @@ namespace MainWindowMenu
 	struct MainFile{};
 	MENU_TEXT(L"Файл", TopMenu<MainFile>)
 	//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-	struct LoadDateFile {static void Do(HWND h){zprint("");}};
-	struct SaveDateFile {static void Do(HWND h){zprint("");}};
+	struct LoadDateFile : LoadDlg{};//{static void Do(HWND h){zprint("");}};
+	struct SaveDateFile : StoreDlg{};//{static void Do(HWND h){zprint("");}};
 	struct Compute_     {static void Do(HWND h){Compute::Recalculation();}};
 
 	struct MainExit

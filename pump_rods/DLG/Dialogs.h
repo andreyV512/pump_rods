@@ -34,5 +34,7 @@ DLG(TestIOPorts)
 DLG(AboutWindowDlg)
 DLG(KoefDlg)
 DLG(MessageDlg)
+DLG(StoreDlg)
+DLG(LoadDlg)
 
 #undef DLG

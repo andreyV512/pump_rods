@@ -529,6 +529,9 @@
     <ClCompile Include="Automat\EquipmentCheck.cpp">
       <Filter>pump_rods\Automat</Filter>
     </ClCompile>
+    <ClCompile Include="DLG\StoredData.cpp">
+      <Filter>pump_rods\DLG</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\Common\Resource\Resource.rc">
