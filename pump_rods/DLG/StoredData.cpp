@@ -35,13 +35,13 @@ namespace Store
 		fread(&def.deathZoneSecond, sizeof(def.deathZoneSecond), 1, f);
 		fread(&def.threshSortDown , sizeof(def.threshSortDown), 1, f);
 		fread(&def.threshDefect   , sizeof(def.threshDefect), 1, f);
-		 
+
 		fread(&str.currentOffset  , sizeof(str.currentOffset), 1, f);
 		fread(&str.deathZoneFirst , sizeof(str.deathZoneFirst), 1, f);
 		fread(&str.deathZoneSecond, sizeof(str.deathZoneSecond), 1, f);
 		fread(&str.threshSortDown , sizeof(str.threshSortDown), 1, f);
 		fread(&str.threshDefect   , sizeof(str.threshDefect), 1, f);
-		
+
 		fread(&def.inputData   , sizeof(double), def.currentOffset, f);
 		fread(&str.inputData   , sizeof(double), str.currentOffset, f);
 	}
@@ -78,16 +78,17 @@ void LoadDlg::Do(HWND h)
 	if(o())
 	{
 		FILE *f = _wfopen(o.sFile, L"rb");
+		bool b = false;
 		if(f)
 		{
-			bool b = true;
+			b = true;
 			int magic;
 			fread(&magic, sizeof(magic), 1, f);
 			if(Store::magic_number == (magic & 0xffff0000))
 			{
 				DefectSig<DataItem::Buffer> &def = Singleton<DefectSig<DataItem::Buffer>>::Instance();
 				StructSig<DataItem::Buffer> &str = Singleton<StructSig<DataItem::Buffer>>::Instance();
-				
+
 				switch(magic & 0xffff)
 				{
 				case 1: Store::LoadData_0001(f, def, str);break;
@@ -102,11 +103,16 @@ void LoadDlg::Do(HWND h)
 					App::TopLabel(buf);
 				}
 			}
-			if(b)
+			else
 			{
-				MessageBox(h, L"Файл не загружен", L"Ошибка!!!", MB_ICONEXCLAMATION);
+				b = false;
 			}
+
 			fclose(f);
+		}
+		if(!b)
+		{
+			MessageBox(h, L"Файл не загружен", L"Ошибка!!!", MB_ICONEXCLAMATION);
 		}
 	}
 }
