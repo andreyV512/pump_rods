@@ -38,7 +38,7 @@ Param(oC1     , L"Сигнал (С1)")
 Param(oC2 	  , L"Сигнал (С2)")
 #undef Param
 
-typedef Dialog::Templ<ParametersBase, InputBitTable, InputBitTable::items_list, 300> TInputBitDlg;
+typedef Dialog::Templ<ParametersBase, InputBitTable, InputBitTable::items_list, 350> TInputBitDlg;
 template<class P>struct __data_from_widget__<Dialog::DlgItem2<P, TInputBitDlg>, unsigned>
 {
     unsigned operator()(Dialog::DlgItem2<P, TInputBitDlg> &o)
@@ -83,9 +83,8 @@ PARAM_TITLE(NamePlate1730, L"Дескриптор")
 
 void DiscriptorBitDlg::Do(HWND h)
 {
-	if(Dialog::Templ<ParametersBase, NamePlate1730ParametersTable>(
-		Singleton<NamePlate1730ParametersTable>::Instance()
-		).Do(h, L"Дескриптор платы"))
+	if(Dialog::Templ<ParametersBase, NamePlate1730ParametersTable
+	>(Singleton<NamePlate1730ParametersTable>::Instance()).Do(h, L"Дескриптор платы"))
 	{
 	}
 }

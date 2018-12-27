@@ -66,7 +66,7 @@ LRESULT MainWindow::operator()(TCreate &m)
 	
 	CreateChildWindow(m.hwnd, &topLabelViewer);
 	topLabelViewer.label.fontHeight = 24;
-	topLabelViewer.label = L"<ff>Test <ff00>string";
+	//topLabelViewer.label = L"<ff>Test <ff00>string";
 	//
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);
 	return 0;
