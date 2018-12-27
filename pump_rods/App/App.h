@@ -6,6 +6,9 @@
 template<class T>struct DefectSig; 
 template<class T>struct StructSig; 
 
+template<class>struct On{};
+template<class>struct Off{};
+
 namespace DataItem
 {
 	struct Buffer;

@@ -1,4 +1,7 @@
 ﻿#pragma once
+#include "templates\typelist.hpp"
+#include "App\App.h"
+#include "App\AppBase.h"
 
 template<int N>struct IDtoMess;
 
@@ -63,23 +66,86 @@ namespace LogMess
 	MESS(outputsDC_ON2, bool, "вход \"DC_ON2\"", red, yellow)	
 	MESS(outputsDC_ON1, bool, "вход \"DC_ON1\"", red, yellow)
 
-	MESS(WaitingForControlCircuitActivation, void, "проверка сигнала \"ЦЕПИ УПРАВЛЕНИЯ\"", blue, white)
-	MESS(WaitingForTheCycleSignal, void, "ожидание сигнала \"ЦИКЛ\"", blue, white)
-	MESS(WaitingForTheCortSignal, void, "ожидание сигнала \"СОРТ\"", blue, white)
-	MESS(WaitingForTheCortP1P2SignalToTurnOff, void, "ожидание отключения сигналов \"СОРТ\"\"П1\"\"П2\"", blue, white)
-	MESS(WaitingForTheControlSignal, void, "ожидание сигнала \"КОНТРОЛЬ\"", blue, white)
-	MESS(WaitingForTheP1Signal, void, "ожидание сигнала \"П1\"", blue, white)
-	MESS(WaitingForTheP1SignalTurnOff, void, "ожидание отключения сигнала \"П1\"", blue, white)
+//	MESS(WaitingForControlCircuitActivation, void, "проверка сигнала \"ЦЕПИ УПРАВЛЕНИЯ\"", blue, white)
+////	MESS(WaitingForTheCycleSignal, void, "ожидание сигнала \"ЦИКЛ\"", blue, white)
+//	MESS(WaitingForTheCortSignal, void, "ожидание сигнала \"СОРТ\"", blue, white)
+//	MESS(WaitingForTheCortP1P2SignalToTurnOff, void, "ожидание отключения сигналов \"СОРТ\"\"П1\"\"П2\"", blue, white)
+	//MESS(WaitingForTheControlSignal, void, "ожидание сигнала \"КОНТРОЛЬ\"", blue, white)
+//	MESS(WaitingForTheP1Signal, void, "ожидание сигнала \"П1\"", blue, white)
+	//MESS(WaitingForTheP1SignalTurnOff, void, "ожидание отключения сигнала \"П1\"", blue, white)
 	MESS(DataCollectionDEF, void, "сбор данных \"ДЕФЕКТОСКОП\"", blue, white)
 
-	MESS(WaitingForTheP2Signal, void, "ожидание сигнала \"П2\"", blue, white)
-	MESS(WaitingForTheP2SignalTurnOff, void, "ожидание отключения сигнала \"П2\"", blue, white)
+//	MESS(WaitingForTheP2Signal, void, "ожидание сигнала \"П2\"", blue, white)
+//	MESS(WaitingForTheP2SignalTurnOff, void, "ожидание отключения сигнала \"П2\"", blue, white)
 	MESS(DataCollectionSTR, void, "сбор данных \"СТРУКТУРА\"", blue, white)
 
 	MESS(Alarm502, int, "Ошибка платы L502  ", red  , yellow)
 
 	MESS(DataCollectionCompleted, void, "Цикл сбора данных закончен", green, white)
 
+	template<class T>struct Bits;
+	//{
+	//	static const int ID = 99;//__COUNTER__;
+	//	typedef int type;
+	//	static const char *mess(){return L"xx";}
+	//};
+	//template<class T>struct IDtoMess<Bits<T>::ID>
+	//{
+	//		typedef typename Bits<T> Result;
+	//};
+	template<>struct Bits<NullType>{};
+	//template<class On>struct Bits<On, NullType>{};
+	//template<class Off>struct Bits<NullType, Off>{};
+	/*
+	#define MESS1(name, tpe, txt, bc, tc)struct name\
+{\
+	static const int ID = __COUNTER__;\
+	typedef tpe type;\
+	static const unsigned backColor = bc;\
+    static const unsigned textColor = tc;\
+	static const char *mess(){return _cat(txt, __##tpe##_1);}\
+};\
+template<>struct IDtoMess<name::ID>{typedef name Result;};
+	*/
+//	template<>struct Bits<Tlst<Tlst<On<iСU>, Tlst<On<iCycle>, NullType>>, Tlst<Off<iP2>, /N/ullType>>>
+//	{
+//		static const int ID = __COUNTER__;
+//		typedef int type;
+//		static const unsigned backColor = white;
+//		static const unsigned textColor = white;
+//		static const char *mess(){return "";}
+//	};
+//	
+//	template<>struct IDtoMess<Bits<Tlst<Tlst<On<iСU>, Tlst<On<iCycle>, NullType>>, /T/lst<Off<iP2>, NullType>>>::ID>
+//	{
+//			typedef Bits<Tlst<Tlst<On<iСU>, Tlst<On<iCycle>, NullType>>, Tlst<Off<iP2>, /N/ullType>>> Result;
+//	};
+
+#define BITS_ON(txt, ...)template<>struct Bits<TL::MkTlst<__VA_ARGS__>::Result>\
+	{\
+		static const int ID = __COUNTER__;\
+		typedef int type;\
+		static const unsigned backColor = white;\
+		static const unsigned textColor = white;\
+		static const char *mess(){return txt;}\
+	};\
+	template<>struct IDtoMess<Bits<TL::MkTlst<__VA_ARGS__>::Result>::ID>\
+	{\
+		typedef Bits<TL::MkTlst<__VA_ARGS__>::Result> Result;\
+	};
+
+	BITS_ON("<ff>Ожидание сигнала \"ЦЕПИ УПРАВЛЕНИЯ\"", On<iСU>)
+	BITS_ON("<ff>Ожидание сигнала \"ЦИКЛ\"", On<iCycle>)
+	BITS_ON("<ff>Ожидание сигнала \"СОРТ\"", On<iCOPT>)
+	BITS_ON("<ff>Ожидание сигнала \"КОНТРОЛЬ\"", On<iControl>)
+	BITS_ON("<ff>Ожидание сигналов: \"КОНТРОЛЬ\",\"П1\"",  On<iControl>, On<iP1>)
+	BITS_ON("<ff>Ожидание сигналов: \"КОНТРОЛЬ\",\"П2\"",  On<iControl>, On<iP2>)
+
+	BITS_ON("<ff>Ожидание отключения сигналов: \"СОРТ\",\"П1\",\"П2\"", Off<iCOPT>, Off<iP1>, Off<iP2>)
+	BITS_ON("<ff>Ожидание отключения сигнала \"П1\"", Off<iP1>)
+	BITS_ON("<ff>Ожидание отключения сигнала \"П2\"", Off<iP2>)
+	BITS_ON("<ff>Ожидание отключения сигнала \"КОНТРОЛЬ\"", Off<iControl>)
+#undef BITS_ON
 static const int MAX_MESS_ID = __COUNTER__;
 
 	class FactoryMessages

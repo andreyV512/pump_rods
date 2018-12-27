@@ -82,15 +82,15 @@ namespace Automat
 				//сообщение СТАРТ ЦИКЛА
 				Log::Mess<LogMess::StartCycle>();
 				//проверка сигнала ЦЕПИ УПРАВЛЕНИЯ
-				Log::Mess<LogMess::WaitingForControlCircuitActivation>();
+//				Log::Mess<LogMess::WaitingForControlCircuitActivation>();
 				AND_BITS(3000, Key<Status::stop>, On<iСU>);	
 				//ожидание сигнала ЦИКЛ, проверка ЦЕПИ УПРАВЛЕНИЯ, выход из цикла по кнопке СТОП
-				Log::Mess<LogMess::WaitingForTheCycleSignal>();
+		//		Log::Mess<LogMess::WaitingForTheCycleSignal>();
 				AND_BITS(-1,  Key<Status::stop>, On<iCycle>, Test<On<iСU>>);	
 				//выставил выходной сигнал РАБОТА
 				OUT_BITS(On<oWork>);
 				//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				Log::Mess<LogMess::WaitingForTheCortSignal>();
+		//		Log::Mess<LogMess::WaitingForTheCortSignal>();
 				AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iСU>, On<iCycle>>);
 				//чтение дискретного рорта
 				unsigned bits = device1730.Read();
@@ -113,13 +113,13 @@ namespace Automat
 				//ВЫСТАВЛЕН СИГНАЛ ПУСК
 				OUT_BITS(On<oStart>);
 				//ожидание выключения сигналов СОРТ, П1, П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				Log::Mess<LogMess::WaitingForTheCortP1P2SignalToTurnOff>();
+	//			Log::Mess<LogMess::WaitingForTheCortP1P2SignalToTurnOff>();
 				AND_BITS(-1, Key<Status::stop>, Off<iCOPT>, Off<iP1>, Off<iP2>,Test<On<iСU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				Log::Mess<LogMess::WaitingForTheControlSignal>();
+		//		Log::Mess<LogMess::WaitingForTheControlSignal>();
 				AND_BITS(-1, Key<Status::stop>, On<iControl>,Test<On<iСU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ и П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				Log::Mess<LogMess::WaitingForTheP1Signal>();
+		//		Log::Mess<LogMess::WaitingForTheP1Signal>();
 				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iСU>, On<iCycle>>);
 				//выставлен сигнал DC_ON2
 				OUT_BITS(On<oDC_ON2>);
@@ -134,7 +134,7 @@ namespace Automat
 					}
 					//ожидание выключения сигнала П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке ЦИКЛ
 					//, при превышении сбора 120 сек выход из цикла
-					Log::Mess<LogMess::WaitingForTheP1SignalTurnOff>();
+		//			Log::Mess<LogMess::WaitingForTheP1SignalTurnOff>();
 					AND_BITS(120000, Key<Status::stop>, Off<iP1>,Test<On<iСU>, On<iCycle>>);
 				}
 				//отключение сигнала DC_ON2
@@ -146,7 +146,7 @@ namespace Automat
 				//убеждаемся что сигнал  отключён
 				TEST_OUTPUT_BITS(Off<oDC_ON1>, Off<oDC_ON2>);
 				//ожидание включения сигнала КОНТРОЛЬ и П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				Log::Mess<LogMess::WaitingForTheP2Signal>();
+	//			Log::Mess<LogMess::WaitingForTheP2Signal>();
 				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP2>,Test<On<iСU>, On<iCycle>>);
 				//включение сигнала AC_ON
 				StructSig<DataItem::Buffer> &structBuff = Singleton<StructSig<DataItem::Buffer>>::Instance();
@@ -162,7 +162,7 @@ namespace Automat
 					}
 					//ожидание выключения сигнала П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке ЦИКЛ
 					//, при превышении сбора 120 сек выход из цикла
-					Log::Mess<LogMess::WaitingForTheP2SignalTurnOff>();
+			//		Log::Mess<LogMess::WaitingForTheP2SignalTurnOff>();
 					AND_BITS(120000, Key<Status::stop>, Off<iP2>,Test<On<iСU>, On<iCycle>>);
 				}
 				OUT_BITS(Off<oAC_ON>, Off<oStart>);	
