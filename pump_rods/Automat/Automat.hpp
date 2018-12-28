@@ -349,34 +349,64 @@ namespace Automat
 		}
 	};
 
-	template<class A, class B>struct MessBits
+	template<class List>struct __mess_bits__;
+	template<class Head, class Tail>struct __mess_bits__<Tlst<Head, Tail>>
+	{
+		typedef typename __mess_bits__<Tail>::Result Result;
+	};
+	template<class Head, class Tail>struct __mess_bits__<Tlst<On<Head>, Tail>>
+	{
+		typedef Tlst<On<Head>, typename __mess_bits__<Tail>::Result> Result;
+	};
+	template<class Head, class Tail>struct __mess_bits__<Tlst<Off<Head>, Tail>>
+	{
+		typedef Tlst<Off<Head>, typename __mess_bits__<Tail>::Result> Result;
+	};
+	template<>struct __mess_bits__<NullType>
+	{
+		typedef NullType Result;
+	};
+
+	template<class List>struct MessBits
 	{
 		void operator()(){
-			typedef TL::ListToWapperList<A, On>::Result on_list;
-			typedef TL::ListToWapperList<B, Off>::Result off_list;
-			Log::Mess<LogMess::Bits<typename TL::MultyListToList<typename TL::MkTlst<on_list, off_list>::Result>::Result>(); 
+			Log::Mess<LogMess::Bits<List>>(); 
 		}
 	};
-	template<class A>struct MessBits<A, NullType>
-	{
-		void operator()()
-		{
-			typedef TL::ListToWapperList<A, On>::Result on_list;
-			Log::Mess<LogMess::Bits<on_list>>();
-		}
-	};
-	template<class B>struct MessBits<NullType, B>
-	{
-		void operator()()
-		{
-			typedef TL::ListToWapperList<B, Off>::Result off_list;
-			Log::Mess<LogMess::Bits<off_list>>(); 
-		}
-	};
-	template<>struct MessBits<NullType, NullType>
+
+	template<>struct MessBits<NullType>
 	{
 		void operator()(){}
 	};
+
+	//template<class A, class B>struct MessBits
+	//{
+	//	void operator()(){
+	//		typedef TL::ListToWapperList<A, On>::Result on_list;
+	//		typedef TL::ListToWapperList<B, Off>::Result off_list;
+	//		Log::Mess<LogMess::Bits<typename TL::MultyListToList<typename TL::MkTlst<on_list, off_list>::Result>::Result>(); 
+	//	}
+	//};
+	//template<class A>struct MessBits<A, NullType>
+	//{
+	//	void operator()()
+	//	{
+	//		typedef TL::ListToWapperList<A, On>::Result on_list;
+	//		Log::Mess<LogMess::Bits<on_list>>();
+	//	}
+	//};
+	//template<class B>struct MessBits<NullType, B>
+	//{
+	//	void operator()()
+	//	{
+	//		typedef TL::ListToWapperList<B, Off>::Result off_list;
+	//		Log::Mess<LogMess::Bits<off_list>>(); 
+	//	}
+	//};
+	//template<>struct MessBits<NullType, NullType>
+	//{
+	//	void operator()(){}
+	//};
 
 	template<unsigned DELAY, class List>struct AND_Bits
 	{
@@ -396,7 +426,8 @@ namespace Automat
 
 			typedef typename FiltKey<List, Key>::Result list_key;
 
-			MessBits<list_on, list_off>()(); 
+			//MessBits<list_on, list_off>()(); 
+			MessBits<typename __mess_bits__<List>::Result>()();
 
 			while(true)
 			{
@@ -488,6 +519,7 @@ namespace Automat
 			res |= bitOn;
 
 			device1730.Write(res);
+			MessBits<typename __mess_bits__<List>::Result>()();
 		}
 	};
 

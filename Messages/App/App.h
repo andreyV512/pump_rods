@@ -1,5 +1,8 @@
 #pragma once 
 
+template<class>struct On{};
+template<class>struct Off{};
+
 class App
 {
 public:
