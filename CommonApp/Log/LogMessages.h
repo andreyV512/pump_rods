@@ -39,6 +39,8 @@ template<>struct IDtoMess<name::ID>{typedef name Result;};
 	static const int white = 0xffffff;
 	static const int red = 0xff;
 	static const int yellow = 0xffff;
+	static const int sea = 0xe3d299;
+	static const int pink = 0xCBC0FF;
 namespace LogMess
 {
 	///\brief сопоставление числу сообщениея
@@ -121,11 +123,11 @@ template<>struct IDtoMess<name::ID>{typedef name Result;};
 //			typedef Bits<Tlst<Tlst<On<iСU>, Tlst<On<iCycle>, NullType>>, Tlst<Off<iP2>, /N/ullType>>> Result;
 //	};
 
-#define BITS_XX(txt, ...)template<>struct Bits<TL::MkTlst<__VA_ARGS__>::Result>\
+#define BITS_XX(color, txt, ...)template<>struct Bits<TL::MkTlst<__VA_ARGS__>::Result>\
 	{\
 		static const int ID = __COUNTER__;\
 		typedef int type;\
-		static const unsigned backColor = 0xe3d299;\
+		static const unsigned backColor = color;\
 		static const unsigned textColor = black;\
 		static const char *mess(){zprint(" mess\n");return txt;}\
 	};\
@@ -134,34 +136,34 @@ template<>struct IDtoMess<name::ID>{typedef name Result;};
 		typedef Bits<TL::MkTlst<__VA_ARGS__>::Result> Result;\
 	};
 
-	BITS_XX("Ожидание сигнала \"ЦЕПИ УПРАВЛЕНИЯ\"", On<iСU>)
-	BITS_XX("Ожидание сигнала \"ЦИКЛ\"", On<iCycle>)
-	BITS_XX("Ожидание сигнала \"СОРТ\"", On<iCOPT>)
-	BITS_XX("Ожидание сигнала \"КОНТРОЛЬ\"", On<iControl>)
-	BITS_XX("Ожидание сигналов: \"КОНТРОЛЬ\",\"П1\"",  On<iControl>, On<iP1>)
-	BITS_XX("Ожидание сигналов: \"КОНТРОЛЬ\",\"П2\"",  On<iControl>, On<iP2>)
-	BITS_XX("Ожидание отключения сигналов: \"СОРТ\",\"П1\",\"П2\"", Off<iCOPT>, Off<iP1>, Off<iP2>)
-	BITS_XX("Ожидание отключения сигнала \"П1\"", Off<iP1>)
-	BITS_XX("Ожидание отключения сигнала \"П2\"", Off<iP2>)
-	BITS_XX("Ожидание отключения сигнала \"КОНТРОЛЬ\"", Off<iControl>)
+	BITS_XX(sea, "Ожидание сигнала \"ЦЕПИ УПРАВЛЕНИЯ\"", On<iСU>)
+	BITS_XX(sea, "Ожидание сигнала \"ЦИКЛ\"", On<iCycle>)
+	BITS_XX(sea, "Ожидание сигнала \"СОРТ\"", On<iCOPT>)
+	BITS_XX(sea, "Ожидание сигнала \"КОНТРОЛЬ\"", On<iControl>)
+	BITS_XX(sea, "Ожидание сигналов: \"КОНТРОЛЬ\",\"П1\"",  On<iControl>, On<iP1>)
+	BITS_XX(sea, "Ожидание сигналов: \"КОНТРОЛЬ\",\"П2\"",  On<iControl>, On<iP2>)
+	BITS_XX(sea, "Ожидание отключения сигналов: \"СОРТ\",\"П1\",\"П2\"", Off<iCOPT>, Off<iP1>, Off<iP2>)
+	BITS_XX(sea, "Ожидание отключения сигнала \"П1\"", Off<iP1>)
+	BITS_XX(sea, "Ожидание отключения сигнала \"П2\"", Off<iP2>)
+	BITS_XX(sea, "Ожидание отключения сигнала \"КОНТРОЛЬ\"", Off<iControl>)
 
-	BITS_XX("Выставлен сигнал \"РАБОТА\"", On<oWork>)
-	BITS_XX("Выставлен сигнал \"DC ON1\"", On<oDC_ON1>)
-	BITS_XX("Выставлен сигнал \"DC ON2\"", On<oDC_ON2>)
-	BITS_XX("Снят сигнал \"DC ON2\"", Off<oDC_ON2>)
-	BITS_XX("Снят сигнал \"DC ON1\"", Off<oDC_ON1>)
-
-	BITS_XX("Выставлен сигнал \"AC ON\"", On<oAC_ON>)
-	BITS_XX("Снят сигнал \"AC ON\"", Off<oAC_ON>)
-
-	BITS_XX("Выставлен сигнал \"Start\"", On<oStart>)
-
-	BITS_XX("Сняты сигналы \"AC ON\"\"Start\"", Off<oAC_ON>, Off<oStart>)
-	BITS_XX("Сняты сигналы \"C1\"\"oC2\"", Off<oC1>, Off<oC2>)
-
-	BITS_XX("Выставлен сигнал \"C1\"", On<oC1>)
-	BITS_XX("Выставлен сигнал \"C2\"", On<oC2>)
-	BITS_XX("Выставлен сигнал \"ПЕРЕКЛАДКА\"", On<oToShift>)
+	BITS_XX(pink, "Выставлен сигнал \"РАБОТА\"", On<oWork>)
+	BITS_XX(pink, "Выставлен сигнал \"DC ON1\"", On<oDC_ON1>)
+	BITS_XX(pink, "Выставлен сигнал \"DC ON2\"", On<oDC_ON2>)
+	BITS_XX(pink, "Снят сигнал \"DC ON2\"", Off<oDC_ON2>)
+	BITS_XX(pink, "Снят сигнал \"DC ON1\"", Off<oDC_ON1>)
+			 
+	BITS_XX(pink, "Выставлен сигнал \"AC ON\"", On<oAC_ON>)
+	BITS_XX(pink, "Снят сигнал \"AC ON\"", Off<oAC_ON>)
+			
+	BITS_XX(pink, "Выставлен сигнал \"Start\"", On<oStart>)
+			
+	BITS_XX(pink, "Сняты сигналы \"AC ON\"\"Start\"", Off<oAC_ON>, Off<oStart>)
+	BITS_XX(pink, "Сняты сигналы \"C1\"\"oC2\"", Off<oC1>, Off<oC2>)
+			
+	BITS_XX(pink, "Выставлен сигнал \"C1\"", On<oC1>)
+	BITS_XX(pink, "Выставлен сигнал \"C2\"", On<oC2>)
+	BITS_XX(pink, "Выставлен сигнал \"ПЕРЕКЛАДКА\"", On<oToShift>)
 #undef BITS_XX
 
 
