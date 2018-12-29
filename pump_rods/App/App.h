@@ -31,6 +31,7 @@ namespace App
 
 	bool DataCollectionDefectoscope();
 	bool DataCollectionStructure();
+	bool &IsRun();
 }
 
 extern Device1730 device1730;

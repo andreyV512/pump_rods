@@ -43,12 +43,14 @@ DWORD WINAPI EquipmentCheck__(PVOID)
 	AppKeyHandler::Run();
 	device1730.Write(0);
 	GUARD{
+		App::IsRun() = false;
 		device1730.Write(0);
 		AppKeyHandler::Stop();
 		l502.Stop();
 	};
 	//очистить главное окно
 	App::CleanViewers();
+	App::IsRun() = true;
 	do
 	{
 		OUT_BITS(On<oDC_ON1>);

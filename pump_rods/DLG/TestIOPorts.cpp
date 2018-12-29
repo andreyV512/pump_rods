@@ -203,6 +203,7 @@ private:
 	int idTimer;
 public:
 	HWND hWnd;
+	bool lastIsRun;
 	TL::Factory<list_input0> items_input0;
 	TL::Factory<list_output0> items_output0;
 	TestIOWindow();
@@ -220,6 +221,7 @@ LRESULT TestIOWindow::operator()(TCreate &l)
 {
 	lastBitsInput  = ~device1730.Read();
 	lastBitsOutput = ~device1730.ReadOutput();
+	lastIsRun = !App::IsRun();
 
 	int width = 280;
 	int height = 15;
@@ -251,22 +253,29 @@ void TestIOWindow::operator()(TCommand &l)
 	EventDo(l);
 }
 
+namespace
+{
+	template<class O, class P>struct __enable__
+	{
+		void operator()(O &o, P &p)
+		{
+			EnableWindow(o.hWnd, p);
+		}
+	};
+}
 
 void TestIOWindow::operator()(TTimer &)
 {
+	bool isRun = App::IsRun();
+	if(lastIsRun != isRun)
+	{
+		TL::foreach<TestIOWindow::list_output0, __enable__>()(items_output0, lastIsRun);
+		lastIsRun = isRun;
+	}
 	unsigned test_testIOWindow = device1730.Read();
 	TestIOPortsN::__data_io__<TL::Factory<list_input0>> idata(items_input0, test_testIOWindow ^ lastBitsInput, test_testIOWindow);
 	TL::find<InputBitTable::items_list, TestIOPortsN::__i__>()(Singleton<InputBitTable>::Instance().items, idata);
 	lastBitsInput = test_testIOWindow;  
-	//testunsigned t = device1730.Read();
-	//testif(t & (1 << 15))
-	//test{
-	//test	device1730.WriteOutput(0xaa);
-	//test}
-	//testelse
-	//test{
-	//test	device1730.WriteOutput(0, 0xaa);
-	//test}
 	test_testIOWindow = device1730.ReadOutput();
 	TestIOPortsN::__data_io__<TL::Factory<list_output0>> odata(items_output0, test_testIOWindow ^ lastBitsOutput, test_testIOWindow);
 	TL::find<OutputBitTable::items_list, TestIOPortsN::__o__>()(Singleton<OutputBitTable>::Instance().items, odata);
@@ -303,17 +312,6 @@ void TestIOPorts::Do(HWND)
 
 		SetWindowPos(h, HWND_TOPMOST, 0, 0, 0, 0, SWP_NOMOVE | SWP_NOSIZE);
 	}
-}
-
-namespace
-{
-	template<class O, class P>struct __enable__
-	{
-		void operator()(O &o, P &p)
-		{
-			EnableWindow(o.hWnd, p);
-		}
-	};
 }
 
 void TestIOPortWindowEnable(bool b)

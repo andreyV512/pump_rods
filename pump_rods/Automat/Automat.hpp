@@ -379,35 +379,6 @@ namespace Automat
 		void operator()(){}
 	};
 
-	//template<class A, class B>struct MessBits
-	//{
-	//	void operator()(){
-	//		typedef TL::ListToWapperList<A, On>::Result on_list;
-	//		typedef TL::ListToWapperList<B, Off>::Result off_list;
-	//		Log::Mess<LogMess::Bits<typename TL::MultyListToList<typename TL::MkTlst<on_list, off_list>::Result>::Result>(); 
-	//	}
-	//};
-	//template<class A>struct MessBits<A, NullType>
-	//{
-	//	void operator()()
-	//	{
-	//		typedef TL::ListToWapperList<A, On>::Result on_list;
-	//		Log::Mess<LogMess::Bits<on_list>>();
-	//	}
-	//};
-	//template<class B>struct MessBits<NullType, B>
-	//{
-	//	void operator()()
-	//	{
-	//		typedef TL::ListToWapperList<B, Off>::Result off_list;
-	//		Log::Mess<LogMess::Bits<off_list>>(); 
-	//	}
-	//};
-	//template<>struct MessBits<NullType, NullType>
-	//{
-	//	void operator()(){}
-	//};
-
 	template<unsigned DELAY, class List>struct AND_Bits
 	{
 		template<class Result>unsigned operator()(Result &result)

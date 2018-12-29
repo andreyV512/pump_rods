@@ -14,6 +14,7 @@
 
 namespace App
 {
+	bool is_run = false;
 	template<class O, class P>struct _test_
 	{
 		void operator()()
@@ -109,6 +110,8 @@ namespace App
 	{
 		return Singleton<OnTheJobTable>::Instance().items.get<StructSig<Check>>().value;
 	}
+
+	bool &IsRun(){return is_run;}
 }
 
 Device1730 device1730;

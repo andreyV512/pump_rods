@@ -3,8 +3,8 @@
 
 /// \brief Настройки смещения и усиления каналов  платы сбора данных
 
-PARAM_TITLE(DefectSig<ChannelL502>, L"Смещение")
-PARAM_TITLE(StructSig<ChannelL502>, L"Смещение")
+PARAM_TITLE(DefectSig<ChannelL502>, L"Канал")
+PARAM_TITLE(StructSig<ChannelL502>, L"Канал")
 DO_NOT_CHECK(DefectSig<ChannelL502>)
 DO_NOT_CHECK(StructSig<ChannelL502>)
 

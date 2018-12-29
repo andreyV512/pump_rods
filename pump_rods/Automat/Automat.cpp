@@ -72,8 +72,10 @@ namespace Automat
 				device1730.Write(0);
 				//включены кнопки ЦИКЛ ТЕСТ
 				AppKeyHandler::Stop();
-				//ожидание нажатия кнопки ТЕСТ
+				App::IsRun() = true;
+				//ожидание нажатия кнопки СТАРТ
 				AND_BITS(-1, Key<Status::start>);
+				App::IsRun() = false;
 				dprint("AUTOMAT_RUN------------------------------\n");
 				//очистить главное окно
 				App::CleanViewers();

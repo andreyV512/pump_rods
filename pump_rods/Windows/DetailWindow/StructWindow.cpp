@@ -91,9 +91,8 @@ bool StructWindow::Str::Draw(TMouseMove &l, VGraphics &g)
 		int x;
 		CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 
-		int offs = int((double)x * currentOffset / DataItem::output_buffer_size);
-
-		owner->ChangeFrame(offs);
+		owner->offs = int((double)x * currentOffset / DataItem::output_buffer_size);
+		owner->ChangeFrame(owner->offs);		
 	}
 	return true;
 }
@@ -174,6 +173,7 @@ void StructWindow::ChangeFrame(int offsetDef)
 		, tbuf
 		, tbuf_size
 		, Singleton<L502ParametersTable>::Instance().items.get<StructSig<ChannelSamplingRate>>().value
+    , frame.isBarGraph
 		);
 
     if(frame.isBarGraph)

@@ -21,18 +21,7 @@ namespace
 			if(TestPassword<Owner::Base, Owner::Table>()(h))
 			{
 				wchar_t buf[128];
-
-				//GetWindowText(owner.items.get<Dialog::DlgItem2<DiametrTube, Add_Typesize> >().hWnd, buf, dimention_of(buf));
-				//int t = owner.table.items.get<DiametrTube>().value = _wtoi(buf);
-				//for(int i = 0; i < dimention_of(diameterTubes); ++i)
-				//{
-				//	if(diameterTubes[i] == t)
-				//	{
-				//		owner.table.items.get<CrossCountSensors>().value = countSens[i];
-				//		break;
-				//	}
-				//}
-				//
+				
 				GetWindowText(owner.items.get<Dialog::DlgItem2<NameParam, Add_Typesize> >().hWnd, buf, dimention_of(buf));
 				if(0 == buf[0] || 0 == wcscmp(L"NONAME", buf))
 				{
@@ -42,17 +31,7 @@ namespace
 				CBase base(Owner::Base().name());
 				if(base.IsOpen())
 				{
-					//wchar_t sub[16];
-					//_itow(t, sub, 10);
-					//size_t len = wcslen(sub);
-					//if(0 != wcsncmp(sub, buf, len))
-					//{
-					//	wsprintf(owner.table.items.get<NameParam>().value.buffer, L"%d%s", t, buf);
-					//}
-					//else
-					{
-						owner.table.items.get<NameParam>().value = buf;
-					}
+					owner.table.items.get<NameParam>().value = buf;
 					int id = Select<Owner::Table>(base).eq<NameParam>(owner.table.items.get<NameParam>().value).Execute();
 					if(0 != id)
 					{
@@ -88,7 +67,7 @@ namespace
 
 	struct DelOkBtn;
 	typedef Dialog::Templ<ParametersBase, ParametersTable
-		, TL::MkTlst<NameParam>::Result, 550, TL::MkTlst<DelOkBtn, CancelBtn>::Result> Del_Typesize;
+		, TL::MkTlst<NameParam>::Result, 400, TL::MkTlst<DelOkBtn, CancelBtn>::Result> Del_Typesize;
 
 	struct DelOkBtn
 	{
@@ -147,7 +126,7 @@ namespace
 
 DO_NOT_CHECK(NameParam)
 PARAM_TITLE(NameParam, L"")
-template<int N>struct DlgSubItems<NameParam, Holder<N> >: EditItems<NameParam, 420>{};
+template<int N>struct DlgSubItems<NameParam, Holder<N> >: EditItems<NameParam, 380>{};
 
 void AddTypeSizeDlg::Do(HWND h)
 {
@@ -161,16 +140,23 @@ void AddTypeSizeDlg::Do(HWND h)
 	{}
 }
 
+template<>struct Dialog::DlgItem2<NameParam, Del_Typesize>
+{
+	typedef NameParam T;
+	typedef Del_Typesize Owner;
+	static const int DY = DlgSubItems<T, typename T::type_value>::DY;
+	Owner *owner;
+	T &value;
+	HWND hWnd;
+	DlgItem2(Owner *o) : owner(o), value(o->table.items.get<T>()){}
+	void Init(HWND h, int &x, int &width, int &dy)
+	{
+		hWnd = EditReadOnlyItems<T, 380>().Init(h, x, width, dy, value);
+	}
+};
+
 void DelTypeSizeDlg::Do(HWND h)
 {
-	ParametersTable t;
-	t.items.get<NameParam>().value = Singleton<ParametersTable>::Instance().items.get<NameParam>().value;
-	if(Dialog::Templ<ParametersBase, ParametersTable
-		, TL::MkTlst<NameParam>::Result
-		, 550
-		, TL::MkTlst<DelOkBtn, CancelBtn>::Result
-	>(t).Do(h, L"Удалить типоразмер")
-	)
-	{}
+	Del_Typesize(Singleton<ParametersTable>::Instance()).Do(h, L"Удалить типоразмер");
 }
 

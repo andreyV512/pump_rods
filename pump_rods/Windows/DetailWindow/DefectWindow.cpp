@@ -93,7 +93,6 @@ bool DefectWindow::Def::Draw(TMouseMove &l, VGraphics &g)
 		CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 
 		owner->offs = int((double)x * currentOffset / DataItem::output_buffer_size);
-
 		owner->ChangeFrame(owner->offs);		
 	}
 	return true;
