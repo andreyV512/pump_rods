@@ -13,14 +13,17 @@ template<class T, template<class>class W>struct l502Run<W<T>>
 		, buffer_overlapped
 		, l502_read_error
 	}status;
-	int &currentOffset;
+	
 	bool terminate;
 	HANDLE hThread;
+	W<T> &buf;
+	int &currentOffset;
 	double (&inputData)[App::buffer_size];
-	l502Run(T &t)
-		: currentOffset(t.currentOffset)
-		, terminate(false)
-		, inputData(t.inputData)
+	l502Run()
+		: terminate(false)
+		, buf(Singleton<W<T>>::Instance())
+		, currentOffset(buf.currentOffset)
+		, inputData(buf.inputData)
 		, status(ok)
 		, hThread(NULL)
 	{

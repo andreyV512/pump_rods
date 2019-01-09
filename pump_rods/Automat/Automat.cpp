@@ -104,7 +104,7 @@ namespace Automat
 				AppKeyHandler::Run();
 
 				//убеждаемся что сигнал ACON DCON1 отключён
-				TEST_OUTPUT_BITS(Off<oAC_ON>, Off<oDC_ON2>);
+				//xxxxxxxxxxxxxxx TEST_OUTPUT_BITS(Off<oAC_ON>, Off<oDC_ON2>);
 				//выставлен сигнал DC_ON1
 				OUT_BITS(On<oDC_ON1>);
 				//ВЫСТАВЛЕН СИГНАЛ ПУСК
@@ -112,7 +112,6 @@ namespace Automat
 				//ожидание выключения сигналов СОРТ, П1, П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
 				AND_BITS(-1, Key<Status::stop>, Off<iCOPT>, Off<iP1>, Off<iP2>,Test<On<iСU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-		//		Log::Mess<LogMess::WaitingForTheControlSignal>();
 				AND_BITS(-1, Key<Status::stop>, On<iControl>,Test<On<iСU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ и П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
 				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iСU>, On<iCycle>>);
@@ -121,7 +120,7 @@ namespace Automat
 				{
 					//сбор данных
 					Log::Mess<LogMess::DataCollectionDEF>();
-					l502Run<DefectSig<DataItem::Buffer>> def(Singleton<DefectSig<DataItem::Buffer>>::Instance());
+					l502Run<DefectSig<DataItem::Buffer>> def;//(Singleton<DefectSig<DataItem::Buffer>>::Instance());
 					if(0 != (status502 = def()))
 					{
 						status = Status::alarm_l502;
@@ -138,7 +137,7 @@ namespace Automat
 				OUT_BITS(Off<oDC_ON1>);
 
 				//убеждаемся что сигнал  отключён
-				TEST_OUTPUT_BITS(Off<oDC_ON1>, Off<oDC_ON2>);
+				//xxxxxxxxxx TEST_OUTPUT_BITS(Off<oDC_ON1>, Off<oDC_ON2>);
 				//ожидание включения сигнала КОНТРОЛЬ и П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
 				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP2>,Test<On<iСU>, On<iCycle>>);
 				//включение сигнала AC_ON
@@ -147,7 +146,7 @@ namespace Automat
 				{
 					//сбор данных
 					Log::Mess<LogMess::DataCollectionSTR>();
-					l502Run<StructSig<DataItem::Buffer>> str(structBuff);
+					l502Run<StructSig<DataItem::Buffer>> str;//(structBuff);
 					if(0 != (status502 = str()))
 					{
 						status = Status::alarm_l502;

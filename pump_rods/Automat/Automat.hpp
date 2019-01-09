@@ -495,5 +495,5 @@ namespace Automat
 
 #define AND_BITS(delay, ...) if(0 != (status = AND_Bits<delay, TL::MkTlst<__VA_ARGS__>::Result>()(result)))break
 #define OUT_BITS(...) OUT_Bits<TL::MkTlst<__VA_ARGS__>::Result>()()
-#define TEST_OUTPUT_BITS(...)if(0 != (status = TestOutputBits<TL::MkTlst<__VA_ARGS__>::Result>()()))break
+//#define TEST_OUTPUT_BITS(...)if(0 != (status = TestOutputBits<TL::MkTlst<__VA_ARGS__>::Result>()()))break
 }
