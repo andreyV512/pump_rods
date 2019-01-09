@@ -39,8 +39,8 @@ template<>struct IDtoMess<name::ID>{typedef name Result;};
 	static const int white = 0xffffff;
 	static const int red = 0xff;
 	static const int yellow = 0xffff;
-	static const int sea = 0xe3d299;
-	static const int pink = 0xCBC0FF;
+	static const int sea = 0xffa279;
+	static const int pink = 0xaBa0FF;
 namespace LogMess
 {
 	///\brief сопоставление числу сообщениея
