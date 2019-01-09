@@ -397,12 +397,11 @@ namespace Automat
 
 			typedef typename FiltKey<List, Key>::Result list_key;
 
-			//MessBits<list_on, list_off>()(); 
 			MessBits<typename __mess_bits__<List>::Result>()();
 
 			while(true)
 			{
-				unsigned ev = WaitFor<list_key>()();//WaitForSingleObject(hEvent, 5);
+				unsigned ev = WaitFor<list_key>()();
 				unsigned bits = 0;
 				if(bitsNotEmpty || __list_not_empty__<list_proc>::value)bits = device1730.Read();
 				

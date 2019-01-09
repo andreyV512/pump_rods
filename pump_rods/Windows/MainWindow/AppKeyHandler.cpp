@@ -10,7 +10,6 @@ namespace AppKeyHandler
 {
 	typedef TL::MkTlst<
 		TL::IntToType<IDB_CycleBtn>
-//		, TL::IntToType<IDB_Continue>
 		, TL::IntToType<IDB_Reset>
 		, TL::IntToType<IDB_QueryBtn>
 		, TL::IntToType<IDB_DownArrow>
@@ -98,7 +97,7 @@ namespace AppKeyHandler
 		__btn__<
 			__all_button_OnOff__<
 			  button_list
-			  , TL::MkTlst<TL::IntToType<IDB_Reset>/*, TL::IntToType<IDB_Ok>*/>::Result
+			  , TL::MkTlst<TL::IntToType<IDB_Reset>>::Result
 			  , On, Off
 			>::Result
 		>()();
@@ -116,31 +115,31 @@ namespace AppKeyHandler
 		>()();
 		zprint("\n");
 	}
-	void RunContine()
-	{
-		typedef TL::MkTlst<
-			On<IDB_CycleBtn>, On<IDB_Ok>
-		>::Result list;
-		__btn__<list>()();
-		zprint("\n");
-	}
+	//void RunContine()
+	//{
+	//	typedef TL::MkTlst<
+	//		On<IDB_CycleBtn>, On<IDB_Ok>
+	//	>::Result list;
+	//	__btn__<list>()();
+	//	zprint("\n");
+	//}
 	void Stop()
 	{
 		Init();
 		zprint("\n");
 	}
 
-	void ExitTubeMode()
-	{
-		Run();
-		zprint("\n");
-	}
-
-	void ReturnTubeMode()
-	{
-		Run();
-		zprint("\n");
-	}
+	//void ExitTubeMode()
+	//{
+	//	Run();
+	//	zprint("\n");
+	//}
+	//
+	//void ReturnTubeMode()
+	//{
+	//	Run();
+	//	zprint("\n");
+	//}
 
 	void VK_(unsigned id)
 	{
@@ -191,14 +190,14 @@ namespace AppKeyHandler
 		TL::find<button_list, __test_key__>()(&key);
 	}
 
-	void DisableAllBtn()
-	{
-		__btn__<
-			__all_button_OnOff__<
-			  button_list
-			  , NullType//TL::MkTlst<TL::IntToType<IDB_Reset>, TL::IntToType<IDB_Continue>>::Result
-			  , On, Off
-			>::Result
-		>()();
-	}
+	//void DisableAllBtn()
+	//{
+	//	__btn__<
+	//		__all_button_OnOff__<
+	//		  button_list
+	//		  , NullType//TL::MkTlst<TL::IntToType<IDB_Reset>, TL::IntToType<IDB_Continue>>::Result
+	//		  , On, Off
+	//		>::Result
+	//	>()();
+	//}
 }

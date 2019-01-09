@@ -86,43 +86,7 @@ namespace LogMess
 	MESS(DataCollectionCompleted, void, "Цикл сбора данных закончен", green, white)
 
 	template<class T>struct Bits;
-	//{
-	//	static const int ID = 99;//__COUNTER__;
-	//	typedef int type;
-	//	static const char *mess(){return L"xx";}
-	//};
-	//template<class T>struct IDtoMess<Bits<T>::ID>
-	//{
-	//		typedef typename Bits<T> Result;
-	//};
 	template<>struct Bits<NullType>{};
-	//template<class On>struct Bits<On, NullType>{};
-	//template<class Off>struct Bits<NullType, Off>{};
-	/*
-	#define MESS1(name, tpe, txt, bc, tc)struct name\
-{\
-	static const int ID = __COUNTER__;\
-	typedef tpe type;\
-	static const unsigned backColor = bc;\
-    static const unsigned textColor = tc;\
-	static const char *mess(){return _cat(txt, __##tpe##_1);}\
-};\
-template<>struct IDtoMess<name::ID>{typedef name Result;};
-	*/
-//	template<>struct Bits<Tlst<Tlst<On<iСU>, Tlst<On<iCycle>, NullType>>, Tlst<Off<iP2>, /N/ullType>>>
-//	{
-//		static const int ID = __COUNTER__;
-//		typedef int type;
-//		static const unsigned backColor = white;
-//		static const unsigned textColor = white;
-//		static const char *mess(){return "";}
-//	};
-//	
-//	template<>struct IDtoMess<Bits<Tlst<Tlst<On<iСU>, Tlst<On<iCycle>, NullType>>, /T/lst<Off<iP2>, NullType>>>::ID>
-//	{
-//			typedef Bits<Tlst<Tlst<On<iСU>, Tlst<On<iCycle>, NullType>>, Tlst<Off<iP2>, /N/ullType>>> Result;
-//	};
-
 #define BITS_XX(color, txt, ...)template<>struct Bits<TL::MkTlst<__VA_ARGS__>::Result>\
 	{\
 		static const int ID = __COUNTER__;\

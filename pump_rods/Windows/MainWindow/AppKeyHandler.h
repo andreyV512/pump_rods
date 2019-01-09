@@ -2,17 +2,17 @@
 
 namespace AppKeyHandler
 {
-	void Init();
+	//void Init();
 	void Run();
 	void Continue();
 	void Stop();
 
-	void RunContine();
+	//void RunContine();
 
-	void ExitTubeMode();
-	void ReturnTubeMode();
+	//void ExitTubeMode();
+	//void ReturnTubeMode();
 
 	void KeyPressed(unsigned );
 
-	void DisableAllBtn();
+	//void DisableAllBtn();
 }

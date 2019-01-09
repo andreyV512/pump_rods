@@ -29,7 +29,6 @@ namespace Automat
 	struct Result
 	{
 		unsigned error;
-		//unsigned key;
 		unsigned bits;
 		unsigned ret;
 		InputBitTable::TItems &inputs_bits;
