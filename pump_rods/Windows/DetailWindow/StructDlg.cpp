@@ -105,7 +105,7 @@ namespace Structure
 			frame.medianFiltreWidth = par.items.get< StructSig<MedianFiltreWidth>>().value;
 			frame.medianFiltreON = par.items.get< StructSig<MedianFiltreON>>().value;
 
-			Repaint<StructSig>(e.viewers.get<StructWindow::Str>(), frame);
+			Repaint<StructSig>(e.viewers.get<StructWindow::Viewer>(), frame);
 		}
 	}
 
@@ -133,7 +133,7 @@ namespace Structure
 			frame.cutoffFrequency = par.items.get< StructSig<CutoffFrequency>>().value;
 			frame.cutoffFrequencyON = par.items.get< StructSig<CutoffFrequencyON>>().value;
 
-			Repaint<StructSig>( e.viewers.get<StructWindow::Str>(), frame);
+			Repaint<StructSig>( e.viewers.get<StructWindow::Viewer>(), frame);
 		}
 	}
 
@@ -153,11 +153,11 @@ namespace Structure
 			, TL::MkTlst<DefOkBtn, CancelBtn>::Result
 			>(koef).Do(h, L"Корректировка датчика"))
 		{
-			StructWindow &e = *(StructWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
-			FrameViewer &frame =  e.viewers.get<FrameViewer>();
+			//StructWindow &e = *(StructWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+			//FrameViewer &frame =  e.viewers.get<FrameViewer>();
 			frame.koef = koef.items.get<StructSig<KoeffSign>>().value;
 
-			Repaint<StructSig>(e.viewers.get<StructWindow::Str>(), frame);
+			Repaint<StructSig>(e.viewers.get<StructWindow::Viewer>(), frame);
 		}
 	}
 

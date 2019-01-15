@@ -5,6 +5,7 @@
 #include "Compute\Compute.h"
 #include "App/AppBase.h"
 #include "StructDlg.h"
+#include "TemplDlg.hpp"
 
 namespace StructMenu
 {
@@ -32,9 +33,9 @@ namespace StructMenu
 	struct TypeSize{};
 	MENU_TEXT(L"Типоразмер", TopMenu<TypeSize>)
 
-	struct Filter_     : Structure::FilterDlg{};
-	struct MedianFiltre: Structure::MedianFiltre{};
-	struct Correction  : Structure::CorrectionSensorDlg{};
+	struct Filter_     : TemplDlg::FilterDlg<StructSig>{};//Structure::FilterDlg{};
+	struct MedianFiltre: TemplDlg::MedianFiltre<StructSig>{};//Structure::MedianFiltre{};
+	struct Correction  : TemplDlg::CorrectionSensorDlg<StructSig>{};
 
 	MENU_ITEM(L"Настройки цифрового фильтра", Filter_)
 	MENU_ITEM(L"Медианный фильтр", MedianFiltre)
@@ -53,7 +54,7 @@ namespace StructMenu
 	struct Options{};
 	MENU_TEXT(L"Настройки", TopMenu<Options>)
 
-	struct FrameWidthView: Structure::FrameWidthViewDlg{};
+	struct FrameWidthView: TemplDlg::FrameWidthViewDlg<StructSig>{};
 	MENU_ITEM(L"Ширина кадра", FrameWidthView)
 
 	struct GraphView{
@@ -83,7 +84,7 @@ namespace StructMenu
 	>::Result menu_list;	
 }
 
-bool StructWindow::Str::Draw(TMouseMove &l, VGraphics &g)
+bool StructWindow::Viewer::Draw(TMouseMove &l, VGraphics &g)
 {
 	if(count > 0)
 	{
@@ -104,7 +105,7 @@ LRESULT StructWindow::operator()(TCreate &m)
 	ColorTable::TItems &color = Singleton<ColorTable>::Instance().items;
 	ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
 
-	Str &str = viewers.get<Str>();
+	Viewer &str = viewers.get<Viewer>();
 	str.owner = this;
 	memmove(str.buffer, item.outputData, sizeof(str.buffer));
 	memmove(str.status, item.status, sizeof(str.status));
@@ -122,7 +123,7 @@ LRESULT StructWindow::operator()(TCreate &m)
 	str.threshDefectColor = color.get<Clr<Defect>>().value;
 	str.deathZoneColor = color.get<Clr<DeathZone>>().value;
 	str.nominalColor = color.get<Clr<Nominal>>().value;
-	str.cursor.SetMouseMoveHandler(&str, & StructWindow::Str::Draw);
+	str.cursor.SetMouseMoveHandler(&str, & StructWindow::Viewer::Draw);
 	str.count = DataItem::output_buffer_size;
 
 	FrameViewer &frame =  viewers.get<FrameViewer>();
@@ -140,7 +141,7 @@ LRESULT StructWindow::operator()(TCreate &m)
 
 void StructWindow::ChangeFrame(int offsetDef)
 {
-	Str &def = viewers.get<Str>();
+	Viewer &def = viewers.get<Viewer>();
 	StructSig<DataItem::Buffer> &item = Singleton<StructSig<DataItem::Buffer>>::Instance();
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	
@@ -236,7 +237,7 @@ void StructWindow::operator()(TSize &m)
 	static const int height = 200;
 
 	{
-		Str &def = viewers.get<Str>();
+		Viewer &def = viewers.get<Viewer>();
 		TSize size = {def.hWnd, WM_SIZE, 0, m.Width, height};
 		SendMessage(MESSAGE(size));
 		MoveWindow(def.hWnd , 0, 0, size.Width, size.Height, true);
@@ -264,9 +265,9 @@ void StructWindow::operator()(TMouseWell &l)
 
 void StructWindow::operator()(TClose &l)
 {
-	if(!Structure::TestChangeParam(l.hwnd) && IDYES == MessageBox(l.hwnd, L"Сохранить?", L"Параметры были изменены", MB_ICONQUESTION | MB_YESNO))
+	if(!TemplDlg::TestChangeParam<StructSig>(l.hwnd) && IDYES == MessageBox(l.hwnd, L"Сохранить?", L"Параметры были изменены", MB_ICONQUESTION | MB_YESNO))
 	{
-		Structure::StoreParam(l.hwnd);
+		TemplDlg::StoreParam<StructSig>(l.hwnd);
 	}
 	DestroyWindow(l.hwnd);
 }

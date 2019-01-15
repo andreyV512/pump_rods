@@ -7,7 +7,7 @@
 class DefectWindow
 {
 public:
-	class Def: public MainWindow::DefectoscopeViewer
+	class Viewer: public MainWindow::DefectoscopeViewer
 	{
 	public:
 		typedef MainWindow::DefectoscopeViewer Parent; 
@@ -17,7 +17,7 @@ public:
 	};
 
 	typedef TL::MkTlst<
-		Def
+		Viewer
 		, FrameViewer
 	>::Result viewers_list;
 	TL::Factory<viewers_list> viewers;

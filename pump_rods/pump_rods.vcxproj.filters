@@ -323,6 +323,9 @@
     <ClInclude Include="Automat\EquipmentCheck.h">
       <Filter>pump_rods\Automat</Filter>
     </ClInclude>
+    <ClInclude Include="Windows\DetailWindow\TemplDlg.hpp">
+      <Filter>pump_rods\Windows\DetailWindow</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp">

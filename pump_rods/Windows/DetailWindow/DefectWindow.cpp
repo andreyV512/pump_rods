@@ -6,6 +6,7 @@
 #include "App/AppBase.h"
 #include "DefectDlg.h"
 #include "MessageText\ListMess.hpp"
+#include "TemplDlg.hpp"
 
 namespace DefectMenu
 {
@@ -33,9 +34,9 @@ namespace DefectMenu
 	struct TypeSize{};
 	MENU_TEXT(L"Типоразмер", TopMenu<TypeSize>)
 
-	struct Filter_     : Defectoscope::FilterDlg{};
-	struct MedianFiltre: Defectoscope::MedianFiltre{};
-	struct Correction  : Defectoscope::CorrectionSensorDlg{};
+	struct Filter_     : TemplDlg::FilterDlg<DefectSig>{};//Defectoscope::FilterDlg{};
+	struct MedianFiltre: TemplDlg::MedianFiltre<DefectSig>{};//Defectoscope::MedianFiltre{};
+	struct Correction  : TemplDlg::CorrectionSensorDlg<DefectSig>{};
 
 	MENU_ITEM(L"Настройки цифрового фильтра", Filter_)
 	MENU_ITEM(L"Медианный фильтр", MedianFiltre)
@@ -54,7 +55,7 @@ namespace DefectMenu
 	struct Options{};
 	MENU_TEXT(L"Настройки", TopMenu<Options>)
 
-	struct FrameWidthView: Defectoscope::FrameWidthViewDlg{};
+	struct FrameWidthView: TemplDlg::FrameWidthViewDlg<DefectSig>{};
 	MENU_ITEM(L"Ширина кадра", FrameWidthView)
 
 	struct GraphView{
@@ -84,7 +85,7 @@ namespace DefectMenu
 	>::Result menu_list;	
 }
 
-bool DefectWindow::Def::Draw(TMouseMove &l, VGraphics &g)
+bool DefectWindow::Viewer::Draw(TMouseMove &l, VGraphics &g)
 {
 	if(count > 0)
 	{
@@ -105,7 +106,7 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	ColorTable::TItems &color = Singleton<ColorTable>::Instance().items;
 	ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;
 
-	Def &def = viewers.get<Def>();
+	Viewer &def = viewers.get<Viewer>();
 	def.owner = this;
 	memmove(def.buffer, item.outputData, sizeof(def.buffer));
 	memmove(def.status, item.status, sizeof(def.status));
@@ -123,7 +124,7 @@ LRESULT DefectWindow::operator()(TCreate &m)
 	def.threshDefectColor = color.get<Clr<Defect>>().value;
 	def.deathZoneColor = color.get<Clr<DeathZone>>().value;
 	def.nominalColor = color.get<Clr<Nominal>>().value;
-	def.cursor.SetMouseMoveHandler(&def, & DefectWindow::Def::Draw);
+	def.cursor.SetMouseMoveHandler(&def, & DefectWindow::Viewer::Draw);
 	def.count = DataItem::output_buffer_size;
 
 	FrameViewer &frame =  viewers.get<FrameViewer>();
@@ -141,7 +142,7 @@ LRESULT DefectWindow::operator()(TCreate &m)
 
 void DefectWindow::ChangeFrame(int offsetDef)
 {
-	Def &def = viewers.get<Def>();
+	Viewer &def = viewers.get<Viewer>();
 	DefectSig<DataItem::Buffer> &item = Singleton<DefectSig<DataItem::Buffer>>::Instance();
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 
@@ -237,7 +238,7 @@ void DefectWindow::operator()(TSize &m)
 	static const int height = 200;
 
 	{
-		Def &def = viewers.get<Def>();
+		Viewer &def = viewers.get<Viewer>();
 		TSize size = {def.hWnd, WM_SIZE, 0, m.Width, height};
 		SendMessage(MESSAGE(size));
 		MoveWindow(def.hWnd , 0, 0, size.Width, size.Height, true);
@@ -265,9 +266,9 @@ void DefectWindow::operator()(TMouseWell &l)
 
 void DefectWindow::operator()(TClose &l)
 {
-	if(!Defectoscope::TestChangeParam(l.hwnd) && IDYES == MessageBox(l.hwnd, L"Сохранить?", L"Параметры были изменены", MB_ICONQUESTION | MB_YESNO))
+	if(!TemplDlg::TestChangeParam<DefectSig>(l.hwnd) && IDYES == MessageBox(l.hwnd, L"Сохранить?", L"Параметры были изменены", MB_ICONQUESTION | MB_YESNO))
 	{
-		Defectoscope::StoreParam(l.hwnd);
+		TemplDlg::StoreParam<DefectSig>(l.hwnd);
 	}
 	DestroyWindow(l.hwnd);
 }

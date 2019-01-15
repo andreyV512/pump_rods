@@ -7,7 +7,7 @@
 class StructWindow
 {
 public:
-	class Str: public MainWindow::StructureViewer
+	class Viewer: public MainWindow::StructureViewer
 	{
 	public:
 		typedef MainWindow::StructureViewer Parent; 
@@ -17,7 +17,7 @@ public:
 	};
 
 	typedef TL::MkTlst<
-		Str
+		Viewer
 		, FrameViewer
 	>::Result viewers_list;
 	TL::Factory<viewers_list> viewers;

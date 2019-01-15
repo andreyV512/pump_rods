@@ -255,7 +255,7 @@ template<>struct Event<TopMenu<MainWindow::DefectoscopeViewer >>
 		if(NULL != h)
 		{
 			DefectoscopeDetailWindow *w = (DefectoscopeDetailWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
-			w->viewers.get<DefectWindow::Def>().currentX = v->currentX;
+			w->viewers.get<DefectWindow::Viewer>().currentX = v->currentX;
 			w->ChangeFrame(v->currentX);
 		}
 	}									
@@ -270,7 +270,7 @@ template<>struct Event<TopMenu<MainWindow::StructureViewer >>
 		if(NULL != h)
 		{
 			StructureDetailWindow *w = (StructureDetailWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
-			w->viewers.get<StructWindow::Str>().currentX = v->currentX;
+			w->viewers.get<StructWindow::Viewer>().currentX = v->currentX;
 			w->ChangeFrame(v->currentX);
 		}
 	}									

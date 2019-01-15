@@ -10,16 +10,16 @@
 namespace Defectoscope
 {
 	MIN_EQUAL_VALUE(DefectSig<MedianFiltreWidth>, 3)
-		MAX_EQUAL_VALUE(DefectSig<MedianFiltreWidth>, 15)
-		PARAM_TITLE(DefectSig<MedianFiltreWidth>, L"Ширина фильтра")
-		PARAM_TITLE(DefectSig<MedianFiltreON>, L"Включение фильтра")
+	MAX_EQUAL_VALUE(DefectSig<MedianFiltreWidth>, 15)
+	PARAM_TITLE(DefectSig<MedianFiltreWidth>, L"Ширина фильтра")
+	PARAM_TITLE(DefectSig<MedianFiltreON>, L"Включение фильтра")
 
-		MIN_EQUAL_VALUE(StructSig<MedianFiltreWidth>, 3)
-		MAX_EQUAL_VALUE(StructSig<MedianFiltreWidth>, 15)
-		PARAM_TITLE(StructSig<MedianFiltreWidth>, L"Ширина фильтра")
-		PARAM_TITLE(StructSig<MedianFiltreON>, L"Включение фильтра")
+	MIN_EQUAL_VALUE(StructSig<MedianFiltreWidth>, 3)
+	MAX_EQUAL_VALUE(StructSig<MedianFiltreWidth>, 15)
+	PARAM_TITLE(StructSig<MedianFiltreWidth>, L"Ширина фильтра")
+	PARAM_TITLE(StructSig<MedianFiltreON>, L"Включение фильтра")
 
-		template<class O, class P>struct __def_ok_btn__
+	template<class O, class P>struct __def_ok_btn__
 	{
 		void operator()(O &o)
 		{
@@ -109,7 +109,7 @@ struct DefOkBtn
 			frame.medianFiltreWidth = par.items.get< DefectSig<MedianFiltreWidth>>().value;
 			frame.medianFiltreON = par.items.get< DefectSig<MedianFiltreON>>().value;
 
-			Repaint<DefectSig>(e.viewers.get<DefectWindow::Def>(), frame);
+			Repaint<DefectSig>(e.viewers.get<DefectWindow::Viewer>(), frame);
 		}
 	}
 
@@ -142,7 +142,7 @@ struct DefOkBtn
 			frame.cutoffFrequency = par.items.get< DefectSig<CutoffFrequency>>().value;
 			frame.cutoffFrequencyON = par.items.get< DefectSig<CutoffFrequencyON>>().value;
 
-			Repaint<DefectSig>( e.viewers.get<DefectWindow::Def>(), frame);
+			Repaint<DefectSig>( e.viewers.get<DefectWindow::Viewer>(), frame);
 		}
 	}
 
@@ -166,7 +166,7 @@ struct DefOkBtn
 			FrameViewer &frame =  e.viewers.get<FrameViewer>();
 			frame.koef = koef.items.get<DefectSig<KoeffSign>>().value;
 
-			Repaint<DefectSig>(e.viewers.get<DefectWindow::Def>(), frame);
+			Repaint<DefectSig>(e.viewers.get<DefectWindow::Viewer>(), frame);
 		}
 	}
 

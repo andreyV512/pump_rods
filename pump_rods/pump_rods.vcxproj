@@ -151,6 +151,7 @@
     <ClInclude Include="Windows\DetailWindow\FrameViewer.h" />
     <ClInclude Include="Windows\DetailWindow\StructDlg.h" />
     <ClInclude Include="Windows\DetailWindow\StructWindow.h" />
+    <ClInclude Include="Windows\DetailWindow\TemplDlg.hpp" />
     <ClInclude Include="Windows\MainWindow\AppKeyHandler.h" />
     <ClInclude Include="Windows\MainWindow\MainWindow.h" />
     <ClInclude Include="Windows\MainWindow\MainWindowMenu.hpp" />
