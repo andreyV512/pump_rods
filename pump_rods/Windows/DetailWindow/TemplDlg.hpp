@@ -296,4 +296,84 @@ template<template<class>class W>struct CorrectionSensorDlg
 		}
 	};
 
+
+	struct MainFile{};
+	MENU_TEXT(L"Файл", TopMenu<MainFile>)
+
+	struct MainExit
+	{
+		static void Do(HWND h)
+		{
+			TClose c = {h, WM_CLOSE, 0, 0};
+			SendMessage(MESSAGE(c));
+		}
+	};
+
+	MENU_ITEM(L"Выход", MainExit)
+
+	template<>struct TopMenu<MainFile>
+	{
+		typedef TL::MkTlst<
+			MenuItem<MainExit>
+		>::Result list;
+	};
+
+	#define TEMPL_MENU_TEXT(txt, item)template<template<class>class W, template<class>class Item>struct NameMenu<Item<W<item>>>{wchar_t *operator()(HWND){return txt;}};
+
+	#define TEMPL_MENU_ITEM(txt, item)\
+		template<template<class>class W, template<class>class Item>struct NameMenu<Item<item<W>>>{wchar_t *operator()(HWND){return txt;}};\
+		template<template<class>class W, template<class>class Item>struct Event<Item<item<W>> >:item<W>{};
+
+	struct TypeSize{};
+	TEMPL_MENU_TEXT(L"Типоразмер", TypeSize)
+
+	TEMPL_MENU_ITEM(L"Настройки цифрового фильтра", TemplDlg::FilterDlg)
+	TEMPL_MENU_ITEM(L"Медианный фильтр", TemplDlg::MedianFiltre)
+	TEMPL_MENU_ITEM(L"Корректировка датчика", TemplDlg::CorrectionSensorDlg)
+	//
+	template<template<class >class W>struct TopMenu<W<TypeSize>>
+	{
+		typedef typename TL::MkTlst<
+			 MenuItem<TemplDlg::MedianFiltre<W>>
+			 , MenuItem<TemplDlg::FilterDlg<W>>
+			 , Separator<0>
+			 , MenuItem<TemplDlg::CorrectionSensorDlg<W>>
+		>::Result list;
+	};
+	//
+	struct Options{};
+	TEMPL_MENU_TEXT(L"Настройки", Options)
+	
+	TEMPL_MENU_ITEM(L"Ширина кадра", TemplDlg::FrameWidthViewDlg)
+	
+	template<template<class>class W>struct GraphView{
+		static void Do(HWND h)
+		{			
+			typedef typename __templ_window__<W>::Result Win;
+			Win &w = *(Win *)GetWindowLongPtr(h, GWLP_USERDATA);
+			FrameViewer &f = w.viewers.get<FrameViewer>();
+			f.isBarGraph ^= true;
+			w.ChangeFrame(w.offs);
+		}
+	};
+	TEMPL_MENU_ITEM(L"Вид графика", TemplDlg::GraphView)
+	
+	template<template<class >class W>struct TopMenu<W<Options>>
+	{
+		typedef typename TL::MkTlst<
+			MenuItem<TemplDlg::FrameWidthViewDlg<W>>
+			, Separator<0>
+			, MenuItem<TemplDlg::GraphView<W>>
+		>::Result list;
+	};
+
+	template<template<class>class W>struct Menu
+	{
+		typedef typename TL::MkTlst<
+			TopMenu<MainFile>
+			, typename TopMenu<W<TypeSize>>
+			, typename TopMenu<W<Options>>
+		>::Result menu_list;	
+	};
+
 }

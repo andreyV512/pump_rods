@@ -311,12 +311,6 @@
     <ClInclude Include="..\Common\window_tool\DlgFiles.h">
       <Filter>Common\window_tool</Filter>
     </ClInclude>
-    <ClInclude Include="Windows\DetailWindow\DefectDlg.h">
-      <Filter>pump_rods\Windows\DetailWindow</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DetailWindow\StructDlg.h">
-      <Filter>pump_rods\Windows\DetailWindow</Filter>
-    </ClInclude>
     <ClInclude Include="..\Common\window_tool\RunExecute.h">
       <Filter>Common\window_tool</Filter>
     </ClInclude>
@@ -514,14 +508,8 @@
     <ClCompile Include="DLG\AboutWindow.cpp">
       <Filter>pump_rods\DLG</Filter>
     </ClCompile>
-    <ClCompile Include="Windows\DetailWindow\DefectDlg.cpp">
-      <Filter>pump_rods\Windows\DetailWindow</Filter>
-    </ClCompile>
     <ClCompile Include="DLG\KoefDlg.cpp">
       <Filter>pump_rods\DLG</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DetailWindow\StructDlg.cpp">
-      <Filter>pump_rods\Windows\DetailWindow</Filter>
     </ClCompile>
     <ClCompile Include="DLG\MessageDlg.cpp">
       <Filter>pump_rods\Windows\DetailWindow</Filter>

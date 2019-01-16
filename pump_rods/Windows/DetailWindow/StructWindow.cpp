@@ -4,85 +4,7 @@
 #include "DataItem\DataItem.h"
 #include "Compute\Compute.h"
 #include "App/AppBase.h"
-#include "StructDlg.h"
 #include "TemplDlg.hpp"
-
-namespace StructMenu
-{
-	struct MainFile{};
-	MENU_TEXT(L"Файл", TopMenu<MainFile>)
-
-	struct MainExit
-	{
-		static void Do(HWND h)
-		{
-			TClose c = {h, WM_CLOSE, 0, 0};
-			SendMessage(MESSAGE(c));
-		}
-	};
-
-	MENU_ITEM(L"Выход", MainExit)
-
-	template<>struct TopMenu<MainFile>
-	{
-		typedef TL::MkTlst<
-			MenuItem<MainExit>
-		>::Result list;
-	};
-
-	struct TypeSize{};
-	MENU_TEXT(L"Типоразмер", TopMenu<TypeSize>)
-
-	struct Filter_     : TemplDlg::FilterDlg<StructSig>{};//Structure::FilterDlg{};
-	struct MedianFiltre: TemplDlg::MedianFiltre<StructSig>{};//Structure::MedianFiltre{};
-	struct Correction  : TemplDlg::CorrectionSensorDlg<StructSig>{};
-
-	MENU_ITEM(L"Настройки цифрового фильтра", Filter_)
-	MENU_ITEM(L"Медианный фильтр", MedianFiltre)
-	MENU_ITEM(L"Корректировка датчика", Correction)
-
-	template<>struct TopMenu<TypeSize>
-	{
-		typedef TL::MkTlst<
-			 MenuItem<MedianFiltre>
-			 , MenuItem<Filter_>
-			 , Separator<0>
-			 , MenuItem<Correction>
-		>::Result list;
-	};
-
-	struct Options{};
-	MENU_TEXT(L"Настройки", TopMenu<Options>)
-
-	struct FrameWidthView: TemplDlg::FrameWidthViewDlg<StructSig>{};
-	MENU_ITEM(L"Ширина кадра", FrameWidthView)
-
-	struct GraphView{
-		static void Do(HWND h)
-		{			
-			StructWindow &w = *(StructWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
-			FrameViewer &f = w.viewers.get<FrameViewer>();
-			f.isBarGraph ^= true;
-			w.ChangeFrame(w.offs);
-		}
-	};
-	MENU_ITEM(L"Вид графика", GraphView)
-
-	template<>struct TopMenu<Options>
-	{
-		typedef TL::MkTlst<
-			MenuItem<FrameWidthView>
-			, Separator<0>
-			, MenuItem<GraphView>
-		>::Result list;
-	};
-
-	typedef TL::MkTlst<
-		TopMenu<MainFile>
-		, TopMenu<TypeSize>
-		, TopMenu<Options>
-	>::Result menu_list;	
-}
 
 bool StructWindow::Viewer::Draw(TMouseMove &l, VGraphics &g)
 {
@@ -100,7 +22,7 @@ bool StructWindow::Viewer::Draw(TMouseMove &l, VGraphics &g)
 
 LRESULT StructWindow::operator()(TCreate &m)
 {
-	Menu<StructMenu::menu_list>().Init(m.hwnd);
+	Menu<TemplDlg::Menu<StructSig>::menu_list>().Init(m.hwnd);
 	StructSig<DataItem::Buffer> &item = Singleton<StructSig<DataItem::Buffer>>::Instance();
 	ColorTable::TItems &color = Singleton<ColorTable>::Instance().items;
 	ViewerCountTable::TItems &viewerCount = Singleton<ViewerCountTable>::Instance().items;

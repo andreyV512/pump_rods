@@ -4,7 +4,6 @@
 #include "DataItem\DataItem.h"
 #include "Compute\Compute.h"
 #include "App/AppBase.h"
-#include "DefectDlg.h"
 #include "MessageText\ListMess.hpp"
 #include "TemplDlg.hpp"
 

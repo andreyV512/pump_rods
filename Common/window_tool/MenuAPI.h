@@ -32,7 +32,10 @@ template<class T>struct EnableMenuInit
 template<class T>struct Event
 #if 1
 {
-	static void Do(HWND){}
+	static void Do(HWND)
+	{
+		zprint("\n");
+	}
 }
 #endif
 ;
