@@ -8,6 +8,7 @@
 #include "Windows\DetailWindow\DefectWindow.h"
 #include "Windows\DetailWindow\StructWindow.h"
 #include "MessageText\StatusMessages.h"
+#include "Windows\DetailWindow\TemplWindow.hpp"
 
 namespace {
 	struct __move_window_data__
@@ -157,21 +158,19 @@ void MainWindow::StatusBar(int n, wchar_t *txt)
 	SendMessage(hStatusWindow, SB_SETTEXT, n, (LONG)txt);
 }
 
-template<class >struct __main_window_viewer__;
-template<>struct __main_window_viewer__<DefectSig<DataItem::Buffer>>
+
+template<class T>struct __get_wap__;
+template<template<class>class W, class T>struct __get_wap__<W<T>>
 {
-	typedef MainWindow::DefectoscopeViewer Result;
+	typedef typename __main_window_viewer__<W>::Result Result;
 };
-template<>struct __main_window_viewer__<StructSig<DataItem::Buffer>>
-{
-	typedef MainWindow::StructureViewer Result;
-};
+
 
 template<class O, class P>struct __main_window_set_color__
 {
 	void operator()(P &p)
 	{
-		__main_window_viewer__<O>::Result &o = p.get<__main_window_viewer__<O>::Result>();
+		__get_wap__<O>::Result &o = p.get<__get_wap__<O>::Result>();
 		ColorTable::TItems &color = Singleton<ColorTable>::Instance().items;
 		o.threshSortDownColor = color.get<Clr<SortDown>>().value;
 		o.threshDefectColor = color.get<Clr<Defect>>().value;
@@ -232,49 +231,72 @@ template<>struct TopMenu<MainWindow::StructureViewer>
 template<>struct NameMenu<TopMenu<MainWindow::DefectoscopeViewer> >{wchar_t *operator()(HWND){return L"Просмотр";}};
 template<>struct NameMenu<TopMenu<MainWindow::StructureViewer> >{wchar_t *operator()(HWND){return L"Просмотр";}};
 
-class DefectoscopeDetailWindow: public DefectWindow
+
+template<template<class>class W>class DetailWindow;
+
+template<>class DetailWindow<DefectSig>: public TemplWindow<DefectSig>
 {
 public:
-	typedef DefectWindow Parent; 
+	typedef TemplWindow<DefectSig> Parent; 
 	static wchar_t *Title(){return L"Дефектоскоп";}
 };
 
-class StructureDetailWindow: public StructWindow
+template<>class DetailWindow<StructSig>: public TemplWindow<StructSig>//StructWindow
 {
 public:
-	typedef StructWindow Parent; 
+	typedef TemplWindow<StructSig> Parent; 
 	static wchar_t *Title(){return L"Структура";}
 };
 
-template<>struct Event<TopMenu<MainWindow::DefectoscopeViewer >> 	
-{										
+//template<>struct Event<TopMenu<MainWindow::DefectoscopeViewer >> 	
+//{										
+//	static void Do(void *data)				
+//	{	
+//		MainWindow::DefectoscopeViewer *v = (MainWindow::DefectoscopeViewer *)data;
+//		HWND h = Common::OpenWindow<DefectoscopeDetailWindow>::Do(v->hWnd);
+//		if(NULL != h)
+//		{
+//			DefectoscopeDetailWindow *w = (DefectoscopeDetailWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+//			w->viewers.get<DefectWindow::Viewer>().currentX = v->currentX;
+//			w->ChangeFrame(v->currentX);
+//		}
+//	}									
+//};
+
+//template<>struct Event<TopMenu<MainWindow::StructureViewer >> 	
+//{										
+//	static void Do(void *data)				
+//	{	
+//		MainWindow::StructureViewer *v = (MainWindow::StructureViewer *)data;
+//		HWND h = Common::OpenWindow<StructureDetailWindow>::Do(v->hWnd);
+//		if(NULL != h)
+//		{
+//			StructureDetailWindow *w = (StructureDetailWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+//			w->viewers.get<StructWindow::Viewer>().currentX = v->currentX;
+//			w->ChangeFrame(v->currentX);
+//		}
+//	}									
+//};
+
+template<template<class>class W>struct __event__
+{
 	static void Do(void *data)				
 	{	
-		MainWindow::DefectoscopeViewer *v = (MainWindow::DefectoscopeViewer *)data;
-		HWND h = Common::OpenWindow<DefectoscopeDetailWindow>::Do(v->hWnd);
+		typedef __main_window_viewer__<W>::Result Win;
+		typedef typename DetailWindow<W> datal;
+		Win *v = (Win *)data;
+		HWND h = Common::OpenWindow<DetailWindow<W>>::Do(v->hWnd);
 		if(NULL != h)
 		{
-			DefectoscopeDetailWindow *w = (DefectoscopeDetailWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
-			w->viewers.get<DefectWindow::Viewer>().currentX = v->currentX;
+			datal *w = (datal *)GetWindowLongPtr(h, GWLP_USERDATA);
+			w->viewers.get<typename  DetailWindow<W>::Viewer>().currentX = v->currentX;
 			w->ChangeFrame(v->currentX);
 		}
-	}									
+	}	
 };
 
-template<>struct Event<TopMenu<MainWindow::StructureViewer >> 	
-{										
-	static void Do(void *data)				
-	{	
-		MainWindow::StructureViewer *v = (MainWindow::StructureViewer *)data;
-		HWND h = Common::OpenWindow<StructureDetailWindow>::Do(v->hWnd);
-		if(NULL != h)
-		{
-			StructureDetailWindow *w = (StructureDetailWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
-			w->viewers.get<StructWindow::Viewer>().currentX = v->currentX;
-			w->ChangeFrame(v->currentX);
-		}
-	}									
-};
+template<>struct Event<TopMenu<MainWindow::DefectoscopeViewer >>: __event__<DefectSig>{}; 	
+template<>struct Event<TopMenu<MainWindow::StructureViewer >>: __event__<StructSig>{}; 
 
 void MainWindow::DefectoscopeViewer::operator()(TRButtonDown &l)
 {

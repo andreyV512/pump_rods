@@ -30,12 +30,6 @@
     <Filter Include="Common\Graphics">
       <UniqueIdentifier>{c80cca12-c049-4cf7-a0f9-2b341ce3a32c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="pump_rods\Windows">
-      <UniqueIdentifier>{f731f49d-67e9-4d4b-9d64-525457d3f717}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="pump_rods\Windows\MainWindow">
-      <UniqueIdentifier>{39062b04-9a4a-4a16-97a0-917f30777141}</UniqueIdentifier>
-    </Filter>
     <Filter Include="CommonApp">
       <UniqueIdentifier>{ce83ffc6-bc24-47da-b9a7-07fd024ef4f0}</UniqueIdentifier>
     </Filter>
@@ -59,9 +53,6 @@
     </Filter>
     <Filter Include="Common\DspFilter\Source">
       <UniqueIdentifier>{2591bc36-dc7e-476a-b154-f3ba93c145b2}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="pump_rods\Windows\DetailWindow">
-      <UniqueIdentifier>{b5032c11-9c76-4fb6-a68e-34b268b47eda}</UniqueIdentifier>
     </Filter>
     <Filter Include="CommonApp\MessageText">
       <UniqueIdentifier>{73b93517-b0d2-4fc4-8540-aa445a1e4989}</UniqueIdentifier>
@@ -92,6 +83,15 @@
     </Filter>
     <Filter Include="Common\DlgTemplates">
       <UniqueIdentifier>{2bbb7bf6-99b5-45fc-a6e5-5ea00402588b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows">
+      <UniqueIdentifier>{f731f49d-67e9-4d4b-9d64-525457d3f717}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\MainWindow">
+      <UniqueIdentifier>{39062b04-9a4a-4a16-97a0-917f30777141}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Windows\DetailWindow">
+      <UniqueIdentifier>{b5032c11-9c76-4fb6-a68e-34b268b47eda}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -153,7 +153,7 @@
       <Filter>Common\Graphics</Filter>
     </ClInclude>
     <ClInclude Include="Windows\MainWindow\MainWindow.h">
-      <Filter>pump_rods\Windows\MainWindow</Filter>
+      <Filter>Windows\MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\window_tool\WindowsPosition.h">
       <Filter>Common\window_tool</Filter>
@@ -171,13 +171,13 @@
       <Filter>pump_rods\App</Filter>
     </ClInclude>
     <ClInclude Include="Windows\MainWindow\MainWindowMenu.hpp">
-      <Filter>pump_rods\Windows\MainWindow</Filter>
+      <Filter>Windows\MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="Windows\MainWindow\MainWindowToolBar.h">
-      <Filter>pump_rods\Windows\MainWindow</Filter>
+      <Filter>Windows\MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="Windows\MainWindow\AppKeyHandler.h">
-      <Filter>pump_rods\Windows\MainWindow</Filter>
+      <Filter>Windows\MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\window_tool\MenuAPI.h">
       <Filter>Common\window_tool</Filter>
@@ -198,7 +198,7 @@
       <Filter>CommonApp\CommonWindow</Filter>
     </ClInclude>
     <ClInclude Include="Windows\MainWindow\Viewers.h">
-      <Filter>pump_rods\Windows\MainWindow</Filter>
+      <Filter>Windows\MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="..\Common\Graphics\FixedGridSeries.h">
       <Filter>Common\Graphics</Filter>
@@ -237,13 +237,13 @@
       <Filter>Common\DspFilter\Include</Filter>
     </ClInclude>
     <ClInclude Include="Windows\DetailWindow\DefectWindow.h">
-      <Filter>pump_rods\Windows\DetailWindow</Filter>
+      <Filter>Windows\DetailWindow</Filter>
     </ClInclude>
     <ClInclude Include="Windows\DetailWindow\FrameViewer.h">
-      <Filter>pump_rods\Windows\DetailWindow</Filter>
+      <Filter>Windows\DetailWindow</Filter>
     </ClInclude>
     <ClInclude Include="Windows\MainWindow\ResultViewer.h">
-      <Filter>pump_rods\Windows\MainWindow</Filter>
+      <Filter>Windows\MainWindow</Filter>
     </ClInclude>
     <ClInclude Include="..\CommonApp\MessageText\ListMess.hpp">
       <Filter>CommonApp\MessageText</Filter>
@@ -291,7 +291,7 @@
       <Filter>Common\Devices\502</Filter>
     </ClInclude>
     <ClInclude Include="Windows\DetailWindow\StructWindow.h">
-      <Filter>pump_rods\Windows\DetailWindow</Filter>
+      <Filter>Windows\DetailWindow</Filter>
     </ClInclude>
     <ClInclude Include="DLG\Dialogs.h">
       <Filter>pump_rods\DLG</Filter>
@@ -318,7 +318,10 @@
       <Filter>pump_rods\Automat</Filter>
     </ClInclude>
     <ClInclude Include="Windows\DetailWindow\TemplDlg.hpp">
-      <Filter>pump_rods\Windows\DetailWindow</Filter>
+      <Filter>Windows\DetailWindow</Filter>
+    </ClInclude>
+    <ClInclude Include="Windows\DetailWindow\TemplWindow.hpp">
+      <Filter>Windows\DetailWindow</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -362,7 +365,7 @@
       <Filter>pump_rods\App</Filter>
     </ClCompile>
     <ClCompile Include="Windows\MainWindow\MainWindow.cpp">
-      <Filter>pump_rods\Windows\MainWindow</Filter>
+      <Filter>Windows\MainWindow</Filter>
     </ClCompile>
     <ClCompile Include="..\Common\window_tool\WindowsPosition.cpp">
       <Filter>Common\window_tool</Filter>
@@ -380,10 +383,10 @@
       <Filter>pump_rods\App</Filter>
     </ClCompile>
     <ClCompile Include="Windows\MainWindow\MainWindowToolBar.cpp">
-      <Filter>pump_rods\Windows\MainWindow</Filter>
+      <Filter>Windows\MainWindow</Filter>
     </ClCompile>
     <ClCompile Include="Windows\MainWindow\AppKeyHandler.cpp">
-      <Filter>pump_rods\Windows\MainWindow</Filter>
+      <Filter>Windows\MainWindow</Filter>
     </ClCompile>
     <ClCompile Include="..\Common\window_tool\MenuAPI.cpp">
       <Filter>Common\window_tool</Filter>
@@ -398,7 +401,7 @@
       <Filter>CommonApp\CommonWindow</Filter>
     </ClCompile>
     <ClCompile Include="Windows\MainWindow\Viewers.cpp">
-      <Filter>pump_rods\Windows\MainWindow</Filter>
+      <Filter>Windows\MainWindow</Filter>
     </ClCompile>
     <ClCompile Include="..\Common\Graphics\FixedGridSeries.cpp">
       <Filter>Common\Graphics</Filter>
@@ -434,13 +437,13 @@
       <Filter>Common\DspFilter\Source</Filter>
     </ClCompile>
     <ClCompile Include="Windows\DetailWindow\DefectWindow.cpp">
-      <Filter>pump_rods\Windows\DetailWindow</Filter>
+      <Filter>Windows\DetailWindow</Filter>
     </ClCompile>
     <ClCompile Include="Windows\DetailWindow\FrameViewer.cpp">
-      <Filter>pump_rods\Windows\DetailWindow</Filter>
+      <Filter>Windows\DetailWindow</Filter>
     </ClCompile>
     <ClCompile Include="Windows\MainWindow\ResultViewer.cpp">
-      <Filter>pump_rods\Windows\MainWindow</Filter>
+      <Filter>Windows\MainWindow</Filter>
     </ClCompile>
     <ClCompile Include="..\CommonApp\MessageText\StatusMessages.cpp">
       <Filter>CommonApp\MessageText</Filter>
@@ -467,7 +470,7 @@
       <Filter>Common\Devices\502</Filter>
     </ClCompile>
     <ClCompile Include="Windows\DetailWindow\StructWindow.cpp">
-      <Filter>pump_rods\Windows\DetailWindow</Filter>
+      <Filter>Windows\DetailWindow</Filter>
     </ClCompile>
     <ClCompile Include="DLG\FilterDlg.cpp">
       <Filter>pump_rods\DLG</Filter>
@@ -512,7 +515,7 @@
       <Filter>pump_rods\DLG</Filter>
     </ClCompile>
     <ClCompile Include="DLG\MessageDlg.cpp">
-      <Filter>pump_rods\Windows\DetailWindow</Filter>
+      <Filter>Windows\DetailWindow</Filter>
     </ClCompile>
     <ClCompile Include="..\Common\window_tool\RunExecute.cpp">
       <Filter>Common\window_tool</Filter>

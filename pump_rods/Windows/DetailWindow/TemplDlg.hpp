@@ -1,4 +1,5 @@
-﻿#include <Windows.h>
+﻿#pragma once
+#include <Windows.h>
 #include "App/App.h"
 #include "App\AppBase.h"
 #include "DefectWindow.h"
