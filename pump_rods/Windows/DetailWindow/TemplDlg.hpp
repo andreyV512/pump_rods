@@ -8,15 +8,13 @@
 
 namespace TemplDlg
 {
-	MIN_EQUAL_VALUE(DefectSig<MedianFiltreWidth>, 3)
-	MAX_EQUAL_VALUE(DefectSig<MedianFiltreWidth>, 15)
-	PARAM_TITLE(DefectSig<MedianFiltreWidth>, L"Ширина фильтра")
-	PARAM_TITLE(DefectSig<MedianFiltreON>, L"Включение фильтра")
-
-	MIN_EQUAL_VALUE(StructSig<MedianFiltreWidth>, 3)
-	MAX_EQUAL_VALUE(StructSig<MedianFiltreWidth>, 15)
-	PARAM_TITLE(StructSig<MedianFiltreWidth>, L"Ширина фильтра")
-	PARAM_TITLE(StructSig<MedianFiltreON>, L"Включение фильтра")
+	#define TEMPL_MIN_EQUAL_VALUE(sub_type, value)template<template<class>class W>struct LessEqual<W<sub_type>>{typename W<sub_type>::type_value operator()(){return value;}};
+	#define TEMPL_MAX_EQUAL_VALUE(sub_type, value)template<template<class>class W>struct LargenEqual<W<sub_type>>{typename W<sub_type>::type_value operator()(){return value;}};
+	#define TEMPL_PARAM_TITLE(type, name)template<template<class>class W>struct ParamTitle<W<type>>{wchar_t *operator()(){return name;}};
+	TEMPL_MIN_EQUAL_VALUE(MedianFiltreWidth, 3)
+	TEMPL_MAX_EQUAL_VALUE(MedianFiltreWidth, 15)
+	TEMPL_PARAM_TITLE(DefectSig<MedianFiltreWidth>, L"Ширина фильтра")
+	TEMPL_PARAM_TITLE(DefectSig<MedianFiltreON>, L"Включение фильтра")
 
 	template<class O, class P>struct __def_ok_btn__
 	{
@@ -91,16 +89,6 @@ struct DefOkBtn
 	}
 };
 
-//template<template<class>class T>struct __templ_window__;
-//template<>struct __templ_window__<DefectSig>
-//{
-//	typedef DefectWindow Result;
-//};
-//template<>struct __templ_window__<StructSig>
-//{
-//	typedef StructWindow Result;
-//};
-
 template<template<class>class W>struct MedianFiltre
 {
 	static void Do(HWND h)
@@ -127,15 +115,10 @@ template<template<class>class W>struct MedianFiltre
 	}
 };
 
-MIN_EQUAL_VALUE(DefectSig<CutoffFrequency>, 0)
-MAX_EQUAL_VALUE(DefectSig<CutoffFrequency>, 4000)
-PARAM_TITLE(DefectSig<CutoffFrequency>, L"Частота отсечения фильтра")
-PARAM_TITLE(DefectSig<CutoffFrequencyON>, L"Включение фильтра")
-
-MIN_EQUAL_VALUE(StructSig<CutoffFrequency>, 0)
-MAX_EQUAL_VALUE(StructSig<CutoffFrequency>, 4000)
-PARAM_TITLE(StructSig<CutoffFrequency>, L"Частота отсечения фильтра")
-PARAM_TITLE(StructSig<CutoffFrequencyON>, L"Включение фильтра")
+TEMPL_MIN_EQUAL_VALUE(CutoffFrequency, 0)
+TEMPL_MAX_EQUAL_VALUE(CutoffFrequency, 4000)
+TEMPL_PARAM_TITLE(CutoffFrequency, L"Частота отсечения фильтра")
+TEMPL_PARAM_TITLE(CutoffFrequencyON, L"Включение фильтра")
 
 template<template<class> class W>struct FilterDlg
 {
@@ -164,13 +147,9 @@ template<template<class> class W>struct FilterDlg
 	}
 };
 
-MIN_EQUAL_VALUE( DefectSig<KoeffSign>, 0.1)
-MAX_EQUAL_VALUE( DefectSig<KoeffSign>, 2.0)
-PARAM_TITLE( DefectSig<KoeffSign>, L"Коэффициент")
-
-MIN_EQUAL_VALUE( StructSig<KoeffSign>, 0.1)
-MAX_EQUAL_VALUE( StructSig<KoeffSign>, 2.0)
-PARAM_TITLE( StructSig<KoeffSign>, L"Коэффициент")
+TEMPL_MIN_EQUAL_VALUE(KoeffSign, 0.1)
+TEMPL_MAX_EQUAL_VALUE( KoeffSign, 2.0)
+TEMPL_PARAM_TITLE(KoeffSign, L"Коэффициент")
 
 template<template<class>class W>struct CorrectionSensorDlg
 {
@@ -269,13 +248,9 @@ template<template<class>class W>struct CorrectionSensorDlg
 		}
 	}
 
-	MIN_EQUAL_VALUE(StructSig<ViewerCount>, 100)
-	MAX_EQUAL_VALUE(StructSig<ViewerCount>, 30000)
-	PARAM_TITLE(StructSig<ViewerCount>, L"Ширина")
-
-	MIN_EQUAL_VALUE(DefectSig<ViewerCount>, 100)
-	MAX_EQUAL_VALUE(DefectSig<ViewerCount>, 30000)
-	PARAM_TITLE(DefectSig<ViewerCount>, L"Ширина")
+	TEMPL_MIN_EQUAL_VALUE(ViewerCount, 100)
+	TEMPL_MAX_EQUAL_VALUE(ViewerCount, 30000)
+	TEMPL_PARAM_TITLE(ViewerCount, L"Ширина")
 
 	template<template<class> class W>struct FrameWidthViewDlg
 	{
