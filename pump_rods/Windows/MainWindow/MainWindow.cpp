@@ -5,8 +5,6 @@
 #include "window_tool\MenuAPI.h"
 #include "templates\WindowsEventTemplate.hpp"
 #include "window_tool\EmptyWindow.h"
-#include "Windows\DetailWindow\DefectWindow.h"
-#include "Windows\DetailWindow\StructWindow.h"
 #include "MessageText\StatusMessages.h"
 #include "Windows\DetailWindow\TemplWindow.hpp"
 

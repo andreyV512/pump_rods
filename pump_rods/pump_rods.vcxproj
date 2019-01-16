@@ -146,9 +146,7 @@
     <ClInclude Include="DataItem\DataItem.h" />
     <ClInclude Include="DLG\Dialogs.h" />
     <ClInclude Include="Resource.h" />
-    <ClInclude Include="Windows\DetailWindow\DefectWindow.h" />
     <ClInclude Include="Windows\DetailWindow\FrameViewer.h" />
-    <ClInclude Include="Windows\DetailWindow\StructWindow.h" />
     <ClInclude Include="Windows\DetailWindow\TemplDlg.hpp" />
     <ClInclude Include="Windows\DetailWindow\TemplWindow.hpp" />
     <ClInclude Include="Windows\MainWindow\AppKeyHandler.h" />
@@ -218,9 +216,7 @@
     <ClCompile Include="DLG\StoredData.cpp" />
     <ClCompile Include="DLG\TestIOPorts.cpp" />
     <ClCompile Include="DLG\TypeSizeDlg.cpp" />
-    <ClCompile Include="Windows\DetailWindow\DefectWindow.cpp" />
     <ClCompile Include="Windows\DetailWindow\FrameViewer.cpp" />
-    <ClCompile Include="Windows\DetailWindow\StructWindow.cpp" />
     <ClCompile Include="Windows\MainWindow\AppKeyHandler.cpp" />
     <ClCompile Include="Windows\MainWindow\MainWindow.cpp" />
     <ClCompile Include="Windows\MainWindow\MainWindowToolBar.cpp" />

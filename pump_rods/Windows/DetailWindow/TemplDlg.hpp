@@ -2,8 +2,6 @@
 #include <Windows.h>
 #include "App/App.h"
 #include "App\AppBase.h"
-#include "DefectWindow.h"
-#include "StructWindow.h"
 #include "DlgTemplates\ParamDlg.hpp"
 #include "DlgTemplates\ParamDlgNew.h"
 #include "MessageText\ListMess.hpp"
@@ -93,21 +91,21 @@ struct DefOkBtn
 	}
 };
 
-template<template<class>class T>struct __templ_window__;
-template<>struct __templ_window__<DefectSig>
-{
-	typedef DefectWindow Result;
-};
-template<>struct __templ_window__<StructSig>
-{
-	typedef StructWindow Result;
-};
+//template<template<class>class T>struct __templ_window__;
+//template<>struct __templ_window__<DefectSig>
+//{
+//	typedef DefectWindow Result;
+//};
+//template<>struct __templ_window__<StructSig>
+//{
+//	typedef StructWindow Result;
+//};
 
 template<template<class>class W>struct MedianFiltre
 {
 	static void Do(HWND h)
 	{
-		typedef typename __templ_window__<W>::Result Win;
+		typedef typename TemplWindow<W> Win;
 		Win &e = *(Win *)GetWindowLongPtr(h, GWLP_USERDATA);
 		FrameViewer &frame =  e.viewers.get<FrameViewer>();
 		MedianFiltreTable par;
@@ -143,7 +141,7 @@ template<template<class> class W>struct FilterDlg
 {
 	static void Do(HWND h)
 	{
-		typedef typename __templ_window__<W>::Result Win;
+		typedef TemplWindow<W> Win;
 		Win &e = *(Win *)GetWindowLongPtr(h, GWLP_USERDATA);
 		FrameViewer &frame =  e.viewers.get<FrameViewer>();
 		AnalogFilterTable par;
@@ -178,7 +176,7 @@ template<template<class>class W>struct CorrectionSensorDlg
 {
 	static void Do(HWND h)
 	{
-		typedef typename __templ_window__<W>::Result Win;
+		typedef TemplWindow<W> Win;
 		Win &e = *(Win *)GetWindowLongPtr(h, GWLP_USERDATA);
 		FrameViewer &frame =  e.viewers.get<FrameViewer>();
 		KoeffSignTable koef;
@@ -249,7 +247,7 @@ template<template<class>class W>struct CorrectionSensorDlg
 
 	template<template<class>class W>bool TestChangeParam(HWND h)
 	{
-		typedef typename __templ_window__<W>::Result Win;
+		typedef TemplWindow<W> Win;
 		Win &e = *(Win *)GetWindowLongPtr(h, GWLP_USERDATA);
 		FrameViewer &frame =  e.viewers.get<FrameViewer>();
 
@@ -260,7 +258,7 @@ template<template<class>class W>struct CorrectionSensorDlg
 	{
 		if(TypesizePasswordDlg().Do(h))
 		{
-			typedef typename __templ_window__<W>::Result Win;
+			typedef TemplWindow<W> Win;
 		Win &e = *(Win *)GetWindowLongPtr(h, GWLP_USERDATA);
 			FrameViewer &frame =  e.viewers.get<FrameViewer>();
 			CBase base(ParametersBase().name());
@@ -289,7 +287,7 @@ template<template<class>class W>struct CorrectionSensorDlg
 				>::Result
 			>(Singleton<ViewerCountTable>::Instance()).Do(h, L"Ширина кадра"))
 			{
-				typedef typename __templ_window__<W>::Result Win;
+				typedef TemplWindow<W> Win;
 				Win &e = *(Win *)GetWindowLongPtr(h, GWLP_USERDATA);
 				FrameViewer &frame =  e.viewers.get<FrameViewer>();
 				frame.count = Singleton<ViewerCountTable>::Instance().items.get<W<ViewerCount>>().value;
@@ -350,7 +348,7 @@ template<template<class>class W>struct CorrectionSensorDlg
 	template<template<class>class W>struct GraphView{
 		static void Do(HWND h)
 		{			
-			typedef typename __templ_window__<W>::Result Win;
+			typedef TemplWindow<W> Win;
 			Win &w = *(Win *)GetWindowLongPtr(h, GWLP_USERDATA);
 			FrameViewer &f = w.viewers.get<FrameViewer>();
 			f.isBarGraph ^= true;

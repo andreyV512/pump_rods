@@ -236,9 +236,6 @@
     <ClInclude Include="..\Common\DspFilters\include\PoleFilter.h">
       <Filter>Common\DspFilter\Include</Filter>
     </ClInclude>
-    <ClInclude Include="Windows\DetailWindow\DefectWindow.h">
-      <Filter>Windows\DetailWindow</Filter>
-    </ClInclude>
     <ClInclude Include="Windows\DetailWindow\FrameViewer.h">
       <Filter>Windows\DetailWindow</Filter>
     </ClInclude>
@@ -289,9 +286,6 @@
     </ClInclude>
     <ClInclude Include="..\Common\L502\Device502.h">
       <Filter>Common\Devices\502</Filter>
-    </ClInclude>
-    <ClInclude Include="Windows\DetailWindow\StructWindow.h">
-      <Filter>Windows\DetailWindow</Filter>
     </ClInclude>
     <ClInclude Include="DLG\Dialogs.h">
       <Filter>pump_rods\DLG</Filter>
@@ -436,9 +430,6 @@
     <ClCompile Include="..\Common\DspFilters\source\PoleFilter.cpp">
       <Filter>Common\DspFilter\Source</Filter>
     </ClCompile>
-    <ClCompile Include="Windows\DetailWindow\DefectWindow.cpp">
-      <Filter>Windows\DetailWindow</Filter>
-    </ClCompile>
     <ClCompile Include="Windows\DetailWindow\FrameViewer.cpp">
       <Filter>Windows\DetailWindow</Filter>
     </ClCompile>
@@ -468,9 +459,6 @@
     </ClCompile>
     <ClCompile Include="..\Common\L502\Device502.cpp">
       <Filter>Common\Devices\502</Filter>
-    </ClCompile>
-    <ClCompile Include="Windows\DetailWindow\StructWindow.cpp">
-      <Filter>Windows\DetailWindow</Filter>
     </ClCompile>
     <ClCompile Include="DLG\FilterDlg.cpp">
       <Filter>pump_rods\DLG</Filter>
