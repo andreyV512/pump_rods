@@ -1,14 +1,6 @@
 #pragma once
 
-class DspFiltre
-{
-public:
-		//.Setup(4000, 3, 50, 40); частота дискретизации, порядок фильтра, частота среза, затухание
-	virtual void Setup(int sample_rate, int order, double cutoffFrequency, double stopBandDb) = 0;
-	virtual double operator()(double value) = 0;
-};
-
-class LowFiltre: public DspFiltre
+class LowFiltre
 {
 	class Impl;
 	Impl &impl;
@@ -20,7 +12,7 @@ public:
 	double operator()(double value);
 };
 
-class HighFiltre: public DspFiltre
+class HighFiltre
 {
 	class Impl;
 	Impl &impl;
@@ -31,3 +23,4 @@ public:
 	void Setup(int sample_rate, int order, double cutoffFrequency, double stopBandDb);
 	double operator()(double value);
 };
+
