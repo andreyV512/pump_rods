@@ -101,7 +101,7 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 
 template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 {
-	Viewer &def = viewers.get<Viewer>();
+	Viewer &viewer = viewers.get<Viewer>();
 	W<DataItem::Buffer> &item = Singleton<W<DataItem::Buffer>>::Instance();
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	
@@ -162,18 +162,18 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 
 	frame.delta = (double)frame.count / dimention_of(frame.buffer);
 
-	frame.nominalColor		= def.nominalColor;
+	frame.nominalColor		= viewer.nominalColor;
 
 	DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;
 	int rodLength = dead.get<RodLenght>().value;
 	frame.deathZoneFirst	= int((double)dead.get<W<First<DeathZone>>>().value * item.currentOffset / rodLength); 
 	frame.deathZoneSecond	= item.currentOffset -  int((double)dead.get<W<Second<DeathZone>>>().value * item.currentOffset / rodLength); 
 
-	frame.deathZoneColor	= def.deathZoneColor	; 	
-	frame.threshDefect	 	= def.threshDefect	 	;
-	frame.threshDefectColor	= def.threshDefectColor	;
-	frame.threshSortDownColor = def.threshSortDownColor;
-	frame.threshSortDown   	= def.threshSortDown   	;
+	frame.deathZoneColor	= viewer.deathZoneColor	; 	
+	frame.threshDefect	 	= viewer.threshDefect	 	;
+	frame.threshDefectColor	= viewer.threshDefectColor	;
+	frame.threshSortDownColor = viewer.threshSortDownColor;
+	frame.threshSortDown   	= viewer.threshSortDown   	;
 	
 	ThresholdsTable::TItems &tresh = Singleton<ThresholdsTable>::Instance().items;
 
@@ -197,10 +197,10 @@ template<template<class>class W>void TemplWindow<W>::operator()(TSize &m)
 	static const int height = 200;
 
 	{
-		Viewer &def = viewers.get<Viewer>();
-		TSize size = {def.hWnd, WM_SIZE, 0, m.Width, height};
+		Viewer &viewer = viewers.get<Viewer>();
+		TSize size = {viewer.hWnd, WM_SIZE, 0, m.Width, height};
 		SendMessage(MESSAGE(size));
-		MoveWindow(def.hWnd , 0, 0, size.Width, size.Height, true);
+		MoveWindow(viewer.hWnd , 0, 0, size.Width, size.Height, true);
 	}
 	{
 		FrameViewer &frame = viewers.get<FrameViewer>();
