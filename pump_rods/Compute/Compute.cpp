@@ -1,6 +1,6 @@
 ﻿#include "Compute.h"
 #include "MedianFiltre\MedianFiltre.h"
-#include "DspFilters\ChebyshevFiltre.h"
+#include "DspFilters\ChebyshevFiltre.hpp"
 #include "templates\typelist.hpp"
 #include "App\AppBase.h"
 #include "DataItem\DataItem.h"

@@ -100,7 +100,7 @@
     <ClInclude Include="..\Common\Base\TablesDefine.h" />
     <ClInclude Include="..\Common\DlgTemplates\ParamDlg.h" />
     <ClInclude Include="..\Common\DlgTemplates\ParamDlg.hpp" />
-    <ClInclude Include="..\Common\DspFilters\ChebyshevFiltre.h" />
+    <ClInclude Include="..\Common\DspFilters\ChebyshevFiltre.hpp" />
     <ClInclude Include="..\Common\DspFilters\include\Biquad.h" />
     <ClInclude Include="..\Common\DspFilters\include\Cascade.h" />
     <ClInclude Include="..\Common\DspFilters\include\ChebyshevII.h" />
