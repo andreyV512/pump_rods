@@ -1,25 +1,24 @@
 #pragma once
+#include "include/ChebyshevII.h"
 
-class LowFiltre
+template<class T>class DSPFiltre: public T
 {
-	class Impl;
-	Impl &impl;
-	char implementation_buffer[760];
 public:
-	LowFiltre();
-	//f.Setup(4000, 3, 50, 40); частота дискретизации, порядок фильтра, частота среза, затухание
-	void Setup(int sample_rate, int order, double cutoffFrequency, double stopBandDb);
-	double operator()(double value);
+	double operator()(double value)
+	{
+		return m_state.m_state[0].process(value, typename T::m_design);
+	}
+
+	void Setup(int sample_rate, int order, double cutoffFrequency, double stopBandDb)
+	{	
+		Dsp::Params params;
+		params[0] = sample_rate;
+		params[1] = order;
+		params[2] = cutoffFrequency;
+		params[3] = stopBandDb;
+		setParams (params);
+	}
 };
 
-class HighFiltre
-{
-	class Impl;
-	Impl &impl;
-	char implementation_buffer[760];
-public:
-	HighFiltre();
-	//f.Setup(4000, 3, 50, 40); частота дискретизации, порядок фильтра, частота среза, затухание
-	void Setup(int sample_rate, int order, double cutoffFrequency, double stopBandDb);
-	double operator()(double value);
-};
+class LowFiltre : public DSPFiltre<Dsp::FilterDesign<Dsp::ChebyshevII::Design::LowPass<5>, 1>>{};
+class HighFiltre: public DSPFiltre<Dsp::FilterDesign<Dsp::ChebyshevII::Design::HighPass<5>, 1>>{};
