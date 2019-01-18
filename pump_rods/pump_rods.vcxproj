@@ -167,7 +167,6 @@
     <ClCompile Include="..\CommonApp\MessageText\StatusMessages.cpp" />
     <ClCompile Include="..\Common\1730\Device1730.cpp" />
     <ClCompile Include="..\Common\DlgTemplates\ParamDlg.cpp" />
-    <ClCompile Include="..\Common\DspFilters\ChebyshevFiltre.cpp" />
     <ClCompile Include="..\Common\DspFilters\source\Biquad.cpp" />
     <ClCompile Include="..\Common\DspFilters\source\Cascade.cpp" />
     <ClCompile Include="..\Common\DspFilters\source\ChebyshevII.cpp" />

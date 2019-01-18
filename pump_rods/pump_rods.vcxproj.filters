@@ -409,9 +409,6 @@
     <ClCompile Include="..\Common\MedianFiltre\MedianFiltre.cpp">
       <Filter>Common\MedianFiltre</Filter>
     </ClCompile>
-    <ClCompile Include="..\Common\DspFilters\ChebyshevFiltre.cpp">
-      <Filter>Common\DspFilter</Filter>
-    </ClCompile>
     <ClCompile Include="..\Common\DspFilters\source\Filter.cpp">
       <Filter>Common\DspFilter\Source</Filter>
     </ClCompile>
