@@ -21,5 +21,5 @@ public:
 	}
 };
 
-class LowFiltre : public DSPFiltre<Dsp::ChebyshevII::Design::LowPass<5>>{};
-class HighFiltre: public DSPFiltre<Dsp::ChebyshevII::Design::HighPass<5>>{};
+class LowFiltre : public DSPFiltre<Dsp::ChebyshevII::Design::LowPass<3>>{};
+class HighFiltre: public DSPFiltre<Dsp::ChebyshevII::Design::HighPass<3>>{};
