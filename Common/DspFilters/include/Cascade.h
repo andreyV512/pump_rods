@@ -54,7 +54,7 @@ class Cascade
 {
 public:
   template <class StateType>
-  class StateBase// : private DenormalPrevention
+  class StateBase : private DenormalPrevention
   {
   public:
     template <typename Sample>
@@ -88,21 +88,21 @@ public:
       , stageArray (stageArray_)
     {
     }
-  
+
     int maxStages;
     Stage* stageArray;
   };
 
-  //int getNumStages () const
-  //{
-  //  return m_numStages;
-  //}
+  int getNumStages () const
+  {
+    return m_numStages;
+  }
 
-  //const Stage& operator[] (int index)
-  //{
-  //  assert (index >= 0 && index <= m_numStages);
-  //  return m_stageArray[index];
-  //}
+  const Stage& operator[] (int index)
+  {
+    assert (index >= 0 && index <= m_numStages);
+    return m_stageArray[index];
+  }
 
 public:
   // Calculate filter response at the given normalized frequency.
