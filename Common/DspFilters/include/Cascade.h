@@ -54,23 +54,17 @@ class Cascade
 {
 public:
   template <class StateType>
-  class StateBase : private DenormalPrevention
+  class StateBase// : private DenormalPrevention
   {
   public:
     template <typename Sample>
-    inline Sample process (const Sample in, const Cascade& c)
+    inline Sample process (Sample out, const Cascade& c)
     {
-      double out = in;
       StateType* state = m_stateArray;
       Biquad const* stage = c.m_stageArray;
-      const double vsa = 0;//ac();
-      int i = c.m_numStages - 1;
-        out = (state++)->process1 (out, *stage++, vsa);
-      for (; --i >= 0;)
-        out = (state++)->process1 (out, *stage++, 0);
-      //for (int i = c.m_numStages; --i >= 0; ++state, ++stage)
-      //  out = state->process1 (out, *stage, vsa);
-      return static_cast<Sample> (out);
+      for (int i = c.m_numStages; --i >= 0; ++state, ++stage)
+        out = state->process1 (out, *stage, 0);
+      return out;
     }
 
   protected:
@@ -94,21 +88,21 @@ public:
       , stageArray (stageArray_)
     {
     }
-
+  
     int maxStages;
     Stage* stageArray;
   };
 
-  int getNumStages () const
-  {
-    return m_numStages;
-  }
+  //int getNumStages () const
+  //{
+  //  return m_numStages;
+  //}
 
-  const Stage& operator[] (int index)
-  {
-    assert (index >= 0 && index <= m_numStages);
-    return m_stageArray[index];
-  }
+  //const Stage& operator[] (int index)
+  //{
+  //  assert (index >= 0 && index <= m_numStages);
+  //  return m_stageArray[index];
+  //}
 
 public:
   // Calculate filter response at the given normalized frequency.
@@ -151,7 +145,6 @@ public:
   public:
     State() : Cascade::StateBase <StateType> (m_states)
     {
-      Cascade::StateBase <StateType>::m_stateArray = m_states;
       reset ();
     }
 
