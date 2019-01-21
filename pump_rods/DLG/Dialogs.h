@@ -36,5 +36,6 @@ DLG(KoefDlg)
 DLG(MessageDlg)
 DLG(StoreDlg)
 DLG(LoadDlg)
+DLG(TresholdsDlg)
 
 #undef DLG

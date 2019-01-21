@@ -7,10 +7,7 @@
 #include "MessageText\ListMess.hpp"
 
 namespace TemplDlg
-{
-	#define TEMPL_MIN_EQUAL_VALUE(sub_type, value)template<template<class>class W>struct LessEqual<W<sub_type>>{typename W<sub_type>::type_value operator()(){return value;}};
-	#define TEMPL_MAX_EQUAL_VALUE(sub_type, value)template<template<class>class W>struct LargenEqual<W<sub_type>>{typename W<sub_type>::type_value operator()(){return value;}};
-	#define TEMPL_PARAM_TITLE(type, name)template<template<class>class W>struct ParamTitle<W<type>>{wchar_t *operator()(){return name;}};
+{	
 	TEMPL_MIN_EQUAL_VALUE(MedianFiltreWidth, 3)
 	TEMPL_MAX_EQUAL_VALUE(MedianFiltreWidth, 15)
 	TEMPL_PARAM_TITLE(DefectSig<MedianFiltreWidth>, L"Ширина фильтра")

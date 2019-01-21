@@ -47,7 +47,8 @@ namespace MainWindowMenu
 	struct MainDeleteTypeSize        : DelTypeSizeDlg{};
 	struct MedianFiltre              : MedianFilterDlg{};
 	struct Filter_                   : FilterDlg{};
-	struct KoefDlg_                   : KoefDlg{};
+	struct KoefDlg_                  : KoefDlg{};
+	struct TresholdsDlg_             : TresholdsDlg{};
 
 	MENU_ITEM(L"Мёртвые зоны", DeadZones)
 	MENU_ITEM(L"Создать типоразмер", MainCreateTypesize)
@@ -55,11 +56,13 @@ namespace MainWindowMenu
 	MENU_ITEM(L"Медианный фильтр", MedianFiltre)
 	MENU_ITEM(L"Корректировка датчиков", KoefDlg_)
 	MENU_ITEM(L"Настройки цифрового фильтра", Filter_)
+	MENU_ITEM(L"Настройки порогов", TresholdsDlg_)
 
 	template<>struct TopMenu<MainOptionTypeSize>
 	{
 		typedef TL::MkTlst<
 			 MenuItem<DeadZones>
+			, MenuItem<TresholdsDlg_>
 			, MenuItem<MedianFiltre>
 			, MenuItem<Filter_>
 			, MenuItem<KoefDlg_>
