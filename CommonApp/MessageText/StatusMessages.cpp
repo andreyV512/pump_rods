@@ -179,15 +179,6 @@ int ResultMessageId(unsigned *x)
 	return StatusMessages::idBits(res);
 }
 
-void ColorBar::operator()(double &data, unsigned &color, int id, double defData)
-{
-   //if(id < dimention_of(StatusMessages::bits))StatusMessages::ptrMess[id](NULL, color);
-   //if(TL::IndexOf<StatusMessages::lst_lst::lst_list, TL::MkTlst<DeathZone>::Result>::value == id)
-   //{
-	//		data = defData;
-   //}
-}
-
 void StatusText::FromSensors(unsigned *sens, unsigned &color, wchar_t *buf)
 	{
 		
@@ -198,8 +189,6 @@ void StatusText::FromSensors(unsigned *sens, unsigned &color, wchar_t *buf)
 		{
 			StatusMessages::ptrMess[id](buf, color);
 		}
-		
-		// visible = !(TL::IndexOf<StatusMessages::lst_lst::lst_list, TL::MkTlst<DeathZone>::Result>::value == id);
 	}
 
 unsigned StatusColor::operator()(unsigned id)
@@ -217,9 +206,6 @@ void StatusText::operator()(int id, unsigned &color, wchar_t *buf)
 		{
 			StatusMessages::ptrMess[id](buf, color);
 		}
-
-	//	  visible = !(0//TL::IndexOf<StatusMessages::lst_lst::lst_list, TL::MkTlst<Undefined>::Result>::value == id 
-	//		 || TL::IndexOf<StatusMessages::lst_lst::lst_list, TL::MkTlst<DeathZone>::Result>::value == id);
 	}
 
 
@@ -239,10 +225,6 @@ namespace StatusMessages
 	{
 		static const unsigned value = __klass__<Tail>::value;
 	};
-//	template<class T, class Tail>struct __klass__<Tlst<BorderKlass2<T>, Tail>>
-//	{
-//		static const unsigned value = (1 << TL::IndexOf<status_list, BorderKlass2<T>>::value) | __klass__<Tail>::value;
-//	};
 	template<>struct __klass__<NullType>
 	{
 		static const unsigned value = 0;
@@ -284,15 +266,4 @@ namespace StatusMessages
 		}
 	};
 }
-
-//wchar_t *StatusTextZone(int id, unsigned &color)
-//{
-//	StatusMessages::__status_zone_data__ data = {
-//		id
-//		, Singleton<ColorTable>::Instance().items.get<Clr<Nominal>>().value
-//		, StatusMessages::Txt<Nominal>()()};
-//	TL::find<StatusMessages::list_items, StatusMessages::__status_zone__>()(data);
-//	color = data.color;
-//	return data.txt;
-//}
 

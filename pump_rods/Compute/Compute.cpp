@@ -40,25 +40,6 @@ namespace Compute
 		}		
 	}
 
-	//void Normalization()
-	//{
-	//	L502ParametersTable::TItems &l502Param = Singleton<L502ParametersTable>::Instance().items;
-	//
-	//	DataItem::Defectoscope &def = Singleton<DataItem::Defectoscope>::Instance();
-	//	double adcRange =  100.0 / DataItem::ADC_RANGE(l502Param.get<DefectSig<RangeL502>>().value);
-	//	for(int i = 0; i < def.currentOffset; ++i)
-	//	{
-	//		def.inputData[i] *= adcRange;
-	//	}
-	//
-	//	DataItem::Structure &str = Singleton<DataItem::Structure>::Instance();
-	//	adcRange =  100.0 / DataItem::ADC_RANGE(l502Param.get<StructSig<RangeL502>>().value);
-	//	for(int i = 0; i < str.currentOffset; ++i)
-	//	{
-	//		str.inputData[i] *= adcRange;
-	//	}
-	//}
-
 	typedef App::data_item_list __data_item_list__;
 
 	struct __rec_data__
