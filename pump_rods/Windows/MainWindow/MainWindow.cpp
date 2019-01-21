@@ -239,42 +239,12 @@ public:
 	static wchar_t *Title(){return L"Дефектоскоп";}
 };
 
-template<>class DetailWindow<StructSig>: public TemplWindow<StructSig>//StructWindow
+template<>class DetailWindow<StructSig>: public TemplWindow<StructSig>
 {
 public:
 	typedef TemplWindow<StructSig> Parent; 
 	static wchar_t *Title(){return L"Структура";}
 };
-
-//template<>struct Event<TopMenu<MainWindow::DefectoscopeViewer >> 	
-//{										
-//	static void Do(void *data)				
-//	{	
-//		MainWindow::DefectoscopeViewer *v = (MainWindow::DefectoscopeViewer *)data;
-//		HWND h = Common::OpenWindow<DefectoscopeDetailWindow>::Do(v->hWnd);
-//		if(NULL != h)
-//		{
-//			DefectoscopeDetailWindow *w = (DefectoscopeDetailWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
-//			w->viewers.get<DefectWindow::Viewer>().currentX = v->currentX;
-//			w->ChangeFrame(v->currentX);
-//		}
-//	}									
-//};
-
-//template<>struct Event<TopMenu<MainWindow::StructureViewer >> 	
-//{										
-//	static void Do(void *data)				
-//	{	
-//		MainWindow::StructureViewer *v = (MainWindow::StructureViewer *)data;
-//		HWND h = Common::OpenWindow<StructureDetailWindow>::Do(v->hWnd);
-//		if(NULL != h)
-//		{
-//			StructureDetailWindow *w = (StructureDetailWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
-//			w->viewers.get<StructWindow::Viewer>().currentX = v->currentX;
-//			w->ChangeFrame(v->currentX);
-//		}
-//	}									
-//};
 
 template<template<class>class W>struct __event__
 {

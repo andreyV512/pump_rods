@@ -177,11 +177,15 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	
 	ThresholdsTable::TItems &tresh = Singleton<ThresholdsTable>::Instance().items;
 
-	frame.tchart.items.get<FrameViewer::Border<SortDown>>().value = tresh.get<W<Thresh<SortDown>>>().value;
-	frame.tchart.items.get<FrameViewer::Border<Defect>>().value = tresh.get<W<Thresh<Defect>>>().value;
+	frame.tchart.items.get<FrameViewer::Border<SortDown>>().value = frame.threshSortDown;
+		//tresh.get<W<Thresh<SortDown>>>().value;
+	frame.tchart.items.get<FrameViewer::Border<Defect>>().value = frame.threshDefect;
+		//tresh.get<W<Thresh<Defect>>>().value;
 
 	frame.tchart.items.get<FrameViewer::Border<SortDown>>().color  = frame.threshSortDownColor;
+	//frame.threshSortDownColor;
 	frame.tchart.items.get<FrameViewer::Border<Defect>>().color  = frame.threshDefectColor;
+	//frame.threshDefectColor;
 
 	RepaintWindow(frame.hWnd);
 }
@@ -228,6 +232,7 @@ template<template<class>class W>void TemplWindow<W>::operator()(TClose &l)
 	if(!TemplDlg::TestChangeParam<W>(l.hwnd) && IDYES == MessageBox(l.hwnd, L"Сохранить?", L"Параметры были изменены", MB_ICONQUESTION | MB_YESNO))
 	{
 		TemplDlg::StoreParam<W>(l.hwnd);
+		Compute::Recalculation();
 	}
 	DestroyWindow(l.hwnd);
 }

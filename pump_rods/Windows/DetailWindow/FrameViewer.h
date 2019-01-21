@@ -68,10 +68,10 @@ public:
 	int deathZoneFirst	 ;
 	int deathZoneColor	 ;
 	int deathZoneSecond	 ;
-	double threshDefect	 ;
+	int threshDefect	 ;	
+	int threshSortDown;
 	int threshDefectColor;
 	int threshSortDownColor;
-	double threshSortDown   ;
 	int count;
 	int medianFiltreWidth;
 	int cutoffFrequency;

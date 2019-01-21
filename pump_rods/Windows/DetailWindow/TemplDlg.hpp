@@ -13,7 +13,7 @@ namespace TemplDlg
 	TEMPL_PARAM_TITLE(DefectSig<MedianFiltreWidth>, L"Ширина фильтра")
 	TEMPL_PARAM_TITLE(DefectSig<MedianFiltreON>, L"Включение фильтра")
 
-	template<class O, class P>struct __def_ok_btn__
+	template<class O, class P>struct __set_param_ok_btn__
 	{
 		void operator()(O &o)
 		{
@@ -46,11 +46,11 @@ namespace TemplDlg
 		for(int i = def.deathZoneFirst; i < def.deathZoneSecond; ++i)
 		{
 			double t = def.buffer[i];
-			if(t > def.threshDefect)
+			if(t > frame.threshDefect)
 			{
 				def.status[i] = STATUS_ID(W<Defect>);
 			}
-			else if(t > def.threshSortDown)
+			else if(t > frame.threshSortDown)
 			{
 				def.status[i] = STATUS_ID(W<SortDown>);
 			}
@@ -81,7 +81,7 @@ struct DefOkBtn
 	template<class Owner>void BtnHandler(Owner &t, HWND h)
 	{
 		if(!TL::find<typename Owner::list, __test__>()(&t.items, &h))return;
-		TL::foreach<typename Owner::list, __def_ok_btn__>()(t.items);
+		TL::foreach<typename Owner::list, __set_param_ok_btn__>()(t.items);
 		EndDialog(h, TRUE);
 	}
 };
@@ -143,7 +143,57 @@ template<template<class> class W>struct FilterDlg
 		}
 	}
 };
+//---------------------------------------------------------------
+TEMPL_MIN_EQUAL_VALUE(Thresh<SortDown>, 0)
+TEMPL_MIN_EQUAL_VALUE(Thresh<Defect>, 0)
+TEMPL_MAX_EQUAL_VALUE(Thresh<SortDown>, 100)
+TEMPL_MAX_EQUAL_VALUE(Thresh<Defect>, 100)
 
+TEMPL_PARAM_TITLE(Thresh<SortDown>, L"Сорт")
+TEMPL_PARAM_TITLE(Thresh<Defect>, L"Дефект")
+
+struct TreshOkBtn
+{
+	static const int width = 120;
+	static const int height = 30;
+	static const int ID = IDOK;
+	wchar_t *Title(){return L"Применить";}
+	template<class Owner>void BtnHandler(Owner &t, HWND h)
+	{
+		if(!TL::find<typename Owner::list, __test__>()(&t.items, &h))return;
+		TL::foreach<typename Owner::list, __set_param_ok_btn__>()(t.items);
+		EndDialog(h, TRUE);
+	}
+};
+
+template<template<class> class W>struct TreshDlg
+{
+	static void Do(HWND h)
+	{
+		typedef TemplWindow<W> Win;
+		Win &e = *(Win *)GetWindowLongPtr(h, GWLP_USERDATA);
+		FrameViewer &frame =  e.viewers.get<FrameViewer>();
+		Win::Viewer &viewer = e.viewers.get<Win::Viewer>();
+		ThresholdsTable par;
+		par.items.get< W<Thresh<SortDown>>>().value = frame.threshSortDown;
+		par.items.get< W<Thresh<Defect>>>().value = frame.threshDefect;
+		if(Dialog::Templ<NullType, ThresholdsTable
+			, TL::MkTlst<
+			W<Thresh<SortDown>>
+			, W<Thresh<Defect>>
+			>::Result
+			, 350
+			, TL::MkTlst<TreshOkBtn, CancelBtn>::Result
+		>(par).Do(h, L"Настройки порогов"))
+		{
+			viewer.threshSortDown =  frame.threshSortDown = par.items.get< W<Thresh<SortDown>>>().value;
+			viewer.threshDefect = frame.threshDefect = par.items.get< W<Thresh<Defect>>>().value;
+
+			Repaint<W>( e.viewers.get<Win::Viewer>(), frame);
+		}
+	}
+};
+//---------------------------------------------------------------
 TEMPL_MIN_EQUAL_VALUE(KoeffSign, 0.1)
 TEMPL_MAX_EQUAL_VALUE( KoeffSign, 2.0)
 TEMPL_PARAM_TITLE(KoeffSign, L"Коэффициент")
@@ -171,12 +221,6 @@ template<template<class>class W>struct CorrectionSensorDlg
 
 	template<class Table, class Item, class Param, class Type, Type Param::*>struct __test_change_param__;
 
-	template<>struct __test_change_param__<KoeffSignTable   , StructSig<KoeffSign>, FrameViewer, double, &FrameViewer::koef>{};
-	template<>struct __test_change_param__<AnalogFilterTable, StructSig<CutoffFrequency>, FrameViewer, int, &FrameViewer::cutoffFrequency>{};
-	template<>struct __test_change_param__<AnalogFilterTable, StructSig<CutoffFrequencyON>, FrameViewer, bool, &FrameViewer::cutoffFrequencyON>{};
-	template<>struct __test_change_param__<MedianFiltreTable, StructSig<MedianFiltreWidth>, FrameViewer, int, &FrameViewer::medianFiltreWidth>{};
-	template<>struct __test_change_param__<MedianFiltreTable, StructSig<MedianFiltreON>, FrameViewer, bool, &FrameViewer::medianFiltreON>{};
-
 	template<template<class> class W>struct __param_list__
 	{
 		typedef typename TL::MkTlst<
@@ -185,6 +229,8 @@ template<template<class>class W>struct CorrectionSensorDlg
 			, __test_change_param__<AnalogFilterTable, W<CutoffFrequencyON>, FrameViewer, bool,   &FrameViewer::cutoffFrequencyON>
 			, __test_change_param__<MedianFiltreTable, W<MedianFiltreWidth>, FrameViewer, int,    &FrameViewer::medianFiltreWidth>
 			, __test_change_param__<MedianFiltreTable, W<MedianFiltreON>   , FrameViewer, bool,   &FrameViewer::medianFiltreON>
+			, __test_change_param__<ThresholdsTable, W<Thresh<SortDown>>   , FrameViewer, int,    &FrameViewer::threshSortDown>
+			, __test_change_param__<ThresholdsTable, W<Thresh<Defect>>   , FrameViewer  , int,    &FrameViewer::threshDefect>
 		>::Result Result;
 	};
 
@@ -301,12 +347,14 @@ template<template<class>class W>struct CorrectionSensorDlg
 	TEMPL_MENU_ITEM(L"Настройки цифрового фильтра", TemplDlg::FilterDlg)
 	TEMPL_MENU_ITEM(L"Медианный фильтр", TemplDlg::MedianFiltre)
 	TEMPL_MENU_ITEM(L"Корректировка датчика", TemplDlg::CorrectionSensorDlg)
+	TEMPL_MENU_ITEM(L"Пороги отбраковки", TemplDlg::TreshDlg)
 	//
 	template<template<class >class W>struct TopMenu<W<TypeSize>>
 	{
 		typedef typename TL::MkTlst<
 			 MenuItem<TemplDlg::MedianFiltre<W>>
 			 , MenuItem<TemplDlg::FilterDlg<W>>
+			 , MenuItem<TemplDlg::TreshDlg<W>>
 			 , Separator<0>
 			 , MenuItem<TemplDlg::CorrectionSensorDlg<W>>
 		>::Result list;
