@@ -93,7 +93,7 @@ namespace StatusMessages
 #define SKIP(item, ...)template<>struct ItemSkipX<item>{static const unsigned value = Bits<zone_status_list, typename TL::MkTlst<__VA_ARGS__>::Result>::value;};
 	
 	template<>struct ItemSkipX<SensorOff>{static const unsigned value = 0;};
-
+/*
 		SKIP(Nominal
 		, DefectSig<SortDown>
 		, DefectSig<Defect>
@@ -129,6 +129,41 @@ namespace StatusMessages
 		, SensorOff
 		)
 
+*/
+	SKIP(DeathZone
+		, Nominal
+		, DefectSig<SortDown>
+		, DefectSig<Defect>
+		, StructSig<SortDown>
+		, StructSig<Defect>
+		, SensorOff
+		)
+
+	SKIP(Nominal
+		, DefectSig<SortDown>
+		, DefectSig<Defect>
+		, StructSig<SortDown>
+		, StructSig<Defect>
+		, SensorOff
+		)
+
+		SKIP(DefectSig<SortDown>
+		, DefectSig<Defect>
+		, SensorOff
+		)
+
+		SKIP(StructSig<SortDown>
+		, StructSig<Defect>
+		, SensorOff
+		)
+
+		SKIP(DefectSig<Defect>
+		, SensorOff
+		)
+
+		SKIP(StructSig<Defect>
+		, SensorOff
+		)
 #undef SKIP
 
 	typedef GenList<zone_status_list, ItemSkipX> lst_lst;
