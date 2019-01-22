@@ -182,8 +182,8 @@ struct L502ParametersTable
 	const wchar_t *name(){return L"L502ParametersTable";}
 };
 
-STR_PARAM(NameParam, 128, L"NONAME")
-DEFINE_PARAM(DiametrPumpRods            , int, 19)
+STR_PARAM(NameParam, 128, L"НШ19")
+//DEFINE_PARAM(DiametrPumpRods            , int, 19)
 DEFINE_PARAM_ID(ThresholdsTable, int, 1)
 DEFINE_PARAM_ID(DeadAreaTable, int, 1)
 DEFINE_PARAM_ID(OnTheJobTable, int, 1)
@@ -203,7 +203,7 @@ DEFINE_PARAM_ID(KoeffSignTable	   , int, 1)
 		, ID<L502ParametersTable>
 		, ID<KoeffSignTable>
 		, NameParam
-		, DiametrPumpRods
+		//, DiametrPumpRods
 	>::Result items_list;
 	typedef TL::Factory<items_list> TItems;
 	TItems items;

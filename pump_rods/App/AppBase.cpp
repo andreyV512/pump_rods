@@ -61,6 +61,32 @@ void AppBase::InitTypeSizeTables(CBase &base)
 	TL::foreach<typename ParametersTable::items_list, __default_param__>()(&p.items, &base);
 }
 
+template<class T>struct __need_to_redefine__;
+#define VALUE_DEFAULT(item, val)template<>struct __need_to_redefine__<item>{item::type_value value;__need_to_redefine__():value(val){}};
+
+VALUE_DEFAULT(RodLenght, 7000)
+VALUE_DEFAULT(DefectSig<First<DeathZone>>, 400)
+VALUE_DEFAULT(DefectSig<Second<DeathZone>>, 400)
+VALUE_DEFAULT(StructSig<First<DeathZone>>, 400)
+VALUE_DEFAULT(StructSig<Second<DeathZone>>, 400)
+
+template<class O, class P>struct __insert_value__
+{
+	void operator()(P &p)
+	{
+		p.get<O>().value = __need_to_redefine__<O>().value;
+		//VALUE_DEFAULT(DefectSig<Second<DeathZone>>, 400) <---- определить с помощью макроса(тип, значение)
+	}
+};
+
+#define SET_PARAMS(table, ...)\
+	table _##table;\
+	TL::foreach<TL::MkTlst<__VA_ARGS__>::Result, __insert_value__>()(_##table.items);\
+	Insert_Into<table>(_##table, base).Execute();\
+	par.items.get<ID<table>>().value = Select<table>(base).eq_all<table::items_list>(&_##table.items).Execute();
+
+#undef VALUE_DEFAULT
+
 void AppBase::Init()
 {
 	ParametersBase parameters;
@@ -71,10 +97,28 @@ void AppBase::Init()
 		);
 	if(base.IsOpen())
 	{
-		zprint("\n");
 		TL::foreach<ParametersBase::one_row_table_list, row_table>()(&base);
 
 		InitTypeSizeTables(base);
+
+		NameParam name;
+		name.value = L"НШ22";
+		int id = Select<ParametersTable>(base).eq<NameParam>(name.value).Execute();
+		if(0 == id)
+		{
+			ParametersTable par;
+			par.items.get<NameParam>().value = name.value;
+//...........................................................
+			SET_PARAMS(DeadAreaTable
+				, DefectSig<First<DeathZone>>
+				, DefectSig<Second<DeathZone>>
+				, StructSig<First<DeathZone>>
+				, StructSig<Second<DeathZone>>
+				, RodLenght
+				)
+//...................................................................................................
+			Insert_Into<ParametersTable>(par, base).Execute();
+		}
 	}
 }
 //------------------------------------------------------------------------
