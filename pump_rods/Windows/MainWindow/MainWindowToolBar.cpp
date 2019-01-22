@@ -21,11 +21,11 @@ namespace
 	KEY(IDB_CycleBtn   , L"F4 Цикл")
 	KEY(IDB_Reset      , L"Esc Стоп")
 	KEY(IDB_QueryBtn   , L"Тест")
-	KEY(IDB_DownArrow , L"F5 Вниз")
-	KEY(IDB_UpArrow   , L"F6 БАЗА")
-	KEY(IDB_LeftArrow , L"F7 Влево")
+//	KEY(IDB_DownArrow , L"F5 Вниз")
+//	KEY(IDB_UpArrow   , L"F6 БАЗА")
+//	KEY(IDB_LeftArrow , L"F7 Влево")
 	//KEY(IDB_RightArrow, L"F8 Clear")
-	KEY(IDB_Ok, L"F8 Норма")
+//	KEY(IDB_Ok, L"F8 Норма")
 	//KEY(IDB_Continue, L"F11 Продолжить")
 #undef KEY
 #define BUTTON_KEY(ID)ButtonToolbar<ID, Key<ID> > 
@@ -35,7 +35,7 @@ namespace
 //		, BUTTON_KEY(IDB_Continue)
 		, BUTTON_KEY(IDB_Reset)
 		, BUTTON_KEY(IDB_QueryBtn) 		
-		, BUTTON_KEY(IDB_Ok) 		
+	//	, BUTTON_KEY(IDB_Ok) 		
 		, SeparatorToolbar<1>
 #ifdef DEBUG_ITEMS
 		, BUTTON_KEY(IDB_arrow_down) 
@@ -93,42 +93,36 @@ namespace
 		EquipmentCheck();
 	}
 //------------------------------------------------------------------------------
-	void Key<IDB_DownArrow>::Click(HWND h)
-	{
-	//	LogUSPCWindow::Open();		
-		//AppKeyHandler::IdKey(IDB_arrow_down);
-	}
+	//void Key<IDB_DownArrow>::Click(HWND h)
+	//{
+	////	LogUSPCWindow::Open();		
+	//	//AppKeyHandler::IdKey(IDB_arrow_down);
+	//}
 //------------------------------------------------------------------------------
-	void Key<IDB_UpArrow>::Click(HWND h)
-	{
-		zprint("\n");
-//test
-	//	NumberTubeDlg::Do();
-	//	Stored::Do();
-//test
-	}
+//	void Key<IDB_UpArrow>::Click(HWND h)
+//	{
+//		zprint("\n");
+////test
+//	//	NumberTubeDlg::Do();
+//	//	Stored::Do();
+////test
+//	}
 //------------------------------------------------------------------------------
-	void Key<IDB_LeftArrow>::Click(HWND h)
-	{
-		zprint("\n");	
-		//LogUSPCWindow::Open();
-	}
+//	void Key<IDB_LeftArrow>::Click(HWND h)
+//	{
+//		zprint("\n");	
+//		//LogUSPCWindow::Open();
+//	}
 //------------------------------------------------------------------------------
-	void Key<IDB_Ok>::Click(HWND h)
-	{
-		zprint("\n");	
-		//AppKeyHandler::IdKey(IDB_arrow_right);
-		//app.mainWindow.ClearCharts();
-	}
+//	void Key<IDB_Ok>::Click(HWND h)
+//	{
+//		zprint("\n");	
+//		//AppKeyHandler::IdKey(IDB_arrow_right);
+//		//app.mainWindow.ClearCharts();
+//	}
 //----------------------------------------------------------------------------
 	void Key<IDB_Reset>::Click(HWND h)
 	{
-		//run_once_per_sycle = false;
-		//SetEvent(App::ProgrammStopEvent);
-		//MainWindow *w = (MainWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
-		//SetToolButtonText(w->toolBar.hWnd, IDB_CycleBtn, L"F4 Цикл");
-		//AppKeyHandler::Stop();
-//		Singleton<MainWindow>::Instance().StatusBar(0, L"Стоп");
 		Automat::Stop();
 	}
 }
@@ -136,7 +130,6 @@ namespace
 HWND MainWindowToolBar::Init(HWND h)
 {
 	hWnd = InitToolbar<tool_button_list>()(h);
-	//AppKeyHandler::Stop();
 	return hWnd;
 }
 //-------------------------------------------------------------------
