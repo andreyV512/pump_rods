@@ -61,32 +61,15 @@ void AppBase::InitTypeSizeTables(CBase &base)
 	TL::foreach<typename ParametersTable::items_list, __default_param__>()(&p.items, &base);
 }
 
-template<class T>struct __need_to_redefine__;
-#define VALUE_DEFAULT(item, val)template<>struct __need_to_redefine__<item>{item::type_value value;__need_to_redefine__():value(val){}};
-
-VALUE_DEFAULT(RodLenght, 7000)
-VALUE_DEFAULT(DefectSig<First<DeathZone>>, 400)
-VALUE_DEFAULT(DefectSig<Second<DeathZone>>, 400)
-VALUE_DEFAULT(StructSig<First<DeathZone>>, 400)
-VALUE_DEFAULT(StructSig<Second<DeathZone>>, 400)
-
-template<class O, class P>struct __insert_value__
-{
-	void operator()(P &p)
-	{
-		p.get<O>().value = __need_to_redefine__<O>().value;
-		//VALUE_DEFAULT(DefectSig<Second<DeathZone>>, 400) <---- определить с помощью макроса(тип, значение)
-	}
-};
-
-#define SET_PARAMS(table, ...)\
-	table _##table;\
-	TL::foreach<TL::MkTlst<__VA_ARGS__>::Result, __insert_value__>()(_##table.items);\
-	Insert_Into<table>(_##table, base).Execute();\
-	par.items.get<ID<table>>().value = Select<table>(base).eq_all<table::items_list>(&_##table.items).Execute();
-
-#undef VALUE_DEFAULT
-
+#define _DEF_VAL(T, val) table.items.get<T>().value = val;
+#define DEF_VAL(params) _DEF_VAL##params
+#define SET_PARAMS(Table, ...) {\
+	Table table;\
+	FOR_EACH(DEF_VAL, __VA_ARGS__)\
+	Insert_Into<Table>(table, base).Execute();\
+	par.items.get<ID<Table>>().value = Select<Table>(base).eq_all<Table::items_list>(&table.items).Execute();\
+}
+	
 void AppBase::Init()
 {
 	ParametersBase parameters;
@@ -110,17 +93,20 @@ void AppBase::Init()
 			par.items.get<NameParam>().value = name.value;
 //...........................................................
 			SET_PARAMS(DeadAreaTable
-				, DefectSig<First<DeathZone>>
-				, DefectSig<Second<DeathZone>>
-				, StructSig<First<DeathZone>>
-				, StructSig<Second<DeathZone>>
-				, RodLenght
+				, (DefectSig<First<DeathZone>> , 400)
+				, (DefectSig<Second<DeathZone>>, 400)
+				, (StructSig<First<DeathZone>> , 400)
+				, (StructSig<Second<DeathZone>>, 400)
+				, (RodLenght				   , 7000)
 				)
 //...................................................................................................
 			Insert_Into<ParametersTable>(par, base).Execute();
 		}
 	}
 }
+#undef _DEF_VAL
+#undef DEF_VAL
+#undef SET_PARAMS
 //------------------------------------------------------------------------
 const wchar_t *ParametersBase::name()
 {
