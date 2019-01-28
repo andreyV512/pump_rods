@@ -162,6 +162,11 @@ namespace Automat
 				//расчёт и отображение данных
 				Compute::Recalculation();
 				Log::Mess<LogMess::DataCollectionCompleted>();
+
+				int res = Compute::Result(c1c2);
+				if(0 == res) Log::Mess<LogMess::Brak>();
+				else Log::Mess<LogMess::Copt>(res);
+
 				//прерывание на просмотр
 				if(App::InterruptView())
 				{
@@ -171,10 +176,13 @@ namespace Automat
 					AND_BITS(-1, Key<Status::start>, Key<Status::stop>, Test<On<iСU>, On<iCycle>>);
 				}
 				//формирование результата
-				c1c2 = Compute::Result(c1c2);
+				res = Compute::Result(c1c2);
+				if(0 == res) Log::Mess<LogMess::Brak>();
+				else Log::Mess<LogMess::Copt>(res);
+
 				OUT_BITS(Off<oC1>, Off<oC2>);
-				if(0 != (c1c2 & 2)) OUT_BITS(On<oC1>);
-				if(0 != (c1c2 & 1)) OUT_BITS(On<oC2>);
+				if(0 != (res & 2)) OUT_BITS(On<oC1>);
+				if(0 != (res & 1)) OUT_BITS(On<oC2>);
 				//подтверждение результата
 				OUT_BITS(On<oToShift>);  //перекладка
 				//включена кнопка СТОП

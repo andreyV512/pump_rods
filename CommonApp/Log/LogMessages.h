@@ -85,6 +85,9 @@ namespace LogMess
 
 	MESS(DataCollectionCompleted, void, "Цикл сбора данных закончен", green, white)
 
+	MESS(Copt, int, "Сорт", green, white)
+	MESS(Brak, void, "Брак", red  , yellow)
+
 	template<class T>struct Bits;
 	template<>struct Bits<NullType>{};
 #define BITS_XX(color, txt, ...)template<>struct Bits<TL::MkTlst<__VA_ARGS__>::Result>\
