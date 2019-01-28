@@ -291,7 +291,7 @@ void BottomAxesMeters::Draw()
 	double height;	
 	chart.g->DrawLine(&pen, chart.offsetAxesLeft, y, chart.rect.right - chart.offsetAxesRight, y);
 
-   // char buf[32];
+    char buf[32];
 	wchar_t wbuf[32];
 	PointF origin;
 	RectF rect;	
@@ -302,7 +302,7 @@ void BottomAxesMeters::Draw()
     double minTick = 0;
     int maxLen = 0;
 	OffsetAxes(
-		int(2.0 * chart.GetCountDigit(chart.minAxesX, chart.maxAxesX, height, font, maxLen))
+		int(3.0 * chart.GetCountDigit(0.001 * chart.minAxesX, 0.001 * chart.maxAxesX, height, font, maxLen))
 		, chart.rect.right - chart.rect.left - chart.offsetAxesLeft - chart.offsetAxesRight
 		, minBorder
 		, maxBorder
@@ -324,10 +324,10 @@ void BottomAxesMeters::Draw()
     while(offs < offsMax)
     {		
 		chart.g->DrawLine(&pen, int(offs), y, int(offs), y + 7);
-		//gcvt(digit, 5, buf);
-		//mbstowcs(wbuf, buf, 32);
-		//wsprintf(wbuf, L"%d", (int)digit);
-		_itow((int)digit, wbuf, 10);
+		gcvt(0.001 * digit, 5, buf);
+		mbstowcs(wbuf, buf, 32);
+		//wsprintf(wbuf, L"%f", digit);
+		//_itow((int)digit, wbuf, 10);
 		size_t len = wcslen(wbuf);
 		chart.g->MeasureString(wbuf, (int)len, &font, origin, &format, &rect);
 		origin.X = REAL(offs + (deltaTick - rect.Width) / 2);
@@ -721,7 +721,8 @@ int Chart::BetweenLeftRight(int x)
 	 double bottom = rect.bottom - offsetAxesBottom;
 	 double dX = deltaTickX / deltaDigitX;
 	 double dY = deltaTickY / deltaDigitY;
-	 mX = int(deltaTickX * x / deltaDigitX + left + 0.5 * dX);
+
+	 mX = int(deltaTickX * x / deltaDigitX + left);// + 0.5 * dX);
 	 mY = int(bottom - deltaTickY * y / deltaDigitY - 0.5 * dY);
  }
  //---------------------------------------------------------------------------------------
