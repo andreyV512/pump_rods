@@ -58,15 +58,6 @@ namespace LogMess
 
 	MESS(InfoCycle		          , void  , "ВНИМАТЕЛЬНО ПРОВЕРЬ ПОЛОЖЕНИЕ ШТАНГИ В ЗАХВАТАХ!"	, red  , yellow)
 	MESS(ExitMeshuringCycle, void, "Оператор вышел из цикла", red, yellow)
-//	MESS(AlarmExitControlCircuitBitIn , void, "Нет сигнала \"Цепи управления\""	   , red  , yellow)
-//	MESS(AlarmExitControlCycleBitIn , void, "Нет сигнала \"Цикл\""	   , red  , yellow)
-
-//	MESS(TimeOverlappedDefectoscope , void, "Превышено время сбора сигнала \"ДЕФЕКТОСКОПИЯ\" "	   , red  , yellow)
-//	MESS(TimeOverlappedStructure , void, "Превышено время сбора сигнала \"СТРУКТУРА\" "	   , red  , yellow)
-
-	//MESS(outputsAC_ON, bool, "вход \"AC_ON\"", red, yellow)
-	//MESS(outputsDC_ON2, bool, "вход \"DC_ON2\"", red, yellow)	
-	//MESS(outputsDC_ON1, bool, "вход \"DC_ON1\"", red, yellow)
 
 	MESS(DataCollectionDEF, void, "сбор данных \"ДЕФЕКТОСКОП\"", blue, white)
 	MESS(DataCollectionSTR, void, "сбор данных \"СТРУКТУРА\"", blue, white)

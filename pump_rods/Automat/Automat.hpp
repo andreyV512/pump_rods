@@ -2,8 +2,6 @@
 
 namespace Automat
 {
-	//template<class>struct On{};
-	//template<class>struct Off{};
 	template<class>struct Inv{};
 	template<class>struct Proc{};
 	template<class>struct Once{};
@@ -55,16 +53,6 @@ namespace Automat
 		typedef typename TL::MkTlst<bit0, bit1, bit2, bit3, bit4>::Result Result;
 	};
 
-	//template<class O>struct MessID;
-	//template<>struct MessID<iСU>{typedef LogMess::AlarmExitControlCircuitBitIn Result;};
-	//template<>struct MessID<iCycle>{typedef LogMess::AlarmExitControlCycleBitIn Result;};
-	//template<>struct MessID<iP1>{typedef LogMess::TimeOverlappedDefectoscope Result;};
-	//template<>struct MessID<iP2>{typedef LogMess::TimeOverlappedStructure Result;};
-
-	//template<>struct MessID<oAC_ON>{typedef LogMess::outputsAC_ON Result;};
-	//template<>struct MessID<oDC_ON2>{typedef LogMess::outputsDC_ON2 Result;};
-	//template<>struct MessID<oDC_ON1>{typedef LogMess::outputsDC_ON1 Result;};
-
 	template<class O, class P>struct __test_bits_do__;
 	template<class O, class P>struct __test_bits_do__<On<O>, P>
 	{
@@ -90,31 +78,7 @@ namespace Automat
 			return true;
 		}
 	};
-	//template<class O, class P>struct __test_bits_do__<On<O>, P>
-	//{
-	//	bool operator()(P &p)
-	//	{
-	//		if(!(p.bits & p.inputs_bits.get<O>().value))
-	//		{
-	//			Log::Mess<MessID<O>::Result>();
-	//			return false;
-	//		}
-	//		return true;
-	//	}
-	//};
-	//template<class O, class P>struct __test_bits_do__<Off<O>, P>
-	//{
-	//	bool operator()(P &p)
-	//	{
-	//		if(p.bits & p.inputs_bits.get<O>().value)
-	//		{
-	//			Log::Mess<MessID<O>::Result>();
-	//			return false;
-	//		}
-	//		return true;
-	//	}
-	//};
-
+	
 	template<class List>struct TestBitsDo
 	{
 		template<class T>bool operator()(T &t)
@@ -159,18 +123,6 @@ namespace Automat
 			return true;
 		}
 	};
-
-	//template<class List>struct TestOutputBits
-	//{
-	//	unsigned operator()()
-	//	{
-	//		if(!TL::find<List, __test_output_bits__>()(__test_output_bits_data__()))
-	//		{
-	//			return Status::alarm_bits;
-	//		}
-	//		return 0;
-	//	}
-	//};
 
 	template<class A, class B>struct __all_lists_not_empty__
 	{
@@ -457,14 +409,6 @@ namespace Automat
 					}
 					break;
 
-				//case WAIT_OBJECT_0:
-				//	
-				//	if(!KeyDo<list_key>()(result.key))
-				//	{
-				//		if(result.key == Status::stop) return Status::stop;
-				//	}
-				//	goto EXIT;
-
 				case WAIT_FAILED:
 					return Status::exit_loop;
 
@@ -519,5 +463,4 @@ namespace Automat
 
 #define AND_BITS(delay, ...) if(0 != (status = AND_Bits<delay, TL::MkTlst<__VA_ARGS__>::Result>()(result)))break
 #define OUT_BITS(...) OUT_Bits<TL::MkTlst<__VA_ARGS__>::Result>()()
-//#define TEST_OUTPUT_BITS(...)if(0 != (status = TestOutputBits<TL::MkTlst<__VA_ARGS__>::Result>()()))break
 }
