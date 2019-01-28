@@ -58,27 +58,17 @@ namespace LogMess
 
 	MESS(InfoCycle		          , void  , "ВНИМАТЕЛЬНО ПРОВЕРЬ ПОЛОЖЕНИЕ ШТАНГИ В ЗАХВАТАХ!"	, red  , yellow)
 	MESS(ExitMeshuringCycle, void, "Оператор вышел из цикла", red, yellow)
-	MESS(AlarmExitControlCircuitBitIn , void, "Нет сигнала \"Цепи управления\""	   , red  , yellow)
-	MESS(AlarmExitControlCycleBitIn , void, "Нет сигнала \"Цикл\""	   , red  , yellow)
+//	MESS(AlarmExitControlCircuitBitIn , void, "Нет сигнала \"Цепи управления\""	   , red  , yellow)
+//	MESS(AlarmExitControlCycleBitIn , void, "Нет сигнала \"Цикл\""	   , red  , yellow)
 
-	MESS(TimeOverlappedDefectoscope , void, "Превышено время сбора сигнала \"ДЕФЕКТОСКОПИЯ\" "	   , red  , yellow)
-	MESS(TimeOverlappedStructure , void, "Превышено время сбора сигнала \"СТРУКТУРА\" "	   , red  , yellow)
+//	MESS(TimeOverlappedDefectoscope , void, "Превышено время сбора сигнала \"ДЕФЕКТОСКОПИЯ\" "	   , red  , yellow)
+//	MESS(TimeOverlappedStructure , void, "Превышено время сбора сигнала \"СТРУКТУРА\" "	   , red  , yellow)
 
-	MESS(outputsAC_ON, bool, "вход \"AC_ON\"", red, yellow)
-	MESS(outputsDC_ON2, bool, "вход \"DC_ON2\"", red, yellow)	
-	MESS(outputsDC_ON1, bool, "вход \"DC_ON1\"", red, yellow)
+	//MESS(outputsAC_ON, bool, "вход \"AC_ON\"", red, yellow)
+	//MESS(outputsDC_ON2, bool, "вход \"DC_ON2\"", red, yellow)	
+	//MESS(outputsDC_ON1, bool, "вход \"DC_ON1\"", red, yellow)
 
-//	MESS(WaitingForControlCircuitActivation, void, "проверка сигнала \"ЦЕПИ УПРАВЛЕНИЯ\"", blue, white)
-////	MESS(WaitingForTheCycleSignal, void, "ожидание сигнала \"ЦИКЛ\"", blue, white)
-//	MESS(WaitingForTheCortSignal, void, "ожидание сигнала \"СОРТ\"", blue, white)
-//	MESS(WaitingForTheCortP1P2SignalToTurnOff, void, "ожидание отключения сигналов \"СОРТ\"\"П1\"\"П2\"", blue, white)
-	//MESS(WaitingForTheControlSignal, void, "ожидание сигнала \"КОНТРОЛЬ\"", blue, white)
-//	MESS(WaitingForTheP1Signal, void, "ожидание сигнала \"П1\"", blue, white)
-	//MESS(WaitingForTheP1SignalTurnOff, void, "ожидание отключения сигнала \"П1\"", blue, white)
 	MESS(DataCollectionDEF, void, "сбор данных \"ДЕФЕКТОСКОП\"", blue, white)
-
-//	MESS(WaitingForTheP2Signal, void, "ожидание сигнала \"П2\"", blue, white)
-//	MESS(WaitingForTheP2SignalTurnOff, void, "ожидание отключения сигнала \"П2\"", blue, white)
 	MESS(DataCollectionSTR, void, "сбор данных \"СТРУКТУРА\"", blue, white)
 
 	MESS(Alarm502, int, "Ошибка платы L502  ", red  , yellow)

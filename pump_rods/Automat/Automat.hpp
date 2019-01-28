@@ -55,15 +55,15 @@ namespace Automat
 		typedef typename TL::MkTlst<bit0, bit1, bit2, bit3, bit4>::Result Result;
 	};
 
-	template<class O>struct MessID;
-	template<>struct MessID<iСU>{typedef LogMess::AlarmExitControlCircuitBitIn Result;};
-	template<>struct MessID<iCycle>{typedef LogMess::AlarmExitControlCycleBitIn Result;};
-	template<>struct MessID<iP1>{typedef LogMess::TimeOverlappedDefectoscope Result;};
-	template<>struct MessID<iP2>{typedef LogMess::TimeOverlappedStructure Result;};
+	//template<class O>struct MessID;
+	//template<>struct MessID<iСU>{typedef LogMess::AlarmExitControlCircuitBitIn Result;};
+	//template<>struct MessID<iCycle>{typedef LogMess::AlarmExitControlCycleBitIn Result;};
+	//template<>struct MessID<iP1>{typedef LogMess::TimeOverlappedDefectoscope Result;};
+	//template<>struct MessID<iP2>{typedef LogMess::TimeOverlappedStructure Result;};
 
-	template<>struct MessID<oAC_ON>{typedef LogMess::outputsAC_ON Result;};
-	template<>struct MessID<oDC_ON2>{typedef LogMess::outputsDC_ON2 Result;};
-	template<>struct MessID<oDC_ON1>{typedef LogMess::outputsDC_ON1 Result;};
+	//template<>struct MessID<oAC_ON>{typedef LogMess::outputsAC_ON Result;};
+	//template<>struct MessID<oDC_ON2>{typedef LogMess::outputsDC_ON2 Result;};
+	//template<>struct MessID<oDC_ON1>{typedef LogMess::outputsDC_ON1 Result;};
 
 	template<class O, class P>struct __test_bits_do__;
 	template<class O, class P>struct __test_bits_do__<On<O>, P>
@@ -72,7 +72,7 @@ namespace Automat
 		{
 			if(!(p.bits & p.inputs_bits.get<O>().value))
 			{
-				Log::Mess<MessID<O>::Result>();
+				Log::Mess<LogMess::Bits<typename TL::MkTlst<On<O>>::Result>>();
 				return false;
 			}
 			return true;
@@ -82,14 +82,38 @@ namespace Automat
 	{
 		bool operator()(P &p)
 		{
-			if(p.bits & p.inputs_bits.get<O>().value)
+			if(!(p.bits & p.inputs_bits.get<O>().value))
 			{
-				Log::Mess<MessID<O>::Result>();
+				Log::Mess<LogMess::Bits<typename TL::MkTlst<Off<O>>::Result>>();
 				return false;
 			}
 			return true;
 		}
 	};
+	//template<class O, class P>struct __test_bits_do__<On<O>, P>
+	//{
+	//	bool operator()(P &p)
+	//	{
+	//		if(!(p.bits & p.inputs_bits.get<O>().value))
+	//		{
+	//			Log::Mess<MessID<O>::Result>();
+	//			return false;
+	//		}
+	//		return true;
+	//	}
+	//};
+	//template<class O, class P>struct __test_bits_do__<Off<O>, P>
+	//{
+	//	bool operator()(P &p)
+	//	{
+	//		if(p.bits & p.inputs_bits.get<O>().value)
+	//		{
+	//			Log::Mess<MessID<O>::Result>();
+	//			return false;
+	//		}
+	//		return true;
+	//	}
+	//};
 
 	template<class List>struct TestBitsDo
 	{
@@ -136,17 +160,17 @@ namespace Automat
 		}
 	};
 
-	template<class List>struct TestOutputBits
-	{
-		unsigned operator()()
-		{
-			if(!TL::find<List, __test_output_bits__>()(__test_output_bits_data__()))
-			{
-				return Status::alarm_bits;
-			}
-			return 0;
-		}
-	};
+	//template<class List>struct TestOutputBits
+	//{
+	//	unsigned operator()()
+	//	{
+	//		if(!TL::find<List, __test_output_bits__>()(__test_output_bits_data__()))
+	//		{
+	//			return Status::alarm_bits;
+	//		}
+	//		return 0;
+	//	}
+	//};
 
 	template<class A, class B>struct __all_lists_not_empty__
 	{
