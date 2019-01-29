@@ -295,6 +295,14 @@ template<template<class>class W>struct CorrectionSensorDlg
 	TEMPL_MAX_EQUAL_VALUE(ViewerCount, 30000)
 	TEMPL_PARAM_TITLE(ViewerCount, L"Ширина")
 
+	template<>struct TestPassword<ParametersBase, ViewerCountTable>
+	{
+		bool operator()(HWND h)
+		{
+			return true;
+		}
+	};
+
 	template<template<class> class W>struct FrameWidthViewDlg
 	{
 		static void Do(HWND h)
@@ -312,7 +320,6 @@ template<template<class>class W>struct CorrectionSensorDlg
 			}
 		}
 	};
-
 
 	struct MainFile{};
 	MENU_TEXT(L"Файл", TopMenu<MainFile>)
