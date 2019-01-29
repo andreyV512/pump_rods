@@ -45,6 +45,27 @@ namespace Store
 		fread(&def.inputData   , sizeof(double), def.currentOffset, f);
 		fread(&str.inputData   , sizeof(double), str.currentOffset, f);
 	}
+
+	void StoreData_0002(FILE *f, DefectSig<DataItem::Buffer> &def, StructSig<DataItem::Buffer> &str)
+	{
+		int magic = magic_number + 2;
+		fwrite(&magic  , sizeof(magic), 1, f);
+
+		fwrite(&def.currentOffset  , sizeof(def.currentOffset), 1, f);
+		fwrite(&str.currentOffset  , sizeof(str.currentOffset), 1, f);
+
+		fwrite(&def.inputData   , sizeof(double), def.currentOffset, f);
+		fwrite(&str.inputData   , sizeof(double), str.currentOffset, f);
+	}
+
+	void LoadData_0002(FILE *f, DefectSig<DataItem::Buffer> &def, StructSig<DataItem::Buffer> &str)
+	{
+		fread(&def.currentOffset  , sizeof(def.currentOffset), 1, f);
+		fread(&str.currentOffset  , sizeof(str.currentOffset), 1, f);
+
+		fread(&def.inputData   , sizeof(double), def.currentOffset, f);
+		fread(&str.inputData   , sizeof(double), str.currentOffset, f);
+	}
 }
 #pragma warning(disable: 4996)
 void StoreDlg::Do(HWND h)
@@ -56,7 +77,7 @@ void StoreDlg::Do(HWND h)
 		FILE *f = _wfopen(o.sFile, L"wb");
 		if(f)
 		{
-			Store::StoreData_0001(
+			Store::StoreData_0002(
 				f
 				, Singleton<DefectSig<DataItem::Buffer>>::Instance()
 				, Singleton<StructSig<DataItem::Buffer>>::Instance()
@@ -92,6 +113,7 @@ void LoadDlg::Do(HWND h)
 				switch(magic & 0xffff)
 				{
 				case 1: Store::LoadData_0001(f, def, str);break;
+				case 2: Store::LoadData_0002(f, def, str);break;
 				default:
 					b = false;
 				}

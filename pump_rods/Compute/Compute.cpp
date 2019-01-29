@@ -12,34 +12,6 @@
 
 namespace Compute
 {
-
-	void Compute(double *inputData, int inputLenght, int cutoffFrequency, bool cutoffFrequencyON, int medianWidth, bool medianON, double *outputData, int outputLength, int samplingRate, bool wave
-		)
-	{
-		MedianFiltre filtre;
-		if(medianWidth > 2)filtre.InitWidth(medianWidth);
-
-		LowFiltre analogFiltre;
-		if(0 != cutoffFrequency)analogFiltre.Setup(
-			samplingRate
-			, 3
-			, cutoffFrequency
-			, 40
-			);
-
-		double delta = (double)inputLenght / outputLength;
-		memset(outputData, 0, outputLength * sizeof(double));
-		--inputLenght;
-		for(int i = 0; i <= inputLenght; ++i)
-		{
-			double t = medianON? filtre(inputData[i]): inputData[i];
-			if(cutoffFrequencyON) t = analogFiltre(t);
-			int k = int(i / delta);
-			if(k >= outputLength) break;
-			if(abs(t) > abs(outputData[k])) outputData[k] = wave? abs(t): t;
-		}		
-	}
-
 	typedef App::data_item_list __data_item_list__;
 
 	struct __rec_data__
@@ -74,7 +46,7 @@ namespace Compute
 			o.deathZoneSecond = p.deadArea.get<W<Second<DeathZone>>>().value;
 			o.threshSortDown = p.tresh.get<W<Thresh<SortDown>>>().value;
 			o.threshDefect   = p.tresh.get<W<Thresh<Defect>>>().value;
-			Compute(
+			Compute<typename WapperFiltre<W>::Result>(
 			  o.inputData
 			, o.currentOffset
 			, p.cutoffFrequency.get<W<CutoffFrequency>>().value

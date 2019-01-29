@@ -9,3 +9,4 @@ Version.h
 DOC/~*
 ArchiveEvent/
 Release/
+*.vlt

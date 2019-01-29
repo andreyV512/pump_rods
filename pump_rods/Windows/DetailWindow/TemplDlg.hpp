@@ -25,7 +25,7 @@ namespace TemplDlg
 	{
 		L502ParametersTable::TItems &l502Param =  Singleton<L502ParametersTable>::Instance().items;
 		W<DataItem::Buffer> &o = Singleton<W<DataItem::Buffer>>::Instance();
-		Compute::Compute(
+		Compute::Compute<typename WapperFiltre<W>::Result>(
 			o.inputData
 			, o.currentOffset
 			, frame.cutoffFrequency

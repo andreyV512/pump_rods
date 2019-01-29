@@ -3,6 +3,7 @@
 #include "Windows\MainWindow\MainWindow.h"
 #include "FrameViewer.h"
 #include "TemplDlg.hpp"
+#include "App/App.h"
 
 template<template<class>class W>struct __main_window_viewer__;
 template<>struct __main_window_viewer__<StructSig>
@@ -124,7 +125,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 		offs = item.currentOffset - frame.count;
 	}
 
-	Compute::Compute(
+	Compute::Compute<WapperFiltre<W>::Result>(
 		item.inputData + offs
 		, frameWidth
 		, frame.cutoffFrequency
@@ -137,6 +138,14 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
     , frame.isBarGraph
 		);
 
+	double *ar = &tbuf[offs_b];
+	double last = 0;
+	for(int i = 0; i < dimention_of(frame.buffer); ++i)
+	{
+		if(0.0 == ar[i]) frame.buffer[i] = last;
+		else last = frame.buffer[i] = ar[i];
+	}
+
     if(frame.isBarGraph)
 	{
 		frame.tchart.minAxesY = 0;
@@ -147,8 +156,6 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 		frame.tchart.minAxesY = -100;
 		frame.tchart.maxAxesY = 100;
 	}
-
-	memmove(frame.buffer, &tbuf[offs_b], sizeof(frame.buffer));
 
 	frame.tchart.minAxesX = offsetDef;
 	frame.tchart.maxAxesX = offsetDef + frame.count;

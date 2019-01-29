@@ -3,6 +3,7 @@
 #include "App/AppBase.h"
 #include "window_tool/MenuAPI.h"
 #include "MessageText\StatusMessages.h"
+#include "MessageText\ListMess.hpp"
 
 using namespace Gdiplus;
 
@@ -59,6 +60,7 @@ bool ViewerData::GetColorBar(int zone, double &data, unsigned &color)
 {
 	data = buffer[zone];
 	color = StatusColor()(status[zone]);
+	if(status[zone] == STATUS_ID(DeathZone)) data = 100;
 	return zone < count;
 }
 
