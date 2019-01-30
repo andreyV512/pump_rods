@@ -17,8 +17,8 @@ unsigned FileSize(FILE *f)
 int _tmain(int argc, _TCHAR* argv[])
 {
 	FILE *fD = fopen("ac test3.vlt", "rb");
-	FILE *fA = fopen("dc test9.vlt", "rb");
-	FILE *fR = fopen("test.dat", "wb+");
+	FILE *fA = fopen("dc test.vlt", "rb");
+	FILE *fR = fopen("test3.dat", "wb+");
 
 	if(NULL != fA && NULL != fD && NULL != fR)
 	{
