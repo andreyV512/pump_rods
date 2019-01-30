@@ -19,19 +19,17 @@ namespace Compute
 		double delta = (double)inputLenght / outputLength;
 		memset(outputData, 0, outputLength * sizeof(double));
 		--inputLenght;
-		double t;
-		double last = 0;
 		for(int i = 0; i <= inputLenght; ++i)
 		{
-			t = medianON? filtre(inputData[i]): inputData[i];
+			double t = medianON? filtre(inputData[i]): inputData[i];
 			if(cutoffFrequencyON) t = analogFiltre(t);
 			int k = int(i / delta);
 			if(k >= outputLength) break;
-			if(abs(t) > abs(outputData[k]))
+			double absT = t > 0 ? t: -t;
+			if(absT > abs(outputData[k]))
 			{
-				last = outputData[k] = wave? abs(t): t;
+				outputData[k] = wave? absT: t;
 			}
-			else outputData[k] = last;
 		}		
 	}
 	void ComputeResult();
