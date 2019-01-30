@@ -317,6 +317,8 @@ template<template<class>class W>struct CorrectionSensorDlg
 				Win &e = *(Win *)GetWindowLongPtr(h, GWLP_USERDATA);
 				FrameViewer &frame =  e.viewers.get<FrameViewer>();
 				frame.count = Singleton<ViewerCountTable>::Instance().items.get<W<ViewerCount>>().value;
+
+				Repaint<W>( e.viewers.get<Win::Viewer>(), frame);
 			}
 		}
 	};
