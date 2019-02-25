@@ -98,15 +98,25 @@ ViewerDebugMess::~ViewerDebugMess()
 	CloseHandle(hMapFile);
 }
 //----------------------------------------------------------------------------
+//void ViewerDebugMess::get(void (*proc)(char *))
+//{
+//	static char b[512];		
+//	WaitForSingleObject(h, INFINITE);
+//	while(map && map->tail < map->head)
+//	{
+//		CharToOemA(map->data[map->tail & 0xff], b);
+//		++map->tail;
+//		(*proc)(b);
+//	}
+//	ResetEvent(h);
+//}
 void ViewerDebugMess::get(void (*proc)(char *))
 {
-	static char b[512];		
 	WaitForSingleObject(h, INFINITE);
 	while(map && map->tail < map->head)
 	{
-		CharToOemA(map->data[map->tail & 0xff], b);
+		(*proc)(map->data[map->tail & 0xff]);
 		++map->tail;
-		(*proc)(b);
 	}
 	ResetEvent(h);
 }
