@@ -29,7 +29,7 @@ public:
 	ViewerDebugMess(void);
 public:
 	~ViewerDebugMess(void);
-	char *get();
+	void get(void(*)(char *));
 };
 
 extern DebugMess &debug;

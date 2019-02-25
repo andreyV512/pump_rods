@@ -98,7 +98,7 @@ ViewerDebugMess::~ViewerDebugMess()
 	CloseHandle(hMapFile);
 }
 //----------------------------------------------------------------------------
-char *ViewerDebugMess::get()
+void ViewerDebugMess::get(void (*proc)(char *))
 {
 	static char b[512];		
 	WaitForSingleObject(h, INFINITE);
@@ -106,10 +106,9 @@ char *ViewerDebugMess::get()
 	{
 		CharToOemA(map->data[map->tail & 0xff], b);
 		++map->tail;
-		return b;
+		(*proc)(b);
 	}
 	ResetEvent(h);
-	return NULL;
 }
 //-----------------------------------------------------------------------------
 class  DebugMess::Initialization
