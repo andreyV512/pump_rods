@@ -158,7 +158,6 @@
     <ClInclude Include="Windows\MainWindow\Viewers.h" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\CommonApp\CommonWindow\Common.cpp" />
     <ClCompile Include="..\CommonApp\CommonWindow\CommonViewer.cpp" />
     <ClCompile Include="..\CommonApp\CommonWindow\TopLabelViewer.cpp" />
     <ClCompile Include="..\CommonApp\Log\LogBuffer.cpp" />

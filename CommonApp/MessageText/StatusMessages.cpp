@@ -15,8 +15,6 @@ namespace StatusMessages
 
 	template<>struct Txt< DefectSig<SortDown>  >{wchar_t *operator()(){return L"\"сорт дефектоскопии\"";}};
 	template<>struct Txt< StructSig<SortDown>  >{wchar_t *operator()(){return L"\"сорт структуры\"";}};
-/// \todo вставить цвета для текстового сообщения
-	
 
 	struct __arr_proc_data__
 	{

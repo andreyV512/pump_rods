@@ -400,9 +400,6 @@
     <ClCompile Include="..\Common\Graphics\FixedGridSeries.cpp">
       <Filter>Common\Graphics</Filter>
     </ClCompile>
-    <ClCompile Include="..\CommonApp\CommonWindow\Common.cpp">
-      <Filter>CommonApp\CommonWindow</Filter>
-    </ClCompile>
     <ClCompile Include="Compute\Compute.cpp">
       <Filter>pump_rods\Compute</Filter>
     </ClCompile>

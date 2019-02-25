@@ -178,21 +178,6 @@ namespace Common
 		}
 	};
 //-----------------------------------------------------------------------------------------------
-	//template<class T>struct ColorThreshold
-	//{
-	//	typedef typename T::__template_must_be_overridded__ noused;
-	//};
-	//
-	//template<class X>struct ColorThreshold<Clr<X> >
-	//{
-	//	typedef Clr<X> Result;
-	//};
-	//
-	//template<template<class>class W, class X>struct ColorThreshold<W<BorderKlass2<X> > >
-	//{
-	//	typedef BorderKlass2<X> Result;
-	//};
-	
 	template<class T>struct __set_color_wapper__
 	{
 		typedef T Result;
@@ -228,8 +213,6 @@ namespace Common
 		{
 			o->dataViewer.Do(p->lastZone, N, o->owner->adjustItem.get<AdjustingMultipliers<O>>().val);
 			o->chart->maxAxesX = o->dataViewer.count;
-			//typedef TL::SelectWapper<typename O::TChart::items_list, Border>::Result lst;
-			//TL::foreach<lst, __set_thresholds__>()(&((typename O::TChart *)o->chart)->items, &p->lastZone);
 			RepaintWindow(o->hWnd);
 		}
 	};
@@ -262,14 +245,6 @@ namespace Common
 		typedef L<W, N> O;
 		void operator()(O *o, P *p)
 		{
-			//bool b = N % 2 == 0;
-			//int x = b 
-			//	? 0
-			//	: p->width / 2
-			//	;
-			// MoveWindow(o->hWnd, x, p->y, p->width / 2, p->height, TRUE);
-			// if(!b) p->y += p->height;
-
 			int i = N % 4;
 			int offs = p->width / 4;
 
@@ -278,9 +253,6 @@ namespace Common
 		}
 	};
 }
-//}
-
-void CloseAllWindows();
 
 template<class T, class OWNER>class NoSubMenu: public T
 {
@@ -308,7 +280,6 @@ public:
 	{
 		(*(Parent::Parent *)this)(l);
 		CreateTimerQueueTimer(&hTimer, NULL, WaitOrTimerCallback, this, 50, 0, WT_EXECUTEONLYONCE);
-		//WaitOrTimerCallback(this, TRUE);
 		return 0;
 	}	
 };
@@ -316,9 +287,6 @@ public:
 class Chart;
 void ZoneToCoord(Chart &, int zone, int sens, WORD &x, WORD &y);
 
-class CrossWindow;
-class ThickWindow;
-class LongWindow;
 
 
 
