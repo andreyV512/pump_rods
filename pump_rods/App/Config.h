@@ -1,3 +1,3 @@
 ﻿#pragma once
 
-#define DEBUG_ITEMS
+#undef DEBUG_ITEMS
