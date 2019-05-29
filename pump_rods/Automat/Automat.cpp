@@ -192,7 +192,7 @@ namespace Automat
 				//переход в начало цикла
 			}
 
-			l502.Stop();
+		//	l502.Stop();
 
 			switch(status)
 			{

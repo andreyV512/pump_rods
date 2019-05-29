@@ -32,7 +32,11 @@ template<class T, template<class>class W>struct l502Run<W<T>>
 	~l502Run()
 	{
 		terminate = true;
-		if(NULL != hThread)WaitForSingleObject(hThread, INFINITE);
+		if(NULL != hThread)
+		{
+			WaitForSingleObject(hThread, INFINITE);
+			CloseHandle(hThread);
+		}
 	}
 
 	static DWORD WINAPI Proc(PVOID p)
