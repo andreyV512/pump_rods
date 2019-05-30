@@ -225,7 +225,7 @@ DEFINE_PARAM_WAPPER(StructSig, ViewerCount, int, 3000)
 	const wchar_t *name(){return L"ViewerCountTable";}
  };
 
-DEFINE_PARAM(iСU     , unsigned, 1 << 0) //цепи управления
+DEFINE_PARAM(iCU     , unsigned, 1 << 0) //цепи управления
 DEFINE_PARAM(iKM2_DC , unsigned, 1 << 1)
 DEFINE_PARAM(iKM3_AC , unsigned, 1 << 2)
 DEFINE_PARAM(iCycle , unsigned, 1 << 3)
@@ -237,7 +237,7 @@ DEFINE_PARAM(iControl, unsigned, 1 << 7)
 struct InputBitTable
  {
 	typedef TL::MkTlst<
-		iСU     
+		iCU    
 		, iKM2_DC 
 		, iKM3_AC 
 		, iCycle 

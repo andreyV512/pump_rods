@@ -19,7 +19,7 @@ template<class O, class P>struct __unshift__
 	}
 };
 
-Param(iСU     , L"Сигнал ЦЕПИ УПРАВЛЕНИЯ")
+Param(iCU     , L"Сигнал ЦЕПИ УПРАВЛЕНИЯ")
 Param(iKM2_DC , L"Пускатель (КМ2 DC)")
 Param(iKM3_AC , L"Пускатель (КМ3 AC)")
 Param(iCycle  , L"Сигнал \"ЦИКЛ\"")

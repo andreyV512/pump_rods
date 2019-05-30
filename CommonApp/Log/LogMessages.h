@@ -84,7 +84,7 @@ namespace LogMess
 		typedef Bits<TL::MkTlst<__VA_ARGS__>::Result> Result;\
 	};
 
-	BITS_XX(sea, "Ожидание сигнала \"ЦЕПИ УПРАВЛЕНИЯ\"", On<iСU>)
+	BITS_XX(sea, "Ожидание сигнала \"ЦЕПИ УПРАВЛЕНИЯ\"", On<iCU>)
 	BITS_XX(sea, "Ожидание сигнала \"ЦИКЛ\"", On<iCycle>)
 	BITS_XX(sea, "Ожидание сигнала \"СОРТ\"", On<iCOPT>)
 	BITS_XX(sea, "Ожидание сигнала \"КОНТРОЛЬ\"", On<iControl>)

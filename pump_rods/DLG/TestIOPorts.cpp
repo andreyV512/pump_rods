@@ -18,7 +18,7 @@ namespace TestIOPortsN
 	template<class T>struct InpStat;
 
 #define INPUT_STAT_TYPES_0\
-	iСU\
+	iCU\
 	, iKM2_DC \
 	, iKM3_AC \
 	, iCycle  \
@@ -53,7 +53,7 @@ namespace TestIOPortsN
 #undef INPUT_STAT_TYPES_0
 #undef OUTPUT_STAT_TYPES_0
 
-		PARAM_TITLE(InpStat<iСU     >, L"Сигнал ЦЕПИ УПРАВЛЕНИЯ")
+		PARAM_TITLE(InpStat<iCU     >, L"Сигнал ЦЕПИ УПРАВЛЕНИЯ")
 		PARAM_TITLE(InpStat<iKM2_DC >, L"Пускатель (КМ2 DC)")
 		PARAM_TITLE(InpStat<iKM3_AC >, L"Пускатель (КМ3 AC)")
 		PARAM_TITLE(InpStat<iCycle  >, L"Сигнал \"ЦИКЛ\"")
@@ -63,7 +63,7 @@ namespace TestIOPortsN
 		PARAM_TITLE(InpStat<iControl>, L"Сигнал \"КОНТРОЛЬ\"")
 
 		typedef GROUP_BOX(
-		InpStat<iСU     >
+		InpStat<iCU     >
 		, InpStat<iKM2_DC >
 		, InpStat<iKM3_AC >
 		, InpStat<iCycle  >

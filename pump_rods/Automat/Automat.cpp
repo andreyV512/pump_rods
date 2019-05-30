@@ -82,13 +82,13 @@ namespace Automat
 				//сообщение СТАРТ ЦИКЛА
 				Log::Mess<LogMess::StartCycle>();
 				//проверка сигнала ЦЕПИ УПРАВЛЕНИЯ
-				AND_BITS(500, Key<Status::stop>, On<iСU>);	
+				AND_BITS(500, Key<Status::stop>, On<iCU>);	
 				//ожидание сигнала ЦИКЛ, проверка ЦЕПИ УПРАВЛЕНИЯ, выход из цикла по кнопке СТОП
-				AND_BITS(-1,  Key<Status::stop>, On<iCycle>, Test<On<iСU>>);	
+				AND_BITS(-1,  Key<Status::stop>, On<iCycle>, Test<On<iCU>>);	
 				//выставил выходной сигнал РАБОТА
 				OUT_BITS(On<oWork>);
 				//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iСU>, On<iCycle>>);
+				AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iCU>, On<iCycle>>);
 				//чтение дискретного рорта
 				unsigned bits = device1730.Read();
 				//чтение сигнала П1 и П2
@@ -99,7 +99,7 @@ namespace Automat
 				//включены кнопки ЦИКЛ и СТОП
 				AppKeyHandler::Continue();
 				//кнопка ЦИКЛ - продолжение, СТОП - выход из цикла, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ
-				AND_BITS(-1, Key<Status::start>, Key<Status::stop>, Test<On<iСU>, On<iCycle>>);
+				AND_BITS(-1, Key<Status::start>, Key<Status::stop>, Test<On<iCU>, On<iCycle>>);
 				//включена кнопка СТОП
 				AppKeyHandler::Run();
 
@@ -110,11 +110,11 @@ namespace Automat
 				//ВЫСТАВЛЕН СИГНАЛ ПУСК
 				OUT_BITS(On<oStart>);
 				//ожидание выключения сигналов СОРТ, П1, П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(-1, Key<Status::stop>, Off<iCOPT>, Off<iP1>, Off<iP2>,Test<On<iСU>, On<iCycle>>);
+				AND_BITS(-1, Key<Status::stop>, Off<iCOPT>, Off<iP1>, Off<iP2>,Test<On<iCU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(-1, Key<Status::stop>, On<iControl>,Test<On<iСU>, On<iCycle>>);
+				AND_BITS(-1, Key<Status::stop>, On<iControl>,Test<On<iCU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ и П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iСU>, On<iCycle>>);
+				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iCU>, On<iCycle>>);
 				//выставлен сигнал DC_ON2
 				OUT_BITS(On<oDC_ON2>);
 				{
@@ -128,7 +128,7 @@ namespace Automat
 					}
 					//ожидание выключения сигнала П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке ЦИКЛ
 					//, при превышении сбора 120 сек выход из цикла
-					AND_BITS(120000, Key<Status::stop>, Off<iP1>,Test<On<iСU>, On<iCycle>>);
+					AND_BITS(120000, Key<Status::stop>, Off<iP1>,Test<On<iCU>, On<iCycle>>);
 				}
 				//отключение сигнала DC_ON2
 				OUT_BITS(Off<oDC_ON2>);
@@ -139,7 +139,7 @@ namespace Automat
 				//убеждаемся что сигнал  отключён
 				//xxxxxxxxxx TEST_OUTPUT_BITS(Off<oDC_ON1>, Off<oDC_ON2>);
 				//ожидание включения сигнала КОНТРОЛЬ и П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP2>,Test<On<iСU>, On<iCycle>>);
+				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP2>,Test<On<iCU>, On<iCycle>>);
 				//включение сигнала AC_ON
 				StructSig<DataItem::Buffer> &structBuff = Singleton<StructSig<DataItem::Buffer>>::Instance();
 				OUT_BITS(On<oAC_ON>);
@@ -154,7 +154,7 @@ namespace Automat
 					}
 					//ожидание выключения сигнала П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке ЦИКЛ
 					//, при превышении сбора 120 сек выход из цикла
-					AND_BITS(120000, Key<Status::stop>, Off<iP2>,Test<On<iСU>, On<iCycle>>);
+					AND_BITS(120000, Key<Status::stop>, Off<iP2>,Test<On<iCU>, On<iCycle>>);
 				}
 				OUT_BITS(Off<oAC_ON>, Off<oStart>);	
 				//реверс данных с структуры
@@ -173,7 +173,7 @@ namespace Automat
 					//включены кнопки ЦИКЛ и СТОП
 					AppKeyHandler::Continue();
 					//кнопка ПУСК-продолжение, кнопка СТОП-выход из цикла, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ
-					AND_BITS(-1, Key<Status::start>, Key<Status::stop>, Test<On<iСU>, On<iCycle>>);
+					AND_BITS(-1, Key<Status::start>, Key<Status::stop>, Test<On<iCU>, On<iCycle>>);
 				}
 				//формирование результата
 				res = Compute::Result(c1c2);
