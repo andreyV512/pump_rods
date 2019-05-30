@@ -85,6 +85,10 @@ namespace Automat
 				AND_BITS(500, Key<Status::stop>, On<iCU>);	
 				//ожидание сигнала ЦИКЛ, проверка ЦЕПИ УПРАВЛЕНИЯ, выход из цикла по кнопке СТОП
 				AND_BITS(-1,  Key<Status::stop>, On<iCycle>, Test<On<iCU>>);	
+
+				AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Test<On<iCU>, On<iCycle>>);	
+				AND_BITS(-1,  Key<Status::stop>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
+
 				//выставил выходной сигнал РАБОТА
 				OUT_BITS(On<oWork>);
 				//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
@@ -115,6 +119,7 @@ namespace Automat
 				AND_BITS(-1, Key<Status::stop>, On<iControl>,Test<On<iCU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ и П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
 				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iCU>, On<iCycle>>);
+				AND_BITS(-1, Key<Status::stop>, On<iKM2_DC>, Test<On<iCU>, On<iCycle>>);
 				//выставлен сигнал DC_ON2
 				OUT_BITS(On<oDC_ON2>);
 				{
@@ -132,7 +137,7 @@ namespace Automat
 				}
 				//отключение сигнала DC_ON2
 				OUT_BITS(Off<oDC_ON2>);
-				Sleep(200);
+				Sleep(2000);
 				//отключение сигнала DC_ON1
 				OUT_BITS(Off<oDC_ON1>);
 
@@ -140,6 +145,10 @@ namespace Automat
 				//xxxxxxxxxx TEST_OUTPUT_BITS(Off<oDC_ON1>, Off<oDC_ON2>);
 				//ожидание включения сигнала КОНТРОЛЬ и П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
 				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP2>,Test<On<iCU>, On<iCycle>>);
+
+				AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Test<On<iCU>, On<iCycle>>);	
+				AND_BITS(-1,  Key<Status::stop>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
+
 				//включение сигнала AC_ON
 				StructSig<DataItem::Buffer> &structBuff = Singleton<StructSig<DataItem::Buffer>>::Instance();
 				OUT_BITS(On<oAC_ON>);
