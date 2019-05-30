@@ -65,6 +65,8 @@ namespace App
 	void Destroy()
 	{
 		Automat::Destroy();
+		device1730.Write(0);
+		Sleep(200);
 #ifndef DEBUG_ITEMS
 		l502.Destroy();
 		device1730.Destroy();
