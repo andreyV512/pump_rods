@@ -53,8 +53,8 @@ DWORD WINAPI EquipmentCheck__(PVOID)
 	App::IsRun() = true;
 	do
 	{
-		AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Test<On<iCU>, On<iCycle>>);	
-		AND_BITS(-1,  Key<Status::stop>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
+		AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>);	
+		AND_BITS(-1,  Key<Status::stop>, Off<iKM3_AC>);	
 		OUT_BITS(On<oDC_ON1>);
 		AND_BITS(-1, Key<Status::stop>, On<iKM2_DC>);
 		OUT_BITS(On<oDC_ON2>);
@@ -75,8 +75,8 @@ DWORD WINAPI EquipmentCheck__(PVOID)
 		Sleep(2000);
 		OUT_BITS(Off<oDC_ON1>);
 
-		AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Test<On<iCU>, On<iCycle>>);	
-		AND_BITS(-1,  Key<Status::stop>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
+		AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>);	
+		AND_BITS(-1,  Key<Status::stop>, Off<iKM3_AC>);	
 
 		//StructSig<DataItem::Buffer> &structBuff = Singleton<StructSig<DataItem::Buffer>>::Instance();
 		OUT_BITS(On<oAC_ON>);
