@@ -54,7 +54,7 @@ bool Device502::SetupParams(int *f_channels, int *f_ch_ranges, int ADC_FREQ, int
 	//static const int count_inputs = dimention_of(f_channels);
 	int err = L502_SetLChannelCount((t_l502_hnd)hnd, countChannels);
 	for (int i=0; (i < countChannels) && !err; i++)
-        err = L502_SetLChannel((t_l502_hnd)hnd, i, f_channels[i], L502_LCH_MODE_COMM, f_ch_ranges[i], 0);
+        err = L502_SetLChannel((t_l502_hnd)hnd, i, f_channels[i], L502_LCH_MODE_DIFF, f_ch_ranges[i], 0);
 	/* устанавливаем частоты ввода для АЦП и цифровых входов */
 	double f_adc = ADC_FREQ;
 	double f_frame = (double)ADC_FREQ/countChannels;
