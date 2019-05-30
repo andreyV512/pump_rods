@@ -112,6 +112,12 @@ namespace LogMess
 	BITS_XX(pink, "Выставлен сигнал \"C1\"", On<oC1>)
 	BITS_XX(pink, "Выставлен сигнал \"C2\"", On<oC2>)
 	BITS_XX(pink, "Выставлен сигнал \"ПЕРЕКЛАДКА\"", On<oToShift>)
+
+	BITS_XX(pink, "Проверка включения \"KM2 DC\"", On<iKM2_DC>)
+	BITS_XX(pink, "Проверка включения \"KM3 AC\"", On<iKM3_AC>)
+				 
+	BITS_XX(pink, "Проверка отключения \"KM2 DC\"", Off<iKM2_DC>)
+	BITS_XX(pink, "Проверка отключения \"KM3 AC\"", Off<iKM3_AC>)
 #undef BITS_XX
 
 
