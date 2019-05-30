@@ -53,8 +53,10 @@ DWORD WINAPI EquipmentCheck__(PVOID)
 	App::IsRun() = true;
 	do
 	{
+		AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Test<On<iCU>, On<iCycle>>);	
+		AND_BITS(-1,  Key<Status::stop>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
 		OUT_BITS(On<oDC_ON1>);
-		Sleep(200);
+		AND_BITS(-1, Key<Status::stop>, On<iKM2_DC>);
 		OUT_BITS(On<oDC_ON2>);
 		{
 			//сбор данных
@@ -70,8 +72,11 @@ DWORD WINAPI EquipmentCheck__(PVOID)
 			AND_BITS(-1, Key<Status::stop>, Proc<EquipmentCheckDelay>);
 		}
 		OUT_BITS(Off<oDC_ON2>);
-		Sleep(200);
+		Sleep(2000);
 		OUT_BITS(Off<oDC_ON1>);
+
+		AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Test<On<iCU>, On<iCycle>>);	
+		AND_BITS(-1,  Key<Status::stop>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
 
 		//StructSig<DataItem::Buffer> &structBuff = Singleton<StructSig<DataItem::Buffer>>::Instance();
 		OUT_BITS(On<oAC_ON>);
@@ -93,6 +98,8 @@ DWORD WINAPI EquipmentCheck__(PVOID)
 		Compute::Recalculation();
 		Log::Mess<LogMess::DataCollectionCompleted>();
 	}while(false);
+
+	device1730.Write(0);
 
 	switch(status)
 	{
