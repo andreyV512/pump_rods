@@ -93,43 +93,7 @@ namespace StatusMessages
 #define SKIP(item, ...)template<>struct ItemSkipX<item>{static const unsigned value = Bits<zone_status_list, typename TL::MkTlst<__VA_ARGS__>::Result>::value;};
 	
 	template<>struct ItemSkipX<SensorOff>{static const unsigned value = 0;};
-/*
-		SKIP(Nominal
-		, DefectSig<SortDown>
-		, DefectSig<Defect>
-		, StructSig<SortDown>
-		, StructSig<Defect>
-		, DeathZone
-		, SensorOff
-		)
 
-		SKIP(DefectSig<SortDown>
-		, DefectSig<Defect>
-		, DeathZone 
-		, SensorOff
-		)
-
-		SKIP(StructSig<SortDown>
-		, StructSig<Defect>
-		, DeathZone 
-		, SensorOff
-		)
-
-		SKIP(DefectSig<Defect>
-		, DeathZone 
-		, SensorOff
-		)
-
-		SKIP(StructSig<Defect>
-		, DeathZone 
-		, SensorOff
-		)
-
-		SKIP(DeathZone 
-		, SensorOff
-		)
-
-*/
 	SKIP(DeathZone
 		, Nominal
 		, DefectSig<SortDown>
