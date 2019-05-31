@@ -136,7 +136,7 @@ namespace TestIOPortsN
 			if(p.msk)
 			{
 				if(p.msk & o.value)
-				{
+				{					
 					p.msk &= ~o.value;
 					HWND h = p.items.get<Dialog::DlgItem2<OutStat<O>,NullType>>().hWnd;
 					bool b = 0 != (o.value & p.value);
@@ -169,17 +169,60 @@ class TestIOWindow
 		   SetWindowLongPtr(o.hWnd, GWLP_USERDATA, (LONG)&p.get<CheckBox<O>>());
 		}
 	};
+
+	template<class O, class T>struct DisableCheckItem
+	{
+		template<class Owner>bool operator()(Owner *owner, HWND ho, bool b)
+		{
+			HWND h = owner->items_output0.get<Dialog::DlgItem2<TestIOPortsN::OutStat<T>, NullType>>().hWnd;
+			bool bt = BST_CHECKED == Button_GetCheck(h);
+			if(b && bt)
+			{
+				Button_SetCheck(ho, BST_UNCHECKED);
+				return false;
+			}
+			else
+			{
+				EnableWindow(h, !b);
+				return true;
+			}
+		}
+	};
+	template<class O>struct DisableCheckItem<O, NullType>
+	{
+		template<class Owner>bool operator()(Owner *owner, HWND, bool b)
+		{
+			return true;
+		}
+	};
+
+	template<class T>struct __block_bit__
+	{
+		template<class Owner>bool operator()(Owner *o, HWND h, bool b)
+		{
+			return DisableCheckItem<T, typename __test_bit__<T>::Result>()(o, h, b);
+		}
+	};
+
+	template<class T>struct __test_bit__{typedef NullType Result;};
+
+	template<>struct __test_bit__<oDC_ON1>{typedef oAC_ON Result;};
+	template<>struct __test_bit__<oAC_ON>{typedef oDC_ON1 Result;};
+
 	template<class T>class CheckBox: public TEvent
 	{
 		TestIOWindow *owner;
 	public:
 		CheckBox(TestIOWindow *owner): owner(owner){}
 		void Do(TCommand &l)
-		{
+		{			
 			typedef TL::Inner<TL::Inner<T>::Result>::Result Tbit;
+			//dprint("bits %s\n", typeid(Tbit).name());
+			//dprint("bits %s\n", typeid(T).name());
 			unsigned bit = Singleton<OutputBitTable>::Instance().items.get<Tbit>().value;
 			bool b = BST_CHECKED == Button_GetCheck(l.hControl);
-			if(b)
+			bool b_enabled = __block_bit__<Tbit>()(owner, l.hControl, b);
+			if(b && b_enabled)
 			{
 				device1730.WriteOutput(bit);
 			}
