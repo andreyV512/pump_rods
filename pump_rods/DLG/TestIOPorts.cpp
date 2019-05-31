@@ -144,12 +144,10 @@ namespace TestIOPortsN
 					Button_SetCheck(h, t);
 					if(b)
 					{
-						//p.value |= o.value;
 						device1730.WriteOutput(o.value);
 					}
 					else
 					{
-						//p.value &= ~o.value;
 						device1730.WriteOutput(0, o.value);
 					}
 				}
@@ -170,7 +168,7 @@ class TestIOWindow
 		}
 	};
 
-	template<class O, class T>struct DisableCheckItem
+	template<class T>struct DisableCheckItem
 	{
 		template<class Owner>bool operator()(Owner *owner, HWND ho, bool b)
 		{
@@ -188,7 +186,7 @@ class TestIOWindow
 			}
 		}
 	};
-	template<class O>struct DisableCheckItem<O, NullType>
+	template<>struct DisableCheckItem<NullType>
 	{
 		template<class Owner>bool operator()(Owner *owner, HWND, bool b)
 		{
@@ -200,7 +198,7 @@ class TestIOWindow
 	{
 		template<class Owner>bool operator()(Owner *o, HWND h, bool b)
 		{
-			return DisableCheckItem<T, typename __test_bit__<T>::Result>()(o, h, b);
+			return DisableCheckItem<typename __test_bit__<T>::Result>()(o, h, b);
 		}
 	};
 
@@ -288,6 +286,7 @@ void TestIOWindow::operator()(TDestroy &l)
 	KillTimer(l.hwnd, idTimer);
 	WindowPosition::Set<TestIOWindow>(l.hwnd);
 	SetWindowLongPtr(l.hwnd, GWLP_USERDATA, NULL);
+	if(!App::IsRun())device1730.Write(0);
 	delete this;
 }
 
