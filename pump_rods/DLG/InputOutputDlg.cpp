@@ -5,7 +5,7 @@
 MIN_EQUAL_VALUE(n, 1)\
 MAX_EQUAL_VALUE(n, 32)\
 PARAM_TITLE(n, txt)\
-template<>struct DlgSubItems<n, unsigned>: UpDownSubItem<n>{};
+template<>struct DlgSubItems<n, unsigned>: UpDownSubItem<n, 1, 32>{};
 
 
 template<class O, class P>struct __unshift__
