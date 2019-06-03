@@ -46,10 +46,10 @@ struct ColorTable
 template<class T>struct DefectSig;
 template<class T>struct StructSig;
 template<class T>struct Thresh;
-DEFINE_PARAM_WAPPER2(DefectSig, Thresh, SortDown, int, 40)
-DEFINE_PARAM_WAPPER2(DefectSig, Thresh, Defect, int, 70)
-DEFINE_PARAM_WAPPER2(StructSig, Thresh, SortDown, int, 40)
-DEFINE_PARAM_WAPPER2(StructSig, Thresh, Defect, int, 70)
+DEFINE_PARAM_WAPPER2(DefectSig, Thresh, SortDown, double, 40)
+DEFINE_PARAM_WAPPER2(DefectSig, Thresh, Defect, double, 70)
+DEFINE_PARAM_WAPPER2(StructSig, Thresh, SortDown, double, 40)
+DEFINE_PARAM_WAPPER2(StructSig, Thresh, Defect, double, 70)
 
 struct ThresholdsTable
 {

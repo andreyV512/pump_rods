@@ -32,12 +32,91 @@ namespace Compute
 		{}
 	};
 
+	template<class O, class Filtre>struct diff
+	{
+		void operator()(O &o, double delta, double adcRange, double koef, int medianWidth, bool medianON, int samplingRate, int cutoffFrequency, bool wave)
+		{
+		}
+	};
+
+	template<class O, class Filtre>struct diff<StructSig<O>, Filtre>
+	{
+		void operator()(O &o, double delta, double adcRange, double koef, int medianWidth, bool medianON, int samplingRate, int cutoffFrequency, bool cutoffFrequencyON)//double (&d)[DataItem::output_buffer_size])
+		{
+			MedianFiltre filtre;
+			if(medianWidth > 2)filtre.InitWidth(medianWidth);
+
+			Filtre analogFiltre;
+			if(0 != cutoffFrequency)analogFiltre.Setup(
+				samplingRate
+				, 3
+				, cutoffFrequency
+				, 40
+				);
+			double *d = o.inputData;
+			int first =  int(o.deathZoneFirst * delta);
+			int second =  int(o.deathZoneSecond * delta);
+			
+			int i = 0;
+
+			for(; i < first; ++i)
+			{
+				double t = medianON? filtre(d[i]): d[i];
+				if(cutoffFrequencyON) t = analogFiltre(t);
+			}
+
+			while(d[i] >= 0 && i < second)
+			{
+				double t = medianON? filtre(d[i]): d[i];
+				if(cutoffFrequencyON) t = analogFiltre(t);
+				++i;
+			}
+
+			double min = 100;
+
+			while(true)
+			{
+				double max = 0;
+				while(d[i] < 0)
+				{
+					if(i >= second) goto EXIT;
+					double t = medianON? filtre(d[i]): d[i];
+					if(cutoffFrequencyON) t = analogFiltre(t);
+					if(t < max) max = t;
+					++i;
+				}
+				max =-max;
+				if(max < min) min = max;
+
+				max = 0;
+				while(d[i] >= 0)
+				{
+					if(i >= second) goto EXIT;
+					double t = medianON? filtre(d[i]): d[i];
+					if(cutoffFrequencyON) t = analogFiltre(t);
+					if(t > max) max = t;
+					++i;
+				}
+				if(max < min) min = max;
+			}
+EXIT:
+			min *= adcRange * koef;
+			o.structMinVal = min;
+			d = o.outputData;
+			for(int j = 0; j < DataItem::output_buffer_size; ++j)
+			{
+				d[j] -= min;
+			}
+		}
+	};
+
 	template<class O, class P>struct __recalculation__;
 	template<class T, template<class>class W, class P>struct __recalculation__<W<T>, P>
 	{
 		typedef W<T> O;
 		void operator()(P &p)
 		{
+			zprint("\n");
 			if(!Singleton<OnTheJobTable>::Instance().items.get<W<Check>>().value) return;
 			O &o = Singleton<O>::Instance();
 			double adcRange =  100.0 / DataItem::ADC_RANGE(p.l502Param.get<W<RangeL502>>().value);
@@ -62,7 +141,7 @@ namespace Compute
 			{
 				o.outputData[i] *= adcRange * koef;
 			}
-
+		
 			DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;
 			
 			int rodLength = dead.get<RodLenght>().value;
@@ -70,6 +149,14 @@ namespace Compute
 			int secondDeathZone = dead.get<W<Second<DeathZone>>>().value;
 			o.deathZoneFirst =  int((double )o.deathZoneFirst * DataItem::output_buffer_size / rodLength);
 			o.deathZoneSecond =  DataItem::output_buffer_size - int((double )o.deathZoneSecond * DataItem::output_buffer_size / rodLength);
+
+			diff<O, typename WapperFiltre<W>::Result>()(o, (double)o.currentOffset / DataItem::output_buffer_size, adcRange, koef
+				, p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value
+				, p.medianFiltreWidth.get<W<MedianFiltreON>>().value
+				, p.l502Param.get<W<ChannelSamplingRate>>().value
+				, p.cutoffFrequency.get<W<CutoffFrequency>>().value
+				, p.cutoffFrequency.get<W<CutoffFrequencyON>>().value
+				);
              
 			o.result = STATUS_ID(Nominal);
 			for(int i = o.deathZoneFirst; i < o.deathZoneSecond; ++i)

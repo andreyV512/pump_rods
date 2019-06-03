@@ -26,7 +26,7 @@ public:
 
 	int currentOffset;
 	int deathZoneFirst, deathZoneSecond;
-	int threshSortDown, threshDefect;
+	double threshSortDown, threshDefect;
 	int threshSortDownColor, threshDefectColor, deathZoneColor, nominalColor;
 	int result;
 	double *inputData;

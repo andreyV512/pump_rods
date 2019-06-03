@@ -8,7 +8,7 @@ namespace DataItem
 	{		
 		int currentOffset;
 		int deathZoneFirst, deathZoneSecond;
-		int threshSortDown, threshDefect;
+		double threshSortDown, threshDefect;
 		int result;
 		double structMinVal;
 		double inputData[App::buffer_size];

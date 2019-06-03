@@ -115,9 +115,9 @@ LRESULT CommonViewer::operator()(TCreate &l)
 	currentX /*= currentY*/ = 0;
 
 	chart->minAxesY = 0;
-	chart->maxAxesY = 100;
-	chart->minAxesX = 0;
-	chart->maxAxesX = 1200;
+	//chart->maxAxesY = 100;
+	//chart->minAxesX = 0;
+	//chart->maxAxesX = 1200;
 	chart->rect.top = 17;
 	mouseMove = true;
 	label.fontHeight = 12;

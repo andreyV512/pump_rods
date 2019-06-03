@@ -229,8 +229,8 @@ template<template<class>class W>struct CorrectionSensorDlg
 			, __test_change_param__<AnalogFilterTable, W<CutoffFrequencyON>, FrameViewer, bool,   &FrameViewer::cutoffFrequencyON>
 			, __test_change_param__<MedianFiltreTable, W<MedianFiltreWidth>, FrameViewer, int,    &FrameViewer::medianFiltreWidth>
 			, __test_change_param__<MedianFiltreTable, W<MedianFiltreON>   , FrameViewer, bool,   &FrameViewer::medianFiltreON>
-			, __test_change_param__<ThresholdsTable, W<Thresh<SortDown>>   , FrameViewer, int,    &FrameViewer::threshSortDown>
-			, __test_change_param__<ThresholdsTable, W<Thresh<Defect>>   , FrameViewer  , int,    &FrameViewer::threshDefect>
+			, __test_change_param__<ThresholdsTable, W<Thresh<SortDown>>   , FrameViewer, double,    &FrameViewer::threshSortDown>
+			, __test_change_param__<ThresholdsTable, W<Thresh<Defect>>   , FrameViewer  , double,    &FrameViewer::threshDefect>
 		>::Result Result;
 	};
 

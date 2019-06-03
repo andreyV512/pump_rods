@@ -86,6 +86,7 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 	viewer.nominalColor = color.get<Clr<Nominal>>().value;
 	viewer.cursor.SetMouseMoveHandler(&viewer, & DetailWindow<W>::Viewer::Draw);
 	viewer.count = DataItem::output_buffer_size;
+	viewer.chart->maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
 
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	frame.count = Singleton<ViewerCountTable>::Instance().items.get<W<ViewerCount>>().value;
@@ -99,6 +100,25 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
 	return 0;
 }
+
+template<class T>struct diff_templ
+{
+	template<class O>void operator()(O &o, double(&)[1024])
+	{
+	}
+};
+
+template<class T>struct diff_templ<StructSig<T>>
+{
+	template<class O>void operator()(O &o, double(&arr)[1024])
+	{
+		double structMinVal = o.structMinVal;
+		for(int i = 0; i < dimention_of(arr); ++i)
+		{
+			arr[i] -= structMinVal;
+		}
+	}
+};
 
 template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 {
@@ -149,7 +169,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
     if(frame.isBarGraph)
 	{
 		frame.tchart.minAxesY = 0;
-		frame.tchart.maxAxesY = 100;
+		frame.tchart.maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
 	}
 	else
 	{
@@ -167,9 +187,14 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 		frame.buffer[i] *= adcRange * frame.koef;
 	}
 
+	if(frame.isBarGraph)
+	{
+		diff_templ<W<DataItem::Buffer>>()(item, frame.buffer);
+	}
+
 	frame.delta = (double)frame.count / dimention_of(frame.buffer);
 
-	frame.nominalColor		= viewer.nominalColor;
+	frame.nominalColor	= viewer.nominalColor;
 
 	DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;
 	int rodLength = dead.get<RodLenght>().value;
