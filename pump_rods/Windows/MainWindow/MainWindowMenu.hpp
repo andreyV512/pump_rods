@@ -49,6 +49,7 @@ namespace MainWindowMenu
 	struct Filter_                   : FilterDlg{};
 	struct KoefDlg_                  : KoefDlg{};
 	struct TresholdsDlg_             : TresholdsDlg{};
+	struct AxesGraphs                : AxesGraphsDlg{};
 
 	MENU_ITEM(L"Мёртвые зоны", DeadZones)
 	MENU_ITEM(L"Создать типоразмер", MainCreateTypesize)
@@ -57,6 +58,7 @@ namespace MainWindowMenu
 	MENU_ITEM(L"Корректировка датчиков", KoefDlg_)
 	MENU_ITEM(L"Настройки цифрового фильтра", Filter_)
 	MENU_ITEM(L"Настройки порогов", TresholdsDlg_)
+	MENU_ITEM(L"Настройки осей", AxesGraphs)
 
 	template<>struct TopMenu<MainOptionTypeSize>
 	{
@@ -66,6 +68,7 @@ namespace MainWindowMenu
 			, MenuItem<MedianFiltre>
 			, MenuItem<Filter_>
 			, MenuItem<KoefDlg_>
+			, MenuItem<AxesGraphs>
 			, Separator<0>
 			, MenuItem<MainCreateTypesize>
 			, MenuItem<MainDeleteTypeSize>

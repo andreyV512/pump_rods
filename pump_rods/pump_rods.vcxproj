@@ -205,6 +205,7 @@
     <ClCompile Include="DataItem\DataItem.cpp" />
     <ClCompile Include="DLG\AboutWindow.cpp" />
     <ClCompile Include="DLG\AnalogPlateDlg.cpp" />
+    <ClCompile Include="DLG\AxesDlg.cpp" />
     <ClCompile Include="DLG\ColorItemsDlg.cpp" />
     <ClCompile Include="DLG\DeathZonesDlg.cpp" />
     <ClCompile Include="DLG\FilterDlg.cpp" />

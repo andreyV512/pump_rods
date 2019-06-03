@@ -21,6 +21,7 @@ struct SortDown;
 struct Defect;
 struct DeathZone;
 struct SensorOff;
+struct Axes;
 
 DEFINE_PARAM_WAPPER(Clr, Nominal  , int, 0xff00ff00)
 DEFINE_PARAM_WAPPER(Clr, SortDown, int, 0xff4286f4)
@@ -164,8 +165,8 @@ DEFINE_PARAM_WAPPER(DefectSig, ChannelSamplingRate, int, 10000)
 DEFINE_PARAM_WAPPER(StructSig, ChannelSamplingRate, int, 10000)
 DEFINE_PARAM_WAPPER(DefectSig, RangeL502, int, 0)
 DEFINE_PARAM_WAPPER(StructSig, RangeL502, int, 0)
-DEFINE_PARAM_WAPPER(DefectSig, ChannelL502, int, 1)
-DEFINE_PARAM_WAPPER(StructSig, ChannelL502, int, 2)
+DEFINE_PARAM_WAPPER(DefectSig, ChannelL502, int, 2)
+DEFINE_PARAM_WAPPER(StructSig, ChannelL502, int, 1)
 
 struct L502ParametersTable
 {
@@ -182,6 +183,20 @@ struct L502ParametersTable
 	const wchar_t *name(){return L"L502ParametersTable";}
 };
 
+DEFINE_PARAM_WAPPER(DefectSig, Axes, int, 100)
+DEFINE_PARAM_WAPPER(StructSig, Axes, int, 100)
+
+struct AxesGraphsTable
+{
+	typedef TL::MkTlst<
+		DefectSig<Axes>
+		, StructSig<Axes>
+	>::Result items_list;
+	typedef TL::Factory<items_list> TItems;
+	TItems items;
+	const wchar_t *name(){return L"AxesGraphsTable";}
+};
+
 STR_PARAM(NameParam, 128, L"НШ19")
 //DEFINE_PARAM(DiametrPumpRods            , int, 19)
 DEFINE_PARAM_ID(ThresholdsTable, int, 1)
@@ -191,6 +206,7 @@ DEFINE_PARAM_ID(AnalogFilterTable, int, 1)
 DEFINE_PARAM_ID(MedianFiltreTable, int, 1)
 DEFINE_PARAM_ID(L502ParametersTable, int, 1)
 DEFINE_PARAM_ID(KoeffSignTable	   , int, 1)
+DEFINE_PARAM_ID(AxesGraphsTable	   , int, 1)
 
  struct ParametersTable
  {
@@ -202,6 +218,7 @@ DEFINE_PARAM_ID(KoeffSignTable	   , int, 1)
 		, ID<MedianFiltreTable>
 		, ID<L502ParametersTable>
 		, ID<KoeffSignTable>
+		, ID<AxesGraphsTable>
 		, NameParam
 		//, DiametrPumpRods
 	>::Result items_list;
@@ -277,7 +294,7 @@ struct OutputBitTable
 	const wchar_t *name(){return L"OutputBitTable";}
  };
 
-STR_PARAM(NamePlate1730, 64, L"PCI-1730,BID#1")
+STR_PARAM(NamePlate1730, 64, L"PCIE-1730,BID#0")
  struct NamePlate1730ParametersTable
  {
 	 typedef TL::MkTlst<
@@ -308,6 +325,7 @@ struct ParametersBase
 		 , AnalogFilterTable
 		 , L502ParametersTable
 		 , KoeffSignTable
+		 , AxesGraphsTable
 	 >::Result multy_row_table_list;
 
 	 typedef TL::MkTlst<

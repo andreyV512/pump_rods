@@ -37,5 +37,5 @@ DLG(MessageDlg)
 DLG(StoreDlg)
 DLG(LoadDlg)
 DLG(TresholdsDlg)
-
+DLG(AxesGraphsDlg)
 #undef DLG

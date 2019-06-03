@@ -10,6 +10,7 @@ namespace DataItem
 		int deathZoneFirst, deathZoneSecond;
 		int threshSortDown, threshDefect;
 		int result;
+		double structMinVal;
 		double inputData[App::buffer_size];
 		double outputData[output_buffer_size];
 		char status[output_buffer_size];

@@ -5,9 +5,10 @@
 
 PARAM_TITLE(DefectSig<ChannelL502>, L"Канал")
 PARAM_TITLE(StructSig<ChannelL502>, L"Канал")
-DO_NOT_CHECK(DefectSig<ChannelL502>)
-DO_NOT_CHECK(StructSig<ChannelL502>)
-
+MIN_EQUAL_VALUE(DefectSig<ChannelL502>, 1)
+MAX_EQUAL_VALUE(DefectSig<ChannelL502>, 32)
+MIN_EQUAL_VALUE(StructSig<ChannelL502>, 1)
+MAX_EQUAL_VALUE(StructSig<ChannelL502>, 32)
 
 template<>struct DlgSubItems<DefectSig<ChannelL502>, int>: UpDownSubItem<DefectSig<ChannelL502>, 1, 32, 140>{};
 template<>struct DlgSubItems<StructSig<ChannelL502>, int>: UpDownSubItem<StructSig<ChannelL502>, 1, 32, 140>{};

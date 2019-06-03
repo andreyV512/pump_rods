@@ -14,11 +14,24 @@ namespace {
 		int y, width, height, maxYHeight;
 		int lengthTube;
 	};
+
+	template<class T>struct MaxYAxes;
+	template<>struct MaxYAxes<MainWindow::DefectoscopeViewer>
+	{
+		typedef DefectSig<Axes> Result;
+	};
+
+	template<>struct MaxYAxes<MainWindow::StructureViewer>
+	{
+		typedef StructSig<Axes> Result;
+	};
+
 	template<class O, class P>struct __move_window__
 	{
 		void operator()(O *o, P *p)
 		{		
 			o->tchart.items.get<BottomAxesMeters>().maxBorder = p->lengthTube;
+			o->tchart.maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<typename MaxYAxes<O>::Result>().value;
 			int height =  2 * p->height;
 			TSize size = {o->hWnd, WM_SIZE, 0, p->width, height};
 			SendMessage(MESSAGE(size));

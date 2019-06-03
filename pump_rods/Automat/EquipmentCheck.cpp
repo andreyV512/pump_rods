@@ -105,10 +105,10 @@ DWORD WINAPI EquipmentCheck__(PVOID)
 	{
 	case Status::stop:
 		Log::Mess<LogMess::ExitMeshuringCycle>();
-		dprint("Status++++++++++++++++++++::stop\n");
+	//	dprint("Status++++++++++++++++++++::stop\n");
 		break;
 	case Status::alarm_l502:
-		dprint("Status::alarm_l502  %d\n", status502);
+	//	dprint("Status::alarm_l502  %d\n", status502);
 		Log::Mess<LogMess::Alarm502>(status502);
 		break;
 	}
