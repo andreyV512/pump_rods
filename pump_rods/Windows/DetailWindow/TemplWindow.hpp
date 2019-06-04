@@ -116,6 +116,7 @@ template<class T>struct diff_templ<StructSig<T>>
 		for(int i = 0; i < dimention_of(arr); ++i)
 		{
 			arr[i] -= structMinVal;
+			if(arr[i] < 0) arr[i] = 0;
 		}
 	}
 };

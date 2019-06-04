@@ -24,7 +24,7 @@ ResultViewer::ResultViewer()
 bool ResultViewer::GetColorBar(int zone, double &data, unsigned &color)
 {
 	color = StatusColor()(viewerData.status[zone]);
-	data = 90;
+	data = chart->maxAxesY;
 	return zone < count;
 }
 
