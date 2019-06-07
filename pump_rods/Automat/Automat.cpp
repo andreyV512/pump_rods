@@ -75,6 +75,10 @@ namespace Automat
 				AND_BITS(-1, Key<Status::start>);
 				App::IsRun() = false;
 				dprint("AUTOMAT_RUN------------------------------\n");
+
+				//выставил выходной сигнал РАБОТА
+				OUT_BITS(On<oWork>);
+
 				//очистить главное окно
 				App::CleanViewers();
 				//включена кнопка СТОП
@@ -88,8 +92,8 @@ namespace Automat
 
 				AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
 
-				//выставил выходной сигнал РАБОТА
-				OUT_BITS(On<oWork>);
+		//		//выставил выходной сигнал РАБОТА
+		//		OUT_BITS(On<oWork>);
 				//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
 				AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iCU>, On<iCycle>>);
 				//чтение дискретного рорта
