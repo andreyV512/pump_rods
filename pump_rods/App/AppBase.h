@@ -243,13 +243,13 @@ DEFINE_PARAM_WAPPER(StructSig, ViewerCount, int, 3000)
  };
 
 DEFINE_PARAM(iCU     , unsigned, 1 << 0) //цепи управления
-DEFINE_PARAM(iKM2_DC , unsigned, 1 << 1)
-DEFINE_PARAM(iKM3_AC , unsigned, 1 << 2)
-DEFINE_PARAM(iCycle , unsigned, 1 << 3)
-DEFINE_PARAM(iP1     , unsigned, 1 << 4)
-DEFINE_PARAM(iP2     , unsigned, 1 << 5)
-DEFINE_PARAM(iCOPT   , unsigned, 1 << 6)
-DEFINE_PARAM(iControl, unsigned, 1 << 7)
+DEFINE_PARAM(iKM2_DC , unsigned, 1 << 4)
+DEFINE_PARAM(iKM3_AC , unsigned, 1 << 5)
+DEFINE_PARAM(iCycle , unsigned, 1 << 8)
+DEFINE_PARAM(iP1     , unsigned, 1 << 9)
+DEFINE_PARAM(iP2     , unsigned, 1 << 10)
+DEFINE_PARAM(iCOPT   , unsigned, 1 << 11)
+DEFINE_PARAM(iControl, unsigned, 1 << 12)
 
 struct InputBitTable
  {
