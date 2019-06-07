@@ -318,7 +318,7 @@ template<template<class>class W>struct CorrectionSensorDlg
 				FrameViewer &frame =  e.viewers.get<FrameViewer>();
 				frame.count = Singleton<ViewerCountTable>::Instance().items.get<W<ViewerCount>>().value;
 
-				Repaint<W>( e.viewers.get<Win::Viewer>(), frame);
+				//Repaint<W>( e.viewers.get<Win::Viewer>(), frame);
 			}
 		}
 	};

@@ -118,6 +118,7 @@ namespace LogMess
 				 
 	BITS_XX(pink, "Проверка отключения \"KM2 DC\"", Off<iKM2_DC>)
 	BITS_XX(pink, "Проверка отключения \"KM3 AC\"", Off<iKM3_AC>)
+	BITS_XX(pink, "Проверка отключения \"КМ DC и KM3 AC\"",  Off<iKM2_DC>, Off<iKM3_AC>)
 #undef BITS_XX
 
 
