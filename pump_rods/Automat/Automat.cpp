@@ -76,9 +76,6 @@ namespace Automat
 				App::IsRun() = false;
 				dprint("AUTOMAT_RUN------------------------------\n");
 
-				//выставил выходной сигнал РАБОТА
-				OUT_BITS(On<oWork>);
-
 				//очистить главное окно
 				App::CleanViewers();
 				//включена кнопка СТОП
@@ -87,6 +84,10 @@ namespace Automat
 				Log::Mess<LogMess::StartCycle>();
 				//проверка сигнала ЦЕПИ УПРАВЛЕНИЯ
 				AND_BITS(500, Key<Status::stop>, On<iCU>);	
+
+					//выставил выходной сигнал РАБОТА
+				OUT_BITS(On<oWork>);
+
 				//ожидание сигнала ЦИКЛ, проверка ЦЕПИ УПРАВЛЕНИЯ, выход из цикла по кнопке СТОП
 				AND_BITS(-1,  Key<Status::stop>, On<iCycle>, Test<On<iCU>>);	
 
