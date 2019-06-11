@@ -61,7 +61,7 @@ DWORD WINAPI EquipmentCheck__(PVOID)
 		{
 			//сбор данных
 			Log::Mess<LogMess::DataCollectionDEF>();
-			l502Run<DefectSig<DataItem::Buffer>> def;//(Singleton<DefectSig<DataItem::Buffer>>::Instance());
+			l502Run<DefectSig<DataItem::Buffer>> def;
 			if(def.ok != (status502 = def()))
 			{
 				status = Status::alarm_l502;
@@ -78,7 +78,6 @@ DWORD WINAPI EquipmentCheck__(PVOID)
 		AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>);	
 		AND_BITS(-1,  Key<Status::stop>, Off<iKM3_AC>);	
 
-		//StructSig<DataItem::Buffer> &structBuff = Singleton<StructSig<DataItem::Buffer>>::Instance();
 		OUT_BITS(On<oAC_ON>);
 		{
 			//сбор данных
