@@ -67,7 +67,9 @@ namespace Automat
 			for(;;)
 			{
 				//обнуляем выходные сигналы
-				device1730.Write(0);
+				//device1730.Write(0);
+				//выставил выходной сигнал РАБОТА
+				SET_OUT_BITS(On<oWork>);
 				//включены кнопки ЦИКЛ ТЕСТ
 				AppKeyHandler::Stop();
 				App::IsRun() = true;
@@ -86,7 +88,7 @@ namespace Automat
 				AND_BITS(500, Key<Status::stop>, On<iCU>);	
 
 					//выставил выходной сигнал РАБОТА
-				OUT_BITS(On<oWork>);
+				//OUT_BITS(On<oWork>);
 
 				//ожидание сигнала ЦИКЛ, проверка ЦЕПИ УПРАВЛЕНИЯ, выход из цикла по кнопке СТОП
 				AND_BITS(-1,  Key<Status::stop>, On<iCycle>, Test<On<iCU>>);	

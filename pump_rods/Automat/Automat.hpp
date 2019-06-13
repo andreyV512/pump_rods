@@ -461,6 +461,19 @@ namespace Automat
 		}
 	};
 
+	template<class List>struct Set_OUT_Bits
+	{
+		void operator()()
+		{
+			unsigned bitOn = 0;
+			BitsOut<typename Filt<List, On>::Result>()(bitOn);
+
+			device1730.Write(bitOn);
+			MessBits<typename __mess_bits__<List>::Result>()();
+		}
+	};
+
 #define AND_BITS(delay, ...) if(0 != (status = AND_Bits<delay, TL::MkTlst<__VA_ARGS__>::Result>()(result)))break
 #define OUT_BITS(...) OUT_Bits<TL::MkTlst<__VA_ARGS__>::Result>()()
+#define SET_OUT_BITS(...) Set_OUT_Bits<TL::MkTlst<__VA_ARGS__>::Result>()()
 }
