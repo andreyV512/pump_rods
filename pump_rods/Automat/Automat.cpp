@@ -63,20 +63,19 @@ namespace Automat
 		unsigned status502 = 0;
 		unsigned c1c2 = 0;
 		bool sortOnce = true;
+		App::IsRun() = true;
 		
 		for(;;)
 		{
 			for(;;)
 			{
-				//обнуляем выходные сигналы
-				//device1730.Write(0);
-				//выставил выходной сигнал РАБОТА
-				//SET_OUT_BITS(On<oWork>);
 				//включены кнопки ЦИКЛ ТЕСТ
-				AppKeyHandler::Stop();
-				App::IsRun() = true;
+				AppKeyHandler::Stop();				
 				//ожидание нажатия кнопки СТАРТ
-				AND_BITS(-1, Key<Status::start>);
+				if(App::IsRun())
+				{
+					AND_BITS(-1, Key<Status::start>);
+				}
 				App::IsRun() = false;
 				dprint("AUTOMAT_RUN------------------------------\n");
 
@@ -230,10 +229,14 @@ namespace Automat
 		//	l502.Stop();
 			dprint("x 999\n");
 
+			device1730.Write(0);
+
+			App::IsRun() = true;
+
 			switch(status)
 			{
 			case Status::exit_loop: 
-				device1730.Write(0);
+				
 				dprint("Status::exit_loop\n");
 				return 0;
 			case Status::stop:
