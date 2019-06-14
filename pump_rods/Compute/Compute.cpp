@@ -159,32 +159,33 @@ EXIT:
 				);
              
 			o.result = STATUS_ID(Nominal);
+			int start = o.deathZoneFirst;
 			for(int i = o.deathZoneFirst; i < o.deathZoneSecond; ++i)
 			{
 				double t = o.outputData[i];
 				if(t > o.threshDefect)
 				{
 					o.result = STATUS_ID(W<Defect>);
-					o.status[i] = STATUS_ID(W<Defect>);
+					o.status[i - start] = STATUS_ID(W<Defect>);
 				}
 				else if(t > o.threshSortDown)
 				{
 					if(STATUS_ID(W<Defect>) != o.result)o.result = STATUS_ID(W<SortDown>);
-					o.status[i] = STATUS_ID(W<SortDown>);
+					o.status[i - start] = STATUS_ID(W<SortDown>);
 				}
 				else
 				{
-					o.status[i] = STATUS_ID(Nominal);
+					o.status[i - start] = STATUS_ID(Nominal);
 				}
 			}
-			for(int i = 0; i < o.deathZoneFirst; ++i)
-			{
-				o.status[i] = STATUS_ID(DeathZone);
-			}
-			for(int i = o.deathZoneSecond; i < dimention_of(o.status); ++i)
-			{
-				o.status[i] = STATUS_ID(DeathZone);
-			}
+			//for(int i = 0; i < o.deathZoneFirst; ++i)
+			//{
+			//	o.status[i] = STATUS_ID(DeathZone);
+			//}
+			//for(int i = o.deathZoneSecond; i < dimention_of(o.status); ++i)
+			//{
+			//	o.status[i] = STATUS_ID(DeathZone);
+			//}
 		}
 	};
 

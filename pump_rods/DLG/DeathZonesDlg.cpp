@@ -16,7 +16,7 @@ template<template<class>class W>struct ParamTitle<W<Second<DeathZone>>>
 template<template<class>class W, template<class>class Z>struct LessEqual<W<Z<DeathZone>>>
 {typename W<Z<DeathZone>>::type_value operator()(){return 0;}};
 template<template<class>class W, template<class>class Z>struct LargenEqual<W<Z<DeathZone>>>
-{typename W<Z<DeathZone>>::type_value operator()(){return 1000;}};
+{typename W<Z<DeathZone>>::type_value operator()(){return 3000;}};
 
 typedef GROUP_BOX(DefectSig<First<DeathZone>>, DefectSig<Second<DeathZone>>) death_def;
 typedef GROUP_BOX(StructSig<First<DeathZone>>, StructSig<Second<DeathZone>>) death_str;
