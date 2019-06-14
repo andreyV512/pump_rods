@@ -61,6 +61,8 @@ namespace Automat
 	{
 		unsigned status = 0;
 		unsigned status502 = 0;
+		unsigned c1c2 = 0;
+		bool sortOnce = true;
 		
 		for(;;)
 		{
@@ -97,25 +99,27 @@ namespace Automat
 				AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
 				dprint("x 2\n");
 
-		//		//выставил выходной сигнал РАБОТА
-		//		OUT_BITS(On<oWork>);
-				//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iCU>, On<iCycle>>);
-				dprint("x 3\n");
-				//чтение дискретного рорта
-				unsigned bits = device1730.Read();
-				//чтение сигнала П1 и П2
-				unsigned c1c2  = 0 != (bits & (1 << result.inputs_bits.get<iP1>().value))? 2: 0;
-				         c1c2 |= 0 != (bits & (1 << result.inputs_bits.get<iP2>().value))? 1: 0;
-				//сообщение "ВНИМАТЕЛЬНО ПРОВЕРЬ ПОЛОЖЕНИЕ ШТАНГИ В ЗАХВАТАХ!"
-				Log::Mess<LogMess::InfoCycle>();
-				//включены кнопки ЦИКЛ и СТОП
-				AppKeyHandler::Continue();
-				//кнопка ЦИКЛ - продолжение, СТОП - выход из цикла, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ
-				AND_BITS(-1, Key<Status::start>, Key<Status::stop>/*, Test<On<iCU> On<iCycle>>*/);
-				dprint("x 4\n");
-				//включена кнопка СТОП
-				AppKeyHandler::Run();
+				if(sortOnce)
+				{
+					//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
+					AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iCU>, On<iCycle>>);
+					dprint("x 3\n");
+					//чтение дискретного рорта
+					unsigned bits = device1730.Read();
+					//чтение сигнала П1 и П2
+					c1c2  = 0 != (bits & (1 << result.inputs_bits.get<iP1>().value))? 2: 0;
+					c1c2 |= 0 != (bits & (1 << result.inputs_bits.get<iP2>().value))? 1: 0;
+				}
+				sortOnce = false;
+				////сообщение "ВНИМАТЕЛЬНО ПРОВЕРЬ ПОЛОЖЕНИЕ ШТАНГИ В ЗАХВАТАХ!"
+				//Log::Mess<LogMess::InfoCycle>();
+				////включены кнопки ЦИКЛ и СТОП
+				//AppKeyHandler::Continue();
+				////кнопка ЦИКЛ - продолжение, СТОП - выход из цикла, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ
+				//AND_BITS(-1, Key<Status::start>, Key<Status::stop>/*, Test<On<iCU> On<iCycle>>*/);
+				//dprint("x 4\n");
+				////включена кнопка СТОП
+				//AppKeyHandler::Run();
 
 				//убеждаемся что сигнал ACON DCON1 отключён
 				//xxxxxxxxxxxxxxx TEST_OUTPUT_BITS(Off<oAC_ON>, Off<oDC_ON2>);
