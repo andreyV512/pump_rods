@@ -188,6 +188,7 @@ namespace Automat
 					dprint("x 14\n");
 				}
 				OUT_BITS(Off<oAC_ON>, Off<oStart>);	
+				Sleep(1000);
 				//реверс данных с структуры
 				Compute::Reverse(structBuff.inputData, structBuff.currentOffset);
 				//расчёт и отображение данных
