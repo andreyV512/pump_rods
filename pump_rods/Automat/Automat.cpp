@@ -69,7 +69,7 @@ namespace Automat
 				//обнуляем выходные сигналы
 				//device1730.Write(0);
 				//выставил выходной сигнал РАБОТА
-				SET_OUT_BITS(On<oWork>);
+				//SET_OUT_BITS(On<oWork>);
 				//включены кнопки ЦИКЛ ТЕСТ
 				AppKeyHandler::Stop();
 				App::IsRun() = true;
@@ -87,8 +87,8 @@ namespace Automat
 				//проверка сигнала ЦЕПИ УПРАВЛЕНИЯ
 				AND_BITS(500, Key<Status::stop>, On<iCU>);	
 
-					//выставил выходной сигнал РАБОТА
-				//OUT_BITS(On<oWork>);
+				//выставил выходной сигнал РАБОТА
+				OUT_BITS(On<oWork>);
 
 				//ожидание сигнала ЦИКЛ, проверка ЦЕПИ УПРАВЛЕНИЯ, выход из цикла по кнопке СТОП
 				AND_BITS(-1,  Key<Status::stop>, On<iCycle>, Test<On<iCU>>);	
@@ -151,7 +151,7 @@ namespace Automat
 					dprint("x 9\n");
 				}
 				//отключение сигнала DC_ON2
-				OUT_BITS(Off<oDC_ON1>);
+				OUT_BITS(Off<oDC_ON2>);
 		//todo		AND_BITS(-1, Key<Status::stop>);//, Off<iKM2_DC>);//todo, Test<On<iCU>, On<iCycle>>);
 				dprint("x 10\n");
 				Sleep(2000);
@@ -220,6 +220,7 @@ namespace Automat
 				AND_BITS(-1, Key<Status::stop>, Off<iControl>);
 				dprint("x 16\n");
 				//переход в начало цикла
+				OUT_BITS(Off<oToShift>, Off<oC1>, Off<oC2>);
 			}
 
 		//	l502.Stop();
