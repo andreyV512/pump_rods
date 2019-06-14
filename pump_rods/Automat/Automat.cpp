@@ -216,11 +216,14 @@ namespace Automat
 				if(0 != (res & 2)) OUT_BITS(On<oC1>);
 				if(0 != (res & 1)) OUT_BITS(On<oC2>);
 				//подтверждение результата
+				Sleep(200);
 				OUT_BITS(On<oToShift>);  //перекладка
+				Sleep(1000);
 				//включена кнопка СТОП
+				
 				AppKeyHandler::Run();
 				//ожидание снятия сигнала КОНТРОЛЬ, выход из цикла-кнопка СТОП
-				AND_BITS(-1, Key<Status::stop>, Off<iControl>);
+				AND_BITS(-1, Key<Status::stop>, Off<iControl>);				
 				dprint("x 16\n");
 				//переход в начало цикла
 				OUT_BITS(Off<oToShift>, Off<oC1>, Off<oC2>);
