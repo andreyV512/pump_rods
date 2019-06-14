@@ -95,7 +95,7 @@ namespace TestIOPortsN
 		PARAM_TITLE(OutStat<oDC_ON2 >, L"Сигнал (DC ON2)")
 		PARAM_TITLE(OutStat<oWork   >, L"Сигнал \"РАБОТА\"")
 		PARAM_TITLE(OutStat<oStart  >, L"Сигнал \"ПУСК\"")
-		PARAM_TITLE(OutStat<oToShift>, L"Сигнал \"ПЕРЕКЛАДКА\"")
+		PARAM_TITLE(OutStat<oToShift>, L"Сигнал \"РЕЗУЛЬТАТ\"")
 		PARAM_TITLE(OutStat<oC1     >, L"Сигнал (С1)")
 		PARAM_TITLE(OutStat<oC2 	>, L"Сигнал (С2)")
 

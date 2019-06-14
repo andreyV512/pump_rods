@@ -33,7 +33,7 @@ Param(oAC_ON  , L"Сигнал (AC ON)")
 Param(oDC_ON2 , L"Сигнал (DC ON2)")
 Param(oWork   , L"Сигнал \"РАБОТА\"")
 Param(oStart  , L"Сигнал \"ПУСК\"")
-Param(oToShift, L"Сигнал \"ПЕРЕКЛАДКА\"")
+Param(oToShift, L"Сигнал \"РЕЗУЛЬТАТ\"")
 Param(oC1     , L"Сигнал (С1)")
 Param(oC2 	  , L"Сигнал (С2)")
 #undef Param

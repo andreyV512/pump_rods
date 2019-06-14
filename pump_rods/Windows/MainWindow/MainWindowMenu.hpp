@@ -114,7 +114,7 @@ namespace MainWindowMenu
 
 	MENU_TEXT(L"Дискретная плата", SubMenu<DiscretePlate>)
 	MENU_ITEM(L"Входные порты", DiscretePlateInputs)
-	MENU_ITEM(L"Выодные порты", DiscretePlateOutputs)
+	MENU_ITEM(L"Выходные порты", DiscretePlateOutputs)
 	MENU_ITEM(L"Дискриптор дискретной платы", DiscretePlateDescriptor)
 	MENU_ITEM(L"Коэффициенты пересчёта", Coefficient)
 	
