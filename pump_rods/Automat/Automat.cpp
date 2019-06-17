@@ -77,7 +77,7 @@ namespace Automat
 		BlockSort()
 		{
 			start =  Performance::Counter();
-			start += 15000;
+			start += 5000;
 		}
 		static void Do(Automat::Result &result)
 		{
