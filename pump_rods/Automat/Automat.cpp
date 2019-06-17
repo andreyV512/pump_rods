@@ -188,6 +188,7 @@ namespace Automat
 					AND_BITS(120000, Key<Status::stop>, Off<iP1>,Test<On<iCU>, On<iCycle>, On<iKM2_DC>, Off<iKM3_AC>>);
 					dprint("x 9\n");
 				}
+					OUT_BITS(Off<oStart>);
 				//отключение сигнала DC_ON2
 				OUT_BITS(Off<oDC_ON2>);
 				AND_BITS(-1, Key<Status::stop>, Off<iKM2_DC>, Test<On<iCU>, On<iCycle>>);
@@ -195,10 +196,12 @@ namespace Automat
 				Sleep(2000);
 				//отключение сигнала DC_ON1
   			OUT_BITS(Off<oDC_ON1>);
+		
 
 				//убеждаемся что сигнал  отключён
 		      AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
 				dprint("x 11\n");
+				OUT_BITS(On<oStart>);	
 				//ожидание включения сигнала КОНТРОЛЬ и П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
 				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP2>,Test<On<iCU>, On<iCycle>>);
 				dprint("x 12\n");
