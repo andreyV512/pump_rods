@@ -1,5 +1,5 @@
 ﻿#pragma once
-
+#include "PerformanceCounter/PerformanceCounter.h"
 namespace Automat
 {
 	template<class>struct Inv{};
@@ -360,8 +360,9 @@ namespace Automat
 		template<class Result>unsigned operator()(Result &result)
 		{
 			result.ret = 0;
+			result.currentTime = Performance::Counter();
 			unsigned delay = DELAY;
-			if((unsigned)-1 != DELAY) delay += GetTickCount();
+			if((unsigned)-1 != DELAY) delay += result.currentTime;
 			unsigned bitOn = 0, bitOff = 0, bitInv = 0;
 			typedef typename Filt<List, On>::Result list_on;
 			typedef typename Filt<List, Off>::Result list_off;
@@ -378,9 +379,8 @@ namespace Automat
 			while(true)
 			{
 				unsigned ev = WaitFor<list_key>()();
-				unsigned bits = 0;
-				if(bitsNotEmpty || __list_not_empty__<list_proc>::value)bits = device1730.Read();
-				
+				unsigned bits = device1730.Read();
+				result.currentTime = Performance::Counter();
 				switch(ev)
 				{
 				case WAIT_TIMEOUT:
@@ -399,11 +399,8 @@ namespace Automat
 							if(bitOn == (t & (bitOn | bitOff))) return 0;
 						}	
 						result.bits = bits;
-						switch(DefaultDo<list_proc>()(result))
-						{
-						case Status::stop: return Status::stop;
-						case Status::contine: return 0;
-						}
+						ret = DefaultDo<list_proc>()(result);
+						if(ret < Status::undefined) return ret;
 						typedef typename FiltTestBits<List>::Result __test_bits_list__;
 						if(!TestBitsDo<__test_bits_list__>()(result)) return Status::alarm_bits;
 					}

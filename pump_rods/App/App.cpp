@@ -11,6 +11,7 @@
 #include "Log\LogMessageToTopLabel.h"
 #include "Automat\Automat.h"
 #include "App\Config.h"
+#include "PerformanceCounter/PerformanceCounter.h"
 
 namespace App
 {
@@ -25,6 +26,7 @@ namespace App
 
 	void Init()
 	{
+		Performance::Init();
 //test
 		DataItem::Test();
 		TL::foreach<StatusMessages::list_items, _test_>()();

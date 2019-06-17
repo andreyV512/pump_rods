@@ -28,6 +28,7 @@ namespace Automat
 	};
 	struct Result
 	{
+		unsigned currentTime;
 		unsigned error;
 		unsigned bits;
 		unsigned ret;

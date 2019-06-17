@@ -4,6 +4,7 @@
 #include "App/AppBase.h"
 #include "Log/LogBuffer.h"
 #include "Log/LogMessages.h"
+//#include "PerformanceCounter/PerformanceCounter.h"
 #include "Automat/Automat.h"
 #include "Automat/Automat.hpp"
 #include "Windows.h"
@@ -56,13 +57,47 @@ namespace Automat
 	{
 		SetEvent(Key<Status::stop>::hEvent);
 	}
+	/*
+	if(sortOnce)
+				{
+					//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
+					AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iCU>, On<iCycle>>);
+					dprint("x 3\n");
+					//чтение дискретного рорта
+					unsigned bits = device1730.Read();
+					//чтение сигнала П1 и П2
+					c1c2  = 0 != (bits & (1 << result.inputs_bits.get<iP1>().value))? 2: 0;
+					c1c2 |= 0 != (bits & (1 << result.inputs_bits.get<iP2>().value))? 1: 0;
+				}
+	*/
+	unsigned c1c2 = 0;
+	struct BlockSort
+	{
+		static unsigned start;
+		BlockSort()
+		{
+			start =  Performance::Counter();
+			start += 15000;
+		}
+		static void Do(Automat::Result &result)
+		{
+			if(result.bits & result.inputs_bits.get<iCOPT>().value)
+			{
+				c1c2  = 0 != (result.bits & result.inputs_bits.get<iP1>().value)? 2: 0;
+				c1c2 |= 0 != (result.bits & result.inputs_bits.get<iP2>().value)? 1: 0;
+				return;
+			}
+			if(result.currentTime > start)result.ret = Status::contine;
+		}
+	};
+	unsigned BlockSort::start;
 //-----------------------------------------------------------------------------------
 	DWORD WINAPI  Loop(PVOID)
 	{
 		unsigned status = 0;
 		unsigned status502 = 0;
-		unsigned c1c2 = 0;
-		bool sortOnce = true;
+	//	unsigned c1c2 = 0;
+//		bool sortOnce = true;
 		App::IsRun() = true;
 		
 		for(;;)
@@ -98,18 +133,19 @@ namespace Automat
 				AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
 				dprint("x 2\n");
 
-				if(sortOnce)
-				{
-					//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-					AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iCU>, On<iCycle>>);
-					dprint("x 3\n");
-					//чтение дискретного рорта
-					unsigned bits = device1730.Read();
-					//чтение сигнала П1 и П2
-					c1c2  = 0 != (bits & (1 << result.inputs_bits.get<iP1>().value))? 2: 0;
-					c1c2 |= 0 != (bits & (1 << result.inputs_bits.get<iP2>().value))? 1: 0;
-				}
-				sortOnce = false;
+				AND_BITS(-1,  Key<Status::stop>, Proc<BlockSort>, Test<On<iCU>, On<iCycle>>);
+				//if(sortOnce)
+				//{
+				//	//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
+				//	AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iCU>, On<iCycle>>);
+				//	dprint("x 3\n");
+				//	//чтение дискретного рорта
+				//	unsigned bits = device1730.Read();
+				//	//чтение сигнала П1 и П2
+				//	c1c2  = 0 != (bits & (1 << result.inputs_bits.get<iP1>().value))? 2: 0;
+				//	c1c2 |= 0 != (bits & (1 << result.inputs_bits.get<iP2>().value))? 1: 0;
+				//}
+				//sortOnce = false;
 				////сообщение "ВНИМАТЕЛЬНО ПРОВЕРЬ ПОЛОЖЕНИЕ ШТАНГИ В ЗАХВАТАХ!"
 				//Log::Mess<LogMess::InfoCycle>();
 				////включены кнопки ЦИКЛ и СТОП
