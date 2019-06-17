@@ -355,6 +355,8 @@ namespace Automat
 		void operator()(){}
 	};
 
+	
+
 	template<unsigned DELAY, class List>struct AND_Bits
 	{
 		template<class Result>unsigned operator()(Result &result)
@@ -380,6 +382,13 @@ namespace Automat
 			{
 				unsigned ev = WaitFor<list_key>()();
 				unsigned bits = device1730.Read();
+				unsigned outs = device1730.ReadOutput();
+				if(bits != result.last_input_bits || outs != result.last_output_bits)
+				{
+					dprint("bits %4x %4x\n", bits, outs);
+					result.last_input_bits = bits;
+					result.last_output_bits = outs;
+				}
 				result.currentTime = Performance::Counter();
 				switch(ev)
 				{

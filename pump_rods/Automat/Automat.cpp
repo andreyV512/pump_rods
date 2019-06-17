@@ -4,7 +4,6 @@
 #include "App/AppBase.h"
 #include "Log/LogBuffer.h"
 #include "Log/LogMessages.h"
-//#include "PerformanceCounter/PerformanceCounter.h"
 #include "Automat/Automat.h"
 #include "Automat/Automat.hpp"
 #include "Windows.h"
