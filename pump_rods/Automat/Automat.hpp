@@ -225,7 +225,7 @@ namespace Automat
 	};
 	template<>struct DefaultDo<NullType>
 	{
-		template<class Result>unsigned operator()(Result &){return 0;}
+		template<class Result>unsigned operator()(Result &){return Status::undefined;}
 	};
 	template<class O, class P>struct __button_down__
 	{
