@@ -224,7 +224,8 @@ namespace Automat
 				
 				AppKeyHandler::Run();
 				//ожидание снятия сигнала КОНТРОЛЬ, выход из цикла-кнопка СТОП
-				AND_BITS(-1, Key<Status::stop>, Off<iControl>);				
+				AND_BITS(-1, Key<Status::stop>, Off<iControl>);		
+				Sleep(1000);
 				dprint("x 16\n");
 				//переход в начало цикла
 				OUT_BITS(Off<oToShift>, Off<oC1>, Off<oC2>);
