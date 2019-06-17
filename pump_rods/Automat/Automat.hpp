@@ -78,7 +78,7 @@ namespace Automat
 			return true;
 		}
 	};
-	
+
 	template<class List>struct TestBitsDo
 	{
 		template<class T>bool operator()(T &t)
@@ -93,10 +93,10 @@ namespace Automat
 	{		
 		OutputBitTable::TItems &offs;
 		unsigned bits;
-		 __test_output_bits_data__()
-			 : offs(Singleton<OutputBitTable>::Instance().items)
-			 , bits(device1730.ReadOutput())
-		 {}
+		__test_output_bits_data__()
+			: offs(Singleton<OutputBitTable>::Instance().items)
+			, bits(device1730.ReadOutput())
+		{}
 	};
 	template<class O, class P>struct __test_output_bits__;
 	template<class O, class P>struct __test_output_bits__<On<O>, P>
@@ -225,7 +225,7 @@ namespace Automat
 	};
 	template<>struct DefaultDo<NullType>
 	{
-		template<class Result>unsigned operator()(Result &){return 0;}
+		template<class Result>unsigned operator()(Result &){return Status::undefined;}
 	};
 	template<class O, class P>struct __button_down__
 	{
@@ -255,8 +255,8 @@ namespace Automat
 			{
 				if(!TestBitsDo<TL::MultyListToList<
 					List
-					>::Result>()(result))
-					return Status::alarm_bits;
+				>::Result>()(result))
+				return Status::alarm_bits;
 				return Status::time_out; 
 			}
 			return 0;
@@ -413,7 +413,8 @@ namespace Automat
 					switch(__key_handler__<list_key>()(ev - WAIT_OBJECT_0))
 					{
 					case -1          : break;
-					case 0           : return 0;
+					case 0           : 
+						return 0;
 					case Status::stop: return Status::stop;
 					}
 					break;
@@ -450,7 +451,7 @@ namespace Automat
 
 			unsigned res = device1730.ReadOutput();
 
-            res &= ~bitOff;
+			res &= ~bitOff;
 			res |= bitOn;
 
 			device1730.Write(res);
