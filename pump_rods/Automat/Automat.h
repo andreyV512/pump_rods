@@ -5,14 +5,14 @@ namespace Automat
 	struct Status
 	{
 		enum e{
-			undefined
+		    contine
 			, exit_loop
 			, time_out
 			, start
 			, stop
 			, alarm_bits
 			, alarm_l502
-			, contine
+			, undefined
 		};
 	};
 	template<int>struct Key;

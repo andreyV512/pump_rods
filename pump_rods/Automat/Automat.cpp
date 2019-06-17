@@ -85,9 +85,9 @@ namespace Automat
 			{
 				c1c2  = 0 != (result.bits & result.inputs_bits.get<iP1>().value)? 2: 0;
 				c1c2 |= 0 != (result.bits & result.inputs_bits.get<iP2>().value)? 1: 0;
-				return;
+				result.ret = Status::contine;
 			}
-			if(result.currentTime > start)result.ret = Status::contine;
+			else if(result.currentTime > start)result.ret = Status::contine;
 		}
 	};
 	unsigned BlockSort::start;
@@ -241,7 +241,7 @@ namespace Automat
 					//включены кнопки ЦИКЛ и СТОП
 					AppKeyHandler::Continue();
 					//кнопка ПУСК-продолжение, кнопка СТОП-выход из цикла, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ
-					AND_BITS(-1, Key<Status::start>, Key<Status::stop>, Test<On<iCU>, On<iCycle>>);
+					AND_BITS(-1, Key<Status::start>, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
 					dprint("x 15\n");
 				}
 				//формирование результата
