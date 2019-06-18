@@ -63,7 +63,7 @@ namespace Automat
 
 	void Contine()
 	{
-		SetEvent(Key<Status::stop>::hEvent);
+		SetEvent(Key<Status::contine_btn>::hEvent);
 	}
 	/*
 	if(sortOnce)
@@ -115,6 +115,8 @@ namespace Automat
 				//включены кнопки ЦИКЛ ТЕСТ
 				//test AppKeyHandler::Run();
 				//test AppKeyHandler::Continue();
+				//test AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>, Key<Status::stop>);
+//////////////////////test
 				AppKeyHandler::Stop();				
 				//ожидание нажатия кнопки СТАРТ
 				if(App::IsRun())
