@@ -24,6 +24,8 @@ namespace Automat
 	
 	HANDLE Key<Status::stop>::hEvent;
 
+	HANDLE Key<Status::contine_btn>::hEvent;
+
 	Result::Result()
 		: inputs_bits(Singleton<InputBitTable>::Instance().items)
 	{}
@@ -35,6 +37,7 @@ namespace Automat
 		hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 		Key<Status::start>::hEvent = CreateEvent(NULL, FALSE, FALSE, NULL);
 		Key<Status::stop>::hEvent  = CreateEvent(NULL, FALSE, FALSE, NULL);
+		Key<Status::contine_btn>::hEvent  = CreateEvent(NULL, FALSE, FALSE, NULL);
 		hThread = CreateThread(NULL, 0, Loop, NULL, 0, NULL);
 	}
 
@@ -43,6 +46,7 @@ namespace Automat
 		CloseHandle(hEvent);
 		CloseHandle(Key<Status::start>::hEvent);
 		CloseHandle(Key<Status::stop>::hEvent );
+		CloseHandle(Key<Status::contine_btn>::hEvent );
 		WaitForSingleObject(hThread, INFINITE);
 		CloseHandle(hThread);
 	}
@@ -53,6 +57,11 @@ namespace Automat
 	}
 
 	void Stop()
+	{
+		SetEvent(Key<Status::stop>::hEvent);
+	}
+
+	void Contine()
 	{
 		SetEvent(Key<Status::stop>::hEvent);
 	}
@@ -69,34 +78,34 @@ namespace Automat
 					c1c2 |= 0 != (bits & (1 << result.inputs_bits.get<iP2>().value))? 1: 0;
 				}
 	*/
-	unsigned c1c2 = 0;
-	struct BlockSort
-	{
-		static unsigned start;
-		BlockSort()
-		{
-			start =  Performance::Counter();
-			start += 5000;
-		}
-		static void Do(Automat::Result &result)
-		{
-			if(result.bits & result.inputs_bits.get<iCOPT>().value)
-			{
-				c1c2  = 0 != (result.bits & result.inputs_bits.get<iP1>().value)? 2: 0;
-				c1c2 |= 0 != (result.bits & result.inputs_bits.get<iP2>().value)? 1: 0;
-				result.ret = Status::contine;
-			}
-			else if(result.currentTime > start)result.ret = Status::contine;
-		}
-	};
-	unsigned BlockSort::start;
+	//unsigned c1c2 = 0;
+	//struct BlockSort
+	//{
+	//	static unsigned start;
+	//	BlockSort()
+	//	{
+	//		start =  Performance::Counter();
+	//		start += 5000;
+	//	}
+	//	static void Do(Automat::Result &result)
+	//	{
+	//		if(result.bits & result.inputs_bits.get<iCOPT>().value)
+	//		{
+	//			c1c2  = 0 != (result.bits & result.inputs_bits.get<iP1>().value)? 2: 0;
+	//			c1c2 |= 0 != (result.bits & result.inputs_bits.get<iP2>().value)? 1: 0;
+	//			result.ret = Status::contine;
+	//		}
+	//		else if(result.currentTime > start)result.ret = Status::contine;
+	//	}
+	//};
+	//unsigned BlockSort::start;
 //-----------------------------------------------------------------------------------
 	DWORD WINAPI  Loop(PVOID)
 	{
 		unsigned status = 0;
 		unsigned status502 = 0;
-	//	unsigned c1c2 = 0;
-//		bool sortOnce = true;
+		unsigned c1c2 = 0;
+		bool sortOnce = true;
 		App::IsRun() = true;
 		
 		for(;;)
@@ -104,6 +113,8 @@ namespace Automat
 			for(;;)
 			{
 				//включены кнопки ЦИКЛ ТЕСТ
+				//test AppKeyHandler::Run();
+				//test AppKeyHandler::Continue();
 				AppKeyHandler::Stop();				
 				//ожидание нажатия кнопки СТАРТ
 				if(App::IsRun())
@@ -132,18 +143,18 @@ namespace Automat
 				AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
 				dprint("x 2\n");
 
-				AND_BITS(-1,  Key<Status::stop>, Proc<BlockSort>, Test<On<iCU>, On<iCycle>>);
-				//if(sortOnce)
-				//{
-				//	//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				//	AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iCU>, On<iCycle>>);
-				//	dprint("x 3\n");
-				//	//чтение дискретного рорта
-				//	unsigned bits = device1730.Read();
-				//	//чтение сигнала П1 и П2
-				//	c1c2  = 0 != (bits & (1 << result.inputs_bits.get<iP1>().value))? 2: 0;
-				//	c1c2 |= 0 != (bits & (1 << result.inputs_bits.get<iP2>().value))? 1: 0;
-				//}
+				//AND_BITS(-1,  Key<Status::stop>, Proc<BlockSort>, Test<On<iCU>, On<iCycle>>);
+				if(sortOnce)
+				{
+					//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
+					AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iCU>, On<iCycle>>);
+					dprint("x 3\n");
+					//чтение дискретного рорта
+					unsigned bits = device1730.Read();
+					//чтение сигнала П1 и П2
+					c1c2  = 0 != (bits & (1 << result.inputs_bits.get<iP1>().value))? 2: 0;
+					c1c2 |= 0 != (bits & (1 << result.inputs_bits.get<iP2>().value))? 1: 0;
+				}
 				//sortOnce = false;
 				////сообщение "ВНИМАТЕЛЬНО ПРОВЕРЬ ПОЛОЖЕНИЕ ШТАНГИ В ЗАХВАТАХ!"
 				//Log::Mess<LogMess::InfoCycle>();
@@ -225,7 +236,7 @@ namespace Automat
 					AND_BITS(120000, Key<Status::stop>, Off<iP2>,Test<On<iCU>, On<iCycle>, Off<iKM2_DC>, On<iKM3_AC>>);
 					dprint("x 14\n");
 				}
-				OUT_BITS(Off<oAC_ON>, Off<oStart>);	
+				OUT_BITS(Off<oAC_ON>);	
 				Sleep(1000);
 				//реверс данных с структуры
 				Compute::Reverse(structBuff.inputData, structBuff.currentOffset);
@@ -240,12 +251,16 @@ namespace Automat
 				//прерывание на просмотр
 				if(App::InterruptView())
 				{
+					sortOnce = false;
 					//включены кнопки ЦИКЛ и СТОП
 					AppKeyHandler::Continue();
 					//кнопка ПУСК-продолжение, кнопка СТОП-выход из цикла, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ
-					AND_BITS(-1, Key<Status::start>, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
+					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
+					if(result.ret == Status::contine_btn) continue;
 					dprint("x 15\n");
 				}
+				sortOnce = true;
+				OUT_BITS(Off<oStart>);	
 				//формирование результата
 				res = Compute::Result(c1c2);
 				if(0 == res) Log::Mess<LogMess::Brak>();

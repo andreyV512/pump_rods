@@ -26,13 +26,13 @@ namespace
 //	KEY(IDB_LeftArrow , L"F7 Влево")
 	//KEY(IDB_RightArrow, L"F8 Clear")
 //	KEY(IDB_Ok, L"F8 Норма")
-	//KEY(IDB_Continue, L"F11 Продолжить")
+	KEY(IDB_Continue, L"F11 Повтор")
 #undef KEY
 #define BUTTON_KEY(ID)ButtonToolbar<ID, Key<ID> > 
 		typedef TL::MkTlst<
 		SeparatorToolbar<0>
 		, BUTTON_KEY(IDB_CycleBtn)
-//		, BUTTON_KEY(IDB_Continue)
+		, BUTTON_KEY(IDB_Continue)
 		, BUTTON_KEY(IDB_Reset)
 		, BUTTON_KEY(IDB_QueryBtn) 		
 	//	, BUTTON_KEY(IDB_Ok) 		
@@ -73,23 +73,15 @@ namespace
 	static bool run_once_per_sycle = false;
 	void Key<IDB_CycleBtn>::Click(HWND h)
 	{
-		//if(ActionTool::Run(h))
-		//{
-		//	AppKeyHandler::Run();
-		//	Singleton<MainWindow>::Instance().StatusBar(0, L"Цикл");
-		//}
-		dprint("Key<IDB_CycleBtn>::Click\n");
 		Automat::Run();
 	}
-	//void Key<IDB_Continue>::Click(HWND h)
-	//{
-	////	SetEvent(App::ProgrammContinueEvent);
-	//	AppKeyHandler::Run();
-	//}
+	void Key<IDB_Continue>::Click(HWND h)
+	{
+		Automat::Contine();
+	}
 //-------------------------------------------------------------------------------
 	void Key<IDB_QueryBtn>::Click(HWND h)
 	{
-		zprint("\n");	
 		EquipmentCheck();
 	}
 //------------------------------------------------------------------------------

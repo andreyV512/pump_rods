@@ -422,9 +422,11 @@ namespace Automat
 					switch(__key_handler__<list_key>()(ev - WAIT_OBJECT_0))
 					{
 					case -1          : break;
-					case 0           : 
-						return 0;
+					case 0           : return 0;
 					case Status::stop: return Status::stop;
+					case Status::contine_btn: 
+						result.ret = Status::contine_btn;
+						return 0;
 					}
 					break;
 				}

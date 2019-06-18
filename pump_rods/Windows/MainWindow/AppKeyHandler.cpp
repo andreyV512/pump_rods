@@ -18,6 +18,7 @@ namespace AppKeyHandler
 		, TL::IntToType<IDB_RightArrow>
 		, TL::IntToType<IDB_ExitTubeBtn>
 		, TL::IntToType<IDB_Ok>
+		, TL::IntToType<IDB_Continue>
 	>::Result button_list;
 
 	template<int ID>struct On {static const int ID = ID; static const bool state = true;};
@@ -85,7 +86,7 @@ namespace AppKeyHandler
 		__btn__<
 			__all_button_OnOff__<
 			  button_list
-			  , TL::MkTlst<TL::IntToType<IDB_Reset>, TL::IntToType<IDB_Ok>>::Result
+			  , TL::MkTlst<TL::IntToType<IDB_Reset>, TL::IntToType<IDB_Ok>, TL::IntToType<IDB_Continue>>::Result
 			  , Off, On
 			>::Result
 		>()();
@@ -109,7 +110,7 @@ namespace AppKeyHandler
 		__btn__<
 			__all_button_OnOff__<
 			  button_list
-			  , TL::MkTlst<TL::IntToType<IDB_Reset>, TL::IntToType<IDB_CycleBtn>>::Result
+			  , TL::MkTlst<TL::IntToType<IDB_CycleBtn>, TL::IntToType<IDB_Reset>, TL::IntToType<IDB_Continue>>::Result
 			  , On, Off
 			>::Result
 		>()();
@@ -151,7 +152,7 @@ namespace AppKeyHandler
 	template<int id>struct __is_key__{static const unsigned value = 0;};
 
 	template<>struct __is_key__<IDB_CycleBtn   >{static const unsigned value = VK_F4;};
-//	template<>struct __is_key__<IDB_Continue   >{static const unsigned value = VK_F11;};
+	template<>struct __is_key__<IDB_Continue   >{static const unsigned value = VK_F11;};
 	template<>struct __is_key__<IDB_Reset      >{static const unsigned value = VK_ESCAPE;};
 	template<>struct __is_key__<IDB_DownArrow >{static const unsigned value = VK_F5;};
 	template<>struct __is_key__<IDB_UpArrow   >{static const unsigned value = VK_F6;};

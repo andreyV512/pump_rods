@@ -10,6 +10,7 @@ namespace Automat
 			, time_out
 			, start
 			, stop
+			, contine_btn
 			, alarm_bits
 			, alarm_l502
 			, undefined
@@ -24,6 +25,11 @@ namespace Automat
 	template<>struct Key<Status::stop>
 	{
 		static const int value = Status::stop;
+		static HANDLE hEvent;
+	};
+	template<>struct Key<Status::contine_btn>
+	{
+		static const int value = Status::contine_btn;
 		static HANDLE hEvent;
 	};
 	struct Result
@@ -43,4 +49,5 @@ namespace Automat
 	void Destroy();
 	void Run();
 	void Stop();
+	void Contine();
 }
