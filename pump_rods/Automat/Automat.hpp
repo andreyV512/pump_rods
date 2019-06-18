@@ -303,7 +303,7 @@ namespace Automat
 			{
 				if(TL::IndexOf<List, O>::value == p.key)
 				{
-					p.ret = O::value == Status::stop ? Status::stop: 0; 
+					p.ret = O::value;// == Status::stop ? Status::stop: 0; 
 					return false;
 				}
 				return true;
@@ -422,7 +422,9 @@ namespace Automat
 					switch(__key_handler__<list_key>()(ev - WAIT_OBJECT_0))
 					{
 					case -1          : break;
-					case 0           : return 0;
+					case Status::start :
+						result.ret = Status::start;
+						return 0;
 					case Status::stop: return Status::stop;
 					case Status::contine_btn: 
 						result.ret = Status::contine_btn;
