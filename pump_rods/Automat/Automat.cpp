@@ -239,7 +239,7 @@ namespace Automat
 					dprint("x 14\n");
 				}
 				OUT_BITS(Off<oAC_ON>);	
-				Sleep(1000);
+				//Sleep(1000);
 				//реверс данных с структуры
 				Compute::Reverse(structBuff.inputData, structBuff.currentOffset);
 				//расчёт и отображение данных
@@ -249,7 +249,7 @@ namespace Automat
 				int res = Compute::Result(c1c2);
 				if(0 == res) Log::Mess<LogMess::Brak>();
 				else Log::Mess<LogMess::Copt>(res);
-
+				OUT_BITS(Off<oStart>);	
 				//прерывание на просмотр
 				if(App::InterruptView())
 				{
@@ -262,7 +262,7 @@ namespace Automat
 					dprint("x 15\n");
 				}
 				sortOnce = true;
-				OUT_BITS(Off<oStart>);	
+				
 				//формирование результата
 				res = Compute::Result(c1c2);
 				if(0 == res) Log::Mess<LogMess::Brak>();
