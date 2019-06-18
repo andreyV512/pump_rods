@@ -202,9 +202,9 @@ namespace Automat
 					OUT_BITS(Off<oStart>);
 				//отключение сигнала DC_ON2
 				OUT_BITS(Off<oDC_ON2>);
-				AND_BITS(-1, Key<Status::stop>, Off<iKM2_DC>, Test<On<iCU>, On<iCycle>>);
+			//	AND_BITS(-1, Key<Status::stop>, Off<iKM2_DC>, Test<On<iCU>, On<iCycle>>);
 				dprint("x 10\n");
-				Sleep(200);
+				Sleep(2000);
 				//отключение сигнала DC_ON1
   			OUT_BITS(Off<oDC_ON1>);
 		
