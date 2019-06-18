@@ -175,13 +175,13 @@ namespace Automat
 				//ВЫСТАВЛЕН СИГНАЛ ПУСК
 				OUT_BITS(On<oStart>);
 				//ожидание выключения сигналов СОРТ, П1, П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(-1, Key<Status::stop>, Off<iCOPT>, Off<iP1>, Off<iP2>, Test<On<iCU>, On<iCycle>, On<iKM2_DC>, Off<iKM3_AC>>);
+				AND_BITS(-1, Key<Status::stop>, Off<iCOPT>, Off<iP1>, Off<iP2>, Test<On<iCU>, On<iCycle>>);
 				dprint("x 6\n");
 				//ожидание включения сигнала КОНТРОЛЬ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(-1, Key<Status::stop>, On<iControl> ,Test<On<iCU>, On<iCycle>, On<iKM2_DC>, Off<iKM3_AC>>);
+				AND_BITS(-1, Key<Status::stop>, On<iControl> ,Test<On<iCU>, On<iCycle>>);
 				dprint("x 7\n");
 				//ожидание включения сигнала КОНТРОЛЬ и П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iCU>, On<iCycle>, On<iKM2_DC>, Off<iKM3_AC>>);
+				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iCU>, On<iCycle>>);
 				dprint("x 8\n");
 				//выставлен сигнал DC_ON2
 				OUT_BITS(On<oDC_ON2>);
@@ -196,7 +196,7 @@ namespace Automat
 					}
 					//ожидание выключения сигнала П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке ЦИКЛ
 					//, при превышении сбора 120 сек выход из цикла
-					AND_BITS(120000, Key<Status::stop>, Off<iP1>,Test<On<iCU>, On<iCycle>, On<iKM2_DC>, Off<iKM3_AC>>);
+					AND_BITS(120000, Key<Status::stop>, Off<iP1>,Test<On<iCU>, On<iCycle>>);
 					dprint("x 9\n");
 				}
 					OUT_BITS(Off<oStart>);
@@ -204,7 +204,7 @@ namespace Automat
 				OUT_BITS(Off<oDC_ON2>);
 				AND_BITS(-1, Key<Status::stop>, Off<iKM2_DC>, Test<On<iCU>, On<iCycle>>);
 				dprint("x 10\n");
-				Sleep(2000);
+				Sleep(200);
 				//отключение сигнала DC_ON1
   			OUT_BITS(Off<oDC_ON1>);
 		
@@ -229,11 +229,11 @@ namespace Automat
 						status = Status::alarm_l502;
 						break;
 					}
-					AND_BITS(1200, Key<Status::stop>, On<iKM3_AC> ,Test<On<iCU>, On<iCycle>, Off<iKM2_DC>>);
+					AND_BITS(1200, Key<Status::stop>, On<iKM3_AC> ,Test<On<iCU>, On<iCycle>>);
 					dprint("x 13\n");
 					//ожидание выключения сигнала П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке ЦИКЛ
 					//, при превышении сбора 120 сек выход из цикла
-					AND_BITS(120000, Key<Status::stop>, Off<iP2>,Test<On<iCU>, On<iCycle>, Off<iKM2_DC>, On<iKM3_AC>>);
+					AND_BITS(120000, Key<Status::stop>, Off<iP2>,Test<On<iCU>, On<iCycle>>);
 					dprint("x 14\n");
 				}
 				OUT_BITS(Off<oAC_ON>);	
