@@ -52,9 +52,9 @@ template<template<class>class W>bool TemplWindow<W>::Viewer::Draw(TMouseMove &l,
 		Parent::Draw(l, g);
 		int x;
 		CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
-
 		W<DataItem::Buffer> &item = Singleton<W<DataItem::Buffer>>::Instance();
-		owner->offs = int((double)x * currentOffset / DataItem::output_buffer_size);
+		//owner->offs = int((double)x * currentOffset / DataItem::output_buffer_size);
+		owner->offs = int((double)x * item.secondOffset / DataItem::output_buffer_size);
 		owner->ChangeFrame(owner->offs);	
 	}
 	return true;
