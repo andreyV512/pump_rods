@@ -130,22 +130,22 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	
 	frame.delta = (double)frame.count / dimention_of(frame.buffer);
 
-	static const int tbuf_size = 4 * dimention_of(frame.buffer);
+	static const int tbuf_size = 3 * dimention_of(frame.buffer);
 	double tbuf[tbuf_size];
 
 	int offs_b = tbuf_size - dimention_of(frame.buffer);
 	int offs = int(offsetDef - offs_b * frame.delta);
-	int frameWidth = 4 * frame.count;
-	if(offs < (-item.firstOffset))
-	{
-		offs_b = offs_b + int((double)(offs)/(offs_b * frame.delta) * offs_b);
-		frameWidth = frame.count;
-		offs = int(offs_b * frame.delta);
-	}
-	else if(offs + frame.count > item.currentOffset)
-	{
-		offs = item.currentOffset - frame.count;
-	}
+	int frameWidth = 3 * frame.count;
+	//if(offs < 0)//(-item.firstOffset))
+	//{
+	//	offs_b = offs_b + int((double)(offs)/(offs_b * frame.delta) * offs_b);
+	//	frameWidth = frame.count;
+	//	offs = int(offs_b * frame.delta);
+	//}
+	//else if(offs + frame.count > item.currentOffset)
+	//{
+	//	offs = item.currentOffset - frame.count;
+	//}
 
 	Compute::Compute<WapperFiltre<W>::Result>(
 		&item.inputData[item.firstOffset] + offs
