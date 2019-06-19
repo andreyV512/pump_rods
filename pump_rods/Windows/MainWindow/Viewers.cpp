@@ -60,7 +60,7 @@ bool ViewerData::GetColorBar(int zone, double &data, unsigned &color)
 {
 	data = buffer[zone];
 	color = StatusColor()(status[zone]);
-	if(status[zone] == STATUS_ID(DeathZone)) data = chart->maxAxesY;
+	if(status[zone] == STATUS_ID(DeathZone) || data > chart->maxAxesY) data = chart->maxAxesY;
 	return zone < count;
 }
 
