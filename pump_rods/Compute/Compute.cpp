@@ -74,6 +74,9 @@ namespace Compute
 
 			double min = 100;
 
+			double offs = 0;
+			int count = 0;
+
 			while(true)
 			{
 				double max = 0;
@@ -86,7 +89,10 @@ namespace Compute
 					++i;
 				}
 				max =-max;
-				if(max < min) min = max;
+			//	if(max < min) min = max;
+
+				offs += max;
+				++count;
 
 				max = 0;
 				while(d[i] >= 0)
@@ -97,15 +103,21 @@ namespace Compute
 					if(t > max) max = t;
 					++i;
 				}
-				if(max < min) min = max;
+		//		if(max < min) min = max;
+				offs += max;
+				++count;
 			}
 EXIT:
+			offs /= count;
+			offs *= adcRange * koef;
+
 			min *= adcRange * koef;
-			o.structMinVal = min;
+			o.structMinVal = offs;//min;
 			d = o.outputData;
 			for(int j = 0; j < DataItem::output_buffer_size; ++j)
 			{
-				d[j] -= min;
+				//d[j] -= min;
+				d[j] -= offs;
 			}
 		}
 	};
@@ -125,9 +137,15 @@ EXIT:
 			o.deathZoneSecond = p.deadArea.get<W<Second<DeathZone>>>().value;
 			o.threshSortDown = p.tresh.get<W<Thresh<SortDown>>>().value;
 			o.threshDefect   = p.tresh.get<W<Thresh<Defect>>>().value;
+
+			int rodLength = p.deadArea.get<RodLenght>().value;
+
+			o.firstOffset =  unsigned((double)o.deathZoneFirst * o.currentOffset / rodLength);
+			o.secondOffset =  o.currentOffset - unsigned((double)o.deathZoneSecond * o.currentOffset / rodLength);
+
 			Compute<typename WapperFiltre<W>::Result>(
-			  o.inputData
-			, o.currentOffset
+			  &o.inputData[o.firstOffset]
+			, o.secondOffset//o.currentOffset
 			, p.cutoffFrequency.get<W<CutoffFrequency>>().value
 			, p.cutoffFrequency.get<W<CutoffFrequencyON>>().value
 			, p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value
@@ -142,11 +160,11 @@ EXIT:
 				o.outputData[i] *= adcRange * koef;
 			}
 		
-			DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;
-			
-			int rodLength = dead.get<RodLenght>().value;
-			int firstDeathZone = dead.get<W<First<DeathZone>>>().value;
-			int secondDeathZone = dead.get<W<Second<DeathZone>>>().value;
+			//DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;
+			//
+			//int rodLength = dead.get<RodLenght>().value;
+			//int firstDeathZone = dead.get<W<First<DeathZone>>>().value;
+			//int secondDeathZone = dead.get<W<Second<DeathZone>>>().value;
 			o.deathZoneFirst =  int((double )o.deathZoneFirst * DataItem::output_buffer_size / rodLength);
 			o.deathZoneSecond =  DataItem::output_buffer_size - int((double )o.deathZoneSecond * DataItem::output_buffer_size / rodLength);
 
@@ -159,7 +177,34 @@ EXIT:
 				);
              
 			o.result = STATUS_ID(Nominal);
-			for(int i = o.deathZoneFirst; i < o.deathZoneSecond; ++i)
+			//for(int i = o.deathZoneFirst; i < o.deathZoneSecond; ++i)
+			//{
+			//	double t = o.outputData[i];
+			//	if(t > o.threshDefect)
+			//	{
+			//		o.result = STATUS_ID(W<Defect>);
+			//		o.status[i] = STATUS_ID(W<Defect>);
+			//	}
+			//	else if(t > o.threshSortDown)
+			//	{
+			//		if(STATUS_ID(W<Defect>) != o.result)o.result = STATUS_ID(W<SortDown>);
+			//		o.status[i] = STATUS_ID(W<SortDown>);
+			//	}
+			//	else
+			//	{
+			//		o.status[i] = STATUS_ID(Nominal);
+			//	}
+			//}
+			//for(int i = 0; i < o.deathZoneFirst; ++i)
+			//{
+			//	o.status[i] = STATUS_ID(DeathZone);
+			//}
+			//for(int i = o.deathZoneSecond; i < dimention_of(o.status); ++i)
+			//{
+			//	o.status[i] = STATUS_ID(DeathZone);
+			//}
+
+			for(int i = 0; i < DataItem::output_buffer_size; ++i)
 			{
 				double t = o.outputData[i];
 				if(t > o.threshDefect)
@@ -176,14 +221,6 @@ EXIT:
 				{
 					o.status[i] = STATUS_ID(Nominal);
 				}
-			}
-			for(int i = 0; i < o.deathZoneFirst; ++i)
-			{
-				o.status[i] = STATUS_ID(DeathZone);
-			}
-			for(int i = o.deathZoneSecond; i < dimention_of(o.status); ++i)
-			{
-				o.status[i] = STATUS_ID(DeathZone);
 			}
 		}
 	};

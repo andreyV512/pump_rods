@@ -53,8 +53,9 @@ template<template<class>class W>bool TemplWindow<W>::Viewer::Draw(TMouseMove &l,
 		int x;
 		CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 
+		W<DataItem::Buffer> &item = Singleton<W<DataItem::Buffer>>::Instance();
 		owner->offs = int((double)x * currentOffset / DataItem::output_buffer_size);
-		owner->ChangeFrame(owner->offs);		
+		owner->ChangeFrame(owner->offs);	
 	}
 	return true;
 }
@@ -147,7 +148,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	}
 
 	Compute::Compute<WapperFiltre<W>::Result>(
-		item.inputData + offs
+		&item.inputData[-item.firstOffset] + offs
 		, frameWidth
 		, frame.cutoffFrequency
 		, frame.cutoffFrequencyON
@@ -199,8 +200,8 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 
 	DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;
 	int rodLength = dead.get<RodLenght>().value;
-	frame.deathZoneFirst	= int((double)dead.get<W<First<DeathZone>>>().value * item.currentOffset / rodLength); 
-	frame.deathZoneSecond	= item.currentOffset -  int((double)dead.get<W<Second<DeathZone>>>().value * item.currentOffset / rodLength); 
+	frame.deathZoneFirst	= 0;//int((double)dead.get<W<First<DeathZone>>>().value * item.currentOffset / rodLength); 
+	frame.deathZoneSecond	= item.currentOffset;// -  int((double)dead.get<W<Second<DeathZone>>>().value * item.currentOffset / rodLength); 
 
 	frame.deathZoneColor	= viewer.deathZoneColor	; 	
 	frame.threshDefect	 	= viewer.threshDefect	 	;

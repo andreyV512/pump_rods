@@ -19,9 +19,16 @@ namespace Compute
 		double delta = (double)inputLenght / outputLength;
 		memset(outputData, 0, outputLength * sizeof(double));
 		--inputLenght;
+		//double offs = 0;
+		//for(int i = 0; i <= inputLenght; ++i)
+		//{
+		//	offs += inputData[i];
+		//}
+		//offs /= inputLenght;
 		for(int i = 0; i <= inputLenght; ++i)
 		{
-			double t = medianON? filtre(inputData[i]): inputData[i];
+			double t = inputData[i];// - offs;
+			if(medianON) t = filtre(inputData[i]);
 			if(cutoffFrequencyON) t = analogFiltre(t);
 			int k = int(i / delta);
 			if(k >= outputLength) break;

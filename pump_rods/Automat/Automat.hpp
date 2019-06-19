@@ -419,18 +419,23 @@ namespace Automat
 					return Status::exit_loop;
 
 				default:
-					switch(__key_handler__<list_key>()(ev - WAIT_OBJECT_0))
 					{
-					case -1          : break;
-					case Status::start :
-						result.ret = Status::start;
+						int t = __key_handler__<list_key>()(ev - WAIT_OBJECT_0);
+						if(Status::stop == t) return Status::stop;
+						result.ret = t;
 						return 0;
-					case Status::stop: return Status::stop;
-					case Status::contine_btn: 
-						result.ret = Status::contine_btn;
-						return 0;
+						//switch(t)
+						//{
+						//case Status::stop: return Status::stop;
+						//case Status::contine_btn: 
+						//	result.ret = Status::contine_btn;
+						//	return 0;
+						//default:
+						//	result.ret = t;
+						//	return 0;
+						//}
+						//break;
 					}
-					break;
 				}
 			}
 			return 0;

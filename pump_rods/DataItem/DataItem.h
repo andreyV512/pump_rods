@@ -11,6 +11,7 @@ namespace DataItem
 		double threshSortDown, threshDefect;
 		int result;
 		double structMinVal;
+		unsigned firstOffset, secondOffset;
 		double inputData[App::buffer_size];
 		double outputData[output_buffer_size];
 		char status[output_buffer_size];

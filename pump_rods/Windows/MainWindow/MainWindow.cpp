@@ -298,7 +298,7 @@ bool MainWindow::StructureViewer::Draw(TMouseMove &l, VGraphics &g)
 		StatusText()(status[x], color, txt);
 		wsprintf(label.buffer, L"<ff>смещение <ff00>%d <ff>%s <%x>%s"
 			, offs
-			, Wchar_from<double, 2>(buffer[x])()
+			, Wchar_from<double, 2>(abs(buffer[x]))()
 			, color
 			, txt
 		);
