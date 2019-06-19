@@ -117,11 +117,15 @@ namespace Automat
 				//test AppKeyHandler::Continue();
 				//test AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>, Key<Status::stop>);
 //////////////////////test
-				AppKeyHandler::Stop();				
+				//AppKeyHandler::Stop();				
+				AppKeyHandler::Continue();
 				//ожидание нажатия кнопки СТАРТ
 				if(App::IsRun())
 				{
-					AND_BITS(-1, Key<Status::start>);
+					//
+					//AND_BITS(-1, Key<Status::start>);
+					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
+					if(result.ret == Status::contine_btn) sortOnce = false;
 				}
 				App::IsRun() = false;
 				dprint("AUTOMAT_RUN------------------------------\n");
