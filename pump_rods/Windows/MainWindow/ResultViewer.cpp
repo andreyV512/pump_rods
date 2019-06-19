@@ -37,7 +37,7 @@ bool ResultViewer::Draw(TMouseMove &l, VGraphics &g)
 	unsigned color = 0xffffffff;
 	wchar_t txt[1024];
 	StatusText()(viewerData.status[x], color, txt);
-	wsprintf(label.buffer, L"<ff>смещение <ff00>%d <%x>%s"
+	wsprintf(label.buffer, L"<ff>смещение %d <%x>%s"
 		, offs
 		, color
 		, txt
