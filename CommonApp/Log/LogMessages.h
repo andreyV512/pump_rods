@@ -69,6 +69,11 @@ namespace LogMess
 	MESS(Copt, int, "Сорт", green, white)
 	MESS(Brak, void, "Брак", red  , yellow)
 
+	MESS(Etalon, void, "Эталон", blue, white)
+	MESS(Sort1, void, "Сорт 1", blue, white)
+	MESS(Sort2, void, "Сорт 2", blue, white)
+	MESS(Sort3, void, "Сорт 3", blue, white)
+
 	template<class T>struct Bits;
 	template<>struct Bits<NullType>{};
 #define BITS_XX(color, txt, ...)template<>struct Bits<TL::MkTlst<__VA_ARGS__>::Result>\

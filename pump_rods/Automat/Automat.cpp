@@ -156,6 +156,13 @@ namespace Automat
 					//чтение сигнала П1 и П2
 					c1c2  = 0 != (bits & (1 << result.inputs_bits.get<iP1>().value))? 2: 0;
 					c1c2 |= 0 != (bits & (1 << result.inputs_bits.get<iP2>().value))? 1: 0;
+					switch(c1c2)
+					{
+					case 0: Log::Mess<LogMess::Etalon>(); break;
+					case 1: Log::Mess<LogMess::Sort1>(); break;
+					case 2: Log::Mess<LogMess::Sort2>(); break;
+					case 3: Log::Mess<LogMess::Sort3>(); break;
+					}
 				}
 				//sortOnce = false;
 				////сообщение "ВНИМАТЕЛЬНО ПРОВЕРЬ ПОЛОЖЕНИЕ ШТАНГИ В ЗАХВАТАХ!"
