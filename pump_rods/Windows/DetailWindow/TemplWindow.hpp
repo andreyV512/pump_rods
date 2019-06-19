@@ -138,7 +138,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	int frameWidth = 4 * frame.count;
 	if(offs < 0)
 	{
-		offs_b = offs_b + int((double)offs/(offs_b * frame.delta) * offs_b);
+		offs_b = offs_b + int((double)(offs)/(offs_b * frame.delta) * offs_b);
 		frameWidth = frame.count;
 		offs = int(offs_b * frame.delta);
 	}
@@ -148,7 +148,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	}
 
 	Compute::Compute<WapperFiltre<W>::Result>(
-		&item.inputData[-item.firstOffset] + offs
+		&item.inputData[item.firstOffset] + offs
 		, frameWidth
 		, frame.cutoffFrequency
 		, frame.cutoffFrequencyON

@@ -385,7 +385,7 @@ namespace Automat
 				unsigned outs = device1730.ReadOutput();
 				if(bits != result.last_input_bits || outs != result.last_output_bits)
 				{
-					dprint("bits %4x %4x\n", bits, outs);
+					dprint("bits %04X %04X\n", bits, outs);
 					result.last_input_bits = bits;
 					result.last_output_bits = outs;
 				}

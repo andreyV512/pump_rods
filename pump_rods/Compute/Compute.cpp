@@ -141,7 +141,7 @@ EXIT:
 			int rodLength = p.deadArea.get<RodLenght>().value;
 
 			o.firstOffset =  unsigned((double)o.deathZoneFirst * o.currentOffset / rodLength);
-			o.secondOffset =  o.currentOffset - unsigned((double)o.deathZoneSecond * o.currentOffset / rodLength);
+			o.secondOffset =  o.currentOffset - unsigned((double)o.deathZoneSecond * o.currentOffset / rodLength) - o.firstOffset;
 
 			Compute<typename WapperFiltre<W>::Result>(
 			  &o.inputData[o.firstOffset]
