@@ -128,6 +128,7 @@ namespace Automat
 					if(result.ret == Status::contine_btn) sortOnce = false;
 				}
 				App::IsRun() = false;
+				App::StatusBar(0, L"");
 				dprint("AUTOMAT_RUN------------------------------\n");
 
 				//очистить главное окно
@@ -276,8 +277,18 @@ namespace Automat
 				
 				//формирование результата
 				res = Compute::Result(c1c2);
-				if(0 == res) Log::Mess<LogMess::Brak>();
-				else Log::Mess<LogMess::Copt>(res);
+				if(0 == res)
+				{
+					Log::Mess<LogMess::Brak>();
+					App::StatusBar(0, L"Брак");
+				}
+				else
+				{
+					wchar_t buf[32];
+					wsprintf(buf, L"Сорт %d", res);
+					App::StatusBar(0, buf);
+					Log::Mess<LogMess::Copt>(res);
+				}
 
 				OUT_BITS(Off<oC1>, Off<oC2>);
 				if(0 != (res & 2)) OUT_BITS(On<oC1>);

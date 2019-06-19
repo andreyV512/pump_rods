@@ -116,6 +116,11 @@ namespace App
 	}
 
 	bool &IsRun(){return is_run;}
+
+	void StatusBar(int n, wchar_t *txt)
+	{
+		Singleton<MainWindow>::Instance().StatusBar(n, txt);
+	}
 }
 
 Device1730 device1730;

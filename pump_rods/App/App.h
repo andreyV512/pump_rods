@@ -44,6 +44,8 @@ namespace App
 	bool DataCollectionDefectoscope();
 	bool DataCollectionStructure();
 	bool &IsRun();
+
+	void StatusBar(int, wchar_t *);
 }
 
 extern Device1730 device1730;
