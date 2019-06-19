@@ -51,7 +51,7 @@ namespace MainWindowMenu
 	struct TresholdsDlg_             : TresholdsDlg{};
 	struct AxesGraphs                : AxesGraphsDlg{};
 
-	MENU_ITEM(L"Мёртвые зоны", DeadZones)
+	MENU_ITEM(L"Смещения", DeadZones)
 	MENU_ITEM(L"Создать типоразмер", MainCreateTypesize)
 	MENU_ITEM(L"Удалить типоразмер", MainDeleteTypeSize)
 	MENU_ITEM(L"Медианный фильтр", MedianFiltre)

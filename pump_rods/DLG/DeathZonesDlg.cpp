@@ -6,11 +6,11 @@ PARAM_TITLE(RodLenght, L"Длина штанги(мм)")
 
 template<template<class>class W>struct ParamTitle<W<First<DeathZone>>>
 {
-	wchar_t *operator()(){return L"Мёртвая зона начало штанги(мм)";}
+	wchar_t *operator()(){return L"Смещение начало штанги(мм)";}
 };
 template<template<class>class W>struct ParamTitle<W<Second<DeathZone>>>
 {
-	wchar_t *operator()(){return L"Мёртвая зона конец штанги(мм)";}
+	wchar_t *operator()(){return L"Смещение конец штанги(мм)";}
 };
 
 template<template<class>class W, template<class>class Z>struct LessEqual<W<Z<DeathZone>>>
@@ -28,7 +28,7 @@ PARAM_TITLE(death_str, L"Структура")
 void DeathZonesDlg::Do(HWND h)
 {
 	if(Dialog::Templ<ParametersBase, DeadAreaTable, TL::MkTlst<death_def, death_str, RodLenght>::Result>(
-		Singleton<DeadAreaTable>::Instance()).Do(h, L"Мёртвые зоны")
+		Singleton<DeadAreaTable>::Instance()).Do(h, L"Смещения")
 		)
 	{
 	}
