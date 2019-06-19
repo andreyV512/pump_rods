@@ -77,8 +77,8 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 	viewer.threshSortDown = item.threshSortDown; 
 	viewer.threshDefect = item.threshDefect;
 	viewer.result = item.result;
-	viewer.tchart.maxAxesX = item.currentOffset - 1;
-	viewer.currentOffset = item.currentOffset;
+	viewer.tchart.maxAxesX = item.secondOffset;//item.currentOffset - 1;
+	viewer.currentOffset = item.secondOffset;//item.currentOffset;
 	viewer.inputData = item.inputData;
 	viewer.tchart.items.get<BottomAxesMeters>().maxBorder = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;	
 	viewer.threshSortDownColor = color.get<Clr<SortDown>>().value;
@@ -136,7 +136,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	int offs_b = tbuf_size - dimention_of(frame.buffer);
 	int offs = int(offsetDef - offs_b * frame.delta);
 	int frameWidth = 4 * frame.count;
-	if(offs < 0)
+	if(offs < (-item.firstOffset))
 	{
 		offs_b = offs_b + int((double)(offs)/(offs_b * frame.delta) * offs_b);
 		frameWidth = frame.count;
@@ -179,8 +179,10 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 		frame.tchart.maxAxesY = 100;
 	}
 
+	
+
 	frame.tchart.minAxesX = offsetDef;
-	frame.tchart.maxAxesX = offsetDef + frame.count;
+	frame.tchart.maxAxesX = frame.tchart.minAxesX + frame.count;
 
 	double adcRange =  100.0 / DataItem::ADC_RANGE(Singleton<L502ParametersTable>::Instance().items.get<W<RangeL502>>().value);
 
