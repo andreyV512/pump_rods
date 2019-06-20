@@ -6,7 +6,7 @@ static const wchar_t *about_text[] = {
 	L"ООО НТЦ НК 'Уран'"
 	, L"Проект xxxxxx-xxx/xx"
 	, L"УРАН-3000"
-	, L"г.XXXXXXXXXX"
+	, L"г. Актау"
 	, L"Версия 5.3"
 	, VERSION()
 };
