@@ -296,6 +296,8 @@ EXIT:
 		
 		TL::foreach<__data_item_list__, __recalculation__>()(__rec_data__());
 		ComputeResult();
+		int res = Compute::Result(1);
+		dprint("test Recalculation %d\n", res);
 		TL::foreach<__data_item_list__, __set_data__>()(mainWindow.viewers);		
 		App::UpdateViewers();
 
@@ -314,11 +316,10 @@ EXIT:
 		if(def.result == STATUS_ID(DefectSig<Defect>)) return brak;
 		if(str.result == STATUS_ID(StructSig<Defect>)) return brak;
 
-		if(res <= 0) return brak;
-
-		if(def.result == STATUS_ID(DefectSig<SortDown>)) return res - 1;
-		if(str.result == STATUS_ID(StructSig<SortDown>)) return res - 1;
-		return brak;
+		if(def.result == STATUS_ID(DefectSig<SortDown>)) ++res;
+		else if(str.result == STATUS_ID(StructSig<SortDown>)) ++res;
+		res &= 3;
+		return res;
 	}
 
 	void Reverse(double *data, int len)

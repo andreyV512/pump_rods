@@ -74,6 +74,11 @@ namespace LogMess
 	MESS(Sort2, void, "Сорт 2", blue, white)
 	MESS(Sort3, void, "Сорт 3", blue, white)
 
+	MESS(Off_iP1_Off_iP2, void, "Сигналы отключены: \"П1\",\"П2\"", blue, white)
+	MESS(Off_iP1_On_iP2 , void, "Сигнал отключён\"П1\", включён\"П2\"", blue, white)
+	MESS(On_iP1_Off_iP2 , void, "Сигнал включен\"П1\", отключён\"П2\"", blue, white)
+	MESS(On_iP1_On_iP2  , void, "Сигналы включены: \"П1\",\"П2\"", blue, white)
+
 	template<class T>struct Bits;
 	template<>struct Bits<NullType>{};
 #define BITS_XX(color, txt, ...)template<>struct Bits<TL::MkTlst<__VA_ARGS__>::Result>\
@@ -126,6 +131,8 @@ namespace LogMess
 	BITS_XX(pink, "Проверка отключения \"KM3 AC\"", Off<iKM3_AC>)
 	BITS_XX(pink, "Проверка отключения \"КМ DC и KM3 AC\"",  Off<iKM2_DC>, Off<iKM3_AC>)
 	BITS_XX(pink, "Отключение \"Результат, С1 и С2\"", Off<oToShift>, Off<oC1>, Off<oC2>)
+
+	
 					
 #undef BITS_XX
 
