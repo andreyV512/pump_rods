@@ -262,20 +262,7 @@ namespace Automat
 				int res = Compute::Result(c1c2);
 				if(0 == res) Log::Mess<LogMess::Brak>();
 				else Log::Mess<LogMess::Copt>(res);
-				OUT_BITS(Off<oStart>);	
-				//прерывание на просмотр
-				if(App::InterruptView())
-				{
-					sortOnce = false;
-					//включены кнопки ЦИКЛ и СТОП
-					AppKeyHandler::Continue();
-					//кнопка ПУСК-продолжение, кнопка СТОП-выход из цикла, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ
-					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
-					if(result.ret == Status::contine_btn) continue;
-					dprint("x 15\n");
-				}
-				sortOnce = true;
-				AutoStoredData();
+				OUT_BITS(Off<oStart>);
 				//формирование результата
 				res = Compute::Result(c1c2);
 				if(0 == res)
@@ -290,6 +277,19 @@ namespace Automat
 					App::StatusBar(0, buf);
 					Log::Mess<LogMess::Copt>(res);
 				}
+				//прерывание на просмотр
+				if(App::InterruptView())
+				{
+					sortOnce = false;
+					//включены кнопки ЦИКЛ и СТОП
+					AppKeyHandler::Continue();
+					//кнопка ПУСК-продолжение, кнопка СТОП-выход из цикла, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ
+					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
+					if(result.ret == Status::contine_btn) continue;
+					dprint("x 15\n");
+				}
+				sortOnce = true;
+				AutoStoredData();
 
 				OUT_BITS(Off<oC1>, Off<oC2>);
 				if(0 != (res & 2)) OUT_BITS(On<oC1>);
