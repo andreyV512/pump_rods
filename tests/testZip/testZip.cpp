@@ -28,12 +28,12 @@ int _tmain(int argc, _TCHAR* argv[])
 	//}
 
 
-	Zip::ZipFile(L"C:\\Users\\Andrey\\Desktop\\aktau\\190619_1046.dat");
+//	Zip::ZipFile(L"C:\\Users\\Andrey\\Desktop\\aktau\\190619_1046.dat");
 	
 //	Zip::UnZipFile(L"C:\\Users\\Andrey\\Desktop\\eclipce\\readme.txt.bz2");
 
-	//Zip::ZipAll();
-//	StoredFiles::DeleteExtraFiles(L"Stored", L"dat.bz2", 10);
+//	Zip::ZipAll();
+	StoredFiles::DeleteExtraFiles(L"Stored", L"dat.bz2", 10);
 
 	getchar();
 	return 0;

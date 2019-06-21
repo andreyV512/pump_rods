@@ -47,17 +47,20 @@ namespace StoredFiles
 
 	unsigned long long __compare__(wchar_t *txt, int extLen)
 	{
-		if(txt[0] >= '0' && txt[0] <= '9')
+		unsigned long long t = 0;
+		for(int i = 0, len = wcslen(txt) - extLen; i < len; ++i)
 		{
-			unsigned long long t = 0;
-			for(int i = 0, len = wcslen(txt) - extLen; i < len; ++i)
+			t *= 10;
+			if(txt[i] >= '0' && txt[i] <= '9')
 			{
-				t *= 10;
 				t += txt[i];
 			}
-			return t;
+			else
+			{
+				return (unsigned long long)-1;
+			}
 		}
-		return (unsigned long long)-1;
+		return t;
 	}
 
 #pragma warning(disable : 4996)
@@ -75,7 +78,7 @@ namespace StoredFiles
 		if(INVALID_HANDLE_VALUE == hFind) return;
 
 		int countFiles = 0;
-		int extLen = wcslen(ext);
+		int extLen = 1 + wcslen(ext);
 
 		unsigned long long buf[5000];
 
@@ -83,9 +86,13 @@ namespace StoredFiles
 		{
 			if (0 == (ffd.dwFileAttributes & FILE_ATTRIBUTE_DIRECTORY))
 			{
-				buf[countFiles] = __compare__(ffd.cFileName, extLen);
-				++countFiles;
-				if(countFiles >= dimention_of(buf)) break;
+				unsigned long long t =  __compare__(ffd.cFileName, extLen);
+				if((unsigned long long)-1 != t)
+				{
+					buf[countFiles] = t;
+					++countFiles;
+					if(countFiles >= dimention_of(buf)) break;
+				}
 			}
 		}
 		while (FindNextFile(hFind, &ffd) != 0);

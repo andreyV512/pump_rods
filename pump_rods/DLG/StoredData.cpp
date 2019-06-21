@@ -90,6 +90,7 @@ void StoreDlg::Do(HWND h)
 				, Singleton<StructSig<DataItem::Buffer>>::Instance()
 				);
 			fclose(f);
+			Zip::ZipAll();
 			MessageBox(h, L"Файл сохранён", L"Сообщение!!!", MB_ICONINFORMATION);
 		}
 		else
