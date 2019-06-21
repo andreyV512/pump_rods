@@ -105,6 +105,7 @@ namespace MainWindowMenu
 	struct DiscretePlateOutputs   : OutputBitDlg{};
 	struct ColorItems             : ColorItemsDlg{};
 	struct DiscretePlateDescriptor: DiscriptorBitDlg{};
+	struct StoredFiles            : StoredFilesDlg{};
 	struct Coefficient            {static void Do(HWND h){zprint("");}};
 	struct Signal                 {static void Do(HWND h){zprint("");}};
 	struct ACFBorder              {static void Do(HWND h){zprint("");}};
@@ -125,6 +126,7 @@ namespace MainWindowMenu
 	MENU_ITEM(L"Параметры сигнала", Signal)
 	MENU_ITEM(L"Границы АЧХ", ACFBorder)
 	MENU_ITEM(L"Цвета", ColorItems)
+	MENU_ITEM(L"Сохранение файлов результата измерений", StoredFiles)
 
 	template<>struct SubMenu<DiscretePlate>
 	{
@@ -140,6 +142,8 @@ namespace MainWindowMenu
 			 SubMenu<DiscretePlate>	
 			 , MenuItem<AnalogPlate__>
 			, MenuItem<ColorItems>
+			, Separator<1>
+			, MenuItem<StoredFiles>
 		>::Result list;		
 	};
 	// ----------------------------------------------------------------------------------------------------

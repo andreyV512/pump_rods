@@ -123,6 +123,9 @@
     <ClInclude Include="..\Common\L502\Device502.h" />
     <ClInclude Include="..\Common\MedianFiltre\MedianFiltre.h" />
     <ClInclude Include="..\Common\PerformanceCounter\PerformanceCounter.h" />
+    <ClInclude Include="..\Common\tools\StoredFiles.h" />
+    <ClInclude Include="..\Common\tools\Zip.h" />
+    <ClInclude Include="..\Common\tools\ZipAll.h" />
     <ClInclude Include="..\Common\tools_debug\DebugMess.h" />
     <ClInclude Include="..\Common\window_tool\CheckBoxWidget.h" />
     <ClInclude Include="..\Common\window_tool\DlgFiles.h" />
@@ -184,6 +187,9 @@
     <ClCompile Include="..\Common\L502\Device502.cpp" />
     <ClCompile Include="..\Common\MedianFiltre\MedianFiltre.cpp" />
     <ClCompile Include="..\Common\PerformanceCounter\PerformanceCounter.cpp" />
+    <ClCompile Include="..\Common\tools\StoredFiles.cpp" />
+    <ClCompile Include="..\Common\tools\Zip.cpp" />
+    <ClCompile Include="..\Common\tools\ZipAll.cpp" />
     <ClCompile Include="..\Common\tools_debug\DebugMess.cpp" />
     <ClCompile Include="..\Common\window_tool\DlgFiles.cpp" />
     <ClCompile Include="..\Common\window_tool\EmptyWindow.cpp" />
@@ -214,6 +220,7 @@
     <ClCompile Include="DLG\MedianFilterDlg.cpp" />
     <ClCompile Include="DLG\MessageDlg.cpp" />
     <ClCompile Include="DLG\StoredData.cpp" />
+    <ClCompile Include="DLG\StoredFilesDlg.cpp" />
     <ClCompile Include="DLG\TestIOPorts.cpp" />
     <ClCompile Include="DLG\TresholdsDlg.cpp" />
     <ClCompile Include="DLG\TypeSizeDlg.cpp" />

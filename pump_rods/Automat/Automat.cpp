@@ -10,6 +10,7 @@
 #include "Windows/MainWindow/AppKeyHandler.h"
 #include "Compute/Compute.h"
 #include "l502Automat.hpp"
+#include "Dlg/Dialogs.h"
 
 
 namespace Automat
@@ -274,7 +275,7 @@ namespace Automat
 					dprint("x 15\n");
 				}
 				sortOnce = true;
-				
+				AutoStoredData();
 				//формирование результата
 				res = Compute::Result(c1c2);
 				if(0 == res)

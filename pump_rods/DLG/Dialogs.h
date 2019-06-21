@@ -38,4 +38,7 @@ DLG(StoreDlg)
 DLG(LoadDlg)
 DLG(TresholdsDlg)
 DLG(AxesGraphsDlg)
+DLG(StoredFilesDlg)
 #undef DLG
+
+void AutoStoredData();

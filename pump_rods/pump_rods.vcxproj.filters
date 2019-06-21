@@ -93,6 +93,9 @@
     <Filter Include="Windows\DetailWindow">
       <UniqueIdentifier>{b5032c11-9c76-4fb6-a68e-34b268b47eda}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Common\tools">
+      <UniqueIdentifier>{4811e0b0-d1c3-46e5-8231-622b3d9179bb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <None Include="ReadMe.txt" />
@@ -317,6 +320,15 @@
     <ClInclude Include="..\Common\DspFilters\ChebyshevFiltre.hpp">
       <Filter>Common\DspFilter</Filter>
     </ClInclude>
+    <ClInclude Include="..\Common\tools\StoredFiles.h">
+      <Filter>Common\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\tools\Zip.h">
+      <Filter>Common\tools</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Common\tools\ZipAll.h">
+      <Filter>Common\tools</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="App\main.cpp">
@@ -512,6 +524,18 @@
       <Filter>pump_rods\DLG</Filter>
     </ClCompile>
     <ClCompile Include="DLG\AxesDlg.cpp">
+      <Filter>pump_rods\DLG</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\tools\StoredFiles.cpp">
+      <Filter>Common\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\tools\Zip.cpp">
+      <Filter>Common\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="..\Common\tools\ZipAll.cpp">
+      <Filter>Common\tools</Filter>
+    </ClCompile>
+    <ClCompile Include="DLG\StoredFilesDlg.cpp">
       <Filter>pump_rods\DLG</Filter>
     </ClCompile>
   </ItemGroup>

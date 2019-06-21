@@ -161,8 +161,8 @@ DEFINE_PARAM_WAPPER(StructSig, KoeffSign, double, 1)
 struct RangeL502;
 struct ChannelL502;
 struct ChannelSamplingRate;
-DEFINE_PARAM_WAPPER(DefectSig, ChannelSamplingRate, int, 10000)
-DEFINE_PARAM_WAPPER(StructSig, ChannelSamplingRate, int, 10000)
+DEFINE_PARAM_WAPPER(DefectSig, ChannelSamplingRate, int, 8000)
+DEFINE_PARAM_WAPPER(StructSig, ChannelSamplingRate, int, 8000)
 DEFINE_PARAM_WAPPER(DefectSig, RangeL502, int, 0)
 DEFINE_PARAM_WAPPER(StructSig, RangeL502, int, 0)
 DEFINE_PARAM_WAPPER(DefectSig, ChannelL502, int, 2)
@@ -305,6 +305,20 @@ STR_PARAM(NamePlate1730, 64, L"PCIE-1730,BID#0")
 	 const wchar_t *name(){return L"NamePlate1730ParametersTable";}
  };
 
+DEFINE_PARAM(CountStoredFiles, int, 500)
+DEFINE_PARAM(CountStoredFilesOn, bool, false)
+
+struct CountStoredFilesTable
+ {
+	 typedef TL::MkTlst<
+		 CountStoredFiles
+		 , CountStoredFilesOn
+	 >::Result items_list;
+	 typedef TL::Factory<items_list> TItems;
+	 TItems items;
+	 const wchar_t *name(){return L"CountStoredFilesTable";}
+ };
+
 struct ParametersBase
  {
 	 typedef TL::MkTlst<
@@ -314,6 +328,7 @@ struct ParametersBase
 		 , InputBitTable
 		 , OutputBitTable
 		 , NamePlate1730ParametersTable
+		 , CountStoredFilesTable
 	 >::Result one_row_table_list;
 
 	 typedef TL::MkTlst<
