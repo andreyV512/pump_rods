@@ -121,7 +121,7 @@ namespace MainWindowMenu
 	
 	MENU_ITEM(L"Аналоговая плата", AnalogPlate__)
 	MENU_ITEM(L"Смещение каналов", OffsetChannels)
-	MENU_ITEM(L"Усиление каналов", AmplificationChannels)
+	MENU_ITEM(L"Диапазон каналов", AmplificationChannels)
 
 	MENU_ITEM(L"Параметры сигнала", Signal)
 	MENU_ITEM(L"Границы АЧХ", ACFBorder)
