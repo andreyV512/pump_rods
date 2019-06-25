@@ -286,6 +286,28 @@ namespace Automat
 				//	Log::Mess<LogMess::Etalon>();
 				//	App::StatusBar(0, L"Эталон");
 				//}
+
+				//OUT_BITS(Off<oC1>, Off<oC2>);
+				if(0 != (res & 2))
+				{
+					OUT_BITS(On<oC1>);
+				}
+				else
+				{
+					OUT_BITS(Off<oC1>);
+				}
+				if(0 != (res & 1))
+				{
+					OUT_BITS(On<oC2>);
+				}
+				else
+				{
+					OUT_BITS(Off<oC2>);
+				}
+				//подтверждение результата
+				Sleep(200);
+				OUT_BITS(On<oToShift>);  //перекладка
+
 				//прерывание на просмотр
 				if(App::InterruptView())
 				{
@@ -300,12 +322,7 @@ namespace Automat
 				sortOnce = true;
 				AutoStoredData();
 
-				OUT_BITS(Off<oC1>, Off<oC2>);
-				if(0 != (res & 2)) OUT_BITS(On<oC1>);
-				if(0 != (res & 1)) OUT_BITS(On<oC2>);
-				//подтверждение результата
-				Sleep(200);
-				OUT_BITS(On<oToShift>);  //перекладка
+				
 				Sleep(1000);
 				//включена кнопка СТОП
 				

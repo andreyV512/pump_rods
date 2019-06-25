@@ -161,10 +161,14 @@ namespace LogMess
 			
 	BITS_XX(pink, "Сняты сигналы \"AC ON\"\"ПУСК\"", Off<oAC_ON>, Off<oStart>)
 	BITS_XX(pink, "Снят сигнал \"ПУСК\"", Off<oStart>)
-	BITS_XX(pink, "Сняты сигналы \"C1\"\"C2\"", Off<oC1>, Off<oC2>)
+	//BITS_XX(pink, "Сняты сигналы \"C1\"\"C2\"", Off<oC1>, Off<oC2>)
 			
 	BITS_XX(pink, "Выставлен сигнал \"C1\"", On<oC1>)
 	BITS_XX(pink, "Выставлен сигнал \"C2\"", On<oC2>)
+
+	BITS_XX(sea, "Снят сигнал \"C1\"", Off<oC1>)
+	BITS_XX(sea, "Снят сигнал \"C2\"", Off<oC2>)
+
 	BITS_XX(pink, "Выставлен сигнал \"Результат\"", On<oToShift>)
 
 	BITS_XX(pink, "Проверка включения \"KM2 DC\"", On<iKM2_DC>)
