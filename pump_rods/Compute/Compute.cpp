@@ -9,6 +9,8 @@
 #include "MessageText\StatusMessages.h"
 #include "MessageText\ListMess.hpp"
 #include <cmath>
+#include "Log/LogBuffer.h"
+#include "Log/LogMessages.h"
 
 namespace Compute
 {
@@ -290,10 +292,10 @@ EXIT:
 		}
 	}
 
-	void Recalculation()
+	unsigned Recalculation(unsigned c1c2)
 	{
 		MainWindow &mainWindow = Singleton<MainWindow>::Instance();
-		
+
 		TL::foreach<__data_item_list__, __recalculation__>()(__rec_data__());
 		ComputeResult();
 		int res = Compute::Result(1);
@@ -301,6 +303,20 @@ EXIT:
 		TL::foreach<__data_item_list__, __set_data__>()(mainWindow.viewers);		
 		App::UpdateViewers();
 
+		res = Compute::Result(c1c2);
+		if(0 == res)
+		{
+			Log::Mess<LogMess::Brak>();
+			App::StatusBar(0, L"Брак");
+		}
+		else
+		{
+			wchar_t buf[32];
+			wsprintf(buf, L"Сорт %d", res);
+			App::StatusBar(0, buf);
+			Log::Mess<LogMess::Copt>(res);
+		}
+		return res;
 	}
 
 	static const unsigned brak = 0;
@@ -316,8 +332,7 @@ EXIT:
 		if(def.result == STATUS_ID(DefectSig<Defect>)) return brak;
 		if(str.result == STATUS_ID(StructSig<Defect>)) return brak;
 
-		if(def.result == STATUS_ID(DefectSig<SortDown>)) ++res;
-		else if(str.result == STATUS_ID(StructSig<SortDown>)) ++res;
+		if(def.result == STATUS_ID(DefectSig<SortDown>) || str.result == STATUS_ID(StructSig<SortDown>)) ++res;
 		res &= 3;
 		return res;
 	}

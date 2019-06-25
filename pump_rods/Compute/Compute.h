@@ -40,7 +40,7 @@ namespace Compute
 		}		
 	}
 	void ComputeResult();
-	void Recalculation();
+	unsigned  Recalculation(unsigned = 1);
 	unsigned Result(unsigned res);
 
 	void Reverse(double *data, int len);

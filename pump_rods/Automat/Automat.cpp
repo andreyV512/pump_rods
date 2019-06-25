@@ -257,35 +257,35 @@ namespace Automat
 				//реверс данных с структуры
 				Compute::Reverse(structBuff.inputData, structBuff.currentOffset);
 				//расчёт и отображение данных
-				Compute::Recalculation();
+				unsigned res = Compute::Recalculation(c1c2);
 				Log::Mess<LogMess::DataCollectionCompleted>();
 
-				int res = Compute::Result(c1c2);
-				if(0 == res) Log::Mess<LogMess::Brak>();
-				else Log::Mess<LogMess::Copt>(res);
+				//int res = Compute::Result(c1c2);
+				//if(0 == res) Log::Mess<LogMess::Brak>();
+				//else Log::Mess<LogMess::Copt>(res);
 				OUT_BITS(Off<oStart>);
 				//формирование результата
-				if(c1c2 > 0)
-				{
-					res = Compute::Result(c1c2);
-					if(0 == res)
-					{
-						Log::Mess<LogMess::Brak>();
-						App::StatusBar(0, L"Брак");
-					}
-					else
-					{
-						wchar_t buf[32];
-						wsprintf(buf, L"Сорт %d", res);
-						App::StatusBar(0, buf);
-						Log::Mess<LogMess::Copt>(res);
-					}
-				}
-				else
-				{
-					Log::Mess<LogMess::Etalon>();
-					App::StatusBar(0, L"Эталон");
-				}
+				//if(c1c2 > 0)
+				//{
+					//res = Compute::Result(c1c2);
+					//if(0 == res)
+					//{
+					//	Log::Mess<LogMess::Brak>();
+					//	App::StatusBar(0, L"Брак");
+					//}
+					//else
+					//{
+					//	wchar_t buf[32];
+					//	wsprintf(buf, L"Сорт %d", res);
+					//	App::StatusBar(0, buf);
+					//	Log::Mess<LogMess::Copt>(res);
+					//}
+				//}
+				//else
+				//{
+				//	Log::Mess<LogMess::Etalon>();
+				//	App::StatusBar(0, L"Эталон");
+				//}
 				//прерывание на просмотр
 				if(App::InterruptView())
 				{
