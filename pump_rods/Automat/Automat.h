@@ -39,8 +39,8 @@ namespace Automat
 		unsigned bits;
 		unsigned ret;
 		InputBitTable::TItems &inputs_bits;
-		unsigned last_input_bits;
-		unsigned last_output_bits;
+		//unsigned last_input_bits;
+		//unsigned last_output_bits;
 		Result();		
 	};
 	extern HANDLE hEvent;
