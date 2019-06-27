@@ -426,11 +426,6 @@ namespace Automat
 				unsigned ev = WaitFor<list_key>()();
 				unsigned bits = device1730.Read();
 				unsigned outs = device1730.ReadOutput();
-				//if(bits != result.last_input_bits || outs != result.last_output_bits)
-				//{
-				//	result.last_input_bits = bits;
-				//	result.last_output_bits = outs;
-				//}
 				__inputs_bits__()(bits);
 				__outputs_bits__()(outs);
 				result.currentTime = Performance::Counter();
