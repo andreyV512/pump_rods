@@ -6,6 +6,7 @@
 #include "tools/StoredFiles.h"
 #include "tools/Zip.h"
 #include "tools/ZipAll.h"
+#include "window_tool/ItemIni.h"
 
 namespace Store
 {
@@ -102,54 +103,19 @@ void StoreDlg::Do(HWND h)
 
 void LoadDlg::Do(HWND h)
 {
+	wchar_t path[1024];
+	ItemIni::GetPath(path);
+	int ext = ItemIni::Get(L"ext", L"bz2", 1, path);
 	OpenData o(h, L"Загрузить");
-	o.ofn.lpstrFilter = L"*.bz2\0*.bz2\0*.dat\0*.dat\0*.*\0*.*\0";
+
+	if(0 == ext)
+	{
+		o.ofn.lpstrFilter = L"*.dat\0*.dat\0*.bz2\0*.bz2\0*.*\0*.*\0";
+	}
+
 	if(o())
 	{
-		int len = wcslen(o.sFile) - 4;
-		if(0 == wcscmp(&o.sFile[len], L".bz2"))
-		{
-			Zip::UnZipFile(o.sFile);
-			o.sFile[len] = '\0';
-		}
-		FILE *f = _wfopen(o.sFile, L"rb");
-		bool b = false;
-		if(f)
-		{
-			b = true;
-			int magic;
-			fread(&magic, sizeof(magic), 1, f);
-			if(Store::magic_number == (magic & 0xffff0000))
-			{
-				DefectSig<DataItem::Buffer> &def = Singleton<DefectSig<DataItem::Buffer>>::Instance();
-				StructSig<DataItem::Buffer> &str = Singleton<StructSig<DataItem::Buffer>>::Instance();
-
-				switch(magic & 0xffff)
-				{
-				case 1: Store::LoadData_0001(f, def, str);break;
-				case 2: Store::LoadData_0002(f, def, str);break;
-				default:
-					b = false;
-				}
-				if(b)
-				{
-					Compute::Recalculation();
-					wchar_t buf[2048];
-					wsprintf(buf, L"<ff>Загружен файл <a142f4>\"%s\"", o.sFile);
-					App::TopLabel(buf);
-				}
-			}
-			else
-			{
-				b = false;
-			}
-
-			fclose(f);
-		}
-		if(!b)
-		{
-			MessageBox(h, L"Файл не загружен", L"Ошибка!!!", MB_ICONEXCLAMATION);
-		}
+		LoadDataFromFile(h, o.sFile);
 	}
 }
 
@@ -178,4 +144,62 @@ void AutoStoredData()
 			StoredFiles::DeleteExtraFiles(L"Stored", L"dat", items.get<CountStoredFiles>().value);
 		}
 	}
+}
+
+void LoadDataFromFile(HWND h, wchar_t *path)
+{
+	int len = wcslen(path) - 4;
+
+	wchar_t fileName[1024];
+	ItemIni::GetPath(fileName);
+	int ext = ItemIni::Get(L"ext", L"bz2", 1, fileName);
+
+	if(0 == wcscmp(&path[len], L".bz2"))
+	{		
+		Zip::UnZipFile(path);
+		path[len] = '\0';
+		if(0 == ext) ItemIni::Set(L"ext", L"bz2", 1, fileName);
+	}
+	else
+	{
+		if(0 != ext) ItemIni::Set(L"ext", L"bz2", 0, fileName);
+	}
+	FILE *f = _wfopen(path, L"rb");
+		bool b = false;
+		if(f)
+		{
+			b = true;
+			int magic;
+			fread(&magic, sizeof(magic), 1, f);
+			if(Store::magic_number == (magic & 0xffff0000))
+			{
+				DefectSig<DataItem::Buffer> &def = Singleton<DefectSig<DataItem::Buffer>>::Instance();
+				StructSig<DataItem::Buffer> &str = Singleton<StructSig<DataItem::Buffer>>::Instance();
+
+				switch(magic & 0xffff)
+				{
+				case 1: Store::LoadData_0001(f, def, str);break;
+				case 2: Store::LoadData_0002(f, def, str);break;
+				default:
+					b = false;
+				}
+				if(b)
+				{
+					Compute::Recalculation();
+					wchar_t buf[2048];
+					wsprintf(buf, L"<ff>Загружен файл <a142f4>\"%s\"", path);
+					App::TopLabel(buf);
+				}
+			}
+			else
+			{
+				b = false;
+			}
+
+			fclose(f);
+		}
+		if(!b)
+		{
+			MessageBox(h, L"Файл не загружен", L"Ошибка!!!", MB_ICONEXCLAMATION);
+		}
 }

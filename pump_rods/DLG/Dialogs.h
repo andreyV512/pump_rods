@@ -42,3 +42,4 @@ DLG(StoredFilesDlg)
 #undef DLG
 
 void AutoStoredData();
+void LoadDataFromFile(HWND, wchar_t *);
