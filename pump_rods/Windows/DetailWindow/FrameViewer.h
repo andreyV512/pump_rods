@@ -80,12 +80,4 @@ public:
 	bool DrawFrame(TMouseMove &, VGraphics &);
 };
 
-//template<class T>void FrameViewer::BorderDown<T>::Draw()
-//{
-//	Border<T>  &b = (*(TChart *)&chart).items.get<Border<T>>();
-//	value = -b.value;
-//	color = b.color;
-//	HBorder::Draw();
-//}
-
 
