@@ -15,16 +15,7 @@ class FrameViewer: public CommonViewer
 public:
 	typedef CommonViewer Parent;
 	template<class T>struct Border: HBorder{Border(Chart &c): HBorder(c){}};
-	//template<class T>struct BorderDown: HBorder
-	//{
-	//	BorderDown(Chart &c): HBorder(c){}
-	//	void Draw();
-	//	//{
-	//	//	//HBorder::value = -value;
-	//	//	value = (*(TChart *)&chart).items.get<Border<T>>().value;
-	//	//	HBorder::Draw();
-	//	//}
-	//};
+	template<class T>struct BorderDown: HBorder{BorderDown(Chart &c): HBorder(c){}};
 
 	typedef TL::MkTlst<
 		NoOffsetLeftAxes
@@ -40,10 +31,10 @@ public:
 		, BottomAxes
 		, LineSeries
 		, Grid	
-		//, Border<SortDown>
-		//, Border<Defect>
-		//, BorderDown<SortDown>
-		//, BorderDown<Defect>
+		, Border<SortDown>
+		, Border<Defect>
+		, BorderDown<SortDown>
+		, BorderDown<Defect>
 	>::Result chart_list1;
 
 	typedef ChartDraw<Chart, TL::MkTlst<
@@ -54,8 +45,8 @@ public:
 		, Grid	
 		, Border<SortDown>
 		, Border<Defect>
-	//	, BorderDown<SortDown>
-	//	, BorderDown<Defect>
+		, BorderDown<SortDown>
+		, BorderDown<Defect>
 	>::Result> TChart;	
 	TChart tchart;
 
