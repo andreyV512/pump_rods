@@ -138,14 +138,22 @@ namespace LogMess
 	};
 
 	BITS_XX(sea, "Ожидание сигнала \"ЦЕПИ УПРАВЛЕНИЯ\"", On<iCU>)
+	BITS_XX(pink, "Снят сигнал \"ЦЕПИ УПРАВЛЕНИЯ\"", Off<iCU>)
+
 	BITS_XX(sea, "Ожидание сигнала \"ЦИКЛ\"", On<iCycle>)
+	BITS_XX(sea, "Снят сигнал \"ЦИКЛ\"", Off<iCycle>)
+
 	BITS_XX(sea, "Ожидание сигнала \"СОРТ\"", On<iCOPT>)
 	BITS_XX(sea, "Ожидание сигнала \"КОНТРОЛЬ\"", On<iControl>)
 	BITS_XX(sea, "Ожидание сигналов: \"КОНТРОЛЬ\",\"П1\"",  On<iControl>, On<iP1>)
 	BITS_XX(sea, "Ожидание сигналов: \"КОНТРОЛЬ\",\"П2\"",  On<iControl>, On<iP2>)
 	BITS_XX(sea, "Ожидание отключения сигналов: \"СОРТ\",\"П1\",\"П2\"", Off<iCOPT>, Off<iP1>, Off<iP2>)
 	BITS_XX(sea, "Ожидание отключения сигнала \"П1\"", Off<iP1>)
+	BITS_XX(pink, "Выставлен сигнал \"П1\"", On<iP1>)
+
 	BITS_XX(sea, "Ожидание отключения сигнала \"П2\"", Off<iP2>)
+	BITS_XX(pink, "Выставлен сигнал \"П2\"", On<iP2>)
+
 	BITS_XX(sea, "Ожидание отключения сигнала \"КОНТРОЛЬ\"", Off<iControl>)
 
 	BITS_XX(pink, "Выставлен сигнал \"РАБОТА\"", On<oWork>)

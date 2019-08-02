@@ -60,7 +60,7 @@ namespace Automat
 		{
 			if(!(p.bits & p.inputs_bits.get<O>().value))
 			{
-				Log::Mess<LogMess::Bits<typename TL::MkTlst<On<O>>::Result>>();
+				Log::Mess<LogMess::Bits<typename TL::MkTlst<Off<O>>::Result>>();
 				return false;
 			}
 			return true;
@@ -72,7 +72,7 @@ namespace Automat
 		{
 			if(!(p.bits & p.inputs_bits.get<O>().value))
 			{
-				Log::Mess<LogMess::Bits<typename TL::MkTlst<Off<O>>::Result>>();
+				Log::Mess<LogMess::Bits<typename TL::MkTlst<On<O>>::Result>>();
 				return false;
 			}
 			return true;
@@ -361,8 +361,16 @@ namespace Automat
 		{
 			if(0 != (o.value & p.changed))
 			{
-				if(0 != (o.value & p.bits)) Log::Mess<MessBit<On<O>>>();
-				else Log::Mess<MessBit<Off<O>>>();
+				if(0 != (o.value & p.bits))
+				{
+					Log::Mess<MessBit<On<O>>>();
+					dprint("%s\n", typeid(On<O>).name());
+				}
+				else
+				{
+					Log::Mess<MessBit<Off<O>>>();
+					dprint("%s\n", typeid(Off<O>).name());
+				}
 			}
 		}
 	};

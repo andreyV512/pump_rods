@@ -139,7 +139,7 @@ namespace Automat
 				//сообщение СТАРТ ЦИКЛА
 				Log::Mess<LogMess::StartCycle>();
 				//проверка сигнала ЦЕПИ УПРАВЛЕНИЯ
-				AND_BITS(500, Key<Status::stop>, On<iCU>);	
+				AND_BITS(6000 * 1000, Key<Status::stop>, On<iCU>);	
 
 				//выставил выходной сигнал РАБОТА
 				OUT_BITS(On<oWork>);
