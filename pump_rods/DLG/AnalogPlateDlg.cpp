@@ -52,8 +52,8 @@ const wchar_t *SyncGainData[] ={L"10", L"5", L"2", L"1", L"0.5", L"0.2"};
 	}	 \
 	};
 
-PARAM_TITLE(DefectSig<RangeL502>, L"Усиление")
-PARAM_TITLE(StructSig<RangeL502>, L"Усиление")
+PARAM_TITLE(DefectSig<RangeL502>, L"Диапазон")
+PARAM_TITLE(StructSig<RangeL502>, L"Диапазон")
 COMBO_ITEMS(DefectSig<RangeL502>)
 COMBO_ITEMS(StructSig<RangeL502>)
 DO_NOT_CHECK(DefectSig<RangeL502>)

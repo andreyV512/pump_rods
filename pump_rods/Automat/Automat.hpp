@@ -60,7 +60,7 @@ namespace Automat
 		{
 			if(!(p.bits & p.inputs_bits.get<O>().value))
 			{
-				Log::Mess<LogMess::Bits<typename TL::MkTlst<On<O>>::Result>>();
+				Log::Mess<LogMess::Bits<typename TL::MkTlst<Off<O>>::Result>>();
 				return false;
 			}
 			return true;
@@ -72,7 +72,7 @@ namespace Automat
 		{
 			if(!(p.bits & p.inputs_bits.get<O>().value))
 			{
-				Log::Mess<LogMess::Bits<typename TL::MkTlst<Off<O>>::Result>>();
+				Log::Mess<LogMess::Bits<typename TL::MkTlst<On<O>>::Result>>();
 				return false;
 			}
 			return true;
@@ -355,7 +355,58 @@ namespace Automat
 		void operator()(){}
 	};
 
-	
+	template<class O, class P>struct __test_bits_xxx__
+	{
+		void operator()(O &o, P &p)
+		{
+			if(0 != (o.value & p.changed))
+			{
+				if(0 != (o.value & p.bits))
+				{
+					Log::Mess<MessBit<On<O>>>();
+					dprint("%s\n", typeid(On<O>).name());
+				}
+				else
+				{
+					Log::Mess<MessBit<Off<O>>>();
+					dprint("%s\n", typeid(Off<O>).name());
+				}
+			}
+		}
+	};
+
+	template<class T>struct __test_bit__
+	{
+		unsigned bits, changed;
+		void operator()(unsigned bits)
+		{
+			static unsigned last = 0;
+			changed = bits ^ last;
+			
+			if(changed)
+			{
+				this->bits = bits;
+				TL::foreach<typename T::items_list, __test_bits_xxx__>()(Singleton<T>::Instance().items, *this);
+				last = bits;
+			}
+		}
+	};
+
+	struct __inputs_bits__
+	{
+		void operator()(unsigned bits)
+		{
+			__test_bit__<InputBitTable>()(bits);
+		}
+	};
+
+	struct __outputs_bits__
+	{
+		void operator()(unsigned bits)
+		{
+			__test_bit__<OutputBitTable>()(bits);
+		}
+	};
 
 	template<unsigned DELAY, class List>struct AND_Bits
 	{
@@ -383,12 +434,8 @@ namespace Automat
 				unsigned ev = WaitFor<list_key>()();
 				unsigned bits = device1730.Read();
 				unsigned outs = device1730.ReadOutput();
-				if(bits != result.last_input_bits || outs != result.last_output_bits)
-				{
-					dprint("bits %04X %04X\n", bits, outs);
-					result.last_input_bits = bits;
-					result.last_output_bits = outs;
-				}
+				__inputs_bits__()(bits);
+				__outputs_bits__()(outs);
 				result.currentTime = Performance::Counter();
 				switch(ev)
 				{
@@ -424,17 +471,6 @@ namespace Automat
 						if(Status::stop == t) return Status::stop;
 						result.ret = t;
 						return 0;
-						//switch(t)
-						//{
-						//case Status::stop: return Status::stop;
-						//case Status::contine_btn: 
-						//	result.ret = Status::contine_btn;
-						//	return 0;
-						//default:
-						//	result.ret = t;
-						//	return 0;
-						//}
-						//break;
 					}
 				}
 			}

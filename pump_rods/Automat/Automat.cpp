@@ -139,7 +139,7 @@ namespace Automat
 				//сообщение СТАРТ ЦИКЛА
 				Log::Mess<LogMess::StartCycle>();
 				//проверка сигнала ЦЕПИ УПРАВЛЕНИЯ
-				AND_BITS(500, Key<Status::stop>, On<iCU>);	
+				AND_BITS(6000 * 1000, Key<Status::stop>, On<iCU>);	
 
 				//выставил выходной сигнал РАБОТА
 				OUT_BITS(On<oWork>);
@@ -162,12 +162,13 @@ namespace Automat
 					//чтение сигнала П1 и П2
 					c1c2  = 0 != (bits & (1 << result.inputs_bits.get<iP1>().value))? 2: 0;
 					c1c2 |= 0 != (bits & (1 << result.inputs_bits.get<iP2>().value))? 1: 0;
+					
 					switch(c1c2)
 					{
-					case 0: Log::Mess<LogMess::Etalon>(); break;
-					case 1: Log::Mess<LogMess::Sort1>(); break;
-					case 2: Log::Mess<LogMess::Sort2>(); break;
-					case 3: Log::Mess<LogMess::Sort3>(); break;
+					case 0: Log::Mess<LogMess::Off_iP1_Off_iP2>(); break;
+					case 1: Log::Mess<LogMess::Off_iP1_On_iP2>(); break;
+					case 2: Log::Mess<LogMess::On_iP1_Off_iP2>(); break;
+					case 3: Log::Mess<LogMess::On_iP1_On_iP2>(); break;
 					}
 				}
 				//sortOnce = false;
@@ -256,27 +257,57 @@ namespace Automat
 				//реверс данных с структуры
 				Compute::Reverse(structBuff.inputData, structBuff.currentOffset);
 				//расчёт и отображение данных
-				Compute::Recalculation();
+				unsigned res = Compute::Recalculation(c1c2);
 				Log::Mess<LogMess::DataCollectionCompleted>();
 
-				int res = Compute::Result(c1c2);
-				if(0 == res) Log::Mess<LogMess::Brak>();
-				else Log::Mess<LogMess::Copt>(res);
+				//int res = Compute::Result(c1c2);
+				//if(0 == res) Log::Mess<LogMess::Brak>();
+				//else Log::Mess<LogMess::Copt>(res);
 				OUT_BITS(Off<oStart>);
 				//формирование результата
-				res = Compute::Result(c1c2);
-				if(0 == res)
+				//if(c1c2 > 0)
+				//{
+					//res = Compute::Result(c1c2);
+					//if(0 == res)
+					//{
+					//	Log::Mess<LogMess::Brak>();
+					//	App::StatusBar(0, L"Брак");
+					//}
+					//else
+					//{
+					//	wchar_t buf[32];
+					//	wsprintf(buf, L"Сорт %d", res);
+					//	App::StatusBar(0, buf);
+					//	Log::Mess<LogMess::Copt>(res);
+					//}
+				//}
+				//else
+				//{
+				//	Log::Mess<LogMess::Etalon>();
+				//	App::StatusBar(0, L"Эталон");
+				//}
+
+				//OUT_BITS(Off<oC1>, Off<oC2>);
+				if(0 != (res & 2))
 				{
-					Log::Mess<LogMess::Brak>();
-					App::StatusBar(0, L"Брак");
+					OUT_BITS(On<oC1>);
 				}
 				else
 				{
-					wchar_t buf[32];
-					wsprintf(buf, L"Сорт %d", res);
-					App::StatusBar(0, buf);
-					Log::Mess<LogMess::Copt>(res);
+					OUT_BITS(Off<oC1>);
 				}
+				if(0 != (res & 1))
+				{
+					OUT_BITS(On<oC2>);
+				}
+				else
+				{
+					OUT_BITS(Off<oC2>);
+				}
+				//подтверждение результата
+				Sleep(200);
+				OUT_BITS(On<oToShift>);  //перекладка
+
 				//прерывание на просмотр
 				if(App::InterruptView())
 				{
@@ -291,12 +322,7 @@ namespace Automat
 				sortOnce = true;
 				AutoStoredData();
 
-				OUT_BITS(Off<oC1>, Off<oC2>);
-				if(0 != (res & 2)) OUT_BITS(On<oC1>);
-				if(0 != (res & 1)) OUT_BITS(On<oC2>);
-				//подтверждение результата
-				Sleep(200);
-				OUT_BITS(On<oToShift>);  //перекладка
+				
 				Sleep(1000);
 				//включена кнопка СТОП
 				

@@ -40,4 +40,7 @@ public:
 
 	//void operator()(TRButtonDown &);
 	void operator()(TSize &);
+	LRESULT operator()(TCreate &);
+	void operator()(TDropFiles &);
+
 };

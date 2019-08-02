@@ -292,7 +292,7 @@ template<template<class>class W>struct CorrectionSensorDlg
 	}
 
 	TEMPL_MIN_EQUAL_VALUE(ViewerCount, 100)
-	TEMPL_MAX_EQUAL_VALUE(ViewerCount, 30000)
+	TEMPL_MAX_EQUAL_VALUE(ViewerCount, 100000)
 	TEMPL_PARAM_TITLE(ViewerCount, L"Ширина")
 
 	template<>struct TestPassword<ParametersBase, ViewerCountTable>
@@ -317,8 +317,6 @@ template<template<class>class W>struct CorrectionSensorDlg
 				Win &e = *(Win *)GetWindowLongPtr(h, GWLP_USERDATA);
 				FrameViewer &frame =  e.viewers.get<FrameViewer>();
 				frame.count = Singleton<ViewerCountTable>::Instance().items.get<W<ViewerCount>>().value;
-
-				//Repaint<W>( e.viewers.get<Win::Viewer>(), frame);
 			}
 		}
 	};

@@ -214,14 +214,14 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	ThresholdsTable::TItems &tresh = Singleton<ThresholdsTable>::Instance().items;
 
 	frame.tchart.items.get<FrameViewer::Border<SortDown>>().value = frame.threshSortDown;
-		//tresh.get<W<Thresh<SortDown>>>().value;
 	frame.tchart.items.get<FrameViewer::Border<Defect>>().value = frame.threshDefect;
-		//tresh.get<W<Thresh<Defect>>>().value;
-
 	frame.tchart.items.get<FrameViewer::Border<SortDown>>().color  = frame.threshSortDownColor;
-	//frame.threshSortDownColor;
 	frame.tchart.items.get<FrameViewer::Border<Defect>>().color  = frame.threshDefectColor;
-	//frame.threshDefectColor;
+
+	frame.tchart.items.get<FrameViewer::BorderDown<SortDown>>().value = -frame.threshSortDown;
+	frame.tchart.items.get<FrameViewer::BorderDown<Defect>>().value = -frame.threshDefect;
+	frame.tchart.items.get<FrameViewer::BorderDown<SortDown>>().color  = frame.threshSortDownColor;
+	frame.tchart.items.get<FrameViewer::BorderDown<Defect>>().color  = frame.threshDefectColor;
 
 	RepaintWindow(frame.hWnd);
 }

@@ -2,8 +2,9 @@
 #include "templates/templates.hpp"
 #include "App/AppBase.h"
 #include "window_tool/MenuAPI.h"
-#include "MessageText\StatusMessages.h"
-#include "MessageText\ListMess.hpp"
+#include "MessageText/StatusMessages.h"
+#include "MessageText/ListMess.hpp"
+#include "DLG/Dialogs.h"
 
 using namespace Gdiplus;
 
@@ -64,61 +65,16 @@ bool ViewerData::GetColorBar(int zone, double &data, unsigned &color)
 	return zone < count;
 }
 
-//void Chart_CoordCell(Chart &c, int mX, int &x, int delta)
-// {
-//	double left = c.rect.left + c.offsetAxesLeft;
-//	x = int(delta * (mX - left)/(c.rect.right - c.offsetAxesRight - left));
-//	if(x < 0) x = 0;
-// }
+LRESULT ViewerData::operator()(TCreate &l)
+{
+	DragAcceptFiles(l.hwnd, TRUE);
+	return(*(Parent *)this)(l);
+}
 
-//bool ViewerData::Draw(TMouseMove &l, VGraphics &g)
-//{
-//	int x;
-//	Chart_CoordCell(*chart, l.x, x, count);
-//	unsigned color = 0xff00ff00;
-//
-//	wsprintf(label.buffer, L"<ff>толщины зона <ff00>%d <%6x>%s %s"
-//		, x
-//		, color
-//		, Wchar_from<double, 2>(buffer[x])()
-//		, L"buf__0k"
-//		);
-//	label.Draw(g());
-//	return true;
-//}
-
-//CONTEXT_MENU(ThickWindow)
-//void ViewerData::operator()(TRButtonDown &l)
-//{
-//	//if(Singleton<OnTheJobTable>::Instance().items.get<OnTheJob<Thick>>().value)
-//	//PopupMenu<ContextMenuThickWindow::items_list>::Do(l.hwnd, l.hwnd);
-//}
-
-//void ViewerData::operator()(TMouseWell &l)
-//{
-//	if(0 == l.delta) return;
-//	int offsMin = chart->rect.left + chart->offsetAxesLeft;
-//	storedMouseMove.x += l.delta < 0 ? 1: -1;
-//	if(offsMin >= storedMouseMove.x){storedMouseMove.x = offsMin;}
-//	else
-//	{
-//		int offsMax = chart->rect.right - chart->offsetAxesRight;
-//		if(offsMax <= storedMouseMove.x)storedMouseMove.x = storedMouseMove.x;
-//	}
-//	cursor.VerticalCursor(storedMouseMove, HDCGraphics(storedMouseMove.hwnd, backScreen));
-//}
-
-//void ViewerData::CoordCell(int mX, int &x, int delta)
-//{
-//	double left = chart->rect.left + chart->offsetAxesLeft;
-//	x = int(delta * (mX - left)/(chart->rect.right - chart->offsetAxesRight - left));
-//	if(x < 0) x = 0;
-//}
-
-//wchar_t *ViewerData::Mess(double val, int offs)
-//{
-//	if(offs < deathZoneFirst || offs > deathZoneSecond) return /L/"Мёртвая зона";
-//	if(val > threshDefect) return L"Брак";
-//	if(val > threshSortDown) return L"Сорт";
-//	return L"Норма";
-//}
+void ViewerData::operator()(TDropFiles &l)
+{
+	wchar_t path[1024];
+	DragQueryFile(l.hDrop,0, path, dimention_of(path));
+	LoadDataFromFile(l.hwnd, path);
+	DragFinish(l.hDrop);
+}
