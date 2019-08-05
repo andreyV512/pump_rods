@@ -39,6 +39,15 @@ public:
 
 #define DROP_MESSAGE(N)template<>struct Log::Filter<N>{static const bool value = false;};
 DROP_MESSAGE(LogMess::ProgramOpen)
+DROP_MESSAGE(LogMess::DataCollectionCompleted)
+
+DROP_MESSAGE(LogMess::Bits<TL::MkTlst<Off<oC1>>::Result>)
+DROP_MESSAGE(LogMess::Bits<TL::MkTlst<Off<oC2>>::Result>)
+DROP_MESSAGE(LogMess::Bits<TL::MkTlst<Off<oStart>>::Result>)
+
+
+
+
 
 #define DROP_ID_PARAMS iCU, iKM2_DC, iKM3_AC, iCycle, iP1, iP2, iCOPT, iControl, oDC_ON1, oAC_ON, oDC_ON2, oWork, oStart, oToShift, oC1, oC2
 
