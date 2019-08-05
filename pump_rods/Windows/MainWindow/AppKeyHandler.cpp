@@ -86,7 +86,7 @@ namespace AppKeyHandler
 		__btn__<
 			__all_button_OnOff__<
 			  button_list
-			  , TL::MkTlst<TL::IntToType<IDB_Reset>, TL::IntToType<IDB_Ok>, TL::IntToType<IDB_Continue>>::Result
+			  , TL::MkTlst<TL::IntToType<IDB_Reset>/*, TL::IntToType<IDB_Ok>, TL::IntToType<IDB_Continue>*/>::Result
 			  , Off, On
 			>::Result
 		>()();
