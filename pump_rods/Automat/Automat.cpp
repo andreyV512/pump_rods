@@ -119,7 +119,8 @@ namespace Automat
 				//test AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>, Key<Status::stop>);
 //////////////////////test
 				//AppKeyHandler::Stop();				
-				AppKeyHandler::Continue();
+				//AppKeyHandler::Continue();
+				AppKeyHandler::Init();
 				//ожидание нажатия кнопки СТАРТ
 				if(App::IsRun())
 				{
