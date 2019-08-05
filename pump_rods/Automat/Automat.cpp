@@ -304,9 +304,7 @@ namespace Automat
 				{
 					OUT_BITS(Off<oC2>);
 				}
-				//подтверждение результата
-				Sleep(200);
-				OUT_BITS(On<oToShift>);  //перекладка
+				
 
 				//прерывание на просмотр
 				if(App::InterruptView())
@@ -319,6 +317,11 @@ namespace Automat
 					if(result.ret == Status::contine_btn) continue;
 					dprint("x 15\n");
 				}
+
+				//подтверждение результата
+				Sleep(200);
+				OUT_BITS(On<oToShift>);  //перекладка
+
 				sortOnce = true;
 				AutoStoredData();
 
