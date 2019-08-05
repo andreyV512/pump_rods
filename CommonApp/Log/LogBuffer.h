@@ -38,6 +38,16 @@ public:
 };
 
 #define DROP_MESSAGE(N)template<>struct Log::Filter<N>{static const bool value = false;};
-//DROP_MESSAGE(LogMess::ErrStop)
 DROP_MESSAGE(LogMess::ProgramOpen)
+
+#define DROP_ID_PARAMS iCU, iKM2_DC, iKM3_AC, iCycle, iP1, iP2, iCOPT, iControl, oDC_ON1, oAC_ON, oDC_ON2, oWork, oStart, oToShift, oC1, oC2
+
+#define DROP_ON(n) DROP_MESSAGE(MessBit<On<n>>)
+FOR_EACH(DROP_ON, DROP_ID_PARAMS)
+#undef DROP_ON
+
+#define DROP_OFF(n) DROP_MESSAGE(MessBit<Off<n>>)
+FOR_EACH(DROP_OFF, DROP_ID_PARAMS)
+#undef DROP_OFF
+
 #undef DROP_MESSAGE
