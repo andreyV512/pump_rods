@@ -140,6 +140,8 @@ namespace LogMess
 	BITS_XX(sea, "Ожидание сигнала \"ЦЕПИ УПРАВЛЕНИЯ\"", On<iCU>)
 	BITS_XX(pink, "Снят сигнал \"ЦЕПИ УПРАВЛЕНИЯ\"", Off<iCU>)
 
+	BITS_XX(sea, "Ожидание сигналов: \"ЦЕПИ УПРАВЛЕНИЯ\",\"ЦИКЛ\"", On<iCU>, On<iCycle>)
+
 	BITS_XX(sea, "Ожидание сигнала \"ЦИКЛ\"", On<iCycle>)
 	BITS_XX(sea, "Снят сигнал \"ЦИКЛ\"", Off<iCycle>)
 
