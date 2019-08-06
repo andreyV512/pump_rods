@@ -113,19 +113,10 @@ namespace Automat
 		{
 			for(;;)
 			{
-				//включены кнопки ЦИКЛ ТЕСТ
-				//test AppKeyHandler::Run();
-				//test AppKeyHandler::Continue();
-				//test AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>, Key<Status::stop>);
-//////////////////////test
-				//AppKeyHandler::Stop();				
-				//AppKeyHandler::Continue();
-				AppKeyHandler::Init();
+				AppKeyHandler::Continue();
 				//ожидание нажатия кнопки СТАРТ
 				if(App::IsRun())
 				{
-					//
-					//AND_BITS(-1, Key<Status::start>);
 					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
 					if(result.ret == Status::contine_btn) sortOnce = false;
 				}
@@ -146,18 +137,12 @@ namespace Automat
 				OUT_BITS(On<oWork>);
 
 				//ожидание сигнала ЦИКЛ, проверка ЦЕПИ УПРАВЛЕНИЯ, выход из цикла по кнопке СТОП
-				AND_BITS(-1,  Key<Status::stop>, On<iCycle>, Test<On<iCU>>);	
-				dprint("x 1\n");
-
-				AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
-				dprint("x 2\n");
-
-				//AND_BITS(-1,  Key<Status::stop>, Proc<BlockSort>, Test<On<iCU>, On<iCycle>>);
+				AND_BITS(-1,  Key<Status::stop>, On<iCycle>);//, Test<On<iCU>>);	
+				AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Off<iKM3_AC>);//, Test<On<iCU>, On<iCycle>>);	
 				if(sortOnce)
 				{
 					//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-					AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iCU>, On<iCycle>>);
-					dprint("x 3\n");
+					AND_BITS(-1, Key<Status::stop>, On<iCOPT>);//, Test<On<iCU>, On<iCycle>>);
 					//чтение дискретного рорта
 					unsigned bits = device1730.Read();
 					//чтение сигнала П1 и П2
@@ -172,34 +157,18 @@ namespace Automat
 					case 3: Log::Mess<LogMess::On_iP1_On_iP2>(); break;
 					}
 				}
-				//sortOnce = false;
-				////сообщение "ВНИМАТЕЛЬНО ПРОВЕРЬ ПОЛОЖЕНИЕ ШТАНГИ В ЗАХВАТАХ!"
-				//Log::Mess<LogMess::InfoCycle>();
-				////включены кнопки ЦИКЛ и СТОП
-				//AppKeyHandler::Continue();
-				////кнопка ЦИКЛ - продолжение, СТОП - выход из цикла, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ
-				//AND_BITS(-1, Key<Status::start>, Key<Status::stop>/*, Test<On<iCU> On<iCycle>>*/);
-				//dprint("x 4\n");
-				////включена кнопка СТОП
-				//AppKeyHandler::Run();
-
-				//убеждаемся что сигнал ACON DCON1 отключён
-				//xxxxxxxxxxxxxxx TEST_OUTPUT_BITS(Off<oAC_ON>, Off<oDC_ON2>);
+				AND_BITS(-1, Key<Status::stop>, On<iCU>, On<iCycle>);
 				//выставлен сигнал DC_ON1
 				OUT_BITS(On<oDC_ON1>);
-				AND_BITS(-1, Key<Status::stop>, On<iKM2_DC>, Test<On<iCU>, On<iCycle>>);
-				dprint("x 5\n");
+				AND_BITS(30 * 1000, Key<Status::stop>, On<iKM2_DC>, Test<On<iCU>, On<iCycle>>);
 				//ВЫСТАВЛЕН СИГНАЛ ПУСК
 				OUT_BITS(On<oStart>);
 				//ожидание выключения сигналов СОРТ, П1, П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(-1, Key<Status::stop>, Off<iCOPT>, Off<iP1>, Off<iP2>, Test<On<iCU>, On<iCycle>>);
-				dprint("x 6\n");
+				AND_BITS(30 * 1000, Key<Status::stop>, Off<iCOPT>, Off<iP1>, Off<iP2>, Test<On<iCU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(-1, Key<Status::stop>, On<iControl> ,Test<On<iCU>, On<iCycle>>);
-				dprint("x 7\n");
+				AND_BITS(30 * 1000, Key<Status::stop>, On<iControl> ,Test<On<iCU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ и П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iCU>, On<iCycle>>);
-				dprint("x 8\n");
+				AND_BITS(30 * 1000, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iCU>, On<iCycle>>);
 				//выставлен сигнал DC_ON2
 				OUT_BITS(On<oDC_ON2>);
 				{
@@ -214,25 +183,19 @@ namespace Automat
 					//ожидание выключения сигнала П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке ЦИКЛ
 					//, при превышении сбора 120 сек выход из цикла
 					AND_BITS(120000, Key<Status::stop>, Off<iP1>,Test<On<iCU>, On<iCycle>>);
-					dprint("x 9\n");
 				}
 					OUT_BITS(Off<oStart>);
 				//отключение сигнала DC_ON2
 				OUT_BITS(Off<oDC_ON2>);
-			//	AND_BITS(-1, Key<Status::stop>, Off<iKM2_DC>, Test<On<iCU>, On<iCycle>>);
-				dprint("x 10\n");
 				Sleep(2000);
 				//отключение сигнала DC_ON1
   		    	OUT_BITS(Off<oDC_ON1>);
-		
 
 				//убеждаемся что сигнал  отключён
 		      AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
-				dprint("x 11\n");
 				OUT_BITS(On<oStart>);	
 				//ожидание включения сигнала КОНТРОЛЬ и П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
 				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP2>,Test<On<iCU>, On<iCycle>>);
-				dprint("x 12\n");
 				
 				//включение сигнала AC_ON
 				StructSig<DataItem::Buffer> &structBuff = Singleton<StructSig<DataItem::Buffer>>::Instance();
@@ -247,48 +210,18 @@ namespace Automat
 						break;
 					}
 					AND_BITS(1200, Key<Status::stop>, On<iKM3_AC> ,Test<On<iCU>, On<iCycle>>);
-					dprint("x 13\n");
 					//ожидание выключения сигнала П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке ЦИКЛ
 					//, при превышении сбора 120 сек выход из цикла
 					AND_BITS(120000, Key<Status::stop>, Off<iP2>,Test<On<iCU>, On<iCycle>>);
-					dprint("x 14\n");
 				}
 				OUT_BITS(Off<oAC_ON>);	
-				//Sleep(1000);
 				//реверс данных с структуры
 				Compute::Reverse(structBuff.inputData, structBuff.currentOffset);
 				//расчёт и отображение данных
 				unsigned res = Compute::Recalculation(c1c2);
 				Log::Mess<LogMess::DataCollectionCompleted>();
-
-				//int res = Compute::Result(c1c2);
-				//if(0 == res) Log::Mess<LogMess::Brak>();
-				//else Log::Mess<LogMess::Copt>(res);
 				OUT_BITS(Off<oStart>);
-				//формирование результата
-				//if(c1c2 > 0)
-				//{
-					//res = Compute::Result(c1c2);
-					//if(0 == res)
-					//{
-					//	Log::Mess<LogMess::Brak>();
-					//	App::StatusBar(0, L"Брак");
-					//}
-					//else
-					//{
-					//	wchar_t buf[32];
-					//	wsprintf(buf, L"Сорт %d", res);
-					//	App::StatusBar(0, buf);
-					//	Log::Mess<LogMess::Copt>(res);
-					//}
-				//}
-				//else
-				//{
-				//	Log::Mess<LogMess::Etalon>();
-				//	App::StatusBar(0, L"Эталон");
-				//}
-
-				//OUT_BITS(Off<oC1>, Off<oC2>);
+				
 				if(0 != (res & 2))
 				{
 					OUT_BITS(On<oC1>);
@@ -305,8 +238,6 @@ namespace Automat
 				{
 					OUT_BITS(Off<oC2>);
 				}
-				
-
 				//прерывание на просмотр
 				if(App::InterruptView())
 				{
@@ -316,7 +247,6 @@ namespace Automat
 					//кнопка ПУСК-продолжение, кнопка СТОП-выход из цикла, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ
 					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
 					if(result.ret == Status::contine_btn) continue;
-					dprint("x 15\n");
 				}
 
 				//подтверждение результата
@@ -325,22 +255,16 @@ namespace Automat
 
 				sortOnce = true;
 				AutoStoredData();
-
 				
 				Sleep(1000);
 				//включена кнопка СТОП
-				
 				AppKeyHandler::Run();
 				//ожидание снятия сигнала КОНТРОЛЬ, выход из цикла-кнопка СТОП
 				AND_BITS(-1, Key<Status::stop>, Off<iControl>);		
 				Sleep(1000);
-				dprint("x 16\n");
 				//переход в начало цикла
 				OUT_BITS(Off<oToShift>, Off<oC1>, Off<oC2>);
 			}
-
-		//	l502.Stop();
-			dprint("x 999\n");
 
 			device1730.Write(0);
 

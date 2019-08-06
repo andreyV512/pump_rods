@@ -18,14 +18,9 @@ namespace
 	static void Click(HWND);\
 	static wchar_t *Text(){return text;}\
 	};
-	KEY(IDB_CycleBtn   , L"F4 Цикл")
+	KEY(IDB_CycleBtn   , L"F4 Работа")
 	KEY(IDB_Reset      , L"Esc Стоп")
 	KEY(IDB_QueryBtn   , L"Тест")
-//	KEY(IDB_DownArrow , L"F5 Вниз")
-//	KEY(IDB_UpArrow   , L"F6 БАЗА")
-//	KEY(IDB_LeftArrow , L"F7 Влево")
-	//KEY(IDB_RightArrow, L"F8 Clear")
-//	KEY(IDB_Ok, L"F8 Норма")
 	KEY(IDB_Continue, L"F11 Повтор")
 #undef KEY
 #define BUTTON_KEY(ID)ButtonToolbar<ID, Key<ID> > 
