@@ -120,6 +120,7 @@ EXIT:
 			{
 				//d[j] -= min;
 				d[j] -= offs;
+				if(d[j] < 0) d[j] = -d[j];
 			}
 		}
 	};
