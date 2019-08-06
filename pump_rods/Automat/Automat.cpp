@@ -139,6 +139,7 @@ namespace Automat
 				//ожидание сигнала ЦИКЛ, проверка ЦЕПИ УПРАВЛЕНИЯ, выход из цикла по кнопке СТОП
 				AND_BITS(-1,  Key<Status::stop>, On<iCycle>);//, Test<On<iCU>>);	
 				AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Off<iKM3_AC>);//, Test<On<iCU>, On<iCycle>>);	
+				c1c2 = 0;
 				if(sortOnce)
 				{
 					//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
