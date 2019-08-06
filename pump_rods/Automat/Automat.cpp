@@ -239,9 +239,8 @@ namespace Automat
 					OUT_BITS(Off<oC2>);
 				}
 				//прерывание на просмотр
-				if(App::InterruptView())
+				if(App::InterruptView() || !sortOnce)
 				{
-					sortOnce = false;
 					//включены кнопки ЦИКЛ и СТОП
 					AppKeyHandler::Continue();
 					//кнопка ПУСК-продолжение, кнопка СТОП-выход из цикла, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ
