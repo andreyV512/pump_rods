@@ -18,7 +18,8 @@ template<>struct WapperFiltre<DefectSig>
 };
 template<>struct WapperFiltre<StructSig>
 {
-	typedef HighFiltre Result;
+	//typedef HighFiltre Result;
+	typedef LowFiltre Result;
 };
 
 namespace DataItem

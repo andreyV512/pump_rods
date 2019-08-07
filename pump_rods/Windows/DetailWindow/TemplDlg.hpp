@@ -25,8 +25,9 @@ namespace TemplDlg
 	{
 		L502ParametersTable::TItems &l502Param =  Singleton<L502ParametersTable>::Instance().items;
 		W<DataItem::Buffer> &o = Singleton<W<DataItem::Buffer>>::Instance();
-		Compute::Compute<typename WapperFiltre<W>::Result>(
+		Compute::ComputeFrame<typename WapperFiltre<W>::Result>()(
 			o.inputData
+			, 0
 			, o.currentOffset
 			, frame.cutoffFrequency
 			, frame.cutoffFrequencyON
@@ -397,7 +398,7 @@ template<template<class>class W>struct CorrectionSensorDlg
 	{
 		typedef typename TL::MkTlst<
 			TopMenu<MainFile>
-			, typename TopMenu<W<TypeSize>>
+		//	, typename TopMenu<W<TypeSize>>
 			, typename TopMenu<W<Options>>
 		>::Result menu_list;	
 	};

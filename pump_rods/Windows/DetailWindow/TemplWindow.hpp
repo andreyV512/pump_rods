@@ -117,10 +117,34 @@ template<class T>struct diff_templ<StructSig<T>>
 		for(int i = 0; i < dimention_of(arr); ++i)
 		{
 			arr[i] -= structMinVal;
-			if(arr[i] < 0) arr[i] = 0;
+			if(arr[i] < 0) arr[i] = -arr[i];
 		}
 	}
 };
+
+template<template<class>class>class MeanderX
+{
+public:
+	static bool b;
+	MeanderX(){}
+	double operator()(double next)
+	{
+		return next;
+	}
+};
+template<template<class>class T>bool MeanderX<T>::b;
+
+template<>class MeanderX<StructSig>: public Compute::Meander<StructSig>
+{	
+public:
+	static bool b;
+	double operator()(double next)
+	{
+		if(b) return Compute::Meander<StructSig>::operator()(next);
+		return next;
+	}
+};
+bool MeanderX<StructSig>::b;
 
 template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 {
@@ -136,19 +160,11 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	int offs_b = tbuf_size - dimention_of(frame.buffer);
 	int offs = int(offsetDef - offs_b * frame.delta);
 	int frameWidth = 3 * frame.count;
-	//if(offs < 0)//(-item.firstOffset))
-	//{
-	//	offs_b = offs_b + int((double)(offs)/(offs_b * frame.delta) * offs_b);
-	//	frameWidth = frame.count;
-	//	offs = int(offs_b * frame.delta);
-	//}
-	//else if(offs + frame.count > item.currentOffset)
-	//{
-	//	offs = item.currentOffset - frame.count;
-	//}
 
-	Compute::Compute<WapperFiltre<W>::Result>(
-		&item.inputData[item.firstOffset] + offs
+	MeanderX<W>::b = frame.isBarGraph;
+
+	Compute::ComputeFrame<WapperFiltre<W>::Result, MeanderX<W>>()(
+		&item.inputData[item.firstOffset], offs
 		, frameWidth
 		, frame.cutoffFrequency
 		, frame.cutoffFrequencyON

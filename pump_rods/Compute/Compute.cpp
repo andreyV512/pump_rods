@@ -43,87 +43,25 @@ namespace Compute
 
 	template<class O, class Filtre>struct diff<StructSig<O>, Filtre>
 	{
-		void operator()(O &o, double delta, double adcRange, double koef, int medianWidth, bool medianON, int samplingRate, int cutoffFrequency, bool cutoffFrequencyON)//double (&d)[DataItem::output_buffer_size])
+		void operator()(O &o, double delta, double adcRange, double koef, int medianWidth, bool medianON, int samplingRate, int cutoffFrequency, bool cutoffFrequencyON)
 		{
-			MedianFiltre filtre;
-			if(medianWidth > 2)filtre.InitWidth(medianWidth);
-
-			Filtre analogFiltre;
-			if(0 != cutoffFrequency)analogFiltre.Setup(
-				samplingRate
-				, 3
-				, cutoffFrequency
-				, 40
-				);
-			double *d = o.inputData;
-			int first =  int(o.deathZoneFirst * delta);
-			int second =  int(o.deathZoneSecond * delta);
 			
-			int i = 0;
-
-			for(; i < first; ++i)
-			{
-				double t = medianON? filtre(d[i]): d[i];
-				if(cutoffFrequencyON) t = analogFiltre(t);
-			}
-
-			while(d[i] >= 0 && i < second)
-			{
-				double t = medianON? filtre(d[i]): d[i];
-				if(cutoffFrequencyON) t = analogFiltre(t);
-				++i;
-			}
-
-			double min = 100;
-
-			double offs = 0;
-			int count = 0;
-
-			while(true)
-			{
-				double max = 0;
-				while(d[i] < 0)
-				{
-					if(i >= second) goto EXIT;
-					double t = medianON? filtre(d[i]): d[i];
-					if(cutoffFrequencyON) t = analogFiltre(t);
-					if(t < max) max = t;
-					++i;
-				}
-				max =-max;
-			//	if(max < min) min = max;
-
-				offs += max;
-				++count;
-
-				max = 0;
-				while(d[i] >= 0)
-				{
-					if(i >= second) goto EXIT;
-					double t = medianON? filtre(d[i]): d[i];
-					if(cutoffFrequencyON) t = analogFiltre(t);
-					if(t > max) max = t;
-					++i;
-				}
-		//		if(max < min) min = max;
-				offs += max;
-				++count;
-			}
-EXIT:
-			offs /= count;
-			offs *= adcRange * koef;
-
-			min *= adcRange * koef;
-			o.structMinVal = offs;//min;
-			d = o.outputData;
+			double *d = o.outputData;
+			double t = 0;
 			for(int j = 0; j < DataItem::output_buffer_size; ++j)
 			{
-				//d[j] -= min;
-				d[j] -= offs;
+				t += d[j];
+			}
+			t /=  DataItem::output_buffer_size;
+			for(int j = 0; j < DataItem::output_buffer_size; ++j)
+			{
+				if(d[j] > 0)d[j] -= t;
 				if(d[j] < 0) d[j] = -d[j];
 			}
+			o.structMinVal = t;
 		}
 	};
+
 
 	template<class O, class P>struct __recalculation__;
 	template<class T, template<class>class W, class P>struct __recalculation__<W<T>, P>
@@ -146,9 +84,9 @@ EXIT:
 			o.firstOffset =  unsigned((double)o.deathZoneFirst * o.currentOffset / rodLength);
 			o.secondOffset =  o.currentOffset - unsigned((double)o.deathZoneSecond * o.currentOffset / rodLength) - o.firstOffset;
 
-			Compute<typename WapperFiltre<W>::Result>(
-			  &o.inputData[o.firstOffset]
-			, o.secondOffset//o.currentOffset
+			ComputeFrame<typename WapperFiltre<W>::Result, Meander<W>>()(
+			o.inputData, o.firstOffset
+			, o.secondOffset
 			, p.cutoffFrequency.get<W<CutoffFrequency>>().value
 			, p.cutoffFrequency.get<W<CutoffFrequencyON>>().value
 			, p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value
@@ -163,11 +101,6 @@ EXIT:
 				o.outputData[i] *= adcRange * koef;
 			}
 		
-			//DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;
-			//
-			//int rodLength = dead.get<RodLenght>().value;
-			//int firstDeathZone = dead.get<W<First<DeathZone>>>().value;
-			//int secondDeathZone = dead.get<W<Second<DeathZone>>>().value;
 			o.deathZoneFirst =  int((double )o.deathZoneFirst * DataItem::output_buffer_size / rodLength);
 			o.deathZoneSecond =  DataItem::output_buffer_size - int((double )o.deathZoneSecond * DataItem::output_buffer_size / rodLength);
 
@@ -180,32 +113,6 @@ EXIT:
 				);
              
 			o.result = STATUS_ID(Nominal);
-			//for(int i = o.deathZoneFirst; i < o.deathZoneSecond; ++i)
-			//{
-			//	double t = o.outputData[i];
-			//	if(t > o.threshDefect)
-			//	{
-			//		o.result = STATUS_ID(W<Defect>);
-			//		o.status[i] = STATUS_ID(W<Defect>);
-			//	}
-			//	else if(t > o.threshSortDown)
-			//	{
-			//		if(STATUS_ID(W<Defect>) != o.result)o.result = STATUS_ID(W<SortDown>);
-			//		o.status[i] = STATUS_ID(W<SortDown>);
-			//	}
-			//	else
-			//	{
-			//		o.status[i] = STATUS_ID(Nominal);
-			//	}
-			//}
-			//for(int i = 0; i < o.deathZoneFirst; ++i)
-			//{
-			//	o.status[i] = STATUS_ID(DeathZone);
-			//}
-			//for(int i = o.deathZoneSecond; i < dimention_of(o.status); ++i)
-			//{
-			//	o.status[i] = STATUS_ID(DeathZone);
-			//}
 
 			for(int i = 0; i < DataItem::output_buffer_size; ++i)
 			{
