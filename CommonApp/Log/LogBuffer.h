@@ -44,6 +44,8 @@ DROP_MESSAGE(LogMess::DataCollectionCompleted)
 DROP_MESSAGE(LogMess::Bits<TL::MkTlst<Off<oC1>>::Result>)
 DROP_MESSAGE(LogMess::Bits<TL::MkTlst<Off<oC2>>::Result>)
 DROP_MESSAGE(LogMess::Bits<TL::MkTlst<Off<oStart>>::Result>)
+DROP_MESSAGE(LogMess::Bits<TL::MkTlst<On<oC1>>::Result>)
+DROP_MESSAGE(LogMess::Bits<TL::MkTlst<On<oC2>>::Result>)
 
 
 
