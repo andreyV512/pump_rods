@@ -1,6 +1,9 @@
 ﻿#pragma once
 #include "MedianFiltre\MedianFiltre.h"
 #include "tools_debug\DebugMess.h"
+#include "DspFilters\ChebyshevFiltre.hpp"
+#include "App\AppBase.h"
+
 template<class>struct StructSig;
 template<class>struct DefectSig;
 namespace Compute
@@ -60,21 +63,38 @@ public:
 		return next;
 	}
 };
+
+struct InitFiltre
+{
+	template<class T>void operator()(T &analogFiltre, int samplingRate, int cutoffFrequency)
+	{
+		analogFiltre.Setup(
+			samplingRate
+			, cutoffFrequency
+			, 40
+			);
+	}
+
+	void operator()(BandPassFiltre &analogFiltre, int samplingRate, int centerFrequency)
+	{
+		analogFiltre.Setup(
+			samplingRate
+			, Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<WidthFrequency>>().value
+			, centerFrequency
+			, 1
+			);
+	}
+};
+
 	template<class Filtre, class Meander = Noop>struct ComputeFrame
 	{
 		void operator()(double *inputData, int offs, int inputLenght, int cutoffFrequency, bool cutoffFrequencyON, int medianWidth, bool medianON, double *outputData, int outputLength, int samplingRate, bool wave = true)
 		{
-			dprint("Compute Filtre %s\n", typeid(Filtre).name());
 			MedianFiltre filtre;
 			if(medianWidth > 2)filtre.InitWidth(medianWidth);
 
 			Filtre analogFiltre;
-			if(0 != cutoffFrequency)analogFiltre.Setup(
-				samplingRate
-				, 3
-				, cutoffFrequency
-				, 40
-				);
+			if(0 != cutoffFrequency) InitFiltre()(analogFiltre, samplingRate, cutoffFrequency);
 			Meander meander;
 
 			for(int i = 0; i < offs; ++i)

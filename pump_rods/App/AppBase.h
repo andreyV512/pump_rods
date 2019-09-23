@@ -103,8 +103,10 @@ struct OnTheJobTable
 };
 
 struct CutoffFrequency; 
+struct WidthFrequency; 
 struct CutoffFrequencyON;
-DEFINE_PARAM_WAPPER(DefectSig, CutoffFrequency, int, 20)
+DEFINE_PARAM_WAPPER(DefectSig, CutoffFrequency, int, 70)
+DEFINE_PARAM_WAPPER(DefectSig, WidthFrequency, int, 30)
 DEFINE_PARAM_WAPPER(StructSig, CutoffFrequency, int, 20)
 DEFINE_PARAM_WAPPER(DefectSig, CutoffFrequencyON, bool, true)
 DEFINE_PARAM_WAPPER(StructSig, CutoffFrequencyON, bool, true)
@@ -114,6 +116,7 @@ DEFINE_PARAM_WAPPER(StructSig, CutoffFrequencyON, bool, true)
 {
 	typedef TL::MkTlst<
 		DefectSig<CutoffFrequency>
+		, DefectSig<WidthFrequency>
 		, DefectSig<CutoffFrequencyON>
 		, StructSig<CutoffFrequency>
 		, StructSig<CutoffFrequencyON>
