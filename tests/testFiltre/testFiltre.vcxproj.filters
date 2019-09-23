@@ -1,0 +1,87 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="DspFilter">
+      <UniqueIdentifier>{b7327875-eca2-452c-b57b-88d25bdaddf0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DspFilter\Include">
+      <UniqueIdentifier>{2061b2c3-9700-4c22-aae1-0805d9bda4f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DspFilter\Source">
+      <UniqueIdentifier>{3692d400-5765-4990-a139-c0d1a9788e9c}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="ReadMe.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="stdafx.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="targetver.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DspFilters\ChebyshevFiltre.hpp">
+      <Filter>DspFilter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DspFilters\include\Biquad.h">
+      <Filter>DspFilter\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DspFilters\include\Cascade.h">
+      <Filter>DspFilter\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DspFilters\include\ChebyshevII.h">
+      <Filter>DspFilter\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DspFilters\include\Common.h">
+      <Filter>DspFilter\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DspFilters\include\Filter.h">
+      <Filter>DspFilter\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DspFilters\include\Params.h">
+      <Filter>DspFilter\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Common\DspFilters\include\PoleFilter.h">
+      <Filter>DspFilter\Include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="stdafx.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="testFiltre.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DspFilters\source\Biquad.cpp">
+      <Filter>DspFilter\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DspFilters\source\Cascade.cpp">
+      <Filter>DspFilter\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DspFilters\source\ChebyshevII.cpp">
+      <Filter>DspFilter\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DspFilters\source\Filter.cpp">
+      <Filter>DspFilter\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DspFilters\source\Param.cpp">
+      <Filter>DspFilter\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Common\DspFilters\source\PoleFilter.cpp">
+      <Filter>DspFilter\Source</Filter>
+    </ClCompile>
+  </ItemGroup>
+</Project>
