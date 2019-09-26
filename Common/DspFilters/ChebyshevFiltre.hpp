@@ -34,6 +34,6 @@ public:
 	}
 	void Setup(int sample_rate, int widthFrequency, double centerFrequency, double stopBandDb)
 	{
-		m_design.setup(3, sample_rate, centerFrequency, widthFrequency, stopBandDb);
+		m_design.setup(3, sample_rate, centerFrequency, widthFrequency, 0.01);
 	}
 };
