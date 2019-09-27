@@ -3,6 +3,7 @@
 #include "DlgTemplates\ParamDlg.h"
 #include "window_tool\GroupBox.h"
 
+template<class T>struct NoButton;
 namespace Dialog
 {
 	template<class List>struct __get_height_tmpl__;
@@ -125,12 +126,11 @@ namespace Dialog
 
 	template<class TemplDialog>struct __command_data__
 	{
-		HWND hwnd;
-		WPARAM id;
-		TemplDialog &owner;
-		__command_data__(HWND hwnd, WPARAM id, TemplDialog &owner)
-			: hwnd(hwnd)
-			, id(id)
+		typedef TemplDialog Owner;
+		TCommand &e;
+		Owner &owner;
+		__command_data__(TCommand &e, Owner &owner)
+			: e(e)
 			, owner(owner)
 		{}
 	};
@@ -219,7 +219,7 @@ namespace Dialog
 	{
 		void operator()(P &p)
 		{
-			p.items.get<O>().Init(p.h, p.x, p.width, p.height);	
+			p.items.get<O>().Init(p.h, p.x, p.width, p.height);			
 		}
 	};
 
@@ -254,18 +254,37 @@ namespace Dialog
 			p.height = storeHeight + 5;
 		}
 	};
+
+
+
+template<class List>struct __only_buttons__;
+template<class Head, class Tail>struct __only_buttons__<Tlst<Head, Tail>>
+{
+	typedef Tlst<Head, typename __only_buttons__<Tail>::Result> Result;
+};
+template<class Head, class Tail>struct __only_buttons__<Tlst<NoButton<Head>, Tail>>
+{
+	typedef typename __only_buttons__<Tail>::Result Result;
+};
+template<>struct __only_buttons__<NullType>
+{
+	typedef NullType Result;
+};
 	
 #pragma warning(disable: 4355)
 	template<class BaseParam, class TableParam
 		, class List = typename TableParam::items_list
 		, int widthP = 550
 		, class ButtonsList = TL::MkTlst<OkBtn, CancelBtn>::Result
-		, template<class, class>class Wapper = DlgItem2>struct Templ
+		, class AdditionalData = NullType
+		, template<class, class>class Wapper = DlgItem2
+	>struct Templ
 	{
 		typedef typename TL::TypeToTypeLstParam1<List, Wapper, Templ>::Result original_list;
 		typedef BaseParam Base;
 		typedef TableParam Table;
 		Table &table;	
+		AdditionalData *additionalData;
 		typedef typename TL::TypeToTypeLstParam1<typename __del_group_box__<List>::Result, Wapper, Templ>::Result list;
 		TL::Factory<list> items;
 		TL::Factory<ButtonsList> buttons;
@@ -276,13 +295,13 @@ namespace Dialog
 			int xOffs = 5;
 
 			TL::foreach<original_list, __init__X>()(__table_data__X<TL::Factory<list>>(e.hwnd, xOffs, width, height, items));
-
-			int offs = __btn_width__<ButtonsList>::value + (TL::Length<ButtonsList>::value - 1) * 10;
+			typedef typename __only_buttons__<ButtonsList>::Result __button_list__;
+			int offs = __btn_width__<__button_list__>::value + (TL::Length<__button_list__>::value - 1) * 10;
 
 			offs = (width - offs) / 2;
 			height += 10;
 
-			TL::foreach<ButtonsList, __make_btn__>()(&buttons, &__make_btn_data__(offs, height, e.hwnd));
+			TL::foreach<__button_list__, __make_btn__>()(&buttons, &__make_btn_data__(offs, height, e.hwnd));
 
 			RECT r;
 			GetWindowRect(GetDesktopWindow(), &r);
@@ -294,10 +313,11 @@ namespace Dialog
 		}
 		LRESULT operator()(TCommand &e)
 		{
-			return !TL::find<ButtonsList, __command__>()(&buttons, &__command_data__<Templ>(e.hwnd, e.id, *this));
+			dprint("uMsg %d id %d isAcsel %d\n", e.uMsg, e.id, e.isAcselerator);
+			return !TL::find<ButtonsList, __command__>()(&buttons, &__command_data__<Templ>(e, *this));
 		}
 
-		Templ(Table &table_) : table(table_), items(this){}
+		Templ(Table &table_, AdditionalData *data = NULL) : table(table_), items(this), additionalData(data){}
 		bool Do(HWND hWnd, wchar_t *title)
 		{
 			return TemplDlg_Do(hWnd, title, (DLGPROC)Proc<Templ>::Do, (LPARAM)this);

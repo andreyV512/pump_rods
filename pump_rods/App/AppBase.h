@@ -105,18 +105,26 @@ struct OnTheJobTable
 struct CutoffFrequency; 
 struct WidthFrequency; 
 struct CutoffFrequencyON;
+struct CenterFrequency;
+struct TypeFiltre;
 DEFINE_PARAM_WAPPER(DefectSig, CutoffFrequency, int, 70)
 DEFINE_PARAM_WAPPER(DefectSig, WidthFrequency, int, 30)
+DEFINE_PARAM_WAPPER(DefectSig, CenterFrequency, int, 50)
 DEFINE_PARAM_WAPPER(StructSig, CutoffFrequency, int, 20)
 DEFINE_PARAM_WAPPER(DefectSig, CutoffFrequencyON, bool, true)
 DEFINE_PARAM_WAPPER(StructSig, CutoffFrequencyON, bool, true)
 
+static const int TypeLowFiltre      = 0;
+static const int TypeBandPassFiltre	= 1;
+DEFINE_PARAM_WAPPER(DefectSig, TypeFiltre, int, 0)
 
  struct AnalogFilterTable
 {
 	typedef TL::MkTlst<
 		DefectSig<CutoffFrequency>
 		, DefectSig<WidthFrequency>
+		, DefectSig<CenterFrequency>
+		, DefectSig<TypeFiltre>
 		, DefectSig<CutoffFrequencyON>
 		, StructSig<CutoffFrequency>
 		, StructSig<CutoffFrequencyON>

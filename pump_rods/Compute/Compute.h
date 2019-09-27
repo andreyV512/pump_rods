@@ -84,6 +84,23 @@ struct InitFiltre
 			, 1
 			);
 	}
+
+	void operator()(DoubleFiltre &analogFiltre, int samplingRate, int centerFrequency)
+	{
+		switch(Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<TypeFiltre>>().value)
+		{
+			case TypeLowFiltre:
+				(*this)(analogFiltre.lowFiltre, samplingRate, centerFrequency);
+				analogFiltre.o = (DoubleFiltre::O *)&analogFiltre.lowFiltre;
+				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&LowFiltre::operator();
+				break;
+			case TypeBandPassFiltre: 
+				(*this)(analogFiltre.bandPassFiltre, samplingRate, centerFrequency);
+				analogFiltre.o = (DoubleFiltre::O *)&analogFiltre.bandPassFiltre;
+				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&BandPassFiltre::operator();
+				break;
+		};
+	}
 };
 
 	template<class Filtre, class Meander = Noop>struct ComputeFrame
