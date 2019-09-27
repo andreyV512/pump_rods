@@ -127,7 +127,7 @@ void FilterDlg::Do(HWND h)
 	AdditionalParams typeBandPassFiltre(TypeBandPassFiltre, current_filtre, changed);
 	AnalogFilterTable table;
 
-	//TL::foreach<AnalogFilterTable::items_list, __copy_items__>()(table.items, Singleton<AnalogFilterTable>::Instance().items);
+	TL::foreach<AnalogFilterTable::items_list, __copy_items__>()(table.items, Singleton<AnalogFilterTable>::Instance().items);
 
 	while(changed)
 	{
@@ -144,9 +144,9 @@ void FilterDlg::Do(HWND h)
 					, 550
 					, TL::MkTlst<OkBtn, CancelBtn, NoButton<DefectSig<TypeFiltre>>>::Result
 					, AdditionalParams
-					>(Singleton<AnalogFilterTable>::Instance(), &typeLowFiltre).Do(h, L"Настройки низкочастотного фильтра"))
+					>(table, &typeLowFiltre).Do(h, L"Настройки низкочастотного фильтра"))
 				{
-				//	TL::foreach<AnalogFilterTable::items_list, __copy_items__>()(Singleton<AnalogFilterTable>::Instance().items, table.items);
+					TL::foreach<AnalogFilterTable::items_list, __copy_items__>()(Singleton<AnalogFilterTable>::Instance().items, table.items);
 					return;
 				}
 			}
@@ -161,9 +161,9 @@ void FilterDlg::Do(HWND h)
 					, 550
 					, TL::MkTlst<OkBtn, CancelBtn, NoButton<DefectSig<TypeFiltre>>>::Result
 					, AdditionalParams
-					>(Singleton<AnalogFilterTable>::Instance(), &typeBandPassFiltre).Do(h, L"Настройки полосового фильтра"))
+					>(table, &typeBandPassFiltre).Do(h, L"Настройки полосового фильтра"))
 				{
-				//	TL::foreach<AnalogFilterTable::items_list, __copy_items__>()(Singleton<AnalogFilterTable>::Instance().items, table.items);
+					TL::foreach<AnalogFilterTable::items_list, __copy_items__>()(Singleton<AnalogFilterTable>::Instance().items, table.items);
 					return;
 				}
 			}
