@@ -20,7 +20,7 @@ namespace Compute
 
 	template<>class Meander<StructSig>
 	{
-		double mn, mx, pred;;
+		double mn, mx, pred;
 		bool changed;
 	public:
 		Meander():  mn(0), mx(0), pred(0), changed(false)

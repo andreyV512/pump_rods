@@ -55,8 +55,11 @@ namespace Compute
 			t /=  DataItem::output_buffer_size;
 			for(int j = 0; j < DataItem::output_buffer_size; ++j)
 			{
-				if(d[j] > 0)d[j] -= t;
+				//if(d[j] > 0)d[j] -= t;
+				//if(d[j] < 0) d[j] = -d[j];
 				if(d[j] < 0) d[j] = -d[j];
+				d[j] -= t;
+				if(d[j] < 0) d[j] = 0;
 			}
 			o.structMinVal = t;
 		}
@@ -138,13 +141,13 @@ namespace Compute
 				, median
 				);
 
-			//if(frame.isBarGraph)
-			//{
-			//	for(int i = 0; i < tbuf_size; ++i)
-			//	{
-			//		if(tbuf[i] < 0) tbuf[i] = -tbuf[i];
-			//	}
-			//}
+			if(true)//frame.isBarGraph)
+			{
+				for(int i = 0; i < DataItem::output_buffer_size; ++i)
+				{
+					if(o.outputData[i] < 0) o.outputData[i] = -o.outputData[i];
+				}
+			}
 
 			for(int i = 0; i < DataItem::output_buffer_size; ++i)
 			{
