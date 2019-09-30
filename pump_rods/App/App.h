@@ -15,7 +15,8 @@ template<template<class>class T>struct WapperFiltre;
 template<>struct WapperFiltre<DefectSig>
 {
 	//typedef LowFiltre Result;
-	typedef BandPassFiltre Result;
+	//typedef BandPassFiltre Result;
+	typedef DoubleFiltre Result;
 };
 template<>struct WapperFiltre<StructSig>
 {

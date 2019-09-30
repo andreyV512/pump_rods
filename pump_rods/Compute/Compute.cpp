@@ -45,7 +45,7 @@ namespace Compute
 	{
 		void operator()(O &o, double delta, double adcRange, double koef, int medianWidth, bool medianON, int samplingRate, int cutoffFrequency, bool cutoffFrequencyON)
 		{
-			
+
 			double *d = o.outputData;
 			double t = 0;
 			for(int j = 0; j < DataItem::output_buffer_size; ++j)
@@ -60,6 +60,20 @@ namespace Compute
 			}
 			o.structMinVal = t;
 		}
+	};
+
+
+	template<class T>struct __wapper_filtre__
+	{
+		template<class O>typename T::type_value operator()(O &o){return o.get<T>().value;}
+	};
+	template<>struct __wapper_filtre__<StructSig<WidthFrequency>>
+	{
+		template<class O>typename int operator()(O &o){return 0;}
+	};
+	template<>struct __wapper_filtre__<StructSig<CenterFrequency>>
+	{
+		template<class O>typename int operator()(O &o){return 0;}
 	};
 
 
@@ -83,24 +97,60 @@ namespace Compute
 
 			o.firstOffset =  unsigned((double)o.deathZoneFirst * o.currentOffset / rodLength);
 			o.secondOffset =  o.currentOffset - unsigned((double)o.deathZoneSecond * o.currentOffset / rodLength) - o.firstOffset;
+			//----------------------
+			typedef typename WapperFiltre<W>::Result WFiltre;
+			WFiltre aFiltre;
+			Compute::Filtre analog;
+			if(p.cutoffFrequency.get<W<CutoffFrequencyON>>().value)
+			{
+				Compute::InitFiltre()(aFiltre
+					, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
+					, p.cutoffFrequency.get<W<CutoffFrequency>>().value//frame.cutoffFrequency
+					//, p.cutoffFrequency.get<W<CenterFrequency>>().value//frame.centerFrequency
+					, __wapper_filtre__<W<CenterFrequency>>()(p.cutoffFrequency)
+					//, p.cutoffFrequency.get<W<WidthFrequency>>().value//frame.widthFrequency
+					, __wapper_filtre__<W<WidthFrequency>>()(p.cutoffFrequency)
+					);
+				analog.Init<WFiltre>(&aFiltre, &WFiltre::operator());
+			}
 
-			ComputeFrame<typename WapperFiltre<W>::Result, Meander<W>>()(
-			o.inputData, o.firstOffset
-			, o.secondOffset
-			, p.cutoffFrequency.get<W<CutoffFrequency>>().value
-			, p.cutoffFrequency.get<W<CutoffFrequencyON>>().value
-			, p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value
-			, p.medianFiltreWidth.get<W<MedianFiltreON>>().value
-			, o.outputData
-			, DataItem::output_buffer_size
-			, p.l502Param.get<W<ChannelSamplingRate>>().value
-			);
+			MedianFiltre mFiltre;
+			Compute::Filtre median;
+			//if(frame.medianFiltreON && frame.medianFiltreWidth > 2)
+			if(p.medianFiltreWidth.get<W<MedianFiltreON>>().value && p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value > 2)
+			{
+				//mFiltre.InitWidth(frame.medianFiltreWidth);
+				mFiltre.InitWidth(p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value);
+				median.Init(&mFiltre, &MedianFiltre::operator());
+			}
+			//-------------------------
+			Compute::ComputeFrame(
+				o.inputData, o.firstOffset
+				, o.secondOffset
+				//, p.cutoffFrequency.get<W<CutoffFrequency>>().value
+				//, p.cutoffFrequency.get<W<CutoffFrequencyON>>().value
+				//, p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value
+				//, p.medianFiltreWidth.get<W<MedianFiltreON>>().value
+				, o.outputData
+				, DataItem::output_buffer_size
+				//, p.l502Param.get<W<ChannelSamplingRate>>().value
+				, analog
+				, median
+				);
+
+			//if(frame.isBarGraph)
+			//{
+			//	for(int i = 0; i < tbuf_size; ++i)
+			//	{
+			//		if(tbuf[i] < 0) tbuf[i] = -tbuf[i];
+			//	}
+			//}
 
 			for(int i = 0; i < DataItem::output_buffer_size; ++i)
 			{
 				o.outputData[i] *= adcRange * koef;
 			}
-		
+
 			o.deathZoneFirst =  int((double )o.deathZoneFirst * DataItem::output_buffer_size / rodLength);
 			o.deathZoneSecond =  DataItem::output_buffer_size - int((double )o.deathZoneSecond * DataItem::output_buffer_size / rodLength);
 
@@ -111,7 +161,7 @@ namespace Compute
 				, p.cutoffFrequency.get<W<CutoffFrequency>>().value
 				, p.cutoffFrequency.get<W<CutoffFrequencyON>>().value
 				);
-             
+
 			o.result = STATUS_ID(Nominal);
 
 			for(int i = 0; i < DataItem::output_buffer_size; ++i)
@@ -231,7 +281,7 @@ namespace Compute
 	static const unsigned cort1 = 1;
 	static const unsigned cort2 = 2;
 	static const unsigned cort3 = 3;
-	
+
 	unsigned Result(unsigned res)
 	{
 		DefectSig<DataItem::Buffer> &def = Singleton<DefectSig<DataItem::Buffer>>::Instance();
@@ -256,6 +306,39 @@ namespace Compute
 			double d = data[i];
 			data[i] = data[k];
 			data[k] = d;
+		}
+	}
+
+	void ComputeFrame(double *inputData, int offs, int inputLenght, double *outputData, int outputLength, Filtre &analogFiltre, Filtre &medianFiltre)//, bool wave)
+	{
+		for(int i = 0; i < offs; ++i)
+		{
+			//double t = ;
+			//if(medianON) t = filtre(inputData[i]);
+			//if(cutoffFrequencyON) t = analogFiltre(t);
+			//meander(t);
+			double t = medianFiltre(inputData[i]);
+			t = analogFiltre(t); 
+		}
+
+		inputData += offs;
+
+		double delta = (double)inputLenght / outputLength;
+		memset(outputData, 0, outputLength * sizeof(double));
+		--inputLenght;
+
+		for(int i = 0; i <= inputLenght; ++i)
+		{
+			double t = medianFiltre(inputData[i]);
+			t = analogFiltre(t);
+			//	t = meander(t);
+			int k = int(i / delta);
+			if(k >= outputLength) break;
+			//double absT = t > 0 ? t: -t;
+			if(abs(t) > abs(outputData[k]))
+			{
+				outputData[k] = t;//wave? absT: t;
+			}
 		}
 	}
 }

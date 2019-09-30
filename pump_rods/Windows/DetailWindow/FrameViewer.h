@@ -66,6 +66,10 @@ public:
 	int count;
 	int medianFiltreWidth;
 	int cutoffFrequency;
+
+	int centerFrequency;
+	int widthFrequency;
+
 	bool cutoffFrequencyON;
 	bool medianFiltreON;
 	double delta;

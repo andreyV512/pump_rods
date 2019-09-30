@@ -4,6 +4,7 @@
 #include "FrameViewer.h"
 #include "TemplDlg.hpp"
 #include "App/App.h"
+//#include "Compute\Compute.h"
 
 template<template<class>class W>struct __main_window_viewer__;
 template<>struct __main_window_viewer__<StructSig>
@@ -41,7 +42,7 @@ public:
 	void operator()(TCommand &);
 	void operator()(TMouseWell &);
 	void operator()(TClose &);
-	
+
 	void ChangeFrame(int);
 };
 
@@ -151,7 +152,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	Viewer &viewer = viewers.get<Viewer>();
 	W<DataItem::Buffer> &item = Singleton<W<DataItem::Buffer>>::Instance();
 	FrameViewer &frame =  viewers.get<FrameViewer>();
-	
+
 	frame.delta = (double)frame.count / dimention_of(frame.buffer);
 
 	static const int tbuf_size = 3 * dimention_of(frame.buffer);
@@ -161,20 +162,52 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	int offs = int(offsetDef - offs_b * frame.delta);
 	int frameWidth = 3 * frame.count;
 
-	MeanderX<W>::b = frame.isBarGraph;
+	//MeanderX<W>::b = frame.isBarGraph;
 
-	Compute::ComputeFrame<WapperFiltre<W>::Result, MeanderX<W>>()(
+	typedef typename WapperFiltre<W>::Result WFiltre;
+	WFiltre aFiltre;
+	Compute::Filtre analog;
+	if(frame.cutoffFrequencyON)
+	{
+		Compute::InitFiltre()(aFiltre
+			, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
+			, frame.cutoffFrequency
+			, frame.centerFrequency
+			, frame.widthFrequency
+			);
+		analog.Init<WFiltre>(&aFiltre, &WFiltre::operator());
+	}
+
+	MedianFiltre mFiltre;
+	Compute::Filtre median;
+	if(frame.medianFiltreON && frame.medianFiltreWidth > 2)
+	{
+		mFiltre.InitWidth(frame.medianFiltreWidth);
+		median.Init(&mFiltre, &MedianFiltre::operator());
+	}
+
+	Compute::ComputeFrame(
 		&item.inputData[item.firstOffset], offs
 		, frameWidth
-		, frame.cutoffFrequency
-		, frame.cutoffFrequencyON
-		, frame.medianFiltreWidth
-		, frame.medianFiltreON
+		//, frame.cutoffFrequency
+		//, frame.cutoffFrequencyON
+		//, frame.medianFiltreWidth
+		//, frame.medianFiltreON
 		, tbuf
 		, tbuf_size
-		, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
-    , frame.isBarGraph
+		, analog
+		, median
+		//	, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
+		//, frame.isBarGraph
 		);
+
+	if(frame.isBarGraph)
+	{
+		for(int i = 0; i < tbuf_size; ++i)
+		{
+			if(tbuf[i] < 0) tbuf[i] = -tbuf[i];
+		}
+	}
 
 	double *ar = &tbuf[offs_b];
 	double last = 0;
@@ -184,7 +217,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 		else last = frame.buffer[i] = ar[i];
 	}
 
-    if(frame.isBarGraph)
+	if(frame.isBarGraph)
 	{
 		frame.tchart.minAxesY = 0;
 		frame.tchart.maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
@@ -194,8 +227,6 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 		frame.tchart.minAxesY = -100;
 		frame.tchart.maxAxesY = 100;
 	}
-
-	
 
 	frame.tchart.minAxesX = offsetDef;
 	frame.tchart.maxAxesX = frame.tchart.minAxesX + frame.count;
@@ -226,7 +257,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	frame.threshDefectColor	= viewer.threshDefectColor	;
 	frame.threshSortDownColor = viewer.threshSortDownColor;
 	frame.threshSortDown   	= viewer.threshSortDown   	;
-	
+
 	ThresholdsTable::TItems &tresh = Singleton<ThresholdsTable>::Instance().items;
 
 	frame.tchart.items.get<FrameViewer::Border<SortDown>>().value = frame.threshSortDown;
@@ -273,10 +304,10 @@ template<template<class>class W>void TemplWindow<W>::operator()(TCommand &m)
 
 template<template<class>class W>void TemplWindow<W>::operator()(TMouseWell &l)
 {
-	 TL::find<viewers_list, Common::__in_rect__>()(
-	 	&viewers
-	 	, &Common::__event_data__<TMouseWell, TemplWindow<W>>(*this, l)
-	 	);
+	TL::find<viewers_list, Common::__in_rect__>()(
+		&viewers
+		, &Common::__event_data__<TMouseWell, TemplWindow<W>>(*this, l)
+		);
 }
 
 template<template<class>class W>void TemplWindow<W>::operator()(TClose &l)
