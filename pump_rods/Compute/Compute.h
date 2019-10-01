@@ -8,6 +8,7 @@ template<class>struct StructSig;
 template<class>struct DefectSig;
 namespace Compute
 {	
+
 	struct Noop
 	{
 		Noop(){}
@@ -16,51 +17,80 @@ namespace Compute
 			return t;
 		}
 	};
-	template<template<class>class>class Meander;
+	//template<template<class>class>class Meander;
+	//
+	//template<>class Meander<StructSig>
+	//{
+	//	double mn, mx, pred;
+	//	bool changed;
+	//public:
+	//	Meander():  mn(0), mx(0), pred(0), changed(false)
+	//	{
+	//	}
+	//	double operator()(double x)
+	//	{
+	//		double res = 0;
+	//		if(pred < x)
+	//		{
+	//			if(x >= mx)mx = x;
+	//			res = -mn;
+	//			if(changed)
+	//			{
+	//				mx = 0;
+	//				changed ^= true;
+	//			}
+	//		}
+	//		else
+	//		{
+	//			if(x < mn)mn = x;
+	//			res = mx;
+	//			if(!changed)
+	//			{
+	//				mn = 0;
+	//				changed ^= true;
+	//			}
+	//		}
+	//		pred = x;
+	//		return res;
+	//	}
+	//};
+	//
+	//template<>class Meander<DefectSig>
+	//{
+	//public:
+	//	Meander(){}
+	//	double operator()(double next)
+	//	{
+	//		return next;
+	//	}
+	//};
 
-	template<>class Meander<StructSig>
+	template<template<class>class>struct diff
 	{
-		double mn, mx, pred;
-		bool changed;
-	public:
-		Meander():  mn(0), mx(0), pred(0), changed(false)
+		template<class O>void operator()(O &o, double(&)[1000])
 		{
-		}
-		double operator()(double x)
-		{
-			double res = 0;
-			if(pred < x)
-			{
-				if(x >= mx)mx = x;
-				res = -mn;
-				if(changed)
-				{
-					mx = 0;
-					changed ^= true;
-				}
-			}
-			else
-			{
-				if(x < mn)mn = x;
-				res = mx;
-				if(!changed)
-				{
-					mn = 0;
-					changed ^= true;
-				}
-			}
-			pred = x;
-			return res;
 		}
 	};
 
-	template<>class Meander<DefectSig>
+	template<>struct diff<StructSig>//, Filtre>
 	{
-	public:
-		Meander(){}
-		double operator()(double next)
+		template<class O>void operator()(O &o, double(&d)[1000])
 		{
-			return next;
+
+		//	double *d = o.outputData;
+			double t = 0;
+			for(int j = 0; j < DataItem::output_buffer_size; ++j)
+			{
+				t += d[j];
+			}
+			t /=  DataItem::output_buffer_size;
+			for(int j = 0; j < DataItem::output_buffer_size; ++j)
+			{
+				if(d[j] < 0) d[j] = -d[j];
+				d[j] -= t;
+				if(d[j] < 0) d[j] = 0;
+			}
+			o.structMinVal = t;
 		}
 	};
 
@@ -104,49 +134,6 @@ namespace Compute
 		}
 	};
 
-	/*
-	template<class Filtre, class Meander = Noop>struct ComputeFrame
-	{
-	void operator()(double *inputData, int offs, int inputLenght, int cutoffFrequency, bool cutoffFrequencyON, int medianWidth, bool medianON, double *outputData, int outputLength, int samplingRate, bool wave = true)
-	{
-	MedianFiltre filtre;
-	if(medianWidth > 2)filtre.InitWidth(medianWidth);
-
-	Filtre analogFiltre;
-	if(0 != cutoffFrequency) InitFiltre()(analogFiltre, samplingRate, cutoffFrequency);
-	Meander meander;
-
-	for(int i = 0; i < offs; ++i)
-	{
-	double t = inputData[i];
-	if(medianON) t = filtre(inputData[i]);
-	if(cutoffFrequencyON) t = analogFiltre(t);
-	meander(t);
-	}
-
-	inputData += offs;
-
-	double delta = (double)inputLenght / outputLength;
-	memset(outputData, 0, outputLength * sizeof(double));
-	--inputLenght;
-
-	for(int i = 0; i <= inputLenght; ++i)
-	{
-	double t = inputData[i];
-	if(medianON) t = filtre(inputData[i]);
-	if(cutoffFrequencyON) t = analogFiltre(t);
-	t = meander(t);
-	int k = int(i / delta);
-	if(k >= outputLength) break;
-	double absT = t > 0 ? t: -t;
-	if(absT > abs(outputData[k]))
-	{
-	outputData[k] = wave? absT: t;
-	}
-	}		
-	}
-	};
-	*/
 	class Filtre
 	{
 		struct O{};
@@ -162,7 +149,7 @@ namespace Compute
 		}
 		double operator()(double val){return (o->*ptr)(val);};
 	};
-	void ComputeFrame(double *inputData, int offs, int inputLenght, double *outputData, int outputLength, Filtre &analogFiltre, Filtre &medianFiltre);//, bool wave = true);
+	void ComputeFrame(double *inputData, int offs, int inputLenght, double *outputData, int outputLength, Filtre &analogFiltre, Filtre &medianFiltre);
 	void ComputeResult();
 	unsigned  Recalculation(unsigned = 1);
 	unsigned Result(unsigned res);

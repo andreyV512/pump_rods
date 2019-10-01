@@ -55,7 +55,7 @@ template<>struct DlgSubItems<DefectSig<TypeFiltre>, int>: ComboBoxSubItem<Defect
 DO_NOT_CHECK(DefectSig<TypeFiltre>)
 
 
-	template<>struct NoButton<DefectSig<TypeFiltre>>{};
+template<>struct NoButton<DefectSig<TypeFiltre>>{};
 
 template<class P>struct __command__<NoButton<DefectSig<TypeFiltre>>, P>
 {

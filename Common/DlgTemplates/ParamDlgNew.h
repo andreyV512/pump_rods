@@ -3,9 +3,10 @@
 #include "DlgTemplates\ParamDlg.h"
 #include "window_tool\GroupBox.h"
 
-template<class T>struct NoButton;
+
 namespace Dialog
 {
+	template<class T>struct NoButton;
 	template<class List>struct __get_height_tmpl__;
 	template<class Head, class Tail>struct __get_height_tmpl__<Tlst<Head, Tail>>
 	{
@@ -283,6 +284,7 @@ template<>struct __only_buttons__<NullType>
 		typedef typename TL::TypeToTypeLstParam1<List, Wapper, Templ>::Result original_list;
 		typedef BaseParam Base;
 		typedef TableParam Table;
+		typedef ButtonsList button_list;
 		Table &table;	
 		AdditionalData *additionalData;
 		typedef typename TL::TypeToTypeLstParam1<typename __del_group_box__<List>::Result, Wapper, Templ>::Result list;

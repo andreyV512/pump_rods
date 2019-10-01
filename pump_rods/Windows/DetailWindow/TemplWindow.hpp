@@ -78,8 +78,8 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 	viewer.threshSortDown = item.threshSortDown; 
 	viewer.threshDefect = item.threshDefect;
 	viewer.result = item.result;
-	viewer.tchart.maxAxesX = item.secondOffset;//item.currentOffset - 1;
-	viewer.currentOffset = item.secondOffset;//item.currentOffset;
+	viewer.tchart.maxAxesX = item.secondOffset;
+	viewer.currentOffset = item.secondOffset;
 	viewer.inputData = item.inputData;
 	viewer.tchart.items.get<BottomAxesMeters>().maxBorder = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;	
 	viewer.threshSortDownColor = color.get<Clr<SortDown>>().value;
@@ -89,6 +89,7 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 	viewer.cursor.SetMouseMoveHandler(&viewer, & DetailWindow<W>::Viewer::Draw);
 	viewer.count = DataItem::output_buffer_size;
 	viewer.chart->maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
+	viewer.structMinVal = item.structMinVal;
 
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	frame.count = Singleton<ViewerCountTable>::Instance().items.get<W<ViewerCount>>().value;
@@ -98,12 +99,13 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 	frame.cutoffFrequencyON = Singleton<AnalogFilterTable>::Instance().items.get<W<CutoffFrequencyON>>().value;
 	frame.cursor.SetMouseMoveHandler(&frame, &FrameViewer::DrawFrame); 
 	frame.koef = Singleton<KoeffSignTable>::Instance().items.get<W<KoeffSign>>().value;
+	
 
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
 	return 0;
 }
 
-template<class T>struct diff_templ
+template<template<class>class>struct diff_templ
 {
 	template<class O>void operator()(O &o, double(&arr)[1024])
 	{
@@ -114,15 +116,14 @@ template<class T>struct diff_templ
 	}
 };
 
-template<class T>struct diff_templ<StructSig<T>>
+template<>struct diff_templ<StructSig>
 {
 	template<class O>void operator()(O &o, double(&arr)[1024])
 	{
-		double structMinVal = o.structMinVal;
 		for(int i = 0; i < dimention_of(arr); ++i)
 		{
 			if(arr[i] < 0) arr[i] =-arr[i];
-			arr[i] -= structMinVal;
+			arr[i] -= o.structMinVal;
 			if(arr[i] < 0) arr[i] = 0;
 		}
 	}
@@ -166,8 +167,6 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	int offs_b = tbuf_size - dimention_of(frame.buffer);
 	int offs = int(offsetDef - offs_b * frame.delta);
 	int frameWidth = 3 * frame.count;
-
-	//MeanderX<W>::b = frame.isBarGraph;
 
 	typedef typename WapperFiltre<W>::Result WFiltre;
 	WFiltre aFiltre;
@@ -258,7 +257,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 
 	if(frame.isBarGraph)
 	{
-		diff_templ<W<DataItem::Buffer>>()(item, frame.buffer);
+		diff_templ<W>()(viewer, frame.buffer);
 	}
 
 	frame.delta = (double)frame.count / dimention_of(frame.buffer);

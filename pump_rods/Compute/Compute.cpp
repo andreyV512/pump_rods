@@ -34,36 +34,7 @@ namespace Compute
 		{}
 	};
 
-	template<class O, class Filtre>struct diff
-	{
-		void operator()(O &o, double delta, double adcRange, double koef, int medianWidth, bool medianON, int samplingRate, int cutoffFrequency, bool wave)
-		{
-		}
-	};
-
-	template<class O, class Filtre>struct diff<StructSig<O>, Filtre>
-	{
-		void operator()(O &o, double delta, double adcRange, double koef, int medianWidth, bool medianON, int samplingRate, int cutoffFrequency, bool cutoffFrequencyON)
-		{
-
-			double *d = o.outputData;
-			double t = 0;
-			for(int j = 0; j < DataItem::output_buffer_size; ++j)
-			{
-				t += d[j];
-			}
-			t /=  DataItem::output_buffer_size;
-			for(int j = 0; j < DataItem::output_buffer_size; ++j)
-			{
-				//if(d[j] > 0)d[j] -= t;
-				//if(d[j] < 0) d[j] = -d[j];
-				if(d[j] < 0) d[j] = -d[j];
-				d[j] -= t;
-				if(d[j] < 0) d[j] = 0;
-			}
-			o.structMinVal = t;
-		}
-	};
+	
 
 
 	template<class T>struct __wapper_filtre__
@@ -108,10 +79,8 @@ namespace Compute
 			{
 				Compute::InitFiltre()(aFiltre
 					, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
-					, p.cutoffFrequency.get<W<CutoffFrequency>>().value//frame.cutoffFrequency
-					//, p.cutoffFrequency.get<W<CenterFrequency>>().value//frame.centerFrequency
+					, p.cutoffFrequency.get<W<CutoffFrequency>>().value
 					, __wapper_filtre__<W<CenterFrequency>>()(p.cutoffFrequency)
-					//, p.cutoffFrequency.get<W<WidthFrequency>>().value//frame.widthFrequency
 					, __wapper_filtre__<W<WidthFrequency>>()(p.cutoffFrequency)
 					);
 				analog.Init<WFiltre>(&aFiltre, &WFiltre::operator());
@@ -119,10 +88,8 @@ namespace Compute
 
 			MedianFiltre mFiltre;
 			Compute::Filtre median;
-			//if(frame.medianFiltreON && frame.medianFiltreWidth > 2)
 			if(p.medianFiltreWidth.get<W<MedianFiltreON>>().value && p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value > 2)
 			{
-				//mFiltre.InitWidth(frame.medianFiltreWidth);
 				mFiltre.InitWidth(p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value);
 				median.Init(&mFiltre, &MedianFiltre::operator());
 			}
@@ -130,23 +97,15 @@ namespace Compute
 			Compute::ComputeFrame(
 				o.inputData, o.firstOffset
 				, o.secondOffset
-				//, p.cutoffFrequency.get<W<CutoffFrequency>>().value
-				//, p.cutoffFrequency.get<W<CutoffFrequencyON>>().value
-				//, p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value
-				//, p.medianFiltreWidth.get<W<MedianFiltreON>>().value
 				, o.outputData
 				, DataItem::output_buffer_size
-				//, p.l502Param.get<W<ChannelSamplingRate>>().value
 				, analog
 				, median
 				);
 
-			if(true)//frame.isBarGraph)
+			for(int i = 0; i < DataItem::output_buffer_size; ++i)
 			{
-				for(int i = 0; i < DataItem::output_buffer_size; ++i)
-				{
-					if(o.outputData[i] < 0) o.outputData[i] = -o.outputData[i];
-				}
+				if(o.outputData[i] < 0) o.outputData[i] = -o.outputData[i];
 			}
 
 			for(int i = 0; i < DataItem::output_buffer_size; ++i)
@@ -157,14 +116,7 @@ namespace Compute
 			o.deathZoneFirst =  int((double )o.deathZoneFirst * DataItem::output_buffer_size / rodLength);
 			o.deathZoneSecond =  DataItem::output_buffer_size - int((double )o.deathZoneSecond * DataItem::output_buffer_size / rodLength);
 
-			diff<O, typename WapperFiltre<W>::Result>()(o, (double)o.currentOffset / DataItem::output_buffer_size, adcRange, koef
-				, p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value
-				, p.medianFiltreWidth.get<W<MedianFiltreON>>().value
-				, p.l502Param.get<W<ChannelSamplingRate>>().value
-				, p.cutoffFrequency.get<W<CutoffFrequency>>().value
-				, p.cutoffFrequency.get<W<CutoffFrequencyON>>().value
-				);
-
+			diff<W>()(o, o.outputData);
 			o.result = STATUS_ID(Nominal);
 
 			for(int i = 0; i < DataItem::output_buffer_size; ++i)

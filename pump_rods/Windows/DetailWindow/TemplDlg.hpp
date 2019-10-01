@@ -25,25 +25,47 @@ namespace TemplDlg
 	{
 		L502ParametersTable::TItems &l502Param =  Singleton<L502ParametersTable>::Instance().items;
 		W<DataItem::Buffer> &o = Singleton<W<DataItem::Buffer>>::Instance();
-		Compute::ComputeFrame<typename WapperFiltre<W>::Result>()(
+
+		typedef typename WapperFiltre<W>::Result WFiltre;
+		WFiltre aFiltre;
+		Compute::Filtre analog;
+		if(frame.cutoffFrequencyON)
+		{
+			Compute::InitFiltre()(aFiltre
+				, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
+				, frame.cutoffFrequency
+				, frame.centerFrequency
+				, frame.widthFrequency
+				);
+			analog.Init<WFiltre>(&aFiltre, &WFiltre::operator());
+		}
+
+		MedianFiltre mFiltre;
+		Compute::Filtre median;
+		if(frame.medianFiltreON && frame.medianFiltreWidth > 2)
+		{
+			mFiltre.InitWidth(frame.medianFiltreWidth);
+			median.Init(&mFiltre, &MedianFiltre::operator());
+		}
+
+		Compute::ComputeFrame(
 			o.inputData
 			, 0
 			, o.currentOffset
-			, frame.cutoffFrequency
-			, frame.cutoffFrequencyON
-			, frame.medianFiltreWidth
-			, frame.medianFiltreON
 			, def.buffer
 			, DataItem::output_buffer_size
-			, l502Param.get<W<ChannelSamplingRate>>().value
+			, analog
+			, median
 			);
 
 		double adcRange =  100.0 / DataItem::ADC_RANGE(l502Param.get<W<RangeL502>>().value);
 		for(int i = 0; i < DataItem::output_buffer_size; ++i)
 		{
+			if(def.buffer[i] < 0) def.buffer[i] =-def.buffer[i];
 			def.buffer[i] *= adcRange * frame.koef;
 		}
 
+		Compute::diff<W>()(def, def.buffer);
 		for(int i = def.deathZoneFirst; i < def.deathZoneSecond; ++i)
 		{
 			double t = def.buffer[i];
@@ -87,7 +109,7 @@ struct DefOkBtn
 	}
 };
 
-template<template<class>class W>struct MedianFiltre
+template<template<class>class W>struct MedianFiltreDlg
 {
 	static void Do(HWND h)
 	{
@@ -118,6 +140,69 @@ TEMPL_MAX_EQUAL_VALUE(CutoffFrequency, 4000)
 TEMPL_PARAM_TITLE(CutoffFrequency, L"Частота отсечения фильтра")
 TEMPL_PARAM_TITLE(CutoffFrequencyON, L"Включение фильтра")
 
+template<template<class>class W>struct Dialog::NoButton<W<CutoffFrequency>>{};
+
+template<template<class>class W, class P>struct __command__<Dialog::NoButton<W<CutoffFrequency>>, P>
+{
+	typedef Dialog::NoButton<W<CutoffFrequency>> O;
+	bool operator()(O *o, P *p)
+	{
+		if(768 == p->e.isAcselerator)
+		{
+			typedef typename TL::Inner<O>::Result TVal;
+			HWND h = p->owner.items.get<Dialog::DlgItem2<TVal, P::Owner>>().hWnd;
+			//
+			if(p->e.hControl == h)
+			{
+				wchar_t buf[128];
+				GetWindowText(h, buf, dimention_of(buf));
+
+				typedef TemplWindow<W> Win;
+				HWND hWnd = GetWindow(p->e.hwnd, GW_OWNER);
+				Win &e = *(Win *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+				FrameViewer &frame =  e.viewers.get<FrameViewer>();
+				Win::Viewer &viewer = e.viewers.get<Win::Viewer>();
+
+				frame.cutoffFrequency =  Wchar_to<TVal::type_value>()(buf);
+
+				TemplDlg::Repaint<W>(viewer, frame);
+			}
+			return false;
+		}
+		return true;
+	}
+};
+
+template<template<class>class W>struct Dialog::NoButton<W<CutoffFrequencyON>>{};
+
+template<template<class>class W, class P>struct __command__<Dialog::NoButton<W<CutoffFrequencyON>>, P>
+{
+	typedef Dialog::NoButton<W<CutoffFrequencyON>> O;
+	bool operator()(O *o, P *p)
+	{
+		if(0 == p->e.isAcselerator)
+		{
+			typedef typename TL::Inner<O>::Result TVal;
+			HWND h = p->owner.items.get<Dialog::DlgItem2<TVal, P::Owner>>().hWnd;
+			//
+			if(p->e.hControl == h)
+			{
+				typedef TemplWindow<W> Win;
+				HWND hWnd = GetWindow(p->e.hwnd, GW_OWNER);
+				Win &e = *(Win *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+				FrameViewer &frame =  e.viewers.get<FrameViewer>();
+				Win::Viewer &viewer = e.viewers.get<Win::Viewer>();
+
+				frame.cutoffFrequencyON =  BST_CHECKED == Button_GetCheck(h);
+
+				TemplDlg::Repaint<W>(viewer, frame);
+			}
+			return false;
+		}
+		return true;
+	}
+};
+
 template<template<class> class W>struct FilterDlg
 {
 	static void Do(HWND h)
@@ -134,14 +219,22 @@ template<template<class> class W>struct FilterDlg
 			, W<CutoffFrequencyON>
 			>::Result
 			, 550
-			, TL::MkTlst<DefOkBtn, CancelBtn>::Result
+			, TL::MkTlst<DefOkBtn, CancelBtn
+			, Dialog::NoButton<W<CutoffFrequency>>
+			, Dialog::NoButton<W<CutoffFrequencyON>>
+			>::Result
 		>(par).Do(h, L"Настройки цифрового фильтра"))
 		{
 			frame.cutoffFrequency = par.items.get< W<CutoffFrequency>>().value;
 			frame.cutoffFrequencyON = par.items.get< W<CutoffFrequencyON>>().value;
-
-			Repaint<W>( e.viewers.get<Win::Viewer>(), frame);
 		}
+		else
+		{
+			AnalogFilterTable::TItems &t = Singleton<AnalogFilterTable>::Instance().items;
+			frame.cutoffFrequency = t.get< W<CutoffFrequency>>().value;
+			frame.cutoffFrequencyON = t.get< W<CutoffFrequencyON>>().value;
+		}
+		Repaint<W>( e.viewers.get<Win::Viewer>(), frame);
 	}
 };
 //---------------------------------------------------------------
@@ -353,14 +446,14 @@ template<template<class>class W>struct CorrectionSensorDlg
 	TEMPL_MENU_TEXT(L"Типоразмер", TypeSize)
 
 	TEMPL_MENU_ITEM(L"Настройки цифрового фильтра", TemplDlg::FilterDlg)
-	TEMPL_MENU_ITEM(L"Медианный фильтр", TemplDlg::MedianFiltre)
+	TEMPL_MENU_ITEM(L"Медианный фильтр", TemplDlg::MedianFiltreDlg)
 	TEMPL_MENU_ITEM(L"Корректировка датчика", TemplDlg::CorrectionSensorDlg)
 	TEMPL_MENU_ITEM(L"Пороги отбраковки", TemplDlg::TreshDlg)
 	//
 	template<template<class >class W>struct TopMenu<W<TypeSize>>
 	{
 		typedef typename TL::MkTlst<
-			 MenuItem<TemplDlg::MedianFiltre<W>>
+			 MenuItem<TemplDlg::MedianFiltreDlg<W>>
 			 , MenuItem<TemplDlg::FilterDlg<W>>
 			 , MenuItem<TemplDlg::TreshDlg<W>>
 			 , Separator<0>
@@ -398,7 +491,7 @@ template<template<class>class W>struct CorrectionSensorDlg
 	{
 		typedef typename TL::MkTlst<
 			TopMenu<MainFile>
-		//	, typename TopMenu<W<TypeSize>>
+			, typename TopMenu<W<TypeSize>>
 			, typename TopMenu<W<Options>>
 		>::Result menu_list;	
 	};
