@@ -538,6 +538,9 @@
     <ClCompile Include="DLG\StoredFilesDlg.cpp">
       <Filter>pump_rods\DLG</Filter>
     </ClCompile>
+    <ClCompile Include="Windows\DetailWindow\TemplDlg.cpp">
+      <Filter>Windows\DetailWindow</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ResourceCompile Include="..\Common\Resource\Resource.rc">

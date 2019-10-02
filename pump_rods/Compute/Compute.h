@@ -17,53 +17,6 @@ namespace Compute
 			return t;
 		}
 	};
-	//template<template<class>class>class Meander;
-	//
-	//template<>class Meander<StructSig>
-	//{
-	//	double mn, mx, pred;
-	//	bool changed;
-	//public:
-	//	Meander():  mn(0), mx(0), pred(0), changed(false)
-	//	{
-	//	}
-	//	double operator()(double x)
-	//	{
-	//		double res = 0;
-	//		if(pred < x)
-	//		{
-	//			if(x >= mx)mx = x;
-	//			res = -mn;
-	//			if(changed)
-	//			{
-	//				mx = 0;
-	//				changed ^= true;
-	//			}
-	//		}
-	//		else
-	//		{
-	//			if(x < mn)mn = x;
-	//			res = mx;
-	//			if(!changed)
-	//			{
-	//				mn = 0;
-	//				changed ^= true;
-	//			}
-	//		}
-	//		pred = x;
-	//		return res;
-	//	}
-	//};
-	//
-	//template<>class Meander<DefectSig>
-	//{
-	//public:
-	//	Meander(){}
-	//	double operator()(double next)
-	//	{
-	//		return next;
-	//	}
-	//};
 
 	template<template<class>class>struct diff
 	{
@@ -72,12 +25,10 @@ namespace Compute
 		}
 	};
 
-	template<>struct diff<StructSig>//, Filtre>
+	template<>struct diff<StructSig>
 	{
 		template<class O>void operator()(O &o, double(&d)[1000])
 		{
-
-		//	double *d = o.outputData;
 			double t = 0;
 			for(int j = 0; j < DataItem::output_buffer_size; ++j)
 			{
@@ -96,7 +47,7 @@ namespace Compute
 
 	struct InitFiltre
 	{
-		template<class T>void operator()(T &analogFiltre, int samplingRate, int cutoffFrequency, int, int)
+		template<class T>void operator()(T &analogFiltre, int samplingRate, int cutoffFrequency, int, int, int)
 		{
 			analogFiltre.Setup(
 				samplingRate
@@ -105,28 +56,28 @@ namespace Compute
 				);
 		}
 
-		void operator()(BandPassFiltre &analogFiltre, int samplingRate, int cutoffFrequency, int centerFrequency, int widthFrequency)
+		void operator()(BandPassFiltre &analogFiltre, int samplingRate, int cutoffFrequency, int centerFrequency, int widthFrequency, int)
 		{
 			analogFiltre.Setup(
 				samplingRate
-				//, Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<WidthFrequency>>().value
 				, widthFrequency
 				, centerFrequency
 				, 1
 				);
 		}
 
-		void operator()(DoubleFiltre &analogFiltre, int samplingRate, int cutoffFrequency, int centerFrequency, int widthFrequency)
+		void operator()(DoubleFiltre &analogFiltre, int samplingRate, int cutoffFrequency, int centerFrequency, int widthFrequency, int typeFiltre)
 		{
-			switch(Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<TypeFiltre>>().value)
+			//switch(Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<TypeFiltre>>().value)
+			switch(typeFiltre)
 			{
 			case TypeLowFiltre:
-				(*this)(analogFiltre.lowFiltre, samplingRate, cutoffFrequency, 0, 0);
+				(*this)(analogFiltre.lowFiltre, samplingRate, cutoffFrequency, 0, 0, 0);
 				analogFiltre.o = (DoubleFiltre::O *)&analogFiltre.lowFiltre;
 				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&LowFiltre::operator();
 				break;
 			case TypeBandPassFiltre: 
-				(*this)(analogFiltre.bandPassFiltre, samplingRate, 0, centerFrequency, widthFrequency);
+				(*this)(analogFiltre.bandPassFiltre, samplingRate, 0, centerFrequency, widthFrequency, 0);
 				analogFiltre.o = (DoubleFiltre::O *)&analogFiltre.bandPassFiltre;
 				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&BandPassFiltre::operator();
 				break;

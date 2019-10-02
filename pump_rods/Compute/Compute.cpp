@@ -49,7 +49,10 @@ namespace Compute
 	{
 		template<class O>typename int operator()(O &o){return 0;}
 	};
-
+	//template<>struct __wapper_filtre__<StructSig<TypeFiltre>>
+	//{
+	//	template<class O>typename bool operator()(O &o){return false;}
+	//};
 
 	template<class O, class P>struct __recalculation__;
 	template<class T, template<class>class W, class P>struct __recalculation__<W<T>, P>
@@ -82,6 +85,7 @@ namespace Compute
 					, p.cutoffFrequency.get<W<CutoffFrequency>>().value
 					, __wapper_filtre__<W<CenterFrequency>>()(p.cutoffFrequency)
 					, __wapper_filtre__<W<WidthFrequency>>()(p.cutoffFrequency)
+					, Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<TypeFiltre>>().value
 					);
 				analog.Init<WFiltre>(&aFiltre, &WFiltre::operator());
 			}

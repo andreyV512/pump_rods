@@ -4,7 +4,6 @@
 #include "FrameViewer.h"
 #include "TemplDlg.hpp"
 #include "App/App.h"
-//#include "Compute\Compute.h"
 
 template<template<class>class W>struct __main_window_viewer__;
 template<>struct __main_window_viewer__<StructSig>
@@ -54,12 +53,21 @@ template<template<class>class W>bool TemplWindow<W>::Viewer::Draw(TMouseMove &l,
 		int x;
 		CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 		W<DataItem::Buffer> &item = Singleton<W<DataItem::Buffer>>::Instance();
-		//owner->offs = int((double)x * currentOffset / DataItem::output_buffer_size);
 		owner->offs = int((double)x * item.secondOffset / DataItem::output_buffer_size);
 		owner->ChangeFrame(owner->offs);	
 	}
 	return true;
 }
+
+template<template<class>class, class>struct __param_filtre__
+{
+	int operator()(){return 0;}
+};
+
+template<class P>struct __param_filtre__<DefectSig, P>
+{
+	int operator()(){return Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<P>>().value;}
+};
 
 template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 {
@@ -99,7 +107,9 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 	frame.cutoffFrequencyON = Singleton<AnalogFilterTable>::Instance().items.get<W<CutoffFrequencyON>>().value;
 	frame.cursor.SetMouseMoveHandler(&frame, &FrameViewer::DrawFrame); 
 	frame.koef = Singleton<KoeffSignTable>::Instance().items.get<W<KoeffSign>>().value;
-	
+	frame.typeFiltre = __param_filtre__<W, TypeFiltre>()();
+	frame.centerFrequency = __param_filtre__<W, CenterFrequency>()();
+	frame.widthFrequency = __param_filtre__<W, WidthFrequency>()();
 
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
 	return 0;
@@ -178,6 +188,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 			, frame.cutoffFrequency
 			, frame.centerFrequency
 			, frame.widthFrequency
+			, frame.typeFiltre
 			);
 		analog.Init<WFiltre>(&aFiltre, &WFiltre::operator());
 	}

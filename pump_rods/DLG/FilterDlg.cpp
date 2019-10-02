@@ -31,12 +31,11 @@ PARAM_TITLE(__def_low_param__, L"Дефектоскопия")
 	typedef GROUP_BOX(StructSig<CutoffFrequency>, StructSig<CutoffFrequencyON>) __str_param__;
 PARAM_TITLE(__str_param__, L"Структура")
 
-	const wchar_t *typeFiltreNames[] ={L"Низкочастотный фильтр", L"Полосовой фильтр"};
-
 template<>struct FillComboboxList<DefectSig<TypeFiltre>>			 
 {															 
 	void operator()(HWND h, DefectSig<TypeFiltre> &t)			 
-	{														 
+	{	
+		static const wchar_t *typeFiltreNames[] ={L"Низкочастотный фильтр", L"Полосовой фильтр"};
 		for(int i = 0; i < dimention_of(typeFiltreNames); ++i)	
 		{													 
 			ComboBox_AddString(h, typeFiltreNames[i]);			 
@@ -47,7 +46,7 @@ template<>struct CurrentValue<DefectSig<TypeFiltre>>
 {															 
 	void operator()(HWND h, DefectSig<TypeFiltre> &t)			 
 	{		
-		ComboBox_SetCurSel(h, t.value);//Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<TypeFiltre>>().value);
+		ComboBox_SetCurSel(h, t.value);
 	}
 };
 template<>struct DlgSubItems<DefectSig<TypeFiltre>, int>: ComboBoxSubItem<DefectSig<TypeFiltre>>{};
@@ -55,11 +54,11 @@ template<>struct DlgSubItems<DefectSig<TypeFiltre>, int>: ComboBoxSubItem<Defect
 DO_NOT_CHECK(DefectSig<TypeFiltre>)
 
 
-template<>struct NoButton<DefectSig<TypeFiltre>>{};
+template<>struct Dialog::NoButton<DefectSig<TypeFiltre>>{};
 
-template<class P>struct __command__<NoButton<DefectSig<TypeFiltre>>, P>
+template<class P>struct __command__<Dialog::NoButton<DefectSig<TypeFiltre>>, P>
 {
-	typedef NoButton<DefectSig<TypeFiltre>> O;
+	typedef Dialog::NoButton<DefectSig<TypeFiltre>> O;
 	bool operator()(O *o, P *p)
 	{
 		if(1 == p->e.isAcselerator)
@@ -76,8 +75,8 @@ template<class P>struct __command__<NoButton<DefectSig<TypeFiltre>>, P>
 					p->owner.additionalData->changed = true;
 					EndDialog(p->e.hwnd, FALSE);
 				}
-			}
-			return false;
+				return false;
+			}			
 		}
 		return true;
 	}
@@ -142,7 +141,7 @@ void FilterDlg::Do(HWND h)
 					, __str_param__			
 					>::Result
 					, 550
-					, TL::MkTlst<OkBtn, CancelBtn, NoButton<DefectSig<TypeFiltre>>>::Result
+					, TL::MkTlst<OkBtn, CancelBtn, Dialog::NoButton<DefectSig<TypeFiltre>>>::Result
 					, AdditionalParams
 					>(table, &typeLowFiltre).Do(h, L"Настройки низкочастотного фильтра"))
 				{
@@ -159,7 +158,7 @@ void FilterDlg::Do(HWND h)
 					, __str_param__
 					>::Result
 					, 550
-					, TL::MkTlst<OkBtn, CancelBtn, NoButton<DefectSig<TypeFiltre>>>::Result
+					, TL::MkTlst<OkBtn, CancelBtn, Dialog::NoButton<DefectSig<TypeFiltre>>>::Result
 					, AdditionalParams
 					>(table, &typeBandPassFiltre).Do(h, L"Настройки полосового фильтра"))
 				{

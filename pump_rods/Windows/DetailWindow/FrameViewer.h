@@ -69,13 +69,14 @@ public:
 
 	int centerFrequency;
 	int widthFrequency;
+	int typeFiltre;
 
 	bool cutoffFrequencyON;
 	bool medianFiltreON;
 	double delta;
 	double koef;
 	bool isBarGraph;
-
+	
 	FrameViewer();
 
 	bool GetColorBar(int , double &, unsigned &);

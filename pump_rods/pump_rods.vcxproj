@@ -226,6 +226,7 @@
     <ClCompile Include="DLG\TresholdsDlg.cpp" />
     <ClCompile Include="DLG\TypeSizeDlg.cpp" />
     <ClCompile Include="Windows\DetailWindow\FrameViewer.cpp" />
+    <ClCompile Include="Windows\DetailWindow\TemplDlg.cpp" />
     <ClCompile Include="Windows\MainWindow\AppKeyHandler.cpp" />
     <ClCompile Include="Windows\MainWindow\MainWindow.cpp" />
     <ClCompile Include="Windows\MainWindow\MainWindowToolBar.cpp" />
