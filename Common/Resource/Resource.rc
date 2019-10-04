@@ -74,6 +74,7 @@ IDB_RightArrow64        BITMAP                  "..\\Common\\Resource\\RightArr.
 IDB_TrashCanFull        BITMAP                  "..\\Common\\Resource\\trashcan_full.bmp"
 IDB_Ok                  BITMAP                  "..\\Common\\Resource\\ok.bmp"
 IDB_Continue            BITMAP                  "..\\Common\\Resource\\continue.bmp"
+IDB_OkTumb              BITMAP                  "..\\Common\\Resource\\ok-tumb.bmp"
 
 /////////////////////////////////////////////////////////////////////////////
 //

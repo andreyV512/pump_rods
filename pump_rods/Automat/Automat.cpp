@@ -27,6 +27,8 @@ namespace Automat
 
 	HANDLE Key<Status::contine_btn>::hEvent;
 
+	int sortResult = 0;
+
 	Result::Result()
 		: inputs_bits(Singleton<InputBitTable>::Instance().items)
 	{}
@@ -113,11 +115,11 @@ namespace Automat
 		{
 			for(;;)
 			{
-				AppKeyHandler::Continue();
+				AppKeyHandler::Stop();
 				//ожидание нажатия кнопки СТАРТ
 				if(App::IsRun())
 				{
-					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
+					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>);//, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
 					if(result.ret == Status::contine_btn) sortOnce = false;
 				}
 				App::IsRun() = false;
@@ -239,6 +241,7 @@ namespace Automat
 				{
 					OUT_BITS(Off<oC2>);
 				}
+				sortResult = res;
 				//прерывание на просмотр
 				if(App::InterruptView() || !sortOnce)
 				{
@@ -293,5 +296,40 @@ namespace Automat
 			}
 		}
 		return 0;
+	}
+
+	void UpSort()
+	{
+		--sortResult;
+		sortResult &= 3;
+		int res = sortResult;
+		if(0 != (res & 2))
+		{
+			OUT_BITS(On<oC1>);
+		}
+		else
+		{
+			OUT_BITS(Off<oC1>);
+		}
+		if(0 != (res & 1))
+		{
+			OUT_BITS(On<oC2>);
+		}
+		else
+		{
+			OUT_BITS(Off<oC2>);
+		}
+		if(0 == res)
+		{
+			Log::Mess<LogMess::Brak>();
+			App::StatusBar(0, L"Брак");
+		}
+		else
+		{
+			wchar_t buf[32];
+			wsprintf(buf, L"Сорт %d", res);
+			App::StatusBar(0, buf);
+			Log::Mess<LogMess::Copt>(res);
+		}
 	}
 }

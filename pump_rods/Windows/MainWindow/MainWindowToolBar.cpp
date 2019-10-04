@@ -7,6 +7,7 @@
 #include "MainWindow.h"
 #include "Automat\Automat.h"
 #include "Automat\EquipmentCheck.h"
+#include "window_tool/Emptywindow.h"
 
 namespace 
 {
@@ -22,6 +23,7 @@ namespace
 	KEY(IDB_Reset      , L"Esc Стоп")
 	KEY(IDB_QueryBtn   , L"Тест")
 	KEY(IDB_Continue, L"F11 Повтор")
+	KEY(IDB_OkTumb, L"F8 Норма")
 #undef KEY
 #define BUTTON_KEY(ID)ButtonToolbar<ID, Key<ID> > 
 		typedef TL::MkTlst<
@@ -29,8 +31,7 @@ namespace
 		, BUTTON_KEY(IDB_CycleBtn)
 		, BUTTON_KEY(IDB_Continue)
 		, BUTTON_KEY(IDB_Reset)
-	//	, BUTTON_KEY(IDB_QueryBtn) 		
-	//	, BUTTON_KEY(IDB_Ok) 		
+		, BUTTON_KEY(IDB_OkTumb)
 		, SeparatorToolbar<1>
 #ifdef DEBUG_ITEMS
 		, BUTTON_KEY(IDB_arrow_down) 
@@ -41,28 +42,6 @@ namespace
 #endif
 		>::Result tool_button_list;
 #undef BUTTON_KEY
-	//namespace closed_window
-	//{		
-	//	//typedef TL::MkTlst<
-	//	//	WindowClass<CrossWindow		>
-	//	//	, WindowClass<LongWindow		>
-	//	//	, WindowClass<ThickWindow	>
-	//	//	, WindowClass<ScanWindow		>
-	//	//>::Result window_list;
-	//	template<class O, class P>struct __close_window__
-	//	{
-	//		void operator()()
-	//		{
-	//			HWND hh = FindWindow(O()(), NULL);
-	//	    	if(NULL != hh) DestroyWindow(hh);
-	//		}
-	//	};
-	//
-	//	void close_window()
-	//	{
-	//		//TL::foreach<window_list, __close_window__>()();
-	//	}
-	//}
 //----------------------------------------------------------------------------------
 	static bool closed_packet_dialog = true;
 	static bool run_once_per_sycle = false;
@@ -83,6 +62,26 @@ namespace
 	void Key<IDB_Reset>::Click(HWND h)
 	{
 		Automat::Stop();
+	}
+/////////////////////////////////////////////////////////////////////////////////
+	HANDLE handleTimer = INVALID_HANDLE_VALUE;
+	VOID CALLBACK WaitOrTimerCallback(PVOID lpParameter, BOOLEAN TimerOrWaitFired)
+	{
+		HWND hWnd = FindWindow(WindowClass<MainWindow>()(), 0);
+		if(NULL != hWnd)
+		{
+			MainWindow *w = (MainWindow *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
+			SendMessage(w->toolBar.hWnd, TB_ENABLEBUTTON, TL::IntToType<IDB_OkTumb>::value, MAKELONG(TRUE, 0));
+		}
+		DeleteTimerQueueTimer(NULL, handleTimer, NULL);
+	}
+//////////////////////////////////////////////////////////////////////////////////
+	void Key<IDB_OkTumb>::Click(HWND h)
+	{
+		MainWindow *w = (MainWindow *)GetWindowLongPtr(h, GWLP_USERDATA);
+		SendMessage(w->toolBar.hWnd, TB_ENABLEBUTTON, TL::IntToType<IDB_OkTumb>::value, MAKELONG(FALSE, 0));
+		CreateTimerQueueTimer(&handleTimer, NULL, WaitOrTimerCallback, NULL, 2000, 0, WT_EXECUTEONLYONCE);
+		Automat::UpSort();
 	}
 }
 //--------------------------------------------------------------------------------------------
