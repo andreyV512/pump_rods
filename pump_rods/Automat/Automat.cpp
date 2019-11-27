@@ -148,6 +148,11 @@ namespace Automat
 					//выставлен сигнал DC_ON2
 					OUT_BITS(On<oDC_ON2>);
 				}
+				else
+				{
+					OUT_BITS(On<oAC_ON>);
+				}
+					
 				{
 					//сбор данных
 					Log::Mess<LogMess::DataCollectionDEF>();
@@ -161,12 +166,19 @@ namespace Automat
 					//, при превышении сбора 120 сек выход из цикла
 					AND_BITS(120000, Key<Status::stop>, Off<iP1>,Test<On<iCU>, On<iCycle>>);
 				}
-					OUT_BITS(Off<oStart>);
-				//отключение сигнала DC_ON2
-				OUT_BITS(Off<oDC_ON2>);
-				Sleep(2000);
-				//отключение сигнала DC_ON1
-  		    	OUT_BITS(Off<oDC_ON1>);
+				OUT_BITS(Off<oStart>);
+				if(dCheck)
+				{
+					//отключение сигнала DC_ON2
+					OUT_BITS(Off<oDC_ON2>);
+					Sleep(2000);
+					//отключение сигнала DC_ON1
+					OUT_BITS(Off<oDC_ON1>);
+				}
+				else
+				{
+					OUT_BITS(Off<oAC_ON>);
+				}
 
 				//убеждаемся что сигнал  отключён
 		      AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
