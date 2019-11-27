@@ -178,6 +178,7 @@ namespace Automat
 				else
 				{
 					OUT_BITS(Off<oAC_ON>);
+					Sleep(2000);
 				}
 
 				//убеждаемся что сигнал  отключён
