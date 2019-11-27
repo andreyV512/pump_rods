@@ -68,40 +68,6 @@ namespace Automat
 	{
 		SetEvent(Key<Status::contine_btn>::hEvent);
 	}
-	/*
-	if(sortOnce)
-				{
-					//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-					AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iCU>, On<iCycle>>);
-					dprint("x 3\n");
-					//чтение дискретного рорта
-					unsigned bits = device1730.Read();
-					//чтение сигнала П1 и П2
-					c1c2  = 0 != (bits & (1 << result.inputs_bits.get<iP1>().value))? 2: 0;
-					c1c2 |= 0 != (bits & (1 << result.inputs_bits.get<iP2>().value))? 1: 0;
-				}
-	*/
-	//unsigned c1c2 = 0;
-	//struct BlockSort
-	//{
-	//	static unsigned start;
-	//	BlockSort()
-	//	{
-	//		start =  Performance::Counter();
-	//		start += 5000;
-	//	}
-	//	static void Do(Automat::Result &result)
-	//	{
-	//		if(result.bits & result.inputs_bits.get<iCOPT>().value)
-	//		{
-	//			c1c2  = 0 != (result.bits & result.inputs_bits.get<iP1>().value)? 2: 0;
-	//			c1c2 |= 0 != (result.bits & result.inputs_bits.get<iP2>().value)? 1: 0;
-	//			result.ret = Status::contine;
-	//		}
-	//		else if(result.currentTime > start)result.ret = Status::contine;
-	//	}
-	//};
-	//unsigned BlockSort::start;
 //-----------------------------------------------------------------------------------
 	DWORD WINAPI  Loop(PVOID)
 	{
@@ -119,12 +85,14 @@ namespace Automat
 				//ожидание нажатия кнопки СТАРТ
 				if(App::IsRun())
 				{
-					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>);//, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
+					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>);
 					if(result.ret == Status::contine_btn) sortOnce = false;
 				}
 				App::IsRun() = false;
 				App::StatusBar(0, L"");
 				dprint("AUTOMAT_RUN------------------------------\n");
+
+				bool dCheck = Singleton<OnTheJobTable>::Instance().items.get<DefectSig<Check>>().value;
 
 				//очистить главное окно
 				App::CleanViewers();
@@ -161,9 +129,12 @@ namespace Automat
 					}
 				}
 				AND_BITS(-1, Key<Status::stop>, On<iCU>, On<iCycle>);
-				//выставлен сигнал DC_ON1
-				OUT_BITS(On<oDC_ON1>);
-				AND_BITS(30 * 1000, Key<Status::stop>, On<iKM2_DC>, Test<On<iCU>, On<iCycle>>);
+				if(dCheck)
+				{
+					//выставлен сигнал DC_ON1
+					OUT_BITS(On<oDC_ON1>);
+					AND_BITS(30 * 1000, Key<Status::stop>, On<iKM2_DC>, Test<On<iCU>, On<iCycle>>);
+				}
 				//ВЫСТАВЛЕН СИГНАЛ ПУСК
 				OUT_BITS(On<oStart>);
 				//ожидание выключения сигналов СОРТ, П1, П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
@@ -172,8 +143,11 @@ namespace Automat
 				AND_BITS(30 * 1000, Key<Status::stop>, On<iControl> ,Test<On<iCU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ и П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
 				AND_BITS(30 * 1000, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iCU>, On<iCycle>>);
-				//выставлен сигнал DC_ON2
-				OUT_BITS(On<oDC_ON2>);
+				if(dCheck)
+				{
+					//выставлен сигнал DC_ON2
+					OUT_BITS(On<oDC_ON2>);
+				}
 				{
 					//сбор данных
 					Log::Mess<LogMess::DataCollectionDEF>();
