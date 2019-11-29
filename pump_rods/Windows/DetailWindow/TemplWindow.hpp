@@ -134,7 +134,8 @@ template<>struct diff_templ<StructSig>
 		{
 			if(arr[i] < 0) arr[i] =-arr[i];
 			arr[i] -= o.structMinVal;
-			if(arr[i] < 0) arr[i] = 0;
+			//if(arr[i] < 0) arr[i] = 0;
+			if(arr[i] < 0) arr[i] = -arr[i];
 		}
 	}
 };
