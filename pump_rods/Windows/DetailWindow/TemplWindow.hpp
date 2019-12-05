@@ -140,29 +140,21 @@ template<>struct diff_templ<StructSig>
 	}
 };
 
-//template<template<class>class>class MeanderX
-//{
-//public:
-//	static bool b;
-//	MeanderX(){}
-//	double operator()(double next)
-//	{
-//		return next;
-//	}
-//};
-//template<template<class>class T>bool MeanderX<T>::b;
-//
-//template<>class MeanderX<StructSig>: public Compute::Meander<StructSig>
-//{	
-//public:
-//	static bool b;
-//	double operator()(double next)
-//	{
-//		if(b) return Compute::Meander<StructSig>::operator()(next);
-//		return next;
-//	}
-//};
-//bool MeanderX<StructSig>::b;
+template<template<class>class>struct __get_ampl__
+{
+	template<class O>double *operator()(O &o)
+	{
+		return o.inputData;
+	}
+};
+
+template<>struct __get_ampl__<StructSig>
+{
+	template<class O>double *operator()(O &o)
+	{
+		return o.inputDataX;
+	}
+};
 
 template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 {
@@ -202,49 +194,18 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 		median.Init(&mFiltre, &MedianFiltre::operator());
 	}
 
+	double *d = frame.isBarGraph ? __get_ampl__<W>()(item):item.inputData;
+
 	Compute::ComputeFrame(
-		&item.inputData[item.firstOffset], offs
+		&d[item.firstOffset], offs
 		, frameWidth
-		//, frame.cutoffFrequency
-		//, frame.cutoffFrequencyON
-		//, frame.medianFiltreWidth
-		//, frame.medianFiltreON
 		, tbuf
 		, tbuf_size
 		, analog
 		, median
-		//	, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
-		//, frame.isBarGraph
 		);
 
-	//if(frame.isBarGraph)
-	//{
-	//	//for(int i = 0; i < tbuf_size; ++i)
-	//	//{
-	//	//	if(tbuf[i] < 0) tbuf[i] = -tbuf[i];
-	//	//}
-	//	//diff_templ<W>
-	//}
-
-	//double *ar = &tbuf[offs_b];
-	//
-	//if(frame.isBarGraph)
-	//{
-	//	for(int i = 0; i <  dimention_of(frame.buffer); ++i)
-	//	{
-	//		if(ar[i] < 0) ar[i] = -ar[i];
-	//	}
-	//	//diff_templ<W>
-	//}
-
 	memmove(frame.buffer, &tbuf[offs_b], sizeof(frame.buffer));
-
-	//double last = 0;
-	//for(int i = 0; i < dimention_of(frame.buffer); ++i)
-	//{
-	//	if(0.0 == ar[i]) frame.buffer[i] = last;
-	//	else last = frame.buffer[i] = ar[i];
-	//}
 
 	if(frame.isBarGraph)
 	{
@@ -278,8 +239,12 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 
 	DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;
 	int rodLength = dead.get<RodLenght>().value;
-	frame.deathZoneFirst	= 0;//int((double)dead.get<W<First<DeathZone>>>().value * item.currentOffset / rodLength); 
-	frame.deathZoneSecond	= item.currentOffset;// -  int((double)dead.get<W<Second<DeathZone>>>().value * item.currentOffset / rodLength); 
+
+////	item.deathZoneFirst =  int((double )item.deathZoneFirst * DataItem::output_buffer_size / rodLength);
+	//item.deathZoneSecond =  DataItem::output_buffer_size - int((double )item.deathZoneSecond * DataItem::output_buffer_size / rodLength);
+
+	frame.deathZoneFirst	= 0;
+	frame.deathZoneSecond	= item.currentOffset;
 
 	frame.deathZoneColor	= viewer.deathZoneColor	; 	
 	frame.threshDefect	 	= viewer.threshDefect	 	;

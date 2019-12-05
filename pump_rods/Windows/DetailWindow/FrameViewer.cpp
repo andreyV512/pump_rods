@@ -28,6 +28,7 @@ bool FrameViewer::GetColorBar(int zone_, double &data, unsigned &color)
 		else if(xzone > deathZoneSecond)color = deathZoneColor;
 		else if(data > threshDefect) color = threshDefectColor;
 		else if(data > threshSortDown) color = threshSortDownColor;
+		if(tchart.maxAxesY < data) data = tchart.maxAxesY;
 	}
 	return zone < dimention_of(buffer);
 }

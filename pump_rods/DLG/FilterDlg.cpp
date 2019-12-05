@@ -2,15 +2,15 @@
 #include "DlgTemplates\ParamDlgNew.h"
 
 MIN_EQUAL_VALUE(DefectSig<CenterFrequency>, 0)
-	MAX_EQUAL_VALUE(DefectSig<CenterFrequency>, 1000)
+	MAX_EQUAL_VALUE(DefectSig<CenterFrequency>, 4000)
 	PARAM_TITLE(DefectSig<CenterFrequency>, L"Средняя частота фильтра")
 
 	MIN_EQUAL_VALUE(DefectSig<WidthFrequency>, 0)
-	MAX_EQUAL_VALUE(DefectSig<WidthFrequency>, 1000)
+	MAX_EQUAL_VALUE(DefectSig<WidthFrequency>, 4000)
 	PARAM_TITLE(DefectSig<WidthFrequency>, L"Ширина пропускания фильтра")
 
 	MIN_EQUAL_VALUE(DefectSig<CutoffFrequency>, 0)
-	MAX_EQUAL_VALUE(DefectSig<CutoffFrequency>, 1000)
+	MAX_EQUAL_VALUE(DefectSig<CutoffFrequency>, 4000)
 	PARAM_TITLE(DefectSig<CutoffFrequency>, L"Частота отсечения фильтра")
 
 	PARAM_TITLE(DefectSig<TypeFiltre>, L"Тип фильтра")
@@ -18,7 +18,7 @@ MIN_EQUAL_VALUE(DefectSig<CenterFrequency>, 0)
 	PARAM_TITLE(DefectSig<CutoffFrequencyON>, L"Включение фильтра")
 
 	MIN_EQUAL_VALUE(StructSig<CutoffFrequency>, 0)
-	MAX_EQUAL_VALUE(StructSig<CutoffFrequency>, 1000)
+	MAX_EQUAL_VALUE(StructSig<CutoffFrequency>, 4000)
 	PARAM_TITLE(StructSig<CutoffFrequency>, L"Частота отсечения фильтра")
 	PARAM_TITLE(StructSig<CutoffFrequencyON>, L"Включение фильтра")
 

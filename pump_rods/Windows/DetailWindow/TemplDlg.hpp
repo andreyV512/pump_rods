@@ -30,6 +30,11 @@ namespace TemplDlg
 		L502ParametersTable::TItems &l502Param =  Singleton<L502ParametersTable>::Instance().items;
 		W<DataItem::Buffer> &o = Singleton<W<DataItem::Buffer>>::Instance();
 
+	//	int rodLength = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;
+
+	//	o.firstOffset =  unsigned((double)o.deathZoneFirst * o.currentOffset / rodLength);
+	//		o.secondOffset =  o.currentOffset - unsigned((double)o.deathZoneSecond * o.currentOffset / rodLength) - o.firstOffset;
+
 		typedef typename WapperFiltre<W>::Result WFiltre;
 		WFiltre aFiltre;
 		Compute::Filtre analog;
@@ -54,9 +59,9 @@ namespace TemplDlg
 		}
 
 		Compute::ComputeFrame(
-			o.inputData
-			, 0
-			, o.currentOffset
+			Compute::get_ampl<W>()(o)
+			, o.firstOffset
+			, o.secondOffset
 			, def.buffer
 			, DataItem::output_buffer_size
 			, analog
@@ -71,7 +76,7 @@ namespace TemplDlg
 		}
 
 		Compute::diff<W>()(def, def.buffer);
-		for(int i = def.deathZoneFirst; i < def.deathZoneSecond; ++i)
+		for(int i = 0; i < DataItem::output_buffer_size; ++i)
 		{
 			double t = def.buffer[i];
 			if(t > frame.threshDefect)
@@ -87,14 +92,14 @@ namespace TemplDlg
 				def.status[i] = STATUS_ID(Nominal);
 			}
 		}
-		for(int i = 0; i < def.deathZoneFirst; ++i)
-		{
-			def.status[i] = STATUS_ID(DeathZone);
-		}
-		for(int i = def.deathZoneSecond; i < dimention_of(def.status); ++i)
-		{
-			def.status[i] = STATUS_ID(DeathZone);
-		}
+		//for(int i = 0; i < def.deathZoneFirst; ++i)
+		//{
+		//	def.status[i] = STATUS_ID(DeathZone);
+		//}
+		//for(int i = def.deathZoneSecond; i < dimention_of(def.status); ++i)
+		//{
+		//	def.status[i] = STATUS_ID(DeathZone);
+		//}
 
 		RepaintWindow(def.hWnd);
 		RepaintWindow(frame.hWnd);
@@ -377,6 +382,13 @@ template<template<class>class W>struct CorrectionSensorDlg
 			, __test_change_param__<ThresholdsTable  , DefectSig<Thresh<Defect>>   , FrameViewer  , double,    &FrameViewer::threshDefect>
 		>::Result Result;
 	};
+	/*
+	DeadAreaTable
+	DefectSig<First<DeathZone>>
+		, DefectSig<Second<DeathZone>>
+		, StructSig<First<DeathZone>>
+		, StructSig<Second<DeathZone>>
+	*/
 
 	template<class O, class P>struct __test_param__;
 	template<class Table, class Item, class Param, class Type, Type Param::*X, class P>struct __test_param__<__test_change_param__<Table, Item, Param, Type, X>, P>
