@@ -34,9 +34,6 @@ namespace Compute
 		{}
 	};
 
-	
-
-
 	template<class T>struct __wapper_filtre__
 	{
 		template<class O>typename T::type_value operator()(O &o){return o.get<T>().value;}
@@ -49,10 +46,6 @@ namespace Compute
 	{
 		template<class O>typename int operator()(O &o){return 0;}
 	};
-	//template<>struct __wapper_filtre__<StructSig<TypeFiltre>>
-	//{
-	//	template<class O>typename bool operator()(O &o){return false;}
-	//};
 
 	template<class O, class P>struct __recalculation__;
 	template<class T, template<class>class W, class P>struct __recalculation__<W<T>, P>
@@ -60,7 +53,6 @@ namespace Compute
 		typedef W<T> O;
 		void operator()(P &p)
 		{
-			zprint("\n");
 			if(!Singleton<OnTheJobTable>::Instance().items.get<W<Check>>().value) return;
 			O &o = Singleton<O>::Instance();
 			double adcRange =  100.0 / DataItem::ADC_RANGE(p.l502Param.get<W<RangeL502>>().value);
@@ -99,7 +91,7 @@ namespace Compute
 			}
 			//-------------------------
 			Compute::ComputeFrame(
-				o.inputData, o.firstOffset
+				get_ampl<W>()(o), o.firstOffset
 				, o.secondOffset
 				, o.outputData
 				, DataItem::output_buffer_size
@@ -160,36 +152,7 @@ namespace Compute
 		typedef W<T> Result;
 	};
 
-	template<class O, class P>struct __set_data__
-	{
-		void operator()(P &p)
-		{
-			typedef Viewer<O>::Result V;
-			V &v = p.get<Viewer<O>::Result>();
-			O &item = Singleton<O>::Instance();
-			if(Singleton<OnTheJobTable>::Instance().items.get<typename ChangeWapper<O, Check>::Result>().value)
-			{
-				memmove(v.buffer, item.outputData, sizeof(v.buffer));
-				memmove(v.status, item.status, sizeof(v.status));
-				v. deathZoneFirst = item.deathZoneFirst;
-				v.deathZoneSecond = item.deathZoneSecond;
-				v.threshSortDown = item.threshSortDown; 
-				v.threshDefect = item.threshDefect;
-				v.result = item.result;
-				v.tchart.maxAxesX = item.currentOffset - 1;
-				v.currentOffset = item.currentOffset;
-				v.inputData = item.inputData;
-				v.count = DataItem::output_buffer_size;
-			}
-			else
-			{
-				memset(v.buffer, 0, sizeof(v.buffer));
-				memset(v.status, STATUS_ID(SensorOff), sizeof(v.status));
-				v.result = STATUS_ID(SensorOff);
-				v.count = 0;
-			}
-		}
-	};
+	
 
 	void ComputeResult()
 	{
@@ -268,14 +231,10 @@ namespace Compute
 		}
 	}
 
-	void ComputeFrame(double *inputData, int offs, int inputLenght, double *outputData, int outputLength, Filtre &analogFiltre, Filtre &medianFiltre)//, bool wave)
+	void ComputeFrame(double *inputData, int offs, int inputLenght, double *outputData, int outputLength, Filtre &analogFiltre, Filtre &medianFiltre)
 	{
 		for(int i = 0; i < offs; ++i)
 		{
-			//double t = ;
-			//if(medianON) t = filtre(inputData[i]);
-			//if(cutoffFrequencyON) t = analogFiltre(t);
-			//meander(t);
 			double t = medianFiltre(inputData[i]);
 			t = analogFiltre(t); 
 		}
@@ -290,13 +249,11 @@ namespace Compute
 		{
 			double t = medianFiltre(inputData[i]);
 			t = analogFiltre(t);
-			//	t = meander(t);
 			int k = int(i / delta);
 			if(k >= outputLength) break;
-			//double absT = t > 0 ? t: -t;
 			if(abs(t) > abs(outputData[k]))
 			{
-				outputData[k] = t;//wave? absT: t;
+				outputData[k] = t;
 			}
 		}
 	}
