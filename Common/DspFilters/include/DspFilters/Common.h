@@ -33,32 +33,34 @@ THE SOFTWARE.
 
 *******************************************************************************/
 
-#ifndef DSPFILTERS_DESIGN_H
-#define DSPFILTERS_DESIGN_H
+#ifndef DSPFILTERS_COMMON_H
+#define DSPFILTERS_COMMON_H
 
-#include "Common.h"
-#include "Params.h"
+//
+// This must be the first file included in every DspFilters header and source
+//
 
-namespace Dsp {
+#ifdef _MSC_VER
+#  pragma warning (disable: 4100)
+#endif
 
-struct DesignBase
-{
-  // Sampling rate is the first param for every Design filter
-  static const ParamInfo getParamInfo_0 ()
-  {
-    return ParamInfo::defaultSampleRateParam ();
-  }
+//#include <assert.h>
+#include <stdlib.h>
 
-  // These should never get called
-  static const ParamInfo getParamInfo_1 () { return ParamInfo(); }
-  static const ParamInfo getParamInfo_2 () { return ParamInfo(); }
-  static const ParamInfo getParamInfo_3 () { return ParamInfo(); }
-  static const ParamInfo getParamInfo_4 () { return ParamInfo(); }
-  static const ParamInfo getParamInfo_5 () { return ParamInfo(); }
-  static const ParamInfo getParamInfo_6 () { return ParamInfo(); }
-  static const ParamInfo getParamInfo_7 () { return ParamInfo(); }
-};
+#include <cassert>
+#include <cfloat>
+#include <cmath>
+#include <complex>
+#include <cstring>
+#include <string>
+#include <limits>
+#include <vector>
 
-}
+#ifdef _MSC_VER
+namespace tr1 = std::tr1;
+#else
+namespace tr1 = std;
+#endif
+
 
 #endif

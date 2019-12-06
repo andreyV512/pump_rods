@@ -73,6 +73,7 @@ namespace Compute
 			if(p.cutoffFrequency.get<W<CutoffFrequencyON>>().value)
 			{
 				Compute::InitFiltre()(aFiltre
+					, __wapper_filtre__<W<Order>>()(p.cutoffFrequency)
 					, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
 					, p.cutoffFrequency.get<W<CutoffFrequency>>().value
 					, __wapper_filtre__<W<CenterFrequency>>()(p.cutoffFrequency)

@@ -146,39 +146,49 @@ namespace Compute
 	//	}
 	//};
 
+	template<class >struct OrderFiltre;
+	template<template<int>class W, int N>struct OrderFiltre<W<N> >
+	{
+		static const int value = N;
+	};
+
 	struct InitFiltre
 	{
-		template<class T>void operator()(T &analogFiltre, int samplingRate, int cutoffFrequency, int, int, int)
+		template<class T>void operator()(T &analogFiltre, int order, int samplingRate, int cutoffFrequency, int, int, int)
 		{
+			static const int max_order = OrderFiltre<typename T::T>::value;
 			analogFiltre.Setup(
-				samplingRate
+				order < max_order ? order: max_order
+				, samplingRate
 				, cutoffFrequency
 				, 40
 				);
 		}
 
-		void operator()(BandPassFiltre &analogFiltre, int samplingRate, int cutoffFrequency, int centerFrequency, int widthFrequency, int)
+		void operator()(BandPassFiltre &analogFiltre, int order, int samplingRate, int cutoffFrequency, int centerFrequency, int widthFrequency, int)
 		{
+			static const int max_order = OrderFiltre<BandPassFiltre::T>::value;
 			analogFiltre.Setup(
-				samplingRate
+				order < max_order ? order: max_order
+				, samplingRate
 				, widthFrequency
 				, centerFrequency
 				, 1
 				);
 		}
 
-		void operator()(DoubleFiltre &analogFiltre, int samplingRate, int cutoffFrequency, int centerFrequency, int widthFrequency, int typeFiltre)
+		void operator()(DoubleFiltre &analogFiltre, int order, int samplingRate, int cutoffFrequency, int centerFrequency, int widthFrequency, int typeFiltre)
 		{
 			//switch(Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<TypeFiltre>>().value)
 			switch(typeFiltre)
 			{
 			case TypeLowFiltre:
-				(*this)(analogFiltre.lowFiltre, samplingRate, cutoffFrequency, 0, 0, 0);
+				(*this)(analogFiltre.lowFiltre, order, samplingRate, cutoffFrequency, 0, 0, 0);
 				analogFiltre.o = (DoubleFiltre::O *)&analogFiltre.lowFiltre;
 				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&LowFiltre::operator();
 				break;
 			case TypeBandPassFiltre: 
-				(*this)(analogFiltre.bandPassFiltre, samplingRate, 0, centerFrequency, widthFrequency, 0);
+				(*this)(analogFiltre.bandPassFiltre, order, samplingRate, 0, centerFrequency, widthFrequency, 0);
 				analogFiltre.o = (DoubleFiltre::O *)&analogFiltre.bandPassFiltre;
 				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&BandPassFiltre::operator();
 				break;

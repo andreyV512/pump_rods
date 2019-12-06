@@ -33,33 +33,30 @@ THE SOFTWARE.
 
 *******************************************************************************/
 
-#ifndef DSPFILTERS_COMMON_H
-#define DSPFILTERS_COMMON_H
+#ifndef DSPFILTERS_DSP_H
+#define DSPFILTERS_DSP_H
 
 //
-// This must be the first file included in every DspFilters header and source
+// Include this file in your application to get everything
 //
 
-#ifdef _MSC_VER
-#  pragma warning (disable: 4100)
-#endif
+#include "DspFilters/Common.h"
 
-//#include <assert.h>
-#include <stdlib.h>
+#include "DspFilters/Biquad.h"
+#include "DspFilters/Cascade.h"
+#include "DspFilters/Filter.h"
+#include "DspFilters/PoleFilter.h"
+#include "DspFilters/SmoothedFilter.h"
+#include "DspFilters/State.h"
+#include "DspFilters/Utilities.h"
 
-#include <cassert>
-#include <cfloat>
-#include <cmath>
-#include <complex>
-#include <cstring>
-#include <string>
-#include <limits>
-#include <vector>
-
-#ifdef _MSC_VER
-namespace tr1 = std::tr1;
-#else
-namespace tr1 = std;
-#endif
+#include "DspFilters/Bessel.h"
+#include "DspFilters/Butterworth.h"
+#include "DspFilters/ChebyshevI.h"
+#include "DspFilters/ChebyshevII.h"
+#include "DspFilters/Custom.h"
+#include "DspFilters/Elliptic.h"
+#include "DspFilters/Legendre.h"
+#include "DspFilters/RBJ.h"
 
 #endif

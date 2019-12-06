@@ -22,13 +22,21 @@ MIN_EQUAL_VALUE(DefectSig<CenterFrequency>, 0)
 	PARAM_TITLE(StructSig<CutoffFrequency>, L"Частота отсечения фильтра")
 	PARAM_TITLE(StructSig<CutoffFrequencyON>, L"Включение фильтра")
 
-	typedef GROUP_BOX(DefectSig<CenterFrequency>, DefectSig<WidthFrequency>, DefectSig<TypeFiltre>, DefectSig<CutoffFrequencyON>) __def_band_pass_param__;
+	MIN_EQUAL_VALUE(DefectSig<Order>, 1)
+	MAX_EQUAL_VALUE(DefectSig<Order>, 5)
+	PARAM_TITLE(DefectSig<Order>, L"Порядок фильтра")
+
+	MIN_EQUAL_VALUE(StructSig<Order>, 1)
+	MAX_EQUAL_VALUE(StructSig<Order>, 5)
+	PARAM_TITLE(StructSig<Order>, L"Порядок фильтра")
+
+	typedef GROUP_BOX(DefectSig<CenterFrequency>, DefectSig<WidthFrequency>, DefectSig<Order>, DefectSig<TypeFiltre>, DefectSig<CutoffFrequencyON>) __def_band_pass_param__;
 PARAM_TITLE(__def_band_pass_param__, L"Дефектоскопия")
 
-	typedef GROUP_BOX(DefectSig<CutoffFrequency>, DefectSig<TypeFiltre>, DefectSig<CutoffFrequencyON>) __def_low_param__;
+	typedef GROUP_BOX(DefectSig<CutoffFrequency>, DefectSig<Order>, DefectSig<TypeFiltre>, DefectSig<CutoffFrequencyON>) __def_low_param__;
 PARAM_TITLE(__def_low_param__, L"Дефектоскопия")
 
-	typedef GROUP_BOX(StructSig<CutoffFrequency>, StructSig<CutoffFrequencyON>) __str_param__;
+	typedef GROUP_BOX(StructSig<CutoffFrequency>, StructSig<Order>, StructSig<CutoffFrequencyON>) __str_param__;
 PARAM_TITLE(__str_param__, L"Структура")
 
 template<>struct FillComboboxList<DefectSig<TypeFiltre>>			 

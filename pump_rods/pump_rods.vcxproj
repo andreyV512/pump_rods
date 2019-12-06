@@ -49,7 +49,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_WINDOWS;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <AdditionalIncludeDirectories>$(ProjectDir);$(SolutionDir)Common;$(SolutionDir)CommonApp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(SolutionDir)Common\DspFilters\include;$(ProjectDir);$(SolutionDir)Common;$(SolutionDir)CommonApp;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -102,13 +102,29 @@
     <ClInclude Include="..\Common\DlgTemplates\ParamDlg.h" />
     <ClInclude Include="..\Common\DlgTemplates\ParamDlg.hpp" />
     <ClInclude Include="..\Common\DspFilters\ChebyshevFiltre.hpp" />
-    <ClInclude Include="..\Common\DspFilters\include\Biquad.h" />
-    <ClInclude Include="..\Common\DspFilters\include\Cascade.h" />
-    <ClInclude Include="..\Common\DspFilters\include\ChebyshevII.h" />
-    <ClInclude Include="..\Common\DspFilters\include\Common.h" />
-    <ClInclude Include="..\Common\DspFilters\include\Filter.h" />
-    <ClInclude Include="..\Common\DspFilters\include\Params.h" />
-    <ClInclude Include="..\Common\DspFilters\include\PoleFilter.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Bessel.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Biquad.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Butterworth.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Cascade.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\ChebyshevI.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\ChebyshevII.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Common.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Custom.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Design.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Dsp.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Elliptic.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Filter.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Layout.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Legendre.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\MathSupplement.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Params.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\PoleFilter.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\RBJ.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\RootFinder.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\SmoothedFilter.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\State.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Types.h" />
+    <ClInclude Include="..\Common\DspFilters\include\DspFilters\Utilities.h" />
     <ClInclude Include="..\Common\Graphics\BarSeries.h" />
     <ClInclude Include="..\Common\Graphics\Borders.h" />
     <ClInclude Include="..\Common\Graphics\Chart.h" />
@@ -170,12 +186,23 @@
     <ClCompile Include="..\CommonApp\MessageText\StatusMessages.cpp" />
     <ClCompile Include="..\Common\1730\Device1730.cpp" />
     <ClCompile Include="..\Common\DlgTemplates\ParamDlg.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\Bessel.cpp" />
     <ClCompile Include="..\Common\DspFilters\source\Biquad.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\Butterworth.cpp" />
     <ClCompile Include="..\Common\DspFilters\source\Cascade.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\ChebyshevI.cpp" />
     <ClCompile Include="..\Common\DspFilters\source\ChebyshevII.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\Custom.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\Design.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\Documentation.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\Elliptic.cpp" />
     <ClCompile Include="..\Common\DspFilters\source\Filter.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\Legendre.cpp" />
     <ClCompile Include="..\Common\DspFilters\source\Param.cpp" />
     <ClCompile Include="..\Common\DspFilters\source\PoleFilter.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\RBJ.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\RootFinder.cpp" />
+    <ClCompile Include="..\Common\DspFilters\source\State.cpp" />
     <ClCompile Include="..\Common\Graphics\BarSeries.cpp" />
     <ClCompile Include="..\Common\Graphics\Borders.cpp" />
     <ClCompile Include="..\Common\Graphics\Chart.cpp" />

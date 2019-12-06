@@ -36,8 +36,8 @@ THE SOFTWARE.
 #ifndef DSPFILTERS_PARAMS_H
 #define DSPFILTERS_PARAMS_H
 
-#include "Common.h"
-#include "Types.h"
+#include "DspFilters/Common.h"
+#include "DspFilters/Types.h"
 
 namespace Dsp {
 

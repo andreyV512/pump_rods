@@ -33,34 +33,32 @@ THE SOFTWARE.
 
 *******************************************************************************/
 
+#ifndef DSPFILTERS_DESIGN_H
+#define DSPFILTERS_DESIGN_H
+
 #include "DspFilters/Common.h"
-#include "DspFilters/Custom.h"
+#include "DspFilters/Params.h"
 
 namespace Dsp {
 
-namespace Custom {
-
-void OnePole::setup (double scale,
-                     double pole,
-                     double zero)
+struct DesignBase
 {
-  setOnePole (pole, zero);
-  applyScale (scale);
-}
+  // Sampling rate is the first param for every Design filter
+  static const ParamInfo getParamInfo_0 ()
+  {
+    return ParamInfo::defaultSampleRateParam ();
+  }
 
-void TwoPole::setup (double scale,
-                     double poleRho,
-                     double poleTheta,
-                     double zeroRho,
-                     double zeroTheta)
-{
-  complex_t pole = std::polar (poleRho, poleTheta);
-  complex_t zero = std::polar (zeroRho, zeroTheta);
-
-  setTwoPole (pole, zero, std::conj(pole), std::conj(zero));
-  applyScale (scale);
-}
-
-}
+  // These should never get called
+  static const ParamInfo getParamInfo_1 () { return ParamInfo(); }
+  static const ParamInfo getParamInfo_2 () { return ParamInfo(); }
+  static const ParamInfo getParamInfo_3 () { return ParamInfo(); }
+  static const ParamInfo getParamInfo_4 () { return ParamInfo(); }
+  static const ParamInfo getParamInfo_5 () { return ParamInfo(); }
+  static const ParamInfo getParamInfo_6 () { return ParamInfo(); }
+  static const ParamInfo getParamInfo_7 () { return ParamInfo(); }
+};
 
 }
+
+#endif

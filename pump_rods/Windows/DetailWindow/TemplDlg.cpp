@@ -11,6 +11,7 @@ TEMPL_MIN_EQUAL_VALUE(CenterFrequency, 0)
 
 	template<>struct Dialog::NoButton<DefectSig<CenterFrequency>>{};
 template<>struct Dialog::NoButton<DefectSig<WidthFrequency>>{};
+template<>struct Dialog::NoButton<DefectSig<Order>>{};
 
 struct AdditionalParams
 {
@@ -64,6 +65,8 @@ namespace TemplDlg
 		int frame_widthFrequency = par.items.get< DefectSig<WidthFrequency>>().value    = frame.widthFrequency;
 		int frame_typeFiltre = par.items.get< DefectSig<TypeFiltre>>().value        = frame.typeFiltre;
 
+		int frame_order = par.items.get< DefectSig<Order>>().value        = frame.order;
+
 		bool loop = true;
 		int current_filtre = frame.typeFiltre;
 		AdditionalParams typeLowFiltre(TypeLowFiltre, frame.typeFiltre, loop);
@@ -80,6 +83,7 @@ namespace TemplDlg
 				if(Dialog::Templ<NullType, AnalogFilterTable
 					, TL::MkTlst<
 					DefectSig<CutoffFrequency>
+					, DefectSig<Order>
 					, DefectSig<TypeFiltre>
 					, DefectSig<CutoffFrequencyON>
 					>::Result
@@ -88,6 +92,7 @@ namespace TemplDlg
 					, Dialog::NoButton<DefectSig<CutoffFrequency>>
 					, Dialog::NoButton<DefectSig<CutoffFrequencyON>>
 					, Dialog::NoButton<DefectSig<TypeFiltre>>
+					, Dialog::NoButton<DefectSig<Order>>
 					>::Result
 					, AdditionalParams
 					>(par, &typeLowFiltre).Do(h, L"Настройки низкочастотного фильтра"))
@@ -102,6 +107,7 @@ namespace TemplDlg
 					, TL::MkTlst<
 					DefectSig<CenterFrequency>
 					, DefectSig<WidthFrequency>
+					, DefectSig<Order>
 					, DefectSig<TypeFiltre>
 					, DefectSig<CutoffFrequencyON>
 					>::Result
@@ -112,6 +118,7 @@ namespace TemplDlg
 
 					, Dialog::NoButton<DefectSig<CutoffFrequencyON>>
 					, Dialog::NoButton<DefectSig<TypeFiltre>>
+					, Dialog::NoButton<DefectSig<Order>>
 					>::Result
 					, AdditionalParams
 					>(par, &typeBandPassFiltre).Do(h, L"Настройки полосового фильтра"))
@@ -130,6 +137,7 @@ namespace TemplDlg
 			frame.cutoffFrequency   = frame_cutoffFrequency;
 			frame.typeFiltre = frame_typeFiltre;
 			frame.cutoffFrequencyON = frame_cutoffFrequencyON;
+			frame.order    = frame_order;
 			Repaint<DefectSig>( e.viewers.get<TemplWindow<DefectSig>::Viewer>(), frame);
 		}
 	}

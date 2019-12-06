@@ -110,6 +110,7 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 	frame.typeFiltre = __param_filtre__<W, TypeFiltre>()();
 	frame.centerFrequency = __param_filtre__<W, CenterFrequency>()();
 	frame.widthFrequency = __param_filtre__<W, WidthFrequency>()();
+	frame.order = Singleton<AnalogFilterTable>::Instance().items.get<W<Order>>().value;
 
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
 	return 0;
@@ -177,6 +178,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	if(frame.cutoffFrequencyON)
 	{
 		Compute::InitFiltre()(aFiltre
+			, frame.order
 			, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
 			, frame.cutoffFrequency
 			, frame.centerFrequency

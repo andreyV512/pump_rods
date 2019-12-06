@@ -107,12 +107,21 @@ struct WidthFrequency;
 struct CutoffFrequencyON;
 struct CenterFrequency;
 struct TypeFiltre;
+struct Order;
+struct BandStopDb;
+struct PassBandRippleDb;
 DEFINE_PARAM_WAPPER(DefectSig, CutoffFrequency, int, 70)
 DEFINE_PARAM_WAPPER(DefectSig, WidthFrequency, int, 30)
 DEFINE_PARAM_WAPPER(DefectSig, CenterFrequency, int, 50)
 DEFINE_PARAM_WAPPER(StructSig, CutoffFrequency, int, 20)
 DEFINE_PARAM_WAPPER(DefectSig, CutoffFrequencyON, bool, true)
 DEFINE_PARAM_WAPPER(StructSig, CutoffFrequencyON, bool, true)
+
+DEFINE_PARAM_WAPPER(DefectSig, Order, int, 3)
+DEFINE_PARAM_WAPPER(StructSig, Order, int, 3)
+
+DEFINE_PARAM_WAPPER(DefectSig, BandStopDb, double, 40)
+DEFINE_PARAM_WAPPER(DefectSig, PassBandRippleDb, int, 0.1)
 
 static const int TypeLowFiltre      = 0;
 static const int TypeBandPassFiltre	= 1;
@@ -128,6 +137,11 @@ DEFINE_PARAM_WAPPER(DefectSig, TypeFiltre, int, 0)
 		, DefectSig<CutoffFrequencyON>
 		, StructSig<CutoffFrequency>
 		, StructSig<CutoffFrequencyON>
+		, DefectSig<Order>
+		, StructSig<Order>
+
+		, DefectSig<BandStopDb>
+		, DefectSig<PassBandRippleDb>
 	>::Result items_list;
 	typedef TL::Factory<items_list> TItems;
 	TItems items;

@@ -41,7 +41,8 @@ namespace TemplDlg
 		if(frame.cutoffFrequencyON)
 		{
 			Compute::InitFiltre()(aFiltre
-				, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
+				, frame.order
+				, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value				
 				, frame.cutoffFrequency
 				, frame.centerFrequency
 				, frame.widthFrequency
@@ -150,6 +151,10 @@ TEMPL_MAX_EQUAL_VALUE(CutoffFrequency, 4000)
 TEMPL_PARAM_TITLE(CutoffFrequency, L"Частота отсечения фильтра")
 TEMPL_PARAM_TITLE(CutoffFrequencyON, L"Включение фильтра")
 
+TEMPL_MIN_EQUAL_VALUE(Order, 0)
+TEMPL_MAX_EQUAL_VALUE(Order, 5)
+TEMPL_PARAM_TITLE(Order, L"Порядок фильтра")
+
 #define FILTER_ITEMS(type, param)\
 template<template<class>class W>struct Dialog::NoButton<W<type>>{};\
 template<template<class>class W, class P>struct __command__<Dialog::NoButton<W<type>>, P>\
@@ -182,6 +187,7 @@ template<template<class>class W, class P>struct __command__<Dialog::NoButton<W<t
 FILTER_ITEMS(CutoffFrequency, cutoffFrequency)
 FILTER_ITEMS(CenterFrequency, centerFrequency)
 FILTER_ITEMS(WidthFrequency, widthFrequency)
+FILTER_ITEMS(Order, order)
 #undef FILTER_ITEMS
 
 template<template<class>class W>struct Dialog::NoButton<W<CutoffFrequencyON>>{};
@@ -245,27 +251,34 @@ template<template<class> class W>struct FilterDlg
 		FrameViewer &frame =  e.viewers.get<FrameViewer>();
 		AnalogFilterTable par;
 		par.items.get< W<CutoffFrequency>>().value = frame.cutoffFrequency;
+
+		par.items.get< W<Order>>().value = frame.order;
+
 		par.items.get< W<CutoffFrequencyON>>().value = frame.cutoffFrequencyON;
 		if(Dialog::Templ<NullType, AnalogFilterTable
 			, TL::MkTlst<
 			W<CutoffFrequency>
+			, W<Order>
 			, W<CutoffFrequencyON>
 			>::Result
 			, 550
 			, TL::MkTlst<DefOkBtn, CancelBtn
 			, Dialog::NoButton<W<CutoffFrequency>>
 			, Dialog::NoButton<W<CutoffFrequencyON>>
+			, Dialog::NoButton<W<Order>>
 			>::Result
 			>(par).Do(h, L"Настройки цифрового фильтра"))
 		{
 			frame.cutoffFrequency = par.items.get< W<CutoffFrequency>>().value;
 			frame.cutoffFrequencyON = par.items.get< W<CutoffFrequencyON>>().value;
+			frame.order = par.items.get< W<Order>>().value;
 		}
 		else
 		{
 			AnalogFilterTable::TItems &t = Singleton<AnalogFilterTable>::Instance().items;
 			frame.cutoffFrequency = t.get< W<CutoffFrequency>>().value;
 			frame.cutoffFrequencyON = t.get< W<CutoffFrequencyON>>().value;
+			frame.order = t.get< W<Order>>().value;
 		}
 		Repaint<W>( e.viewers.get<Win::Viewer>(), frame);
 	}
@@ -359,6 +372,7 @@ template<template<class>class W>struct CorrectionSensorDlg
 			__test_change_param__<KoeffSignTable     , W<KoeffSign>        , FrameViewer, double, &FrameViewer::koef>
 			, __test_change_param__<AnalogFilterTable, W<CutoffFrequency>  , FrameViewer, int,    &FrameViewer::cutoffFrequency>
 			, __test_change_param__<AnalogFilterTable, W<CutoffFrequencyON>, FrameViewer, bool,   &FrameViewer::cutoffFrequencyON>
+			, __test_change_param__<AnalogFilterTable, W<Order>            , FrameViewer, int ,   &FrameViewer::order>
 			, __test_change_param__<MedianFiltreTable, W<MedianFiltreWidth>, FrameViewer, int,    &FrameViewer::medianFiltreWidth>
 			, __test_change_param__<MedianFiltreTable, W<MedianFiltreON>   , FrameViewer, bool,   &FrameViewer::medianFiltreON>
 			, __test_change_param__<ThresholdsTable, W<Thresh<SortDown>>   , FrameViewer, double,    &FrameViewer::threshSortDown>
@@ -375,6 +389,7 @@ template<template<class>class W>struct CorrectionSensorDlg
 			, __test_change_param__<AnalogFilterTable, DefectSig<TypeFiltre>, FrameViewer, int,   &FrameViewer::typeFiltre>
 			, __test_change_param__<AnalogFilterTable, DefectSig<WidthFrequency>  , FrameViewer, int,    &FrameViewer::widthFrequency>
 			, __test_change_param__<AnalogFilterTable, DefectSig<CenterFrequency>, FrameViewer, int,   &FrameViewer::centerFrequency>
+			, __test_change_param__<AnalogFilterTable, DefectSig<Order>, FrameViewer, int,   &FrameViewer::order>
 
 			, __test_change_param__<MedianFiltreTable, DefectSig<MedianFiltreWidth>, FrameViewer, int,    &FrameViewer::medianFiltreWidth>
 			, __test_change_param__<MedianFiltreTable, DefectSig<MedianFiltreON>   , FrameViewer, bool,   &FrameViewer::medianFiltreON>

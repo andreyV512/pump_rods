@@ -66,6 +66,7 @@ public:
 	int count;
 	int medianFiltreWidth;
 	int cutoffFrequency;
+	int order;
 
 	int centerFrequency;
 	int widthFrequency;

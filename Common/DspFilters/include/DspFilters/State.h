@@ -36,8 +36,8 @@ THE SOFTWARE.
 #ifndef DSPFILTERS_STATE_H
 #define DSPFILTERS_STATE_H
 
-#include "Common.h"
-#include "Biquad.h"
+#include "DspFilters/Common.h"
+#include "DspFilters/Biquad.h"
 
 #include <stdexcept>
 
@@ -288,7 +288,7 @@ public:
       filter.process (numSamples, arrayOfChannels[i], m_state[i]);
   }
 
-public:
+private:
   StateType m_state[Channels];
 };
 
