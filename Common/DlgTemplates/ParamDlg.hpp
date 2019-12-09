@@ -565,22 +565,6 @@ struct ShowItem
 {typename W<sub_type>::type_value operator()(){return value;}};
 #define TEMPL_PARAM_TITLE(type, name)template<template<class>class W>struct ParamTitle<W<type>>{wchar_t *operator()(){return name;}};
 
-//#define CHECK_EMPTY_STRING(n)template<template<class>class Wapper, class Z>struct Skip<Wapper<n>, Z>\
-//{\
-//	template<class P>bool operator()(Wapper<n> *o, P *)\
-//    {\
-//	  wchar_t buf[128];\
-//	  GetWindowText(o->hWnd, buf, dimention_of(buf));\
-//	  if('\0' == buf[0])\
-//      {  \
-//	     wsprintf(buf, L"Поле данных \"%s\" должно быть заполнено", ParamTitle<n>()());\
-//		 MessageBox(o->hWnd, buf, L"Ошибка!!!", MB_ICONEXCLAMATION);\
-//		 return false;\
-//      } \
-//      return true;\
-//    }\
-//};
-
 #define CHECK_EMPTY_STRING(n)template<template<class, class>class Wapper, class X, class Z>struct Skip<Wapper<n, X>, Z>\
 {\
 	template<class P>bool operator()(Wapper<n, X> *o, P *)\
@@ -596,16 +580,6 @@ struct ShowItem
       return true;\
     }\
 };
-
-
-
-//#define DO_NOT_CHECK(n)template<template<class>class Wapper, class Z>struct Skip<Wapper<n>, Z>\
-//{\
-//	template<class P>bool operator()(Wapper<n> *o, P *)\
-//    {\
-//      return true;\
-//    }\
-//};
 
 #define DO_NOT_CHECK(n)template<>struct __compare_param__<NullType, NullType, n>\
 {\

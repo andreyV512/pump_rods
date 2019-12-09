@@ -66,7 +66,7 @@ template<template<class>class, class>struct __param_filtre__
 
 template<class P>struct __param_filtre__<DefectSig, P>
 {
-	int operator()(){return Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<P>>().value;}
+	typename DefectSig<P>::type_value operator()(){return Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<P>>().value;}
 };
 
 template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
@@ -111,6 +111,12 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 	frame.centerFrequency = __param_filtre__<W, CenterFrequency>()();
 	frame.widthFrequency = __param_filtre__<W, WidthFrequency>()();
 	frame.order = Singleton<AnalogFilterTable>::Instance().items.get<W<Order>>().value;
+
+	frame.stopBandDb = Singleton<AnalogFilterTable>::Instance().items.get<W<StopBandDb>>().value;
+	//frame.passBandRippleDb = Singleton<AnalogFilterTable>::Instance().items.get<W<PassBandRippleDb>>().value;
+
+//	frame.stopBandDb = __param_filtre__<W, StopBandDb>()();
+	frame.passBandRippleDb = __param_filtre__<W, PassBandRippleDb>()();
 
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
 	return 0;
@@ -179,6 +185,8 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	{
 		Compute::InitFiltre()(aFiltre
 			, frame.order
+			, frame.stopBandDb
+			, frame.passBandRippleDb
 			, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
 			, frame.cutoffFrequency
 			, frame.centerFrequency
@@ -216,8 +224,10 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	}
 	else
 	{
-		frame.tchart.minAxesY = -100;
-		frame.tchart.maxAxesY = 100;
+		//frame.tchart.minAxesY = -100;
+		//frame.tchart.maxAxesY = 100;
+		frame.tchart.minAxesY = -Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
+		frame.tchart.maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
 	}
 
 	frame.tchart.minAxesX = offsetDef;

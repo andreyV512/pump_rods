@@ -67,6 +67,8 @@ public:
 	int medianFiltreWidth;
 	int cutoffFrequency;
 	int order;
+	double stopBandDb;
+	double passBandRippleDb;
 
 	int centerFrequency;
 	int widthFrequency;

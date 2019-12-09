@@ -47,6 +47,16 @@ namespace Compute
 		template<class O>typename int operator()(O &o){return 0;}
 	};
 
+	//template<>struct __wapper_filtre__<StructSig<StopBandDb>>
+	//{
+	//	template<class O>typename int operator()(O &o){return 0;}
+	//};
+
+	template<>struct __wapper_filtre__<StructSig<PassBandRippleDb>>
+	{
+		template<class O>typename int operator()(O &o){return 0;}
+	};
+
 	template<class O, class P>struct __recalculation__;
 	template<class T, template<class>class W, class P>struct __recalculation__<W<T>, P>
 	{
@@ -74,6 +84,10 @@ namespace Compute
 			{
 				Compute::InitFiltre()(aFiltre
 					, __wapper_filtre__<W<Order>>()(p.cutoffFrequency)
+				
+					, __wapper_filtre__<W<StopBandDb>>()(p.cutoffFrequency)
+					, __wapper_filtre__<W<PassBandRippleDb>>()(p.cutoffFrequency)
+				
 					, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
 					, p.cutoffFrequency.get<W<CutoffFrequency>>().value
 					, __wapper_filtre__<W<CenterFrequency>>()(p.cutoffFrequency)

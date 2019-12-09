@@ -42,6 +42,8 @@ namespace TemplDlg
 		{
 			Compute::InitFiltre()(aFiltre
 				, frame.order
+				, frame.stopBandDb
+				, frame.passBandRippleDb
 				, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value				
 				, frame.cutoffFrequency
 				, frame.centerFrequency
@@ -155,6 +157,10 @@ TEMPL_MIN_EQUAL_VALUE(Order, 0)
 TEMPL_MAX_EQUAL_VALUE(Order, 5)
 TEMPL_PARAM_TITLE(Order, L"Порядок фильтра")
 
+TEMPL_MIN_EQUAL_VALUE(StopBandDb, 5)
+TEMPL_MAX_EQUAL_VALUE(StopBandDb, 100)
+TEMPL_PARAM_TITLE(StopBandDb, L"Затухание в полосе подавления Db")
+
 #define FILTER_ITEMS(type, param)\
 template<template<class>class W>struct Dialog::NoButton<W<type>>{};\
 template<template<class>class W, class P>struct __command__<Dialog::NoButton<W<type>>, P>\
@@ -175,7 +181,7 @@ template<template<class>class W, class P>struct __command__<Dialog::NoButton<W<t
 				Win &e = *(Win *)GetWindowLongPtr(hWnd, GWLP_USERDATA);\
 				FrameViewer &frame =  e.viewers.get<FrameViewer>();\
 				Win::Viewer &viewer = e.viewers.get<Win::Viewer>();\
-				int t =  Wchar_to<TVal::type_value>()(buf);\
+				TVal::type_value t =  Wchar_to<TVal::type_value>()(buf);\
 				if(t > 0)frame.param = t;\
 				TemplDlg::Repaint<W>(viewer, frame);\
 				return false;\
@@ -188,6 +194,8 @@ FILTER_ITEMS(CutoffFrequency, cutoffFrequency)
 FILTER_ITEMS(CenterFrequency, centerFrequency)
 FILTER_ITEMS(WidthFrequency, widthFrequency)
 FILTER_ITEMS(Order, order)
+FILTER_ITEMS(StopBandDb, stopBandDb)
+FILTER_ITEMS(PassBandRippleDb, passBandRippleDb)
 #undef FILTER_ITEMS
 
 template<template<class>class W>struct Dialog::NoButton<W<CutoffFrequencyON>>{};
@@ -259,6 +267,7 @@ template<template<class> class W>struct FilterDlg
 			, TL::MkTlst<
 			W<CutoffFrequency>
 			, W<Order>
+			, W<StopBandDb>
 			, W<CutoffFrequencyON>
 			>::Result
 			, 550
@@ -266,12 +275,16 @@ template<template<class> class W>struct FilterDlg
 			, Dialog::NoButton<W<CutoffFrequency>>
 			, Dialog::NoButton<W<CutoffFrequencyON>>
 			, Dialog::NoButton<W<Order>>
+			, Dialog::NoButton<W<StopBandDb>>
 			>::Result
 			>(par).Do(h, L"Настройки цифрового фильтра"))
 		{
 			frame.cutoffFrequency = par.items.get< W<CutoffFrequency>>().value;
 			frame.cutoffFrequencyON = par.items.get< W<CutoffFrequencyON>>().value;
 			frame.order = par.items.get< W<Order>>().value;
+
+			//todo frame.stopBandDb = par.items.get< W<StopBandDb>>().value;
+			//todo frame.passBandRippleDb = par.items.get< W<PassBandRippleDb>>().value;
 		}
 		else
 		{
@@ -279,6 +292,9 @@ template<template<class> class W>struct FilterDlg
 			frame.cutoffFrequency = t.get< W<CutoffFrequency>>().value;
 			frame.cutoffFrequencyON = t.get< W<CutoffFrequencyON>>().value;
 			frame.order = t.get< W<Order>>().value;
+
+			//todo frame.stopBandDb = t.get< W<StopBandDb>>().value;
+			//todo frame.passBandRippleDb = t.get< W<PassBandRippleDb>>().value;
 		}
 		Repaint<W>( e.viewers.get<Win::Viewer>(), frame);
 	}
@@ -390,6 +406,8 @@ template<template<class>class W>struct CorrectionSensorDlg
 			, __test_change_param__<AnalogFilterTable, DefectSig<WidthFrequency>  , FrameViewer, int,    &FrameViewer::widthFrequency>
 			, __test_change_param__<AnalogFilterTable, DefectSig<CenterFrequency>, FrameViewer, int,   &FrameViewer::centerFrequency>
 			, __test_change_param__<AnalogFilterTable, DefectSig<Order>, FrameViewer, int,   &FrameViewer::order>
+			, __test_change_param__<AnalogFilterTable, DefectSig<StopBandDb>, FrameViewer, double,   &FrameViewer::stopBandDb>
+			, __test_change_param__<AnalogFilterTable, DefectSig<PassBandRippleDb>, FrameViewer, double,   &FrameViewer::passBandRippleDb>
 
 			, __test_change_param__<MedianFiltreTable, DefectSig<MedianFiltreWidth>, FrameViewer, int,    &FrameViewer::medianFiltreWidth>
 			, __test_change_param__<MedianFiltreTable, DefectSig<MedianFiltreON>   , FrameViewer, bool,   &FrameViewer::medianFiltreON>

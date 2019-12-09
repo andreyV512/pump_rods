@@ -3,15 +3,25 @@
 
 TEMPL_MIN_EQUAL_VALUE(CenterFrequency, 0)
 	TEMPL_MAX_EQUAL_VALUE(CenterFrequency, 2000)
-	TEMPL_PARAM_TITLE(CenterFrequency, L"Средняя частота фильтра")
+	TEMPL_PARAM_TITLE(CenterFrequency, L"Средняя частота фильтра Гц")
 
 	TEMPL_MIN_EQUAL_VALUE(WidthFrequency, 0)
 	TEMPL_MAX_EQUAL_VALUE(WidthFrequency, 2000)
-	TEMPL_PARAM_TITLE(WidthFrequency, L"Полоса пропускания фильтра")
+	TEMPL_PARAM_TITLE(WidthFrequency, L"Полоса пропускания фильтра Гц")
 
-	template<>struct Dialog::NoButton<DefectSig<CenterFrequency>>{};
+	//TEMPL_MIN_EQUAL_VALUE(StopBandDb, 5)
+	//TEMPL_MAX_EQUAL_VALUE(StopBandDb, 100)
+	//TEMPL_PARAM_TITLE(StopBandDb, L"Затухание в полосе подавления Db")
+
+	TEMPL_MIN_EQUAL_VALUE(PassBandRippleDb, 0.001)
+	TEMPL_MAX_EQUAL_VALUE(PassBandRippleDb, 100.0)
+	TEMPL_PARAM_TITLE(PassBandRippleDb, L"Неравномерность в полосе пропускания Db")
+
+template<>struct Dialog::NoButton<DefectSig<CenterFrequency>>{};
 template<>struct Dialog::NoButton<DefectSig<WidthFrequency>>{};
 template<>struct Dialog::NoButton<DefectSig<Order>>{};
+template<>struct Dialog::NoButton<DefectSig<StopBandDb> >{};
+template<>struct Dialog::NoButton<DefectSig<PassBandRippleDb>>{};
 
 struct AdditionalParams
 {
@@ -29,7 +39,6 @@ template<class P>struct __command__<Dialog::NoButton<DefectSig<TypeFiltre>>, P>
 	{
 		if(1 == p->e.isAcselerator)
 		{
-			//HWND h = p->owner.items.get<Dialog::DlgItem2<DefectSig<TypeFiltre>, P::Owner>>().hWnd;
 			auto &item = p->owner.items.get<Dialog::DlgItem2<DefectSig<TypeFiltre>, P::Owner>>();
 			HWND h = item.hWnd;
 
@@ -67,6 +76,9 @@ namespace TemplDlg
 
 		int frame_order = par.items.get< DefectSig<Order>>().value        = frame.order;
 
+		double frame_stopBandDb = par.items.get< DefectSig<StopBandDb>>().value = frame.stopBandDb;
+		double frame_passBandRippleDb = par.items.get< DefectSig<PassBandRippleDb>>().value        = frame.passBandRippleDb;
+
 		bool loop = true;
 		int current_filtre = frame.typeFiltre;
 		AdditionalParams typeLowFiltre(TypeLowFiltre, frame.typeFiltre, loop);
@@ -84,6 +96,7 @@ namespace TemplDlg
 					, TL::MkTlst<
 					DefectSig<CutoffFrequency>
 					, DefectSig<Order>
+					, DefectSig<StopBandDb>
 					, DefectSig<TypeFiltre>
 					, DefectSig<CutoffFrequencyON>
 					>::Result
@@ -93,6 +106,7 @@ namespace TemplDlg
 					, Dialog::NoButton<DefectSig<CutoffFrequencyON>>
 					, Dialog::NoButton<DefectSig<TypeFiltre>>
 					, Dialog::NoButton<DefectSig<Order>>
+					, Dialog::NoButton<DefectSig<StopBandDb> >
 					>::Result
 					, AdditionalParams
 					>(par, &typeLowFiltre).Do(h, L"Настройки низкочастотного фильтра"))
@@ -108,6 +122,7 @@ namespace TemplDlg
 					DefectSig<CenterFrequency>
 					, DefectSig<WidthFrequency>
 					, DefectSig<Order>
+					, DefectSig<PassBandRippleDb>
 					, DefectSig<TypeFiltre>
 					, DefectSig<CutoffFrequencyON>
 					>::Result
@@ -118,6 +133,7 @@ namespace TemplDlg
 
 					, Dialog::NoButton<DefectSig<CutoffFrequencyON>>
 					, Dialog::NoButton<DefectSig<TypeFiltre>>
+					, Dialog::NoButton<DefectSig<PassBandRippleDb>>
 					, Dialog::NoButton<DefectSig<Order>>
 					>::Result
 					, AdditionalParams
