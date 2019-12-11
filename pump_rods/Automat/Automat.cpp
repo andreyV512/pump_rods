@@ -244,7 +244,7 @@ namespace Automat
 				}
 
 				//подтверждение результата
-				Sleep(200);
+				Sleep(2000);
 				OUT_BITS(On<oToShift>);  //перекладка
 
 			//	sortOnce = true;
