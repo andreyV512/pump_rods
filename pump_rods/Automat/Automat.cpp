@@ -247,7 +247,7 @@ namespace Automat
 				Sleep(200);
 				OUT_BITS(On<oToShift>);  //перекладка
 
-				sortOnce = true;
+			//	sortOnce = true;
 				AutoStoredData();
 				
 				Sleep(1000);
