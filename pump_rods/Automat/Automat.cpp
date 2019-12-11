@@ -126,6 +126,7 @@ namespace Automat
 					case 2: Log::Mess<LogMess::On_iP1_Off_iP2>(); break;
 					case 3: Log::Mess<LogMess::On_iP1_On_iP2>(); break;
 					}
+					sortOnce = false;
 				}
 				AND_BITS(-1, Key<Status::stop>, On<iCU>, On<iCycle>);
 				if(dCheck)
@@ -272,6 +273,7 @@ namespace Automat
 			case Status::stop:
 				Log::Mess<LogMess::ExitMeshuringCycle>();
 				dprint("Status::stop\n");
+				sortOnce = true;
 				break;
 			case Status::time_out:
 				dprint("Status::time_out\n");
