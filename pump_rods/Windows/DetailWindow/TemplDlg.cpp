@@ -14,8 +14,8 @@ TEMPL_MIN_EQUAL_VALUE(CenterFrequency, 0)
 	//TEMPL_PARAM_TITLE(StopBandDb, L"Затухание в полосе подавления Db")
 
 	TEMPL_MIN_EQUAL_VALUE(PassBandRippleDb, 0.001)
-	TEMPL_MAX_EQUAL_VALUE(PassBandRippleDb, 100.0)
-	TEMPL_PARAM_TITLE(PassBandRippleDb, L"Неравномерность в полосе пропускания Db")
+	TEMPL_MAX_EQUAL_VALUE(PassBandRippleDb, 200.0)
+	TEMPL_PARAM_TITLE(PassBandRippleDb, L"Затухание в полосе подавления Db")
 
 template<>struct Dialog::NoButton<DefectSig<CenterFrequency>>{};
 template<>struct Dialog::NoButton<DefectSig<WidthFrequency>>{};

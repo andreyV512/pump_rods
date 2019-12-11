@@ -1,5 +1,6 @@
 ﻿#include "Dialogs.h"
 #include "DlgTemplates\ParamDlgNew.h"
+#include "DspFilters\ChebyshevFiltre.hpp"
 
 MIN_EQUAL_VALUE(DefectSig<CenterFrequency>, 0)
 	MAX_EQUAL_VALUE(DefectSig<CenterFrequency>, 4000)
@@ -27,7 +28,7 @@ MIN_EQUAL_VALUE(DefectSig<CenterFrequency>, 0)
 	PARAM_TITLE(DefectSig<Order>, L"Порядок фильтра")
 
 	MIN_EQUAL_VALUE(StructSig<Order>, 1)
-	MAX_EQUAL_VALUE(StructSig<Order>, 5)
+	MAX_EQUAL_VALUE(StructSig<Order>, filter_max_order)
 	PARAM_TITLE(StructSig<Order>, L"Порядок фильтра")
 
 	MIN_EQUAL_VALUE(DefectSig<StopBandDb>, 5)
@@ -35,8 +36,8 @@ MIN_EQUAL_VALUE(DefectSig<CenterFrequency>, 0)
 	PARAM_TITLE(DefectSig<StopBandDb>, L"Затухание в полосе подавления Db")
 
 	MIN_EQUAL_VALUE(DefectSig<PassBandRippleDb>, 0.001)
-	MAX_EQUAL_VALUE(DefectSig<PassBandRippleDb>, 100)
-	PARAM_TITLE(DefectSig<PassBandRippleDb>, L"Неравномерность в полосе пропускания Db")
+	MAX_EQUAL_VALUE(DefectSig<PassBandRippleDb>, 200)
+	PARAM_TITLE(DefectSig<PassBandRippleDb>, L"Затухание в полосе подавления Db")
 
 	MIN_EQUAL_VALUE(StructSig<StopBandDb>, 5)
 	MAX_EQUAL_VALUE(StructSig<StopBandDb>, 100)

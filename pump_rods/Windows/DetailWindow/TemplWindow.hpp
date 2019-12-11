@@ -167,8 +167,8 @@ template<template<class>class>struct __axes_size___
 {
 	template<class T>void operator()(T &t)
 	{
-		t.minAxesY = -Singleton<AxesGraphsTable>::Instance().items.get<StructSig<Axes>>().value;;
-		t.maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<StructSig<Axes>>().value;;
+		t.minAxesY = -Singleton<AxesGraphsTable>::Instance().items.get<StructSig<Axes>>().value;
+		t.maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<StructSig<Axes>>().value;
 	}
 };
 
@@ -179,6 +179,15 @@ template<>struct __axes_size___<StructSig>
 		t.minAxesY = -100;
 		t.maxAxesY = 100;
 	}
+};
+
+template<template<class>class>struct IsStructSig
+{
+	static const bool value = false;
+};
+template<>struct IsStructSig<StructSig>
+{
+	static const bool value = true;
 };
 
 template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
@@ -199,7 +208,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	typedef typename WapperFiltre<W>::Result WFiltre;
 	WFiltre aFiltre;
 	Compute::Filtre analog;
-	if(frame.cutoffFrequencyON)
+	if(frame.cutoffFrequencyON && (!IsStructSig<W>::value || frame.isBarGraph))
 	{
 		Compute::InitFiltre()(aFiltre
 			, frame.order
@@ -216,7 +225,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 
 	MedianFiltre mFiltre;
 	Compute::Filtre median;
-	if(frame.medianFiltreON && frame.medianFiltreWidth > 2)
+	if(frame.medianFiltreON && frame.medianFiltreWidth > 2 && (!IsStructSig<W>::value || frame.isBarGraph))
 	{
 		mFiltre.InitWidth(frame.medianFiltreWidth);
 		median.Init(&mFiltre, &MedianFiltre::operator());
@@ -242,10 +251,6 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	}
 	else
 	{
-		//frame.tchart.minAxesY = -100;
-		//frame.tchart.maxAxesY = 100;
-		//frame.tchart.minAxesY = -Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
-		//frame.tchart.maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
 		__axes_size___<W>()(frame.tchart);
 	}
 
@@ -294,6 +299,15 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	frame.tchart.items.get<FrameViewer::BorderDown<Defect>>().value = -frame.threshDefect;
 	frame.tchart.items.get<FrameViewer::BorderDown<SortDown>>().color  = frame.threshSortDownColor;
 	frame.tchart.items.get<FrameViewer::BorderDown<Defect>>().color  = frame.threshDefectColor;
+
+	if(IsStructSig<W>::value && !frame.isBarGraph)
+	{
+		frame.tchart.items.get<FrameViewer::Border<SortDown>>().value = 200;
+		frame.tchart.items.get<FrameViewer::Border<Defect>>().value = 200;
+
+		frame.tchart.items.get<FrameViewer::BorderDown<SortDown>>().value = 200;
+		frame.tchart.items.get<FrameViewer::BorderDown<Defect>>().value = 200;
+	}
 
 	RepaintWindow(frame.hWnd);
 }
