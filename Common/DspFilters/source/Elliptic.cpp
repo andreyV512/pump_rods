@@ -1,17 +1,17 @@
 /*******************************************************************************
 
 "A Collection of Useful C++ Classes for Digital Signal Processing"
- By Vincent Falco
+ By Vinnie Falco
 
 Official project location:
-http://code.google.com/p/dspfilterscpp/
+https://github.com/vinniefalco/DSPFilters
 
 See Documentation.cpp for contact information, notes, and bibliography.
 
 --------------------------------------------------------------------------------
 
 License: MIT License (http://www.opensource.org/licenses/mit-license.php)
-Copyright (c) 2009 by Vincent Falco
+Copyright (c) 2009 by Vinnie Falco
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -139,17 +139,17 @@ void AnalogLowPass::design (int numPoles,
       double d = 1+m_p[r]+m_q1[r];
       m_b1[r] = (1+m_p[r]/2)*fbb/d;
       m_zf1[r] = fb/pow(d, .25);
-      m_zq1[r] = 1/sqrt(abs(2*(1-m_b1[r]/(m_zf1[r]*m_zf1[r]))));
+      m_zq1[r] = 1/sqrt(fabs(2*(1-m_b1[r]/(m_zf1[r]*m_zf1[r]))));
       m_zw1[r] = tp*m_zf1[r];
 
       m_rootR[r] = -.5*m_zw1[r]/m_zq1[r];
       m_rootR[r+m_em/2] = m_rootR[r];
-      m_rootI[r] = .5*sqrt(abs(m_zw1[r]*m_zw1[r]/(m_zq1[r]*m_zq1[r]) - 4*m_zw1[r]*m_zw1[r]));
+      m_rootI[r] = .5*sqrt(fabs(m_zw1[r]*m_zw1[r]/(m_zq1[r]*m_zq1[r]) - 4*m_zw1[r]*m_zw1[r]));
       m_rootI[r+m_em/2] = -m_rootI[r];
 
       complex_t pole (
         -.5*m_zw1[r]/m_zq1[r],
-        .5*sqrt(abs(m_zw1[r]*m_zw1[r]/(m_zq1[r]*m_zq1[r]) - 4*m_zw1[r]*m_zw1[r])));
+        .5*sqrt(fabs(m_zw1[r]*m_zw1[r]/(m_zq1[r]*m_zq1[r]) - 4*m_zw1[r]*m_zw1[r])));
 
       complex_t zero (0, m_zeros[r-1]);
 
@@ -271,7 +271,7 @@ double AnalogLowPass::findfact(int t)
       p0 += ddp;
       double dq = (m_b1[t]*m_c1[x2]-m_b1[x1]*(m_c1[x1]-m_b1[x1]))/x4;
       q0 += dq;
-      if (abs(ddp+dq) < 1e-6)
+      if (fabs(ddp+dq) < 1e-6)
         break;
     }
     m_p[i1] = p0;

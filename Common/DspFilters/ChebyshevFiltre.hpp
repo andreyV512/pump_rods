@@ -2,62 +2,43 @@
 #include "include/DspFilters/ChebyshevII.h"
 #include "include/DspFilters/SmoothedFilter.h"
 
-static const int filter_size = 7;
-template<class X>class DSPFiltre: public X::State<Dsp::DirectFormII>
+static const int filter_max_order = 10;
+template<class X>class DSPFiltre
 {
 public:
 	typedef X T;
 private:
-	X m_design;
+	X filtre;
+	typename T::State<Dsp::DirectFormII> state;
 public:
 	double Simple(double value)
 	{
-		return process(value, m_design);
+		return state.process(value, filtre);
 	}
 	void Setup(int order, int sample_rate, double cutoffFrequency, double stopBandDb)
 	{	
-		m_design.setup(order, sample_rate, cutoffFrequency, stopBandDb);
+		filtre.setup(order, sample_rate, cutoffFrequency, stopBandDb);
 	}
 };
 
-class LowFiltre : public DSPFiltre<Dsp::ChebyshevII::LowPass<filter_size>>{};
-class HighFiltre: public DSPFiltre<Dsp::ChebyshevII::HighPass<filter_size>>{};
+class LowFiltre : public DSPFiltre<Dsp::ChebyshevII::LowPass<filter_max_order>>{};
+class HighFiltre: public DSPFiltre<Dsp::ChebyshevII::HighPass<filter_max_order>>{};
 
-//class BandPassFiltre: public Dsp::ChebyshevII::BandPass<filter_size>::State<Dsp::DirectFormII>
-//{
-//public:
-//	typedef Dsp::ChebyshevII::BandPass<filter_size> T;
-//private:
-//	T m_design;
-//public:
-//	inline double operator()(double value)
-//	{
-//		return process(value, m_design);
-//	}
-//	void Setup(int order, int sample_rate, int widthFrequency, double centerFrequency, double passBandRippleDb)
-//	{
-//		m_design.setup(order, sample_rate, centerFrequency, widthFrequency, passBandRippleDb);
-//	}
-//};
-
-class BandPassFiltre//: public Dsp::ChebyshevII::BandPass<filter_size>//::State<Dsp::DirectFormII>
+class BandPassFiltre
 {
-	// Dsp::CascadeStages<filter_size>::State<Dsp::DirectFormII> state;
-
 public:
-	typedef Dsp::ChebyshevII::BandPass<filter_size> T;
-	//Dsp::ChebyshevII::Design::BandPass<filter_size> f;
-	//Dsp::ChebyshevII::Design::BandPass <filter_size>::State<Dsp::DirectFormII> xxx;
-	//BandPassFiltre(): f(1){}
-	 Dsp::SimpleFilter <T, 1> f;
+	typedef Dsp::ChebyshevII::BandPass<filter_max_order> T;
+private:
+	T filtre;
+	T::State<Dsp::DirectFormII> state;
+public:
 	double Simple(double value)
 	{
-		//return xxx.process(value, f);
-		return f.m_state.m_state[0].process(value, f);
+		return state.process(value, filtre);
 	}
 	void Setup(int order, int sample_rate, int widthFrequency, double centerFrequency, double passBandRippleDb)
 	{
-		f.setup(order, sample_rate, centerFrequency, widthFrequency, passBandRippleDb);
+		filtre.setup(order, sample_rate, centerFrequency, widthFrequency, passBandRippleDb);
 	}
 };
 

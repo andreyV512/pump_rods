@@ -1,17 +1,17 @@
 /*******************************************************************************
 
 "A Collection of Useful C++ Classes for Digital Signal Processing"
- By Vincent Falco
+ By Vinnie Falco
 
 Official project location:
-http://code.google.com/p/dspfilterscpp/
+https://github.com/vinniefalco/DSPFilters
 
 See Documentation.cpp for contact information, notes, and bibliography.
 
 --------------------------------------------------------------------------------
 
 License: MIT License (http://www.opensource.org/licenses/mit-license.php)
-Copyright (c) 2009 by Vincent Falco
+Copyright (c) 2009 by Vinnie Falco
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -156,12 +156,12 @@ void HighShelf::setup (double sampleRate,
   double sn = sin (w0);
   double AL = sn / 2 * ::std::sqrt ((A + 1/A) * (1/shelfSlope - 1) + 2);
   double sq = 2 * sqrt(A) * AL;
-  double b0 =    A*( (A+1) - (A-1)*cs + sq );
-  double b1 = -2*A*( (A-1) - (A+1)*cs );
-  double b2 =    A*( (A+1) - (A-1)*cs - sq );
-  double a0 =        (A+1) + (A-1)*cs + sq;
-  double a1 =    2*( (A-1) + (A+1)*cs );
-  double a2 =        (A+1) + (A-1)*cs - sq;
+  double b0 =    A*( (A+1) + (A-1)*cs + sq );
+  double b1 = -2*A*( (A-1) + (A+1)*cs );
+  double b2 =    A*( (A+1) + (A-1)*cs - sq );
+  double a0 =        (A+1) - (A-1)*cs + sq;
+  double a1 =    2*( (A-1) - (A+1)*cs );
+  double a2 =        (A+1) - (A-1)*cs - sq;
   setCoefficients (a0, a1, a2, b0, b1, b2);
 }
 

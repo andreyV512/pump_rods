@@ -1,17 +1,17 @@
 /*******************************************************************************
 
 "A Collection of Useful C++ Classes for Digital Signal Processing"
- By Vincent Falco
+ By Vinnie Falco
 
 Official project location:
-http://code.google.com/p/dspfilterscpp/
+https://github.com/vinniefalco/DSPFilters
 
 See Documentation.cpp for contact information, notes, and bibliography.
 
 --------------------------------------------------------------------------------
 
 License: MIT License (http://www.opensource.org/licenses/mit-license.php)
-Copyright (c) 2009 by Vincent Falco
+Copyright (c) 2009 by Vinnie Falco
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -64,7 +64,7 @@ void add (int samples,
     ++destSkip;
     while (--samples >= 0)
     {
-      *dest = static_cast<Td>(*src);
+      *dest += static_cast<Td>(*src);
       dest += destSkip;
       src += srcSkip;
     }
@@ -274,7 +274,8 @@ void fade (int samples,
 
   while (--samples >= 0)
   {
-    *dest++ = static_cast<Td>(*dest + t * (*src++ - *dest));
+    *dest = static_cast<Td>(*dest + t * (*src++ - *dest));
+    dest++;
     t += dt;
   }
 }
@@ -384,8 +385,10 @@ void multiply (int samples,
   }
   else
   {
-    while (--samples >= 0)
-      *dest++ = static_cast<Td>(*dest * factor);
+    while (--samples >= 0) {
+      *dest = static_cast<Td>(*dest * factor);
+      dest++;
+    }
   }
 }
 
@@ -708,7 +711,7 @@ public:
       double e = m_env[i];
       for (int n = samples; n; n--)
       {
-        double v = ::fabs(*cur++);
+        double v = std::abs(*cur++);
         if (v > e)
           e = m_a * (e - v) + v;
         else
@@ -723,6 +726,56 @@ public:
 protected:
   double m_a;
   double m_r;
+};
+
+//------------------------------------------------------------------------------
+
+// Helpful for discovering discontinuities in buffers
+template <int Channels=2, typename Value=float>
+class SlopeDetector
+{
+public:
+  SlopeDetector () : m_firstTime(true)
+  {
+	for (int i = 0; i < Channels; ++i)
+	  m_slope [i] = 0;
+  }
+
+  Value getSlope (int channel) const
+  {
+	return m_slope [channel];
+  }
+
+  void process (size_t numSamples, const Value** input)
+  {
+	for (int i = 0; i < Channels; ++i)
+	{
+	  const Value* src = input [i];
+	  int n = numSamples;
+
+	  if (m_firstTime)
+	  {
+		m_prev[i] = *src++;
+		--n;
+	  }
+
+	  while (n > 0)
+	  {
+		n--;
+		Value cur = *src++;
+		Value diff = std::abs (cur - m_prev[i]);
+		m_slope [i] = std::max (diff, m_slope[i]);
+		m_prev [i] = cur;
+	  }
+	}
+
+	m_firstTime = false;
+  }
+
+private:
+  bool m_firstTime;
+  Value m_slope [Channels];
+  Value m_prev [Channels];
 };
 
 }
