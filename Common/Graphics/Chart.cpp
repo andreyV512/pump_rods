@@ -551,7 +551,7 @@ bool Cursor::VerticalCursor(TMouseMove &l, VGraphics &g)
 	if(chart.AxesValues(l.x, l.y, xx, xy)	)
 	{		
 		Color col(COLOR_CURSOR);
-		Pen pen(col, 1);	
+		Pen pen(col, 3);	
 		int top = chart.rect.top + chart.offsetAxesTop + 3;
 		int bottom = chart.rect.bottom - chart.offsetAxesBottom - 3;
       
@@ -565,7 +565,7 @@ bool Cursor::VerticalCursor(TMouseMove &l, VGraphics &g)
 void Cursor::VerticalCursorNoTest(TMouseMove &l, VGraphics &g)
 {
 	Color col(COLOR_CURSOR);
-	Pen pen(col, 1);	
+	Pen pen(col, 3);	
 	int top = chart.rect.top + chart.offsetAxesTop + 3;
 	int bottom = chart.rect.bottom - chart.offsetAxesBottom - 3;
 
@@ -585,7 +585,7 @@ bool Cursor::CrossCursor(TMouseMove &l, VGraphics &g)
 	if(chart.AxesValues(l.x, l.y, xx, xy)	)
 	{		
 		Color col(COLOR_CURSOR);
-		Pen pen(col, 1);	
+		Pen pen(col, 3);	
 		int left = chart.rect.left + chart.offsetAxesLeft + 3;
 		int right = chart.rect.right - chart.offsetAxesRight - 3;
 		int top = chart.rect.top + chart.offsetAxesTop + 3;
@@ -605,8 +605,8 @@ void Cursor::Draw()
 	int xx, xy;
 	if(chart.ValuesAxes(x0, y0, xx, xy))
 	{
-        Color col(COLOR_BLUE);
-		Pen pen(col, 1);	
+        Color col(COLOR_CURSOR);
+		Pen pen(col, 3);	
 		int left = chart.rect.left + chart.offsetAxesLeft + 3;
 		int right = chart.rect.right - chart.offsetAxesRight - 3;
 		int top = chart.rect.top + chart.offsetAxesTop + 3;
@@ -616,8 +616,8 @@ void Cursor::Draw()
 	}
 	if(chart.ValuesAxes(x1, y1, xx, xy))
 	{
-        Color col(COLOR_RED);
-		Pen pen(col, 1);	
+        Color col(COLOR_CURSOR);
+		Pen pen(col, 3);	
 		int left = chart.rect.left + chart.offsetAxesLeft + 3;
 		int right = chart.rect.right - chart.offsetAxesRight - 3;
 		int top = chart.rect.top + chart.offsetAxesTop + 3;
