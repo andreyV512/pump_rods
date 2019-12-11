@@ -94,7 +94,7 @@ namespace Compute
 					, __wapper_filtre__<W<WidthFrequency>>()(p.cutoffFrequency)
 					, Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<TypeFiltre>>().value
 					);
-				analog.Init<WFiltre>(&aFiltre, &WFiltre::operator());
+				analog.Init<WFiltre>(&aFiltre, &WFiltre::Simple);
 			}
 
 			MedianFiltre mFiltre;

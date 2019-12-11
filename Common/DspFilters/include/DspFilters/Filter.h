@@ -223,7 +223,7 @@ public:
                      FilterDesignBase<DesignClass>::m_design);
   }
 
-protected:
+public:
   ChannelsState <Channels,
                  typename DesignClass::template State <StateType> > m_state;
 };
@@ -259,7 +259,7 @@ public:
     m_state.process (numSamples, arrayOfChannels, *((FilterClass*)this));
   }
 
-protected:
+public:
   ChannelsState <Channels,
                  typename FilterClass::template State <StateType> > m_state;
 };

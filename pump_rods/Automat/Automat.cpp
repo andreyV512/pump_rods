@@ -94,8 +94,7 @@ namespace Automat
 
 				bool dCheck = Singleton<OnTheJobTable>::Instance().items.get<DefectSig<Check>>().value;
 
-				//очистить главное окно
-				App::CleanViewers();
+				
 				//включена кнопка СТОП
 				AppKeyHandler::Run();
 				//сообщение СТАРТ ЦИКЛА
@@ -143,6 +142,10 @@ namespace Automat
 				AND_BITS(30 * 1000, Key<Status::stop>, On<iControl> ,Test<On<iCU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ и П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
 				AND_BITS(30 * 1000, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iCU>, On<iCycle>>);
+
+				//очистить главное окно
+				App::CleanViewers();
+
 				if(dCheck)
 				{
 					//выставлен сигнал DC_ON2
@@ -230,7 +233,7 @@ namespace Automat
 				}
 				sortResult = res;
 				//прерывание на просмотр
-				if(App::InterruptView() || !sortOnce)
+				if(App::InterruptView()) // || !sortOnce)
 				{
 					//включены кнопки ЦИКЛ и СТОП
 					AppKeyHandler::Continue();

@@ -184,12 +184,12 @@ namespace Compute
 			case TypeLowFiltre:
 				(*this)(analogFiltre.lowFiltre, order, passBand, passBandRippleDb, samplingRate, cutoffFrequency, 0, 0, 0);
 				analogFiltre.o = (DoubleFiltre::O *)&analogFiltre.lowFiltre;
-				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&LowFiltre::operator();
+				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&LowFiltre::Simple;
 				break;
 			case TypeBandPassFiltre: 
 				(*this)(analogFiltre.bandPassFiltre, order, passBand, passBandRippleDb, samplingRate, 0, centerFrequency, widthFrequency, 0);
 				analogFiltre.o = (DoubleFiltre::O *)&analogFiltre.bandPassFiltre;
-				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&BandPassFiltre::operator();
+				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&BandPassFiltre::Simple;
 				break;
 			};
 		}

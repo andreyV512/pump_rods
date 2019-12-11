@@ -50,7 +50,7 @@ namespace TemplDlg
 				, frame.widthFrequency
 				, frame.typeFiltre
 				);
-			analog.Init<WFiltre>(&aFiltre, &WFiltre::operator());
+			analog.Init<WFiltre>(&aFiltre, &WFiltre::Simple);
 		}
 
 		MedianFiltre mFiltre;

@@ -163,6 +163,24 @@ template<>struct __get_ampl__<StructSig>
 	}
 };
 
+template<template<class>class>struct __axes_size___
+{
+	template<class T>void operator()(T &t)
+	{
+		t.minAxesY = -Singleton<AxesGraphsTable>::Instance().items.get<StructSig<Axes>>().value;;
+		t.maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<StructSig<Axes>>().value;;
+	}
+};
+
+template<>struct __axes_size___<StructSig>
+{
+	template<class T>void operator()(T &t)
+	{
+		t.minAxesY = -100;
+		t.maxAxesY = 100;
+	}
+};
+
 template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 {
 	Viewer &viewer = viewers.get<Viewer>();
@@ -193,7 +211,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 			, frame.widthFrequency
 			, frame.typeFiltre
 			);
-		analog.Init<WFiltre>(&aFiltre, &WFiltre::operator());
+		analog.Init<WFiltre>(&aFiltre, &WFiltre::Simple);
 	}
 
 	MedianFiltre mFiltre;
@@ -226,8 +244,9 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	{
 		//frame.tchart.minAxesY = -100;
 		//frame.tchart.maxAxesY = 100;
-		frame.tchart.minAxesY = -Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
-		frame.tchart.maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
+		//frame.tchart.minAxesY = -Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
+		//frame.tchart.maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
+		__axes_size___<W>()(frame.tchart);
 	}
 
 	frame.tchart.minAxesX = offsetDef;

@@ -288,7 +288,7 @@ public:
       filter.process (numSamples, arrayOfChannels[i], m_state[i]);
   }
 
-private:
+public:
   StateType m_state[Channels];
 };
 
