@@ -30,11 +30,6 @@ namespace TemplDlg
 		L502ParametersTable::TItems &l502Param =  Singleton<L502ParametersTable>::Instance().items;
 		W<DataItem::Buffer> &o = Singleton<W<DataItem::Buffer>>::Instance();
 
-	//	int rodLength = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;
-
-	//	o.firstOffset =  unsigned((double)o.deathZoneFirst * o.currentOffset / rodLength);
-	//		o.secondOffset =  o.currentOffset - unsigned((double)o.deathZoneSecond * o.currentOffset / rodLength) - o.firstOffset;
-
 		typedef typename WapperFiltre<W>::Result WFiltre;
 		WFiltre aFiltre;
 		Compute::Filtre analog;
@@ -78,7 +73,7 @@ namespace TemplDlg
 			def.buffer[i] *= adcRange * frame.koef;
 		}
 
-		Compute::diff<W>()(def, def.buffer);
+	    Compute::diff<W>()(def, def.buffer);
 		for(int i = 0; i < DataItem::output_buffer_size; ++i)
 		{
 			double t = def.buffer[i];
@@ -95,14 +90,6 @@ namespace TemplDlg
 				def.status[i] = STATUS_ID(Nominal);
 			}
 		}
-		//for(int i = 0; i < def.deathZoneFirst; ++i)
-		//{
-		//	def.status[i] = STATUS_ID(DeathZone);
-		//}
-		//for(int i = def.deathZoneSecond; i < dimention_of(def.status); ++i)
-		//{
-		//	def.status[i] = STATUS_ID(DeathZone);
-		//}
 
 		RepaintWindow(def.hWnd);
 		RepaintWindow(frame.hWnd);

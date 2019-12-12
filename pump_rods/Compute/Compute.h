@@ -83,6 +83,7 @@ namespace Compute
 			return o.inputData;
 		}
 	};
+
 	template<>struct get_ampl<StructSig>
 	{
 		template<class O>double *operator()(O &o)
@@ -90,31 +91,24 @@ namespace Compute
 			int i = 0;
 			double *d = o.inputData;
 			double ampl = 0;
-			int offs = 0;
+			int k = 0;
 			while(i < o.currentOffset)
 			{
-				while(d[i] < 0)
+				ampl = 0;
+				while(d[i] < 0 && i < o.currentOffset)
 				{
-					if(d[i] > d[1 + i] && d[1 + i] <= d[2 + i])
-					{
-						ampl = -d[1 + i];
-					}
-					if(0 == ampl) ++offs;
-					o.inputDataX[i] = ampl;
+					if(ampl < -d[i]) ampl = -d[i];
 					++i;
 				}
-				while(d[i] > 0)
+				for(; k < i; ++k)o.inputDataX[k] = ampl;
+				ampl = 0;
+				while(d[i] > 0 && i < o.currentOffset)
 				{
-					if(d[i] < d[1 + i] && d[1 + i] >= d[2 + i])
-					{
-						ampl = d[1 + i];
-					}
-					if(0 == ampl) ++offs;
-					o.inputDataX[i] = ampl;
+					if(ampl < d[i]) ampl = d[i];
 					++i;
 				}
+				for(; k < i; ++k)o.inputDataX[k] = ampl;
 			}
-			for(int i = 0; i < offs; ++i){o.inputDataX[i] = ampl;}
 			return o.inputDataX;
 		}
 	};

@@ -113,9 +113,6 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 	frame.order = Singleton<AnalogFilterTable>::Instance().items.get<W<Order>>().value;
 
 	frame.stopBandDb = Singleton<AnalogFilterTable>::Instance().items.get<W<StopBandDb>>().value;
-	//frame.passBandRippleDb = Singleton<AnalogFilterTable>::Instance().items.get<W<PassBandRippleDb>>().value;
-
-//	frame.stopBandDb = __param_filtre__<W, StopBandDb>()();
 	frame.passBandRippleDb = __param_filtre__<W, PassBandRippleDb>()();
 
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
@@ -141,8 +138,10 @@ template<>struct diff_templ<StructSig>
 		{
 			if(arr[i] < 0) arr[i] =-arr[i];
 			arr[i] -= o.structMinVal;
-			//if(arr[i] < 0) arr[i] = 0;
-			if(arr[i] < 0) arr[i] = -arr[i];
+			if(arr[i] < 0) 
+			{
+				arr[i] = -arr[i];
+			}
 		}
 	}
 };
@@ -159,16 +158,17 @@ template<>struct __get_ampl__<StructSig>
 {
 	template<class O>double *operator()(O &o)
 	{
+
 		return o.inputDataX;
 	}
 };
 
-template<template<class>class>struct __axes_size___
+template<template<class>class W>struct __axes_size___
 {
 	template<class T>void operator()(T &t)
 	{
-		t.minAxesY = -Singleton<AxesGraphsTable>::Instance().items.get<StructSig<Axes>>().value;
-		t.maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<StructSig<Axes>>().value;
+		t.minAxesY = -Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
+		t.maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
 	}
 };
 
