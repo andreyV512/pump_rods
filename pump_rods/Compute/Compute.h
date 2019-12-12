@@ -90,6 +90,7 @@ namespace Compute
 			int i = 0;
 			double *d = o.inputData;
 			double ampl = 0;
+			int offs = 0;
 			while(i < o.currentOffset)
 			{
 				while(d[i] < 0)
@@ -98,6 +99,7 @@ namespace Compute
 					{
 						ampl = -d[1 + i];
 					}
+					if(0 == ampl) ++offs;
 					o.inputDataX[i] = ampl;
 					++i;
 				}
@@ -107,44 +109,15 @@ namespace Compute
 					{
 						ampl = d[1 + i];
 					}
+					if(0 == ampl) ++offs;
 					o.inputDataX[i] = ampl;
 					++i;
 				}
 			}
+			for(int i = 0; i < offs; ++i){o.inputDataX[i] = ampl;}
 			return o.inputDataX;
 		}
 	};
-
-	//template<class O, class P>struct __set_data__
-	//{
-	//	void operator()(P &p)
-	//	{
-	//		typedef Viewer<O>::Result V;
-	//		V &v = p.get<Viewer<O>::Result>();
-	//		O &item = Singleton<O>::Instance();
-	//		if(Singleton<OnTheJobTable>::Instance().items.get<typename ChangeWapper<O, Check>::Result>().value)
-	//		{
-	//			memmove(v.buffer, item.outputData, sizeof(v.buffer));
-	//			memmove(v.status, item.status, sizeof(v.status));
-	//			v. deathZoneFirst = item.deathZoneFirst;
-	//			v.deathZoneSecond = item.deathZoneSecond;
-	//			v.threshSortDown = item.threshSortDown; 
-	//			v.threshDefect = item.threshDefect;
-	//			v.result = item.result;
-	//			v.tchart.maxAxesX = item.currentOffset - 1;
-	//			v.currentOffset = item.currentOffset;
-	//			v.inputData = item.inputData;
-	//			v.count = DataItem::output_buffer_size;
-	//		}
-	//		else
-	//		{
-	//			memset(v.buffer, 0, sizeof(v.buffer));
-	//			memset(v.status, STATUS_ID(SensorOff), sizeof(v.status));
-	//			v.result = STATUS_ID(SensorOff);
-	//			v.count = 0;
-	//		}
-	//	}
-	//};
 
 	template<class >struct OrderFiltre;
 	template<template<int>class W, int N>struct OrderFiltre<W<N> >
