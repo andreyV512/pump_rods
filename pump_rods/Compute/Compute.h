@@ -179,6 +179,7 @@ namespace Compute
 	};
 	void ComputeFrame(double *inputData, int offs, int inputLenght, double *outputData, int outputLength, Filtre &analogFiltre, Filtre &medianFiltre);
 	void ComputeResult();
+	void  RecalculationDefect();
 	unsigned  Recalculation(unsigned = 1);
 	unsigned Result(unsigned res);
 

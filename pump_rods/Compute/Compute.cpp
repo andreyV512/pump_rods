@@ -187,6 +187,15 @@ namespace Compute
 		}
 	}
 
+	void  RecalculationDefect()
+	{
+		MainWindow &mainWindow = Singleton<MainWindow>::Instance();
+		typedef TL::MkTlst<DefectSig<DataItem::Buffer>>::Result list;
+		TL::foreach<list, __recalculation__>()(__rec_data__());
+		TL::foreach<list, __set_data__>()(mainWindow.viewers);		
+		App::UpdateViewers();
+	}
+
 	unsigned Recalculation(unsigned c1c2)
 	{
 		MainWindow &mainWindow = Singleton<MainWindow>::Instance();

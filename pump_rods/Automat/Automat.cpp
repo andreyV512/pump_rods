@@ -170,6 +170,7 @@ namespace Automat
 					//, при превышении сбора 120 сек выход из цикла
 					AND_BITS(120000, Key<Status::stop>, Off<iP1>,Test<On<iCU>, On<iCycle>>);
 				}
+				Compute::RecalculationDefect();
 				OUT_BITS(Off<oStart>);
 				if(dCheck)
 				{
@@ -208,6 +209,7 @@ namespace Automat
 					//, при превышении сбора 120 сек выход из цикла
 					AND_BITS(120000, Key<Status::stop>, Off<iP2>,Test<On<iCU>, On<iCycle>>);
 				}
+				Sleep(1500);
 				OUT_BITS(Off<oAC_ON>);	
 				//реверс данных с структуры
 				Compute::Reverse(structBuff.inputData, structBuff.currentOffset);
