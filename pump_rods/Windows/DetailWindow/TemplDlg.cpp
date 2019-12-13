@@ -17,11 +17,11 @@ TEMPL_MIN_EQUAL_VALUE(CenterFrequency, 0)
 	TEMPL_MAX_EQUAL_VALUE(PassBandRippleDb, 200.0)
 	TEMPL_PARAM_TITLE(PassBandRippleDb, L"Затухание в полосе подавления Db")
 
-template<>struct Dialog::NoButton<DefectSig<CenterFrequency>>{};
-template<>struct Dialog::NoButton<DefectSig<WidthFrequency>>{};
-template<>struct Dialog::NoButton<DefectSig<Order>>{};
-template<>struct Dialog::NoButton<DefectSig<StopBandDb> >{};
-template<>struct Dialog::NoButton<DefectSig<PassBandRippleDb>>{};
+//template<>struct Dialog::NoButton<DefectSig<CenterFrequency>>{};
+//template<>struct Dialog::NoButton<DefectSig<WidthFrequency>>{};
+//template<>struct Dialog::NoButton<DefectSig<Order>>{};
+//template<>struct Dialog::NoButton<DefectSig<StopBandDb> >{};
+//template<>struct Dialog::NoButton<DefectSig<PassBandRippleDb>>{};
 
 struct AdditionalParams
 {
