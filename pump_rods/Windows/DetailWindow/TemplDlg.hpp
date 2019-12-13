@@ -66,9 +66,16 @@ FILTER_ITEMS(WidthFrequency, widthFrequency)
 FILTER_ITEMS(Order, order)
 FILTER_ITEMS(StopBandDb, stopBandDb)
 FILTER_ITEMS(PassBandRippleDb, passBandRippleDb)
+FILTER_ITEMS(CutoffFrequencyON, cutoffFrequencyON)
+
 
 FILTER_ITEMS(MedianFiltreWidth, medianFiltreWidth)
 FILTER_ITEMS(MedianFiltreON, medianFiltreON)
+
+FILTER_ITEMS(Thresh<SortDown>, threshSortDown)
+FILTER_ITEMS(Thresh<Defect>, threshDefect)
+
+FILTER_ITEMS(KoeffSign, koef)
 #undef FILTER_ITEMS
 
 	TEMPL_MIN_EQUAL_VALUE(MedianFiltreWidth, 3)
@@ -210,36 +217,6 @@ TEMPL_MIN_EQUAL_VALUE(StopBandDb, 5)
 TEMPL_MAX_EQUAL_VALUE(StopBandDb, 100)
 TEMPL_PARAM_TITLE(StopBandDb, L"Затухание в полосе подавления Db")
 
-template<template<class>class W>struct Dialog::NoButton<W<CutoffFrequencyON>>{};
-
-template<template<class>class W, class P>struct __command__<Dialog::NoButton<W<CutoffFrequencyON>>, P>
-{
-	typedef Dialog::NoButton<W<CutoffFrequencyON>> O;
-	bool operator()(O *o, P *p)
-	{
-		if(0 == p->e.isAcselerator)
-		{
-			typedef typename TL::Inner<O>::Result TVal;
-			HWND h = p->owner.items.get<Dialog::DlgItem2<TVal, P::Owner>>().hWnd;
-			//
-			if(p->e.hControl == h)
-			{
-				typedef TemplWindow<W> Win;
-				HWND hWnd = GetWindow(p->e.hwnd, GW_OWNER);
-				Win &e = *(Win *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-				FrameViewer &frame =  e.viewers.get<FrameViewer>();
-				Win::Viewer &viewer = e.viewers.get<Win::Viewer>();
-
-				frame.cutoffFrequencyON =  BST_CHECKED == Button_GetCheck(h);
-
-				TemplDlg::Repaint<W>(viewer, frame);
-				return false;
-			}
-		}
-		return true;
-	}
-};
-
 template<>struct FillComboboxList<DefectSig<TypeFiltre>>			 
 {		
 	void operator()(HWND h, DefectSig<TypeFiltre> &t)			 
@@ -350,7 +327,10 @@ template<template<class> class W>struct TreshDlg
 			, W<Thresh<Defect>>
 			>::Result
 			, 350
-			, TL::MkTlst<TreshOkBtn, CancelBtn>::Result
+			, TL::MkTlst<TreshOkBtn, CancelBtn
+			, Dialog::NoButton<W<Thresh<SortDown>>>
+			, Dialog::NoButton<W<Thresh<Defect>>>
+			>::Result
 		>(par).Do(h, L"Настройки порогов"))
 		{
 			viewer.threshSortDown =  frame.threshSortDown = par.items.get< W<Thresh<SortDown>>>().value;
@@ -362,7 +342,7 @@ template<template<class> class W>struct TreshDlg
 };
 //---------------------------------------------------------------
 TEMPL_MIN_EQUAL_VALUE(KoeffSign, 0.1)
-TEMPL_MAX_EQUAL_VALUE( KoeffSign, 2.0)
+TEMPL_MAX_EQUAL_VALUE( KoeffSign, 10.0)
 TEMPL_PARAM_TITLE(KoeffSign, L"Коэффициент")
 
 template<template<class>class W>struct CorrectionSensorDlg
@@ -377,7 +357,9 @@ template<template<class>class W>struct CorrectionSensorDlg
 		if(Dialog::Templ<NullType, KoeffSignTable
 			, TL::MkTlst<W<KoeffSign>>::Result
 			, 550
-			, TL::MkTlst<DefOkBtn, CancelBtn>::Result
+			, TL::MkTlst<DefOkBtn, CancelBtn
+			, Dialog::NoButton<W<KoeffSign>>
+			>::Result
 			>(koef).Do(h, L"Корректировка датчика"))
 		{
 			frame.koef = koef.items.get<W<KoeffSign>>().value;
