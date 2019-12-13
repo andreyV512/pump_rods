@@ -113,11 +113,11 @@ namespace Automat
 		{
 			for(;;)
 			{
-				AppKeyHandler::Init();
+				AppKeyHandler::Continue();
 				//ожидание нажатия кнопки СТАРТ
 				if(App::IsRun())
 				{
-					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>);//, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
+					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
 					if(result.ret == Status::contine_btn) sortOnce = false;
 				}
 				App::IsRun() = false;
