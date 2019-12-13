@@ -66,16 +66,20 @@ public:
 	int count;
 	int medianFiltreWidth;
 	int cutoffFrequency;
+	int order;
+	double stopBandDb;
+	double passBandRippleDb;
 
 	int centerFrequency;
 	int widthFrequency;
+	int typeFiltre;
 
 	bool cutoffFrequencyON;
 	bool medianFiltreON;
 	double delta;
 	double koef;
 	bool isBarGraph;
-
+	
 	FrameViewer();
 
 	bool GetColorBar(int , double &, unsigned &);

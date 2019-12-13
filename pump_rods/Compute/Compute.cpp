@@ -34,35 +34,6 @@ namespace Compute
 		{}
 	};
 
-	template<class O, class Filtre>struct diff
-	{
-		void operator()(O &o, double delta, double adcRange, double koef, int medianWidth, bool medianON, int samplingRate, int cutoffFrequency, bool wave)
-		{
-		}
-	};
-
-	template<class O, class Filtre>struct diff<StructSig<O>, Filtre>
-	{
-		void operator()(O &o, double delta, double adcRange, double koef, int medianWidth, bool medianON, int samplingRate, int cutoffFrequency, bool cutoffFrequencyON)
-		{
-
-			double *d = o.outputData;
-			double t = 0;
-			for(int j = 0; j < DataItem::output_buffer_size; ++j)
-			{
-				t += d[j];
-			}
-			t /=  DataItem::output_buffer_size;
-			for(int j = 0; j < DataItem::output_buffer_size; ++j)
-			{
-				if(d[j] > 0)d[j] -= t;
-				if(d[j] < 0) d[j] = -d[j];
-			}
-			o.structMinVal = t;
-		}
-	};
-
-
 	template<class T>struct __wapper_filtre__
 	{
 		template<class O>typename T::type_value operator()(O &o){return o.get<T>().value;}
@@ -76,6 +47,15 @@ namespace Compute
 		template<class O>typename int operator()(O &o){return 0;}
 	};
 
+	//template<>struct __wapper_filtre__<StructSig<StopBandDb>>
+	//{
+	//	template<class O>typename int operator()(O &o){return 0;}
+	//};
+
+	template<>struct __wapper_filtre__<StructSig<PassBandRippleDb>>
+	{
+		template<class O>typename int operator()(O &o){return 0;}
+	};
 
 	template<class O, class P>struct __recalculation__;
 	template<class T, template<class>class W, class P>struct __recalculation__<W<T>, P>
@@ -83,7 +63,6 @@ namespace Compute
 		typedef W<T> O;
 		void operator()(P &p)
 		{
-			zprint("\n");
 			if(!Singleton<OnTheJobTable>::Instance().items.get<W<Check>>().value) return;
 			O &o = Singleton<O>::Instance();
 			double adcRange =  100.0 / DataItem::ADC_RANGE(p.l502Param.get<W<RangeL502>>().value);
@@ -104,47 +83,41 @@ namespace Compute
 			if(p.cutoffFrequency.get<W<CutoffFrequencyON>>().value)
 			{
 				Compute::InitFiltre()(aFiltre
+					, __wapper_filtre__<W<Order>>()(p.cutoffFrequency)
+				
+					, __wapper_filtre__<W<StopBandDb>>()(p.cutoffFrequency)
+					, __wapper_filtre__<W<PassBandRippleDb>>()(p.cutoffFrequency)
+				
 					, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
-					, p.cutoffFrequency.get<W<CutoffFrequency>>().value//frame.cutoffFrequency
-					//, p.cutoffFrequency.get<W<CenterFrequency>>().value//frame.centerFrequency
+					, p.cutoffFrequency.get<W<CutoffFrequency>>().value
 					, __wapper_filtre__<W<CenterFrequency>>()(p.cutoffFrequency)
-					//, p.cutoffFrequency.get<W<WidthFrequency>>().value//frame.widthFrequency
 					, __wapper_filtre__<W<WidthFrequency>>()(p.cutoffFrequency)
+					, Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<TypeFiltre>>().value
 					);
-				analog.Init<WFiltre>(&aFiltre, &WFiltre::operator());
+				analog.Init<WFiltre>(&aFiltre, &WFiltre::Simple);
 			}
 
 			MedianFiltre mFiltre;
 			Compute::Filtre median;
-			//if(frame.medianFiltreON && frame.medianFiltreWidth > 2)
 			if(p.medianFiltreWidth.get<W<MedianFiltreON>>().value && p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value > 2)
 			{
-				//mFiltre.InitWidth(frame.medianFiltreWidth);
 				mFiltre.InitWidth(p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value);
 				median.Init(&mFiltre, &MedianFiltre::operator());
 			}
 			//-------------------------
 			Compute::ComputeFrame(
-				o.inputData, o.firstOffset
+				get_ampl<W>()(o), o.firstOffset
 				, o.secondOffset
-				//, p.cutoffFrequency.get<W<CutoffFrequency>>().value
-				//, p.cutoffFrequency.get<W<CutoffFrequencyON>>().value
-				//, p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value
-				//, p.medianFiltreWidth.get<W<MedianFiltreON>>().value
 				, o.outputData
 				, DataItem::output_buffer_size
-				//, p.l502Param.get<W<ChannelSamplingRate>>().value
 				, analog
 				, median
 				);
 
-			//if(frame.isBarGraph)
-			//{
-			//	for(int i = 0; i < tbuf_size; ++i)
-			//	{
-			//		if(tbuf[i] < 0) tbuf[i] = -tbuf[i];
-			//	}
-			//}
+			for(int i = 0; i < DataItem::output_buffer_size; ++i)
+			{
+				if(o.outputData[i] < 0) o.outputData[i] = -o.outputData[i];
+			}
 
 			for(int i = 0; i < DataItem::output_buffer_size; ++i)
 			{
@@ -154,14 +127,7 @@ namespace Compute
 			o.deathZoneFirst =  int((double )o.deathZoneFirst * DataItem::output_buffer_size / rodLength);
 			o.deathZoneSecond =  DataItem::output_buffer_size - int((double )o.deathZoneSecond * DataItem::output_buffer_size / rodLength);
 
-			diff<O, typename WapperFiltre<W>::Result>()(o, (double)o.currentOffset / DataItem::output_buffer_size, adcRange, koef
-				, p.medianFiltreWidth.get<W<MedianFiltreWidth>>().value
-				, p.medianFiltreWidth.get<W<MedianFiltreON>>().value
-				, p.l502Param.get<W<ChannelSamplingRate>>().value
-				, p.cutoffFrequency.get<W<CutoffFrequency>>().value
-				, p.cutoffFrequency.get<W<CutoffFrequencyON>>().value
-				);
-
+			diff<W>()(o, o.outputData);
 			o.result = STATUS_ID(Nominal);
 
 			for(int i = 0; i < DataItem::output_buffer_size; ++i)
@@ -201,36 +167,7 @@ namespace Compute
 		typedef W<T> Result;
 	};
 
-	template<class O, class P>struct __set_data__
-	{
-		void operator()(P &p)
-		{
-			typedef Viewer<O>::Result V;
-			V &v = p.get<Viewer<O>::Result>();
-			O &item = Singleton<O>::Instance();
-			if(Singleton<OnTheJobTable>::Instance().items.get<typename ChangeWapper<O, Check>::Result>().value)
-			{
-				memmove(v.buffer, item.outputData, sizeof(v.buffer));
-				memmove(v.status, item.status, sizeof(v.status));
-				v. deathZoneFirst = item.deathZoneFirst;
-				v.deathZoneSecond = item.deathZoneSecond;
-				v.threshSortDown = item.threshSortDown; 
-				v.threshDefect = item.threshDefect;
-				v.result = item.result;
-				v.tchart.maxAxesX = item.currentOffset - 1;
-				v.currentOffset = item.currentOffset;
-				v.inputData = item.inputData;
-				v.count = DataItem::output_buffer_size;
-			}
-			else
-			{
-				memset(v.buffer, 0, sizeof(v.buffer));
-				memset(v.status, STATUS_ID(SensorOff), sizeof(v.status));
-				v.result = STATUS_ID(SensorOff);
-				v.count = 0;
-			}
-		}
-	};
+	
 
 	void ComputeResult()
 	{
@@ -309,14 +246,10 @@ namespace Compute
 		}
 	}
 
-	void ComputeFrame(double *inputData, int offs, int inputLenght, double *outputData, int outputLength, Filtre &analogFiltre, Filtre &medianFiltre)//, bool wave)
+	void ComputeFrame(double *inputData, int offs, int inputLenght, double *outputData, int outputLength, Filtre &analogFiltre, Filtre &medianFiltre)
 	{
 		for(int i = 0; i < offs; ++i)
 		{
-			//double t = ;
-			//if(medianON) t = filtre(inputData[i]);
-			//if(cutoffFrequencyON) t = analogFiltre(t);
-			//meander(t);
 			double t = medianFiltre(inputData[i]);
 			t = analogFiltre(t); 
 		}
@@ -331,13 +264,11 @@ namespace Compute
 		{
 			double t = medianFiltre(inputData[i]);
 			t = analogFiltre(t);
-			//	t = meander(t);
 			int k = int(i / delta);
 			if(k >= outputLength) break;
-			//double absT = t > 0 ? t: -t;
 			if(abs(t) > abs(outputData[k]))
 			{
-				outputData[k] = t;//wave? absT: t;
+				outputData[k] = t;
 			}
 		}
 	}

@@ -27,6 +27,8 @@ namespace Automat
 
 	HANDLE Key<Status::contine_btn>::hEvent;
 
+	int sortResult = 0;
+
 	Result::Result()
 		: inputs_bits(Singleton<InputBitTable>::Instance().items)
 	{}
@@ -66,40 +68,6 @@ namespace Automat
 	{
 		SetEvent(Key<Status::contine_btn>::hEvent);
 	}
-	/*
-	if(sortOnce)
-				{
-					//ожидание сигнала СОРТ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-					AND_BITS(-1, Key<Status::stop>, On<iCOPT>, Test<On<iCU>, On<iCycle>>);
-					dprint("x 3\n");
-					//чтение дискретного рорта
-					unsigned bits = device1730.Read();
-					//чтение сигнала П1 и П2
-					c1c2  = 0 != (bits & (1 << result.inputs_bits.get<iP1>().value))? 2: 0;
-					c1c2 |= 0 != (bits & (1 << result.inputs_bits.get<iP2>().value))? 1: 0;
-				}
-	*/
-	//unsigned c1c2 = 0;
-	//struct BlockSort
-	//{
-	//	static unsigned start;
-	//	BlockSort()
-	//	{
-	//		start =  Performance::Counter();
-	//		start += 5000;
-	//	}
-	//	static void Do(Automat::Result &result)
-	//	{
-	//		if(result.bits & result.inputs_bits.get<iCOPT>().value)
-	//		{
-	//			c1c2  = 0 != (result.bits & result.inputs_bits.get<iP1>().value)? 2: 0;
-	//			c1c2 |= 0 != (result.bits & result.inputs_bits.get<iP2>().value)? 1: 0;
-	//			result.ret = Status::contine;
-	//		}
-	//		else if(result.currentTime > start)result.ret = Status::contine;
-	//	}
-	//};
-	//unsigned BlockSort::start;
 //-----------------------------------------------------------------------------------
 	DWORD WINAPI  Loop(PVOID)
 	{
@@ -113,19 +81,20 @@ namespace Automat
 		{
 			for(;;)
 			{
-				AppKeyHandler::Continue();
+				AppKeyHandler::Stop();
 				//ожидание нажатия кнопки СТАРТ
 				if(App::IsRun())
 				{
-					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>, Key<Status::stop>);//, Test<On<iCU>, On<iCycle>>);
+					AND_BITS(-1, Key<Status::start>, Key<Status::contine_btn>);
 					if(result.ret == Status::contine_btn) sortOnce = false;
 				}
 				App::IsRun() = false;
 				App::StatusBar(0, L"");
 				dprint("AUTOMAT_RUN------------------------------\n");
 
-				//очистить главное окно
-				App::CleanViewers();
+				bool dCheck = Singleton<OnTheJobTable>::Instance().items.get<DefectSig<Check>>().value;
+
+				
 				//включена кнопка СТОП
 				AppKeyHandler::Run();
 				//сообщение СТАРТ ЦИКЛА
@@ -157,11 +126,15 @@ namespace Automat
 					case 2: Log::Mess<LogMess::On_iP1_Off_iP2>(); break;
 					case 3: Log::Mess<LogMess::On_iP1_On_iP2>(); break;
 					}
+					sortOnce = false;
 				}
 				AND_BITS(-1, Key<Status::stop>, On<iCU>, On<iCycle>);
-				//выставлен сигнал DC_ON1
-				OUT_BITS(On<oDC_ON1>);
-				AND_BITS(30 * 1000, Key<Status::stop>, On<iKM2_DC>, Test<On<iCU>, On<iCycle>>);
+				if(dCheck)
+				{
+					//выставлен сигнал DC_ON1
+					OUT_BITS(On<oDC_ON1>);
+					AND_BITS(30 * 1000, Key<Status::stop>, On<iKM2_DC>, Test<On<iCU>, On<iCycle>>);
+				}
 				//ВЫСТАВЛЕН СИГНАЛ ПУСК
 				OUT_BITS(On<oStart>);
 				//ожидание выключения сигналов СОРТ, П1, П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
@@ -170,8 +143,20 @@ namespace Automat
 				AND_BITS(30 * 1000, Key<Status::stop>, On<iControl> ,Test<On<iCU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ и П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
 				AND_BITS(30 * 1000, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iCU>, On<iCycle>>);
-				//выставлен сигнал DC_ON2
-				OUT_BITS(On<oDC_ON2>);
+
+				//очистить главное окно
+				App::CleanViewers();
+
+				if(dCheck)
+				{
+					//выставлен сигнал DC_ON2
+					OUT_BITS(On<oDC_ON2>);
+				}
+				else
+				{
+					OUT_BITS(On<oAC_ON>);
+				}
+					
 				{
 					//сбор данных
 					Log::Mess<LogMess::DataCollectionDEF>();
@@ -185,12 +170,20 @@ namespace Automat
 					//, при превышении сбора 120 сек выход из цикла
 					AND_BITS(120000, Key<Status::stop>, Off<iP1>,Test<On<iCU>, On<iCycle>>);
 				}
-					OUT_BITS(Off<oStart>);
-				//отключение сигнала DC_ON2
-				OUT_BITS(Off<oDC_ON2>);
-				Sleep(2000);
-				//отключение сигнала DC_ON1
-  		    	OUT_BITS(Off<oDC_ON1>);
+				OUT_BITS(Off<oStart>);
+				if(dCheck)
+				{
+					//отключение сигнала DC_ON2
+					OUT_BITS(Off<oDC_ON2>);
+					Sleep(2000);
+					//отключение сигнала DC_ON1
+					OUT_BITS(Off<oDC_ON1>);
+				}
+				else
+				{
+					OUT_BITS(Off<oAC_ON>);
+					Sleep(2000);
+				}
 
 				//убеждаемся что сигнал  отключён
 		      AND_BITS(-1,  Key<Status::stop>, Off<iKM2_DC>, Off<iKM3_AC>, Test<On<iCU>, On<iCycle>>);	
@@ -239,8 +232,9 @@ namespace Automat
 				{
 					OUT_BITS(Off<oC2>);
 				}
+				sortResult = res;
 				//прерывание на просмотр
-				if(App::InterruptView() || !sortOnce)
+				if(App::InterruptView()) // || !sortOnce)
 				{
 					//включены кнопки ЦИКЛ и СТОП
 					AppKeyHandler::Continue();
@@ -279,6 +273,7 @@ namespace Automat
 			case Status::stop:
 				Log::Mess<LogMess::ExitMeshuringCycle>();
 				dprint("Status::stop\n");
+				sortOnce = true;
 				break;
 			case Status::time_out:
 				dprint("Status::time_out\n");
@@ -293,5 +288,40 @@ namespace Automat
 			}
 		}
 		return 0;
+	}
+
+	void UpSort()
+	{
+		--sortResult;
+		sortResult &= 3;
+		int res = sortResult;
+		if(0 != (res & 2))
+		{
+			OUT_BITS(On<oC1>);
+		}
+		else
+		{
+			OUT_BITS(Off<oC1>);
+		}
+		if(0 != (res & 1))
+		{
+			OUT_BITS(On<oC2>);
+		}
+		else
+		{
+			OUT_BITS(Off<oC2>);
+		}
+		if(0 == res)
+		{
+			Log::Mess<LogMess::Brak>();
+			App::StatusBar(0, L"Брак");
+		}
+		else
+		{
+			wchar_t buf[32];
+			wsprintf(buf, L"Сорт %d", res);
+			App::StatusBar(0, buf);
+			Log::Mess<LogMess::Copt>(res);
+		}
 	}
 }

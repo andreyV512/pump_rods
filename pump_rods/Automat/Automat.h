@@ -45,9 +45,12 @@ namespace Automat
 	};
 	extern HANDLE hEvent;
 	extern Result result;
+	extern int sortResult;
 	void Init();
 	void Destroy();
 	void Run();
 	void Stop();
 	void Contine();
+
+	void UpSort();
 }

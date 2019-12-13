@@ -3,11 +3,43 @@
 #include "tools_debug\DebugMess.h"
 #include "DspFilters\ChebyshevFiltre.hpp"
 #include "App\AppBase.h"
+#include "MessageText/ListMess.hpp"
 
 template<class>struct StructSig;
 template<class>struct DefectSig;
 namespace Compute
 {	
+	template<class O, class P>struct __set_data__
+	{
+		void operator()(P &p)
+		{
+			typedef Viewer<O>::Result V;
+			V &v = p.get<Viewer<O>::Result>();
+			O &item = Singleton<O>::Instance();
+			if(Singleton<OnTheJobTable>::Instance().items.get<typename ChangeWapper<O, Check>::Result>().value)
+			{
+				memmove(v.buffer, item.outputData, sizeof(v.buffer));
+				memmove(v.status, item.status, sizeof(v.status));
+				v. deathZoneFirst = item.deathZoneFirst;
+				v.deathZoneSecond = item.deathZoneSecond;
+				v.threshSortDown = item.threshSortDown; 
+				v.threshDefect = item.threshDefect;
+				v.result = item.result;
+				v.tchart.maxAxesX = item.currentOffset - 1;
+				v.currentOffset = item.currentOffset;
+				v.inputData = item.inputData;
+				v.count = DataItem::output_buffer_size;
+			}
+			else
+			{
+				memset(v.buffer, 0, sizeof(v.buffer));
+				memset(v.status, STATUS_ID(SensorOff), sizeof(v.status));
+				v.result = STATUS_ID(SensorOff);
+				v.count = 0;
+			}
+		}
+	};
+
 	struct Noop
 	{
 		Noop(){}
@@ -16,137 +48,120 @@ namespace Compute
 			return t;
 		}
 	};
-	template<template<class>class>class Meander;
 
-	template<>class Meander<StructSig>
+	template<template<class>class>struct diff
 	{
-		double mn, mx, pred;;
-		bool changed;
-	public:
-		Meander():  mn(0), mx(0), pred(0), changed(false)
+		template<class O>void operator()(O &o, double(&)[1000])
 		{
-		}
-		double operator()(double x)
-		{
-			double res = 0;
-			if(pred < x)
-			{
-				if(x >= mx)mx = x;
-				res = -mn;
-				if(changed)
-				{
-					mx = 0;
-					changed ^= true;
-				}
-			}
-			else
-			{
-				if(x < mn)mn = x;
-				res = mx;
-				if(!changed)
-				{
-					mn = 0;
-					changed ^= true;
-				}
-			}
-			pred = x;
-			return res;
 		}
 	};
 
-	template<>class Meander<DefectSig>
+	template<>struct diff<StructSig>
 	{
-	public:
-		Meander(){}
-		double operator()(double next)
+		template<class O>void operator()(O &o, double(&d)[1000])
 		{
-			return next;
+			double t = 0;
+			for(int j = 0; j < DataItem::output_buffer_size; ++j)
+			{
+				t += d[j];
+			}
+			t /=  DataItem::output_buffer_size;
+			for(int j = 0; j < DataItem::output_buffer_size; ++j)
+			{
+				if(d[j] < 0) d[j] = -d[j];
+				d[j] -= t;
+				if(d[j] < 0) d[j] = -d[j];
+			}
+			o.structMinVal = t;
 		}
+	};
+
+	template<template<class>class>struct get_ampl
+	{
+		template<class O>double *operator()(O &o)
+		{
+			return o.inputData;
+		}
+	};
+
+	template<>struct get_ampl<StructSig>
+	{
+		template<class O>double *operator()(O &o)
+		{
+			int i = 0;
+			double *d = o.inputData;
+			double ampl = 0;
+			int k = 0;
+			while(i < o.currentOffset)
+			{
+				ampl = 0;
+				while(d[i] < 0 && i < o.currentOffset)
+				{
+					if(ampl < -d[i]) ampl = -d[i];
+					++i;
+				}
+				for(; k < i; ++k)o.inputDataX[k] = ampl;
+				ampl = 0;
+				while(d[i] > 0 && i < o.currentOffset)
+				{
+					if(ampl < d[i]) ampl = d[i];
+					++i;
+				}
+				for(; k < i; ++k)o.inputDataX[k] = ampl;
+			}
+			return o.inputDataX;
+		}
+	};
+
+	template<class >struct OrderFiltre;
+	template<template<int>class W, int N>struct OrderFiltre<W<N> >
+	{
+		static const int value = N;
 	};
 
 	struct InitFiltre
 	{
-		template<class T>void operator()(T &analogFiltre, int samplingRate, int cutoffFrequency, int, int)
+		template<class T>void operator()(T &analogFiltre, int order, double stopBandDb, double, int samplingRate, int cutoffFrequency, int, int, int)
 		{
+			static const int max_order = OrderFiltre<typename T::T>::value;
 			analogFiltre.Setup(
-				samplingRate
+				order > 0 && order < max_order ? order: max_order
+				, samplingRate
 				, cutoffFrequency
-				, 40
+				, stopBandDb
 				);
 		}
 
-		void operator()(BandPassFiltre &analogFiltre, int samplingRate, int cutoffFrequency, int centerFrequency, int widthFrequency)
+		void operator()(BandPassFiltre &analogFiltre, int order, double, double passBandRippleDb, int samplingRate, int cutoffFrequency, int centerFrequency, int widthFrequency, int)
 		{
+			static const int max_order = OrderFiltre<BandPassFiltre::T>::value;
 			analogFiltre.Setup(
-				samplingRate
-				//, Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<WidthFrequency>>().value
+				order > 0 && order < max_order ? order: max_order
+				, samplingRate
 				, widthFrequency
 				, centerFrequency
-				, 1
+				, passBandRippleDb
 				);
 		}
 
-		void operator()(DoubleFiltre &analogFiltre, int samplingRate, int cutoffFrequency, int centerFrequency, int widthFrequency)
+		void operator()(DoubleFiltre &analogFiltre, int order, double passBand, double passBandRippleDb, int samplingRate, int cutoffFrequency, int centerFrequency, int widthFrequency, int typeFiltre)
 		{
-			switch(Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<TypeFiltre>>().value)
+			switch(typeFiltre)
 			{
 			case TypeLowFiltre:
-				(*this)(analogFiltre.lowFiltre, samplingRate, cutoffFrequency, 0, 0);
+				(*this)(analogFiltre.lowFiltre, order, passBand, passBandRippleDb, samplingRate, cutoffFrequency, 0, 0, 0);
 				analogFiltre.o = (DoubleFiltre::O *)&analogFiltre.lowFiltre;
-				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&LowFiltre::operator();
+				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&LowFiltre::Simple;
 				break;
 			case TypeBandPassFiltre: 
-				(*this)(analogFiltre.bandPassFiltre, samplingRate, 0, centerFrequency, widthFrequency);
+				(*this)(analogFiltre.bandPassFiltre, order, passBand, passBandRippleDb, samplingRate, 0, centerFrequency, widthFrequency, 0);
 				analogFiltre.o = (DoubleFiltre::O *)&analogFiltre.bandPassFiltre;
-				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&BandPassFiltre::operator();
+				analogFiltre.ptr = (double(DoubleFiltre::O::*)(double))&BandPassFiltre::Simple;
 				break;
 			};
 		}
 	};
 
-	/*
-	template<class Filtre, class Meander = Noop>struct ComputeFrame
-	{
-	void operator()(double *inputData, int offs, int inputLenght, int cutoffFrequency, bool cutoffFrequencyON, int medianWidth, bool medianON, double *outputData, int outputLength, int samplingRate, bool wave = true)
-	{
-	MedianFiltre filtre;
-	if(medianWidth > 2)filtre.InitWidth(medianWidth);
-
-	Filtre analogFiltre;
-	if(0 != cutoffFrequency) InitFiltre()(analogFiltre, samplingRate, cutoffFrequency);
-	Meander meander;
-
-	for(int i = 0; i < offs; ++i)
-	{
-	double t = inputData[i];
-	if(medianON) t = filtre(inputData[i]);
-	if(cutoffFrequencyON) t = analogFiltre(t);
-	meander(t);
-	}
-
-	inputData += offs;
-
-	double delta = (double)inputLenght / outputLength;
-	memset(outputData, 0, outputLength * sizeof(double));
-	--inputLenght;
-
-	for(int i = 0; i <= inputLenght; ++i)
-	{
-	double t = inputData[i];
-	if(medianON) t = filtre(inputData[i]);
-	if(cutoffFrequencyON) t = analogFiltre(t);
-	t = meander(t);
-	int k = int(i / delta);
-	if(k >= outputLength) break;
-	double absT = t > 0 ? t: -t;
-	if(absT > abs(outputData[k]))
-	{
-	outputData[k] = wave? absT: t;
-	}
-	}		
-	}
-	};
-	*/
 	class Filtre
 	{
 		struct O{};
@@ -162,7 +177,7 @@ namespace Compute
 		}
 		double operator()(double val){return (o->*ptr)(val);};
 	};
-	void ComputeFrame(double *inputData, int offs, int inputLenght, double *outputData, int outputLength, Filtre &analogFiltre, Filtre &medianFiltre);//, bool wave = true);
+	void ComputeFrame(double *inputData, int offs, int inputLenght, double *outputData, int outputLength, Filtre &analogFiltre, Filtre &medianFiltre);
 	void ComputeResult();
 	unsigned  Recalculation(unsigned = 1);
 	unsigned Result(unsigned res);

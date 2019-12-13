@@ -30,18 +30,21 @@ bool ResultViewer::GetColorBar(int zone, double &data, unsigned &color)
 
 bool ResultViewer::Draw(TMouseMove &l, VGraphics &g)
 {
-	int x = 0;
-	CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
+	if(count > 0)
+	{
+		int x = 0;
+		CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 
-	int offs = int((double)x * Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value / DataItem::output_buffer_size);
-	unsigned color = 0xffffffff;
-	wchar_t txt[1024];
-	StatusText()(viewerData.status[x], color, txt);
-	wsprintf(label.buffer, L"<ff>смещение %d <%x>%s"
-		, offs
-		, color
-		, txt
-		);
-	label.Draw(g());
+		int offs = int((double)x * Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value / DataItem::output_buffer_size);
+		unsigned color = 0xffffffff;
+		wchar_t txt[1024];
+		StatusText()(viewerData.status[x], color, txt);
+		wsprintf(label.buffer, L"<ff>смещение %d <%x>%s"
+			, offs
+			, color
+			, txt
+			);
+		label.Draw(g());
+	}
 	return false;
 }

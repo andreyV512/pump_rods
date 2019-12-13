@@ -4,7 +4,6 @@
 #include "FrameViewer.h"
 #include "TemplDlg.hpp"
 #include "App/App.h"
-//#include "Compute\Compute.h"
 
 template<template<class>class W>struct __main_window_viewer__;
 template<>struct __main_window_viewer__<StructSig>
@@ -54,12 +53,21 @@ template<template<class>class W>bool TemplWindow<W>::Viewer::Draw(TMouseMove &l,
 		int x;
 		CoordCell(tchart, l.x, x, DataItem::output_buffer_size);
 		W<DataItem::Buffer> &item = Singleton<W<DataItem::Buffer>>::Instance();
-		//owner->offs = int((double)x * currentOffset / DataItem::output_buffer_size);
 		owner->offs = int((double)x * item.secondOffset / DataItem::output_buffer_size);
 		owner->ChangeFrame(owner->offs);	
 	}
 	return true;
 }
+
+template<template<class>class, class>struct __param_filtre__
+{
+	int operator()(){return 0;}
+};
+
+template<class P>struct __param_filtre__<DefectSig, P>
+{
+	typename DefectSig<P>::type_value operator()(){return Singleton<AnalogFilterTable>::Instance().items.get<DefectSig<P>>().value;}
+};
 
 template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 {
@@ -78,8 +86,8 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 	viewer.threshSortDown = item.threshSortDown; 
 	viewer.threshDefect = item.threshDefect;
 	viewer.result = item.result;
-	viewer.tchart.maxAxesX = item.secondOffset;//item.currentOffset - 1;
-	viewer.currentOffset = item.secondOffset;//item.currentOffset;
+	viewer.tchart.maxAxesX = item.secondOffset;
+	viewer.currentOffset = item.secondOffset;
 	viewer.inputData = item.inputData;
 	viewer.tchart.items.get<BottomAxesMeters>().maxBorder = Singleton<DeadAreaTable>::Instance().items.get<RodLenght>().value;	
 	viewer.threshSortDownColor = color.get<Clr<SortDown>>().value;
@@ -89,6 +97,7 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 	viewer.cursor.SetMouseMoveHandler(&viewer, & DetailWindow<W>::Viewer::Draw);
 	viewer.count = DataItem::output_buffer_size;
 	viewer.chart->maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
+	viewer.structMinVal = item.structMinVal;
 
 	FrameViewer &frame =  viewers.get<FrameViewer>();
 	frame.count = Singleton<ViewerCountTable>::Instance().items.get<W<ViewerCount>>().value;
@@ -98,54 +107,88 @@ template<template<class>class W>LRESULT TemplWindow<W>::operator()(TCreate &m)
 	frame.cutoffFrequencyON = Singleton<AnalogFilterTable>::Instance().items.get<W<CutoffFrequencyON>>().value;
 	frame.cursor.SetMouseMoveHandler(&frame, &FrameViewer::DrawFrame); 
 	frame.koef = Singleton<KoeffSignTable>::Instance().items.get<W<KoeffSign>>().value;
+	frame.typeFiltre = __param_filtre__<W, TypeFiltre>()();
+	frame.centerFrequency = __param_filtre__<W, CenterFrequency>()();
+	frame.widthFrequency = __param_filtre__<W, WidthFrequency>()();
+	frame.order = Singleton<AnalogFilterTable>::Instance().items.get<W<Order>>().value;
+
+	frame.stopBandDb = Singleton<AnalogFilterTable>::Instance().items.get<W<StopBandDb>>().value;
+	frame.passBandRippleDb = __param_filtre__<W, PassBandRippleDb>()();
 
 	TL::foreach<viewers_list, Common::__create_window__>()(&viewers, &m.hwnd);	
 	return 0;
 }
 
-template<class T>struct diff_templ
-{
-	template<class O>void operator()(O &o, double(&)[1024])
-	{
-	}
-};
-
-template<class T>struct diff_templ<StructSig<T>>
+template<template<class>class>struct diff_templ
 {
 	template<class O>void operator()(O &o, double(&arr)[1024])
 	{
-		double structMinVal = o.structMinVal;
 		for(int i = 0; i < dimention_of(arr); ++i)
 		{
-			arr[i] -= structMinVal;
-			if(arr[i] < 0) arr[i] = -arr[i];
+			if(arr[i] < 0) arr[i] =-arr[i];
 		}
 	}
 };
 
-template<template<class>class>class MeanderX
+template<>struct diff_templ<StructSig>
 {
-public:
-	static bool b;
-	MeanderX(){}
-	double operator()(double next)
+	template<class O>void operator()(O &o, double(&arr)[1024])
 	{
-		return next;
+		for(int i = 0; i < dimention_of(arr); ++i)
+		{
+			if(arr[i] < 0) arr[i] =-arr[i];
+			arr[i] -= o.structMinVal;
+			if(arr[i] < 0) 
+			{
+				arr[i] = -arr[i];
+			}
+		}
 	}
 };
-template<template<class>class T>bool MeanderX<T>::b;
 
-template<>class MeanderX<StructSig>: public Compute::Meander<StructSig>
-{	
-public:
-	static bool b;
-	double operator()(double next)
+template<template<class>class>struct __get_ampl__
+{
+	template<class O>double *operator()(O &o)
 	{
-		if(b) return Compute::Meander<StructSig>::operator()(next);
-		return next;
+		return o.inputData;
 	}
 };
-bool MeanderX<StructSig>::b;
+
+template<>struct __get_ampl__<StructSig>
+{
+	template<class O>double *operator()(O &o)
+	{
+
+		return o.inputDataX;
+	}
+};
+
+template<template<class>class W>struct __axes_size___
+{
+	template<class T>void operator()(T &t)
+	{
+		t.minAxesY = -Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
+		t.maxAxesY = Singleton<AxesGraphsTable>::Instance().items.get<W<Axes>>().value;
+	}
+};
+
+template<>struct __axes_size___<StructSig>
+{
+	template<class T>void operator()(T &t)
+	{
+		t.minAxesY = -100;
+		t.maxAxesY = 100;
+	}
+};
+
+template<template<class>class>struct IsStructSig
+{
+	static const bool value = false;
+};
+template<>struct IsStructSig<StructSig>
+{
+	static const bool value = true;
+};
 
 template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 {
@@ -162,60 +205,44 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	int offs = int(offsetDef - offs_b * frame.delta);
 	int frameWidth = 3 * frame.count;
 
-	//MeanderX<W>::b = frame.isBarGraph;
-
 	typedef typename WapperFiltre<W>::Result WFiltre;
 	WFiltre aFiltre;
 	Compute::Filtre analog;
-	if(frame.cutoffFrequencyON)
+	if(frame.cutoffFrequencyON && (!IsStructSig<W>::value || frame.isBarGraph))
 	{
 		Compute::InitFiltre()(aFiltre
+			, frame.order
+			, frame.stopBandDb
+			, frame.passBandRippleDb
 			, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
 			, frame.cutoffFrequency
 			, frame.centerFrequency
 			, frame.widthFrequency
+			, frame.typeFiltre
 			);
-		analog.Init<WFiltre>(&aFiltre, &WFiltre::operator());
+		analog.Init<WFiltre>(&aFiltre, &WFiltre::Simple);
 	}
 
 	MedianFiltre mFiltre;
 	Compute::Filtre median;
-	if(frame.medianFiltreON && frame.medianFiltreWidth > 2)
+	if(frame.medianFiltreON && frame.medianFiltreWidth > 2 && (!IsStructSig<W>::value || frame.isBarGraph))
 	{
 		mFiltre.InitWidth(frame.medianFiltreWidth);
 		median.Init(&mFiltre, &MedianFiltre::operator());
 	}
 
+	double *d = frame.isBarGraph ? __get_ampl__<W>()(item):item.inputData;
+
 	Compute::ComputeFrame(
-		&item.inputData[item.firstOffset], offs
+		&d[item.firstOffset], offs
 		, frameWidth
-		//, frame.cutoffFrequency
-		//, frame.cutoffFrequencyON
-		//, frame.medianFiltreWidth
-		//, frame.medianFiltreON
 		, tbuf
 		, tbuf_size
 		, analog
 		, median
-		//	, Singleton<L502ParametersTable>::Instance().items.get<W<ChannelSamplingRate>>().value
-		//, frame.isBarGraph
 		);
 
-	if(frame.isBarGraph)
-	{
-		for(int i = 0; i < tbuf_size; ++i)
-		{
-			if(tbuf[i] < 0) tbuf[i] = -tbuf[i];
-		}
-	}
-
-	double *ar = &tbuf[offs_b];
-	double last = 0;
-	for(int i = 0; i < dimention_of(frame.buffer); ++i)
-	{
-		if(0.0 == ar[i]) frame.buffer[i] = last;
-		else last = frame.buffer[i] = ar[i];
-	}
+	memmove(frame.buffer, &tbuf[offs_b], sizeof(frame.buffer));
 
 	if(frame.isBarGraph)
 	{
@@ -224,8 +251,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	}
 	else
 	{
-		frame.tchart.minAxesY = -100;
-		frame.tchart.maxAxesY = 100;
+		__axes_size___<W>()(frame.tchart);
 	}
 
 	frame.tchart.minAxesX = offsetDef;
@@ -240,7 +266,7 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 
 	if(frame.isBarGraph)
 	{
-		diff_templ<W<DataItem::Buffer>>()(item, frame.buffer);
+		diff_templ<W>()(viewer, frame.buffer);
 	}
 
 	frame.delta = (double)frame.count / dimention_of(frame.buffer);
@@ -249,8 +275,12 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 
 	DeadAreaTable::TItems &dead = Singleton<DeadAreaTable>::Instance().items;
 	int rodLength = dead.get<RodLenght>().value;
-	frame.deathZoneFirst	= 0;//int((double)dead.get<W<First<DeathZone>>>().value * item.currentOffset / rodLength); 
-	frame.deathZoneSecond	= item.currentOffset;// -  int((double)dead.get<W<Second<DeathZone>>>().value * item.currentOffset / rodLength); 
+
+////	item.deathZoneFirst =  int((double )item.deathZoneFirst * DataItem::output_buffer_size / rodLength);
+	//item.deathZoneSecond =  DataItem::output_buffer_size - int((double )item.deathZoneSecond * DataItem::output_buffer_size / rodLength);
+
+	frame.deathZoneFirst	= 0;
+	frame.deathZoneSecond	= item.currentOffset;
 
 	frame.deathZoneColor	= viewer.deathZoneColor	; 	
 	frame.threshDefect	 	= viewer.threshDefect	 	;
@@ -269,6 +299,15 @@ template<template<class>class W>void TemplWindow<W>::ChangeFrame(int offsetDef)
 	frame.tchart.items.get<FrameViewer::BorderDown<Defect>>().value = -frame.threshDefect;
 	frame.tchart.items.get<FrameViewer::BorderDown<SortDown>>().color  = frame.threshSortDownColor;
 	frame.tchart.items.get<FrameViewer::BorderDown<Defect>>().color  = frame.threshDefectColor;
+
+	if(IsStructSig<W>::value && !frame.isBarGraph)
+	{
+		frame.tchart.items.get<FrameViewer::Border<SortDown>>().value = 200;
+		frame.tchart.items.get<FrameViewer::Border<Defect>>().value = 200;
+
+		frame.tchart.items.get<FrameViewer::BorderDown<SortDown>>().value = 200;
+		frame.tchart.items.get<FrameViewer::BorderDown<Defect>>().value = 200;
+	}
 
 	RepaintWindow(frame.hWnd);
 }

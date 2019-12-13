@@ -121,7 +121,15 @@ void Ch()
 int _tmain(int argc, _TCHAR* argv[])
 {
 	//Conv();
-	Ch();
+	//Ch();
+	//getchar();
+	//char x[] = {(char)0xc9, 0x01, 0xaf, 0x3f};
+	char x[] = {(char)0x9a, 0xd3, 0xae, 0x3f, 0};
+
+	//int  z = *(int *)x;
+
+	printf("%s\n", x);
+
 	getchar();
 	return 0;
 }

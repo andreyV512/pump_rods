@@ -33,8 +33,8 @@ THE SOFTWARE.
 
 *******************************************************************************/
 
-#include "../include/Common.h"
-#include "../include/Design.h"
+#include "DspFilters/Common.h"
+#include "DspFilters/Design.h"
 
 #include <stdexcept>
 #include <sstream>

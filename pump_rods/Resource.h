@@ -39,6 +39,7 @@
 #define IDB_MashCutBtn                  214
 #define IDB_Ok							215
 #define IDB_Continue					216
+#define IDB_OkTumb 						217
 
 // Next default values for new objects
 // 

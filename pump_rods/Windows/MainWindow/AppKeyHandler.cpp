@@ -19,6 +19,7 @@ namespace AppKeyHandler
 		, TL::IntToType<IDB_ExitTubeBtn>
 		, TL::IntToType<IDB_Ok>
 		, TL::IntToType<IDB_Continue>
+		, TL::IntToType<IDB_OkTumb>
 	>::Result button_list;
 
 	template<int ID>struct On {static const int ID = ID; static const bool state = true;};
@@ -110,37 +111,23 @@ namespace AppKeyHandler
 		__btn__<
 			__all_button_OnOff__<
 			  button_list
-			  , TL::MkTlst<TL::IntToType<IDB_CycleBtn>, TL::IntToType<IDB_Reset>, TL::IntToType<IDB_Continue>>::Result
+			  , TL::MkTlst<TL::IntToType<IDB_CycleBtn>, TL::IntToType<IDB_Reset>, TL::IntToType<IDB_Continue>, TL::IntToType<IDB_OkTumb>>::Result
 			  , On, Off
 			>::Result
 		>()();
 		zprint("\n");
 	}
-	//void RunContine()
-	//{
-	//	typedef TL::MkTlst<
-	//		On<IDB_CycleBtn>, On<IDB_Ok>
-	//	>::Result list;
-	//	__btn__<list>()();
-	//	zprint("\n");
-	//}
 	void Stop()
 	{
-		Init();
+		__btn__<
+			__all_button_OnOff__<
+			  button_list
+			  , TL::MkTlst<TL::IntToType<IDB_Reset>, TL::IntToType<IDB_OkTumb>>::Result
+			  , Off, On
+			>::Result
+		>()();
 		zprint("\n");
 	}
-
-	//void ExitTubeMode()
-	//{
-	//	Run();
-	//	zprint("\n");
-	//}
-	//
-	//void ReturnTubeMode()
-	//{
-	//	Run();
-	//	zprint("\n");
-	//}
 
 	void VK_(unsigned id)
 	{
@@ -158,7 +145,7 @@ namespace AppKeyHandler
 	template<>struct __is_key__<IDB_UpArrow   >{static const unsigned value = VK_F6;};
 	template<>struct __is_key__<IDB_LeftArrow >{static const unsigned value = VK_F7;};
 	//template<>struct __is_key__<IDB_RightArrow>{static const unsigned value = VK_F8;};
-	template<>struct __is_key__<IDB_Ok>{static const unsigned value = VK_F8;};
+	template<>struct __is_key__<IDB_OkTumb>{static const unsigned value = VK_F8;};
 
 	template<>struct __is_key__<IDB_ExitTubeBtn >{static const unsigned value = VK_F9;};
 
@@ -190,15 +177,4 @@ namespace AppKeyHandler
 	{
 		TL::find<button_list, __test_key__>()(&key);
 	}
-
-	//void DisableAllBtn()
-	//{
-	//	__btn__<
-	//		__all_button_OnOff__<
-	//		  button_list
-	//		  , NullType//TL::MkTlst<TL::IntToType<IDB_Reset>, TL::IntToType<IDB_Continue>>::Result
-	//		  , On, Off
-	//		>::Result
-	//	>()();
-	//}
 }

@@ -1,34 +1,44 @@
 #pragma once
-#include "include/ChebyshevII.h"
+#include "include/DspFilters/ChebyshevII.h"
+#include "include/DspFilters/SmoothedFilter.h"
 
-template<class T>class DSPFiltre: public T::State<Dsp::DirectFormII>
+static const int filter_max_order = 10;
+template<class X>class DSPFiltre
 {
-	T m_design;
 public:
-	inline double operator()(double value)
+	typedef X T;
+private:
+	X filtre;
+	typename T::State<Dsp::DirectFormII> state;
+public:
+	double Simple(double value)
 	{
-		return process(value, m_design);
+		return state.process(value, filtre);
 	}
-	void Setup(int sample_rate, double cutoffFrequency, double stopBandDb)
+	void Setup(int order, int sample_rate, double cutoffFrequency, double stopBandDb)
 	{	
-		m_design.setup(3, sample_rate, cutoffFrequency, stopBandDb);
+		filtre.setup(order, sample_rate, cutoffFrequency, stopBandDb);
 	}
 };
 
-class LowFiltre : public DSPFiltre<Dsp::ChebyshevII::LowPass<3>>{};
-class HighFiltre: public DSPFiltre<Dsp::ChebyshevII::HighPass<3>>{};
+class LowFiltre : public DSPFiltre<Dsp::ChebyshevII::LowPass<filter_max_order>>{};
+class HighFiltre: public DSPFiltre<Dsp::ChebyshevII::HighPass<filter_max_order>>{};
 
-class BandPassFiltre: public Dsp::ChebyshevII::BandPass<3>::State<Dsp::DirectFormII>
+class BandPassFiltre
 {
-	Dsp::ChebyshevII::BandPass<3> m_design;
 public:
-	inline double operator()(double value)
+	typedef Dsp::ChebyshevII::BandPass<filter_max_order> T;
+private:
+	T filtre;
+	T::State<Dsp::DirectFormII> state;
+public:
+	double Simple(double value)
 	{
-		return process(value, m_design);
+		return state.process(value, filtre);
 	}
-	void Setup(int sample_rate, int widthFrequency, double centerFrequency, double stopBandDb)
+	void Setup(int order, int sample_rate, int widthFrequency, double centerFrequency, double passBandRippleDb)
 	{
-		m_design.setup(3, sample_rate, centerFrequency, widthFrequency, 0.01);
+		filtre.setup(order, sample_rate, centerFrequency, widthFrequency, passBandRippleDb);
 	}
 };
 
@@ -41,7 +51,7 @@ public:
 public:
 	LowFiltre lowFiltre;
 	BandPassFiltre bandPassFiltre;
-	inline double operator()(double value)
+	double Simple(double value)
 	{
 		return (o->*ptr)(value);
 	}

@@ -1,17 +1,17 @@
 /*******************************************************************************
 
 "A Collection of Useful C++ Classes for Digital Signal Processing"
- By Vincent Falco
+ By Vinnie Falco
 
 Official project location:
-http://code.google.com/p/dspfilterscpp/
+https://github.com/vinniefalco/DSPFilters
 
 See Documentation.cpp for contact information, notes, and bibliography.
 
 --------------------------------------------------------------------------------
 
 License: MIT License (http://www.opensource.org/licenses/mit-license.php)
-Copyright (c) 2009 by Vincent Falco
+Copyright (c) 2009 by Vinnie Falco
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
 of this software and associated documentation files (the "Software"), to deal
@@ -36,11 +36,11 @@ THE SOFTWARE.
 #ifndef DSPFILTERS_CASCADE_H
 #define DSPFILTERS_CASCADE_H
 
-#include "Common.h"
-#include "Biquad.h"
-#include "Filter.h"
-#include "Layout.h"
-#include "MathSupplement.h"
+#include "DspFilters/Common.h"
+#include "DspFilters/Biquad.h"
+#include "DspFilters/Filter.h"
+#include "DspFilters/Layout.h"
+#include "DspFilters/MathSupplement.h"
 
 namespace Dsp {
 
@@ -58,13 +58,19 @@ public:
   {
   public:
     template <typename Sample>
-    inline Sample process (Sample out, const Cascade& c)
+    inline Sample process (const Sample in, const Cascade& c)
     {
+      double out = in;
       StateType* state = m_stateArray;
       Biquad const* stage = c.m_stageArray;
-      for (int i = c.m_numStages; --i >= 0; ++state, ++stage)
-        out = state->process1 (out, *stage, 0);
-      return out;
+      const double vsa = ac();
+      int i = c.m_numStages - 1;
+        out = (state++)->process1 (out, *stage++, vsa);
+      for (; --i >= 0;)
+        out = (state++)->process1 (out, *stage++, 0);
+      //for (int i = c.m_numStages; --i >= 0; ++state, ++stage)
+      //  out = state->process1 (out, *stage, vsa);
+      return static_cast<Sample> (out);
     }
 
   protected:
@@ -114,8 +120,10 @@ public:
   template <class StateType, typename Sample>
   void process (int numSamples, Sample* dest, StateType& state) const
   {
-    while (--numSamples >= 0)
-      *dest++ = state.process (*dest, *this);
+    while (--numSamples >= 0) {
+      *dest = state.process (*dest, *this);
+      dest++;
+    }
   }
 
 protected:
@@ -145,6 +153,7 @@ public:
   public:
     State() : Cascade::StateBase <StateType> (m_states)
     {
+      Cascade::StateBase <StateType>::m_stateArray = m_states;
       reset ();
     }
 

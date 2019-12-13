@@ -30,6 +30,9 @@ namespace DataItem
 }
 
 template<>struct DefectSig<DataItem::Buffer>: DataItem::Buffer{};
-template<>struct StructSig<DataItem::Buffer>: DataItem::Buffer{};
+template<>struct StructSig<DataItem::Buffer>: DataItem::Buffer
+{
+	double inputDataX[App::buffer_size];
+};
 
 
