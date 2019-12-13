@@ -9,19 +9,9 @@ TEMPL_MIN_EQUAL_VALUE(CenterFrequency, 0)
 	TEMPL_MAX_EQUAL_VALUE(WidthFrequency, 2000)
 	TEMPL_PARAM_TITLE(WidthFrequency, L"Полоса пропускания фильтра Гц")
 
-	//TEMPL_MIN_EQUAL_VALUE(StopBandDb, 5)
-	//TEMPL_MAX_EQUAL_VALUE(StopBandDb, 100)
-	//TEMPL_PARAM_TITLE(StopBandDb, L"Затухание в полосе подавления Db")
-
 	TEMPL_MIN_EQUAL_VALUE(PassBandRippleDb, 0.001)
 	TEMPL_MAX_EQUAL_VALUE(PassBandRippleDb, 200.0)
 	TEMPL_PARAM_TITLE(PassBandRippleDb, L"Затухание в полосе подавления Db")
-
-//template<>struct Dialog::NoButton<DefectSig<CenterFrequency>>{};
-//template<>struct Dialog::NoButton<DefectSig<WidthFrequency>>{};
-//template<>struct Dialog::NoButton<DefectSig<Order>>{};
-//template<>struct Dialog::NoButton<DefectSig<StopBandDb> >{};
-//template<>struct Dialog::NoButton<DefectSig<PassBandRippleDb>>{};
 
 struct AdditionalParams
 {

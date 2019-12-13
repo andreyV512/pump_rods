@@ -12,6 +12,28 @@
 
 namespace TemplDlg
 {	
+	template<class>struct __is_acselerator__{static const int value = 768;};
+	template<>struct __is_acselerator__<bool>{static const int value = 0;};
+
+	template<class T>struct __get_val__
+	{
+		void operator()(HWND h, T &t)
+		{
+			wchar_t buf[128];
+			GetWindowText(h, buf, dimention_of(buf));
+			T x = Wchar_to<T>()(buf);
+			if(x > 0) t = x;
+		}
+	};
+
+	template<>struct __get_val__<bool>
+	{
+		void operator()(HWND h, bool &t)
+		{
+			t = BST_CHECKED == Button_GetCheck(h);
+		}
+	};
+
 	#define FILTER_ITEMS(type, param)\
 template<template<class>class W>struct Dialog::NoButton<W<type>>{};\
 template<template<class>class W, class P>struct __command__<Dialog::NoButton<W<type>>, P>\
@@ -19,21 +41,18 @@ template<template<class>class W, class P>struct __command__<Dialog::NoButton<W<t
 	typedef Dialog::NoButton<W<type>> O;\
 	bool operator()(O *o, P *p)\
 	{\
-		if(768 == p->e.isAcselerator)\
+		typedef typename TL::Inner<O>::Result TVal;\
+		if(TemplDlg::__is_acselerator__<TVal::type_value>::value == p->e.isAcselerator)\
 		{\
-			typedef typename TL::Inner<O>::Result TVal;\
 			HWND h = p->owner.items.get<Dialog::DlgItem2<TVal, P::Owner>>().hWnd;\
 			if(p->e.hControl == h)\
 			{\
-				wchar_t buf[128];\
-				GetWindowText(h, buf, dimention_of(buf));\
 				typedef TemplWindow<W> Win;\
 				HWND hWnd = GetWindow(p->e.hwnd, GW_OWNER);\
 				Win &e = *(Win *)GetWindowLongPtr(hWnd, GWLP_USERDATA);\
 				FrameViewer &frame =  e.viewers.get<FrameViewer>();\
 				Win::Viewer &viewer = e.viewers.get<Win::Viewer>();\
-				TVal::type_value t =  Wchar_to<TVal::type_value>()(buf);\
-				if(t > (TVal::type_value)0)frame.param = t;\
+				TemplDlg::__get_val__<TVal::type_value>()(h, frame.param);\
 				TemplDlg::Repaint<W>(viewer, frame);\
 				return false;\
 			}\
@@ -49,38 +68,7 @@ FILTER_ITEMS(StopBandDb, stopBandDb)
 FILTER_ITEMS(PassBandRippleDb, passBandRippleDb)
 
 FILTER_ITEMS(MedianFiltreWidth, medianFiltreWidth)
-//FILTER_ITEMS(MedianFiltreON, medianFiltreON)
-
-
-template<template<class>class W>struct Dialog::NoButton<W<MedianFiltreON>>{};
-template<template<class>class W, class P>struct __command__<Dialog::NoButton<W<MedianFiltreON>>, P>
-{
-	typedef Dialog::NoButton<W<MedianFiltreON>> O;
-	bool operator()(O *o, P *p)
-	{
-		if(768 == p->e.isAcselerator)
-		{
-			typedef typename TL::Inner<O>::Result TVal;
-			HWND h = p->owner.items.get<Dialog::DlgItem2<TVal, P::Owner>>().hWnd;
-			if(p->e.hControl == h)
-			{
-				wchar_t buf[128];
-				GetWindowText(h, buf, dimention_of(buf));
-				typedef TemplWindow<W> Win;
-				HWND hWnd = GetWindow(p->e.hwnd, GW_OWNER);
-				Win &e = *(Win *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-				FrameViewer &frame =  e.viewers.get<FrameViewer>();
-				Win::Viewer &viewer = e.viewers.get<Win::Viewer>();
-				TVal::type_value t =  Wchar_to<TVal::type_value>()(buf);
-				if(t > (TVal::type_value)0)frame.medianFiltreON = t;
-				TemplDlg::Repaint<W>(viewer, frame);
-				return false;
-			}
-		}
-		return true;
-	}
-};
-
+FILTER_ITEMS(MedianFiltreON, medianFiltreON)
 #undef FILTER_ITEMS
 
 	TEMPL_MIN_EQUAL_VALUE(MedianFiltreWidth, 3)
@@ -221,43 +209,6 @@ TEMPL_PARAM_TITLE(Order, L"Порядок фильтра")
 TEMPL_MIN_EQUAL_VALUE(StopBandDb, 5)
 TEMPL_MAX_EQUAL_VALUE(StopBandDb, 100)
 TEMPL_PARAM_TITLE(StopBandDb, L"Затухание в полосе подавления Db")
-
-
-
-
-//template<template<class>class W>struct Dialog::NoButton<W<MedianFiltreWidth>>{};
-//template<template<class>class W, class P>struct __command__<Dialog::NoButton<W<MedianFiltreWidth>>, P>
-//{
-//	typedef Dialog::NoButton<W<MedianFiltreWidth>> O;
-//	bool operator()(O *o, P *p)
-//	{
-//		if(768 == p->e.isAcselerator)
-//		{
-//			typedef typename TL::Inner<O>::Result TVal;
-//			HWND h = p->owner.items.get<Dialog::DlgItem2<TVal, P::Owner>>().hWnd;
-//			if(p->e.hControl == h)
-//			{
-//				wchar_t buf[128];
-//				GetWindowText(h, buf, dimention_of(buf));
-//				typedef TemplWindow<W> Win;
-//				HWND hWnd = GetWindow(p->e.hwnd, GW_OWNER);
-//				Win &e = *(Win *)GetWindowLongPtr(hWnd, GWLP_USERDATA);
-//				FrameViewer &frame =  e.viewers.get<FrameViewer>();
-//				Win::Viewer &viewer = e.viewers.get<Win::Viewer>();
-//				TVal::type_value t =  Wchar_to<TVal::type_value>()(buf);
-//				if(t > 0)frame.medianFiltreWidth = t;
-//				TemplDlg::Repaint<W>(viewer, frame);
-//				return false;
-//			}
-//		}
-//		return true;
-//	}
-//};
-
-
-
-
-
 
 template<template<class>class W>struct Dialog::NoButton<W<CutoffFrequencyON>>{};
 
