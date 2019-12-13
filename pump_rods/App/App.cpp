@@ -88,10 +88,30 @@ namespace App
 		RepaintWindow(mainWindow.hWnd);
 	}
 
+	template<class O, class P>struct __clean_chart__
+	{
+		void operator()(O &o)
+		{
+			o.count = 0;
+			memset(o.status, 0, sizeof(o.status));
+		}
+	};
+
+	template<class P>struct __clean_chart__<ResultViewer, P>
+	{
+		typedef ResultViewer O;
+		void operator()(O &o)
+		{
+			o.count = 0;
+			memset(o.viewerData.status, 0, sizeof(o.viewerData.status));
+		}
+	};
+
 	void CleanViewers()
 	{
 		MainWindow &mainWindow = Singleton<MainWindow>::Instance();
-		mainWindow.CleanChart(false);
+		//mainWindow.CleanChart(false);
+		TL::foreach<MainWindow::viewers_list, __clean_chart__>()(mainWindow.viewers);
 		RepaintWindow(mainWindow.hWnd);
 	}
 
