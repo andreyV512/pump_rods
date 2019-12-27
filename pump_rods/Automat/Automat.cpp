@@ -134,17 +134,17 @@ namespace Automat
 				{
 					//выставлен сигнал DC_ON1
 					OUT_BITS(On<oDC_ON1>);
-					AND_BITS(30 * 1000, Key<Status::stop>, On<iKM2_DC>);
+					AND_BITS(-1, Key<Status::stop>, On<iKM2_DC>);
 				}
 				//ВЫСТАВЛЕН СИГНАЛ ПУСК
 				OUT_BITS(On<oStart>);
 				Sleep(1000);
 				//ожидание выключения сигналов СОРТ, П1, П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(30 * 1000, Key<Status::stop>, Off<iCOPT>, Off<iP1>, Off<iP2>);//, Test<On<iCU>, On<iCycle>>);
+				AND_BITS(-1, Key<Status::stop>, Off<iCOPT>, Off<iP1>, Off<iP2>);//, Test<On<iCU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(30 * 1000, Key<Status::stop>, On<iControl> ,Test<On<iCU>, On<iCycle>>);
+				AND_BITS(-1, Key<Status::stop>, On<iControl> ,Test<On<iCU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ и П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(30 * 1000, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iCU>, On<iCycle>>);
+				AND_BITS(-1, Key<Status::stop>, On<iControl>, On<iP1>,Test<On<iCU>, On<iCycle>>);
 
 				//очистить главное окно
 				App::CleanViewers();
@@ -206,7 +206,7 @@ namespace Automat
 						status = Status::alarm_l502;
 						break;
 					}
-					AND_BITS(1200, Key<Status::stop>, On<iKM3_AC> ,Test<On<iCU>, On<iCycle>>);
+					AND_BITS(-1, Key<Status::stop>, On<iKM3_AC> ,Test<On<iCU>, On<iCycle>>);
 					//ожидание выключения сигнала П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке ЦИКЛ
 					//, при превышении сбора 120 сек выход из цикла
 					AND_BITS(120000, Key<Status::stop>, Off<iP2>,Test<On<iCU>, On<iCycle>>);
