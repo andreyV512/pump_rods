@@ -138,7 +138,7 @@ namespace Automat
 				//ВЫСТАВЛЕН СИГНАЛ ПУСК
 				OUT_BITS(On<oStart>);
 				//ожидание выключения сигналов СОРТ, П1, П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
-				AND_BITS(30 * 1000, Key<Status::stop>, Off<iCOPT>, Off<iP1>, Off<iP2>, Test<On<iCU>, On<iCycle>>);
+				AND_BITS(30 * 1000, Key<Status::stop>, Off<iCOPT>, Off<iP1>, Off<iP2>);//, Test<On<iCU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
 				AND_BITS(30 * 1000, Key<Status::stop>, On<iControl> ,Test<On<iCU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ и П1, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
