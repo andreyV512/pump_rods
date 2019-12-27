@@ -34,6 +34,7 @@ template<>struct IDtoMess<name::ID>{typedef name Result;};
 template<>struct IDtoMess<name::ID>{typedef name Result;};
 
 template<class T>struct MessBit;
+template<class T>struct Alarm;
 
 #define MESS_BIT(name, tpe, txt, bc, tc)template<>struct MessBit<name>\
 {\
@@ -189,7 +190,17 @@ namespace LogMess
 	BITS_XX(pink, "Проверка отключения \"КМ DC и KM3 AC\"",  Off<iKM2_DC>, Off<iKM3_AC>)
 	BITS_XX(pink, "Отключение \"Результат, С1 и С2\"", Off<oToShift>, Off<oC1>, Off<oC2>)
 
-	
+
+
+	BITS_XX(pink, "Авария выставлен сигнал \"ЦЕПИ УПРАВЛЕНИЯ\"", On<Alarm<iCU>>)
+	BITS_XX(pink, "Авария снят сигнал \"ЦЕПИ УПРАВЛЕНИЯ\"", Off<Alarm<iCU>>)
+
+	BITS_XX(pink, "Авария! Выставлен сигнал \"ЦИКЛ\"", On<Alarm<iCycle>>)
+	BITS_XX(pink, "Авария! Снят сигнал \"ЦИКЛ\"", Off<Alarm<iCycle>>)
+
+
+	MESS(TimeOut, void, "Выход из цикла из-за превышения времени ожидания", red  , yellow)
+	MESS(AlarmBits, void, "Выход из цикла по аварийному сигналу", red  , yellow)
 					
 #undef BITS_XX
 

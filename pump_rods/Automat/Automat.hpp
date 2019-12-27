@@ -48,9 +48,35 @@ namespace Automat
 		typedef NullType Result;
 	};
 
+	template<class T>struct A;
+	template<template<class>class W, class T>struct A<W<T>>
+	{
+		typedef typename W<Alarm<T>> Result;
+	};
+	template<>struct A<NullType>
+	{
+		typedef NullType Result;
+	};
+
 	template<class bit0, class bit1, class bit2, class bit3, class bit4, class Tail>struct FiltTestBits<Tlst<Test<bit0, bit1, bit2, bit3, bit4>, Tail>>
 	{
-		typedef typename TL::MkTlst<bit0, bit1, bit2, bit3, bit4>::Result Result;
+		typedef typename TL::MkTlst<
+			typename A<bit0>::Result
+			, typename A<bit1>::Result
+			, typename A<bit2>::Result
+			, typename A<bit3>::Result
+			, typename A<bit4>::Result
+		>::Result Result;
+	};
+
+	template<class T>struct RemAlarm
+	{
+		typedef T Result;
+	};
+
+	template<class T>struct RemAlarm<Alarm<T> >
+	{
+		typedef T Result;
 	};
 
 	template<class O, class P>struct __test_bits_do__;
@@ -58,7 +84,7 @@ namespace Automat
 	{
 		bool operator()(P &p)
 		{
-			if(!(p.bits & p.inputs_bits.get<O>().value))
+			if(!(p.bits & p.inputs_bits.get<typename RemAlarm<O>::Result>().value))
 			{
 				Log::Mess<LogMess::Bits<typename TL::MkTlst<Off<O>>::Result>>();
 				return false;
@@ -70,7 +96,7 @@ namespace Automat
 	{
 		bool operator()(P &p)
 		{
-			if(!(p.bits & p.inputs_bits.get<O>().value))
+			if(!(p.bits & p.inputs_bits.get<typename RemAlarm<O>::Result>().value))
 			{
 				Log::Mess<LogMess::Bits<typename TL::MkTlst<On<O>>::Result>>();
 				return false;
@@ -429,6 +455,8 @@ namespace Automat
 
 			MessBits<typename __mess_bits__<List>::Result>()();
 
+			int changedAlarmBits = 10;
+
 			while(true)
 			{
 				unsigned ev = WaitFor<list_key>()();
@@ -458,7 +486,7 @@ namespace Automat
 						ret = DefaultDo<list_proc>()(result);
 						if(ret < Status::undefined) return ret;
 						typedef typename FiltTestBits<List>::Result __test_bits_list__;
-						if(!TestBitsDo<__test_bits_list__>()(result)) return Status::alarm_bits;
+						if(!TestBitsDo<__test_bits_list__>()(result) && --changedAlarmBits < 0) return Status::alarm_bits;
 					}
 					break;
 

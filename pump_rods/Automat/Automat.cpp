@@ -269,7 +269,6 @@ namespace Automat
 			switch(status)
 			{
 			case Status::exit_loop: 
-				
 				dprint("Status::exit_loop\n");
 				return 0;
 			case Status::stop:
@@ -279,9 +278,11 @@ namespace Automat
 				break;
 			case Status::time_out:
 				dprint("Status::time_out\n");
+				Log::Mess<LogMess::TimeOut>();
 				break;
 			case Status::alarm_bits:
 				dprint("Status::alarm_bits\n");
+				Log::Mess<LogMess::AlarmBits>();
 				break;
 			case Status::alarm_l502:
 				dprint("Status::alarm_l502  %d\n", status502);
