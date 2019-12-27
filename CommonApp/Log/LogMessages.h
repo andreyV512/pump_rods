@@ -131,7 +131,7 @@ namespace LogMess
 		typedef int type;\
 		static const unsigned backColor = color;\
 		static const unsigned textColor = black;\
-		static const char *mess(){zprint(" mess\n");return txt;}\
+		static const char *mess(){return txt;}\
 	};\
 	template<>struct IDtoMess<Bits<TL::MkTlst<__VA_ARGS__>::Result>::ID>\
 	{\
