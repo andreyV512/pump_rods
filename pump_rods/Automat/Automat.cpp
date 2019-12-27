@@ -104,6 +104,7 @@ namespace Automat
 
 				//выставил выходной сигнал РАБОТА
 				OUT_BITS(On<oWork>);
+				Sleep(1000);
 
 				//ожидание сигнала ЦИКЛ, проверка ЦЕПИ УПРАВЛЕНИЯ, выход из цикла по кнопке СТОП
 				AND_BITS(-1,  Key<Status::stop>, On<iCycle>);//, Test<On<iCU>>);	

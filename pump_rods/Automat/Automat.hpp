@@ -455,7 +455,7 @@ namespace Automat
 
 			MessBits<typename __mess_bits__<List>::Result>()();
 
-			int changedAlarmBits = 10;
+			int changedAlarmBits = 20;
 
 			while(true)
 			{
@@ -486,7 +486,14 @@ namespace Automat
 						ret = DefaultDo<list_proc>()(result);
 						if(ret < Status::undefined) return ret;
 						typedef typename FiltTestBits<List>::Result __test_bits_list__;
-						if(!TestBitsDo<__test_bits_list__>()(result) && --changedAlarmBits < 0) return Status::alarm_bits;
+						if(!TestBitsDo<__test_bits_list__>()(result))
+						{
+							if(--changedAlarmBits < 0) return Status::alarm_bits;
+						}
+						else
+						{
+							changedAlarmBits = 20;
+						}
 					}
 					break;
 
