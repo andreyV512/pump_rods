@@ -279,10 +279,10 @@ namespace Automat
 		{
 			if(delay < GetTickCount()) 
 			{
-				if(!TestBitsDo<TL::MultyListToList<
-					List
-				>::Result>()(result))
-				return Status::alarm_bits;
+				//if(!TestBitsDo<TL::MultyListToList<
+				//	List
+				//>::Result>()(result))
+				//return Status::alarm_bits;
 				return Status::time_out; 
 			}
 			return 0;
