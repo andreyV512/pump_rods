@@ -18,14 +18,14 @@ App::App()
 	MyRegisterClass(Viewer<MainWindow>::Proc, t(),  CS_HREDRAW | CS_VREDRAW | CS_DBLCLKS
 		, IDI_LETTER, IDI_LETTER, NULL);
 
-	HWND h = CreateWindowEx(WS_EX_CLIENTEDGE | WS_EX_TOPMOST | WS_EX_LAYERED, t(), L"События", WS_OVERLAPPEDWINDOW, r.left, r.top, r.right, r.bottom, NULL, NULL, (HINSTANCE)::GetModuleHandle(NULL), &mainWindow); 
+	HWND h = CreateWindowEx(WS_EX_CLIENTEDGE | WS_EX_TOPMOST/* | WS_EX_LAYERED*/, t(), L"События", WS_OVERLAPPEDWINDOW, r.left, r.top, r.right, r.bottom, NULL, NULL, (HINSTANCE)::GetModuleHandle(NULL), &mainWindow); 
 
 	DWORD dwStyle = GetWindowLong(h, GWL_STYLE);
 	dwStyle &= ~(WS_MAXIMIZEBOX);
 	SetWindowLong(h, GWL_STYLE, dwStyle);
 
 	ShowWindow(h, SW_SHOWNORMAL);
-	SetLayeredWindowAttributes (h, 0, (255*70)/100, LWA_ALPHA);
+	//SetLayeredWindowAttributes (h, 0, (255*95)/100, LWA_ALPHA);
 }
 
 void App::Destroy()
