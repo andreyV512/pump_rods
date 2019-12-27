@@ -134,10 +134,11 @@ namespace Automat
 				{
 					//выставлен сигнал DC_ON1
 					OUT_BITS(On<oDC_ON1>);
-					AND_BITS(30 * 1000, Key<Status::stop>, On<iKM2_DC>, Test<On<iCU>, On<iCycle>>);
+					AND_BITS(30 * 1000, Key<Status::stop>, On<iKM2_DC>);
 				}
 				//ВЫСТАВЛЕН СИГНАЛ ПУСК
 				OUT_BITS(On<oStart>);
+				Sleep(1000);
 				//ожидание выключения сигналов СОРТ, П1, П2, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
 				AND_BITS(30 * 1000, Key<Status::stop>, Off<iCOPT>, Off<iP1>, Off<iP2>);//, Test<On<iCU>, On<iCycle>>);
 				//ожидание включения сигнала КОНТРОЛЬ, проверка сигналов ЦЕПИ УПРАВЛЕНИЯ и ЦИКЛ, выход по кнопке СТОП
