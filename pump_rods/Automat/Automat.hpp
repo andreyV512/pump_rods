@@ -273,25 +273,25 @@ namespace Automat
 		bool operator()(unsigned){return true;}
 	};
 
-	template<class List, class Result, unsigned N>struct AND_Bits_WAIT_TIMEOUT
-	{
-		unsigned operator()(Result &result, unsigned delay)
-		{
-			if(delay < GetTickCount()) 
-			{
-				//if(!TestBitsDo<TL::MultyListToList<
-				//	List
-				//>::Result>()(result))
-				//return Status::alarm_bits;
-				return Status::time_out; 
-			}
-			return 0;
-		}
-	};
-	template<class List, class Result>struct AND_Bits_WAIT_TIMEOUT<List, Result, -1>
-	{
-		unsigned operator()(Result &, unsigned){return 0;}
-	};
+	//template<class List, class Result, unsigned N>struct AND_Bits_WAIT_TIMEOUT
+	//{
+	//	unsigned operator()(Result &result, unsigned delay)
+	//	{
+	//		if(delay < GetTickCount()) 
+	//		{
+	//			//if(!TestBitsDo<TL::MultyListToList<
+	//			//	List
+	//			//>::Result>()(result))
+	//			//return Status::alarm_bits;
+	//			return Status::time_out; 
+	//		}
+	//		return 0;
+	//	}
+	//};
+	//template<class List, class Result>struct AND_Bits_WAIT_TIMEOUT<List, Result, -1>
+	//{
+	//	unsigned operator()(Result &, unsigned){return 0;}
+	//};
 
 	template<class List>struct WaitFor
 	{
@@ -455,7 +455,7 @@ namespace Automat
 
 			MessBits<typename __mess_bits__<List>::Result>()();
 
-			int changedAlarmBits = 20;
+			int changedAlarmBits = 5;
 
 			while(true)
 			{
@@ -469,13 +469,14 @@ namespace Automat
 				{
 				case WAIT_TIMEOUT:
 					{
-						unsigned ret = AND_Bits_WAIT_TIMEOUT<
-							Tlst<typename TL::TypeToTypeLst<list_on, On>::Result
-							, Tlst<typename TL::TypeToTypeLst<list_off, Off>::Result
-							, NullType>>
-							, Result, DELAY
-							>()(result, delay);
-						if(0 != ret) return ret;
+						//unsigned ret = AND_Bits_WAIT_TIMEOUT<
+						//	Tlst<typename TL::TypeToTypeLst<list_on, On>::Result
+						//	, Tlst<typename TL::TypeToTypeLst<list_off, Off>::Result
+						//	, NullType>>
+						//	, Result, DELAY
+						//	>()(result, delay);
+						//if(0 != ret) return ret;
+						if(delay < GetTickCount()) return Status::time_out; 
 
 						if(bitsNotEmpty &&(bitOn || bitOff))
 						{						
@@ -483,7 +484,7 @@ namespace Automat
 							if(bitOn == (t & (bitOn | bitOff))) return 0;
 						}	
 						result.bits = bits;
-						ret = DefaultDo<list_proc>()(result);
+						unsigned ret = DefaultDo<list_proc>()(result);
 						if(ret < Status::undefined) return ret;
 						typedef typename FiltTestBits<List>::Result __test_bits_list__;
 						if(!TestBitsDo<__test_bits_list__>()(result))
@@ -492,7 +493,7 @@ namespace Automat
 						}
 						else
 						{
-							changedAlarmBits = 20;
+							changedAlarmBits = 5;
 						}
 					}
 					break;
