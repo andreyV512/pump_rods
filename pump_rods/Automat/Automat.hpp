@@ -273,26 +273,6 @@ namespace Automat
 		bool operator()(unsigned){return true;}
 	};
 
-	//template<class List, class Result, unsigned N>struct AND_Bits_WAIT_TIMEOUT
-	//{
-	//	unsigned operator()(Result &result, unsigned delay)
-	//	{
-	//		if(delay < GetTickCount()) 
-	//		{
-	//			//if(!TestBitsDo<TL::MultyListToList<
-	//			//	List
-	//			//>::Result>()(result))
-	//			//return Status::alarm_bits;
-	//			return Status::time_out; 
-	//		}
-	//		return 0;
-	//	}
-	//};
-	//template<class List, class Result>struct AND_Bits_WAIT_TIMEOUT<List, Result, -1>
-	//{
-	//	unsigned operator()(Result &, unsigned){return 0;}
-	//};
-
 	template<class List>struct WaitFor
 	{
 		static const int count = TL::Length<List>::value;
@@ -469,13 +449,6 @@ namespace Automat
 				{
 				case WAIT_TIMEOUT:
 					{
-						//unsigned ret = AND_Bits_WAIT_TIMEOUT<
-						//	Tlst<typename TL::TypeToTypeLst<list_on, On>::Result
-						//	, Tlst<typename TL::TypeToTypeLst<list_off, Off>::Result
-						//	, NullType>>
-						//	, Result, DELAY
-						//	>()(result, delay);
-						//if(0 != ret) return ret;
 						if(delay < GetTickCount()) return Status::time_out; 
 
 						if(bitsNotEmpty &&(bitOn || bitOff))
